@@ -53,8 +53,5 @@
             <!-- 纬度(可选)-->
             <Latitude>34.2</Latitude>
         </Item>
-        <Item>
-
-        </Item>
     </DeviceList>
 </Response>
