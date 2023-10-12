@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.device;
+package io.github.lunasaw.gbproxy.client.entity.device;
 
 import com.google.common.collect.Lists;
 import io.github.lunasaw.gbproxy.client.entity.XmlBean;
@@ -14,9 +14,9 @@ import java.util.List;
  */
 @Getter
 @Setter
-@XmlRootElement(name = "DeviceResponse")
+@XmlRootElement(name = "Response")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceResponse extends XmlBean {
+public class DeviceCatalog extends XmlBean {
     @XmlElement(name = "CmdType")
     public String cmdType;
 
@@ -40,11 +40,11 @@ public class DeviceResponse extends XmlBean {
     }
 
     public static void main(String[] args) {
-        DeviceResponse deviceResponse = new DeviceResponse();
-        deviceResponse.setDeviceId("123");
+        DeviceCatalog deviceCatalog = new DeviceCatalog();
+        deviceCatalog.setDeviceId("123");
         DeviceItem deviceItem = new DeviceItem();
         deviceItem.setAddress("!23");
-        deviceResponse.setDeviceItemList(Lists.newArrayList(deviceItem, deviceItem));
-        System.out.println(deviceResponse);
+        deviceCatalog.setDeviceItemList(Lists.newArrayList(deviceItem, deviceItem));
+        System.out.println(deviceCatalog);
     }
 }

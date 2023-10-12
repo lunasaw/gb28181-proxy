@@ -1,11 +1,14 @@
 package io.github.lunasaw.gbproxy.client.entity;
 
-import lombok.Data;
-import lombok.SneakyThrows;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
+import javax.xml.bind.Unmarshaller;
+
+import lombok.Data;
+import lombok.SneakyThrows;
 
 /**
  * @author luna
@@ -27,5 +30,12 @@ public class XmlBean {
         StringWriter writer = new StringWriter();
         marshaller.marshal(this, writer);
         return writer.toString();
+    }
+
+    @SneakyThrows
+    public static  <T> Object parseObj(String xmlStr, Class<T> clazz) {
+        JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        return unmarshaller.unmarshal(new StringReader(xmlStr));
     }
 }
