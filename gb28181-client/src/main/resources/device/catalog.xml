@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<Response>
+    <CmdType>Catalog</CmdType>
+    <SN>${SN}</SN>
+    <DeviceID>${DEVICE_ID}</DeviceID>
+    <SumNum>1</SumNum>
+    <DeviceList>
+        <Item>
+            <!-- 设备/区域/系统编码(必选)-->
+            <DeviceID>33010602011187000002</DeviceID>
+            <!-- 设备/区域/系统名称(必选)-->
+            <Name>Camera</Name>
+            <!-- 当为设备时,设备厂商(必选)-->
+            <Manufacturer>海康</Manufacturer>
+            <!-- 当为设备时,设备型号(必选)-->
+            <Model>Model</Model>
+            <!-- 当为设备时,设备归属(必选)-->
+            <Owner>Owner</Owner>
+            <!-- 行政区域(必选)-->
+            <CivilCode>CivilCode</CivilCode>
+            <!-- 警区(可选)-->
+            <Block>Block</Block>
+            <!-- 当为设备时,安装地址(必选)-->
+            <Address>上海市五角场合生汇</Address>
+            <!-- 当为设备时,是否有子设备(必选)1有,0没有-->
+            <Parental>0</Parental>
+            <!-- 父设备/区域/系统ID(必选)-->
+            <ParentID>${DEVICE_ID}</ParentID>
+            <!-- 信令安全模式(可选)缺省为0; 0:不采用;2:S/MIME 签名方式;3:S/ MIME加密签名同时采用方式;4:数字摘要方式-->
+            <SafetyWay>0</SafetyWay>
+            <!-- 注册方式(必选)缺省为1;1:符合IETFRFC3261标准的认证注册模 式;2:基于口令的双向认证注册模式;3:基于数字证书的双向认证注册模式-->
+            <RegisterWay>1</RegisterWay>
+            <!-- 证书序列号(有证书的设备必选)-->
+            <CertNum>CertNum1</CertNum>
+            <!-- 证书有效标识(有证书的设备必选)缺省为0;证书有效标识:0:无效 1: 有效-->
+            <Certifiable>0</Certifiable>
+            <!-- 无效原因码(有证书且证书无效的设备必选)-->
+            <ErrCode>400</ErrCode>
+            <!-- 证书终止有效期(有证书的设备必选)-->
+            <EndTime>2010-11-11T19:46:17</EndTime>
+            <!-- 保密属性(必选)缺省为0;0:不涉密,1:涉密-->
+            <Secrecy>0</Secrecy>
+            <!-- 设备/区域/系统IP地址(可选)-->
+            <IPAddress>172.19.128.50</IPAddress>
+            <!-- 设备/区域/系统端口(可选)-->
+            <Port>5060</Port>
+            <!-- 设备口令(可选)-->
+            <Password>Password1</Password>
+            <!-- 设备状态(必选)-->
+            <Status>Status1</Status>
+            <!-- 经度(可选)-->
+            <Longitude>171.4</Longitude>
+            <!-- 纬度(可选)-->
+            <Latitude>34.2</Latitude>
+        </Item>
+        <Item>
+
+        </Item>
+    </DeviceList>
+</Response>
