@@ -10,6 +10,8 @@ import javax.sip.message.Request;
 import javax.sip.message.Response;
 
 import io.github.lunasaw.gbproxy.common.transmit.ISipProcessorObserver;
+import io.github.lunasaw.gbproxy.common.transmit.event.Event;
+import io.github.lunasaw.gbproxy.common.transmit.event.EventResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,8 @@ import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.common.transmit.event.EventPublisher;
 import io.github.lunasaw.gbproxy.common.transmit.event.SipSubscribe;
-import io.github.lunasaw.gbproxy.common.transmit.event.request.ISIPRequestProcessor;
-import io.github.lunasaw.gbproxy.common.transmit.event.response.ISIPResponseProcessor;
+import io.github.lunasaw.gbproxy.common.transmit.event.request.ISipRequestProcessor;
+import io.github.lunasaw.gbproxy.common.transmit.event.response.ISipResponseProcessor;
 import io.github.lunasaw.gbproxy.common.transmit.event.timeout.ITimeoutProcessor;
 
 /**
@@ -34,11 +36,11 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
     /**
      * 对SIP事件进行处理
      */
-    private static final Map<String, ISIPRequestProcessor>  requestProcessorMap  = new ConcurrentHashMap<>();
+    private static final Map<String, ISipRequestProcessor> REQUEST_PROCESSOR_MAP = new ConcurrentHashMap<>();
     /**
      * 处理接收IPCamera发来的SIP协议响应消息
      */
-    private static final Map<String, ISIPResponseProcessor> responseProcessorMap = new ConcurrentHashMap<>();
+    private static final Map<String, ISipResponseProcessor> RESPONSE_PROCESSOR_MAP = new ConcurrentHashMap<>();
     /**
      * 处理超时事件
      */
@@ -56,8 +58,8 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
      * @param method 方法名
      * @param processor 处理程序
      */
-    public void addRequestProcessor(String method, ISIPRequestProcessor processor) {
-        requestProcessorMap.put(method, processor);
+    public void addRequestProcessor(String method, ISipRequestProcessor processor) {
+        REQUEST_PROCESSOR_MAP.put(method, processor);
     }
 
     /**
@@ -66,8 +68,8 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
      * @param method 方法名
      * @param processor 处理程序
      */
-    public void addResponseProcessor(String method, ISIPResponseProcessor processor) {
-        responseProcessorMap.put(method, processor);
+    public void addResponseProcessor(String method, ISipResponseProcessor processor) {
+        RESPONSE_PROCESSOR_MAP.put(method, processor);
     }
 
     /**
@@ -88,13 +90,13 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
     @Async("taskExecutor")
     public void processRequest(RequestEvent requestEvent) {
         String method = requestEvent.getRequest().getMethod();
-        ISIPRequestProcessor sipRequestProcessor = requestProcessorMap.get(method);
+        ISipRequestProcessor sipRequestProcessor = REQUEST_PROCESSOR_MAP.get(method);
         if (sipRequestProcessor == null) {
             logger.warn("不支持方法{}的request", method);
             // TODO 回复错误玛
             return;
         }
-        requestProcessorMap.get(method).process(requestEvent);
+        REQUEST_PROCESSOR_MAP.get(method).process(requestEvent);
 
     }
 
@@ -113,16 +115,16 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
         if (((status >= Response.OK) && (status < Response.MULTIPLE_CHOICES)) || status == Response.UNAUTHORIZED) {
             CSeqHeader cseqHeader = (CSeqHeader)responseEvent.getResponse().getHeader(CSeqHeader.NAME);
             String method = cseqHeader.getMethod();
-            ISIPResponseProcessor sipRequestProcessor = responseProcessorMap.get(method);
+            ISipResponseProcessor sipRequestProcessor = RESPONSE_PROCESSOR_MAP.get(method);
             if (sipRequestProcessor != null) {
                 sipRequestProcessor.process(responseEvent);
             }
             if (status != Response.UNAUTHORIZED && responseEvent.getResponse() != null && sipSubscribe.getOkSubscribesSize() > 0) {
                 CallIdHeader callIdHeader = (CallIdHeader)responseEvent.getResponse().getHeader(CallIdHeader.NAME);
                 if (callIdHeader != null) {
-                    SipSubscribe.Event subscribe = sipSubscribe.getOkSubscribe(callIdHeader.getCallId());
+                    Event subscribe = sipSubscribe.getOkSubscribe(callIdHeader.getCallId());
                     if (subscribe != null) {
-                        SipSubscribe.EventResult eventResult = new SipSubscribe.EventResult(responseEvent);
+                        EventResult eventResult = new EventResult(responseEvent);
                         sipSubscribe.removeOkSubscribe(callIdHeader.getCallId());
                         subscribe.response(eventResult);
                     }
@@ -135,9 +137,9 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
             if (responseEvent.getResponse() != null && sipSubscribe.getErrorSubscribesSize() > 0) {
                 CallIdHeader callIdHeader = (CallIdHeader)responseEvent.getResponse().getHeader(CallIdHeader.NAME);
                 if (callIdHeader != null) {
-                    SipSubscribe.Event subscribe = sipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
+                    Event subscribe = sipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
                     if (subscribe != null) {
-                        SipSubscribe.EventResult eventResult = new SipSubscribe.EventResult(responseEvent);
+                        EventResult eventResult = new EventResult(responseEvent);
                         subscribe.response(eventResult);
                         sipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
                     }
@@ -152,7 +154,7 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
 
     /**
      * 向超时订阅发送消息
-     * 
+     *
      * @param timeoutEvent timeoutEvent事件
      */
     @Override
@@ -168,8 +170,8 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
                 CallIdHeader callIdHeader = (CallIdHeader)request.getHeader(CallIdHeader.NAME);
                 if (callIdHeader != null) {
                     logger.info("[发送错误订阅]");
-                    SipSubscribe.Event subscribe = sipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
-                    SipSubscribe.EventResult eventResult = new SipSubscribe.EventResult(timeoutEvent);
+                    Event subscribe = sipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
+                    EventResult eventResult = new EventResult(timeoutEvent);
                     if (subscribe != null) {
                         subscribe.response(eventResult);
                     }

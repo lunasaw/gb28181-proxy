@@ -1,9 +1,15 @@
-package io.github.lunasaw.gbproxy.common.transmit.event.object;
+package io.github.lunasaw.gbproxy.common.transmit.event.result;
+
+import lombok.Getter;
 
 import java.util.EventObject;
 
 import javax.sip.Dialog;
 
+/**
+ * @author weidian
+ */
+@Getter
 public class DeviceNotFoundEvent extends EventObject {
 
     private String callId;
@@ -16,10 +22,6 @@ public class DeviceNotFoundEvent extends EventObject {
      */
     public DeviceNotFoundEvent(Dialog dialog) {
         super(dialog);
-    }
-
-    public String getCallId() {
-        return callId;
     }
 
     public void setCallId(String callId) {
