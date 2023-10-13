@@ -24,13 +24,13 @@ public class SIPRequestHeaderProvider {
      * @param fromDevice 发送设备
      * @param toDevice 发送目的设备
      * @param sipMessage 内容
-     * @return
+     * @return Request
      */
     public Request createSipRequest(FromDevice fromDevice, ToDevice toDevice, SipMessage sipMessage) {
 
         CallIdHeader callIdHeader = SipRequestUtils.createCallIdHeader(sipMessage.getCallId());
         // sipUri
-        SipURI requestURI = SipRequestUtils.createSipUri(toDevice.getDeviceId(), toDevice.getHostAddress());
+        SipURI requestUri = SipRequestUtils.createSipUri(toDevice.getDeviceId(), toDevice.getHostAddress());
         // via
         ViaHeader viaHeader =
             SipRequestUtils.createViaHeader(fromDevice.getIp(), fromDevice.getPort(), toDevice.getTransport(), sipMessage.getViaTag());
@@ -44,13 +44,22 @@ public class SIPRequestHeaderProvider {
         // ceq
         CSeqHeader cSeqHeader = SipRequestUtils.createCSeqHeader(sipMessage.getSequence(), sipMessage.getMethod());
         // request
-        Request request = SipRequestUtils.createRequest(requestURI, sipMessage.getMethod(), callIdHeader, cSeqHeader, fromHeader,
+        Request request = SipRequestUtils.createRequest(requestUri, sipMessage.getMethod(), callIdHeader, cSeqHeader, fromHeader,
             toHeader, viaHeaders, maxForwards, sipMessage.getContentTypeHeader(), sipMessage.getContent());
 
         SipRequestUtils.setRequestHeader(request, sipMessage.getHeaders());
         return request;
     }
 
+    /**
+     * 创建Message请求
+     * 
+     * @param fromDevice 发送设备
+     * @param toDevice 发送目的设备
+     * @param content 内容
+     * @param callId callId
+     * @return Request
+     */
     public Request createMessageRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         SipMessage sipMessage = SipMessage.getMessageBody();
         sipMessage.setMethod(Request.MESSAGE);
@@ -65,12 +74,12 @@ public class SIPRequestHeaderProvider {
 
     /**
      * 创建Invite请求
-     * 
-     * @param fromDevice
-     * @param toDevice
-     * @param content
-     * @param callId
-     * @return
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 发送目的设备
+     * @param content 内容
+     * @param callId callId
+     * @return Request
      */
     public Request createInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         SipMessage sipMessage = SipMessage.getInviteBody();
@@ -91,6 +100,14 @@ public class SIPRequestHeaderProvider {
         return createInviteRequest(fromDevice, toDevice, content, callId);
     }
 
+    /**
+     * 创建Bye请求
+     * 
+     * @param fromDevice 发送设备
+     * @param toDevice 发送目的设备
+     * @param callId callId
+     * @return Request
+     */
     public Request createByeRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
 
         SipMessage sipMessage = SipMessage.getByeBody();
@@ -105,6 +122,17 @@ public class SIPRequestHeaderProvider {
         return createSipRequest(fromDevice, toDevice, sipMessage);
     }
 
+    /**
+     * 创建Subscribe请求
+     * 
+     * @param fromDevice 发送设备
+     * @param toDevice 发送目的设备
+     * @param content 内容
+     * @param callId callId
+     * @param expires 过期时间
+     * @param event 事件名称
+     * @return Request
+     */
     public Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId, Integer expires, String event) {
         SipMessage sipMessage = SipMessage.getSubscribeBody();
         sipMessage.setMethod(Request.SUBSCRIBE);
@@ -120,6 +148,15 @@ public class SIPRequestHeaderProvider {
         return createSipRequest(fromDevice, toDevice, sipMessage);
     }
 
+    /**
+     * 创建INFO 请求
+     * 
+     * @param fromDevice 发送设备
+     * @param toDevice 发送目的设备
+     * @param content 内容
+     * @param callId callId
+     * @return Request
+     */
     public Request createInfoRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
 
         SipMessage sipMessage = SipMessage.getInfoBody();
@@ -135,6 +172,14 @@ public class SIPRequestHeaderProvider {
         return createSipRequest(fromDevice, toDevice, sipMessage);
     }
 
+    /**
+     * 创建ACK请求
+     * 
+     * @param fromDevice 发送设备
+     * @param toDevice 发送目的设备
+     * @param callId callId
+     * @return Request
+     */
     public Request createAckRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
         SipMessage sipMessage = SipMessage.getAckBody();
         sipMessage.setMethod(Request.ACK);
