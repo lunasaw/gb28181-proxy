@@ -6,11 +6,13 @@ import javax.sip.header.ContentTypeHeader;
 import javax.sip.header.Header;
 import javax.sip.message.Request;
 
-import io.github.lunasaw.gbproxy.common.enums.ContentTypeEnum;
-import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
-import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
 import org.assertj.core.util.Lists;
+
+import io.github.lunasaw.gbproxy.common.enums.ContentTypeEnum;
+import io.github.lunasaw.gbproxy.common.sequence.GenerateSequenceImpl;
+import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
+import lombok.Data;
 
 /**
  * @author luna
@@ -60,7 +62,8 @@ public class SipMessage {
         sipMessage.setMethod(Request.MESSAGE);
         sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_XML.getContentTypeHeader());
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
-        sipMessage.setSequence(System.currentTimeMillis());
+        long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setSequence(sequence);
 
         return sipMessage;
     }
@@ -70,7 +73,8 @@ public class SipMessage {
         sipMessage.setMethod(Request.INVITE);
         sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_SDP.getContentTypeHeader());
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
-        sipMessage.setSequence(System.currentTimeMillis());
+        long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setSequence(sequence);
 
         return sipMessage;
     }
@@ -79,29 +83,32 @@ public class SipMessage {
         SipMessage sipMessage = new SipMessage();
         sipMessage.setMethod(Request.BYE);
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
-        sipMessage.setSequence(System.currentTimeMillis());
+        long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setSequence(sequence);
 
         return sipMessage;
     }
-
 
     public static SipMessage getSubscribeBody() {
         SipMessage sipMessage = new SipMessage();
         sipMessage.setMethod(Request.SUBSCRIBE);
         sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_XML.getContentTypeHeader());
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
-        sipMessage.setSequence(System.currentTimeMillis());
+        long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setSequence(sequence);
 
         return sipMessage;
     }
-
 
     public static SipMessage getInfoBody() {
         SipMessage sipMessage = new SipMessage();
         sipMessage.setMethod(Request.INFO);
         sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_MAN_SRTSP.getContentTypeHeader());
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
-        sipMessage.setSequence(System.currentTimeMillis());
+
+        long sequence = GenerateSequenceImpl.getSequence();
+
+        sipMessage.setSequence(sequence);
 
         return sipMessage;
     }
@@ -110,7 +117,8 @@ public class SipMessage {
         SipMessage sipMessage = new SipMessage();
         sipMessage.setMethod(Request.ACK);
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
-        sipMessage.setSequence(System.currentTimeMillis());
+        long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setSequence(sequence);
 
         return sipMessage;
     }
@@ -123,4 +131,5 @@ public class SipMessage {
         }
         return this;
     }
+
 }
