@@ -15,4 +15,9 @@ public class ToDevice extends Device{
      * 用于标识该消息的接收方。在SIP消息的传输过程中，每个中间节点都会将toTag字段的值保留不变，以确保消息的接收方不变。
      */
     private String toTag;
+
+    /**
+     * 需要想下游携带的信息
+     */
+    private String subject;
 }

@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.sip.SipFactory;
 import javax.sip.header.ContentTypeHeader;
 
+import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
 import lombok.SneakyThrows;
 
 /**
@@ -65,7 +66,7 @@ public enum ContentTypeEnum {
         if (MAP.containsKey(key)) {
             return MAP.get(key);
         } else {
-            ContentTypeHeader contentTypeHeader = SipFactory.getInstance().createHeaderFactory().createContentTypeHeader(type, subtype);
+            ContentTypeHeader contentTypeHeader = SipRequestUtils.createContentTypeHeader(type, subtype);
             MAP.put(key, contentTypeHeader);
             return contentTypeHeader;
         }

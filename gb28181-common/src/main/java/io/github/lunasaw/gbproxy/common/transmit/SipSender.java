@@ -14,6 +14,7 @@ import io.github.lunasaw.gbproxy.common.constant.Constant;
 import io.github.lunasaw.gbproxy.common.layer.SipLayer;
 import io.github.lunasaw.gbproxy.common.transmit.event.Event;
 import io.github.lunasaw.gbproxy.common.transmit.event.SipSubscribe;
+import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
 import io.github.lunasaw.gbproxy.common.utils.SipUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -61,11 +62,7 @@ public class SipSender {
             transport = viaHeader.getTransport();
         }
         if (message.getHeader(UserAgentHeader.NAME) == null) {
-            try {
-                message.addHeader(SipUtils.createUserAgentHeader(agent));
-            } catch (ParseException e) {
-                log.error("添加UserAgentHeader失败", e);
-            }
+            message.addHeader(SipRequestUtils.createUserAgentHeader(agent));
         }
 
         CallIdHeader callIdHeader = (CallIdHeader)message.getHeader(CallIdHeader.NAME);
