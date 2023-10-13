@@ -1,5 +1,9 @@
 package io.github.lunasaw.gbproxy.common.entity;
 
+import io.github.lunasaw.gbproxy.common.constant.Constant;
+import io.github.lunasaw.gbproxy.common.enums.StreamModeEnum;
+import io.github.lunasaw.gbproxy.common.enums.TransModeEnum;
+import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
 import lombok.Data;
 
 /**
@@ -20,4 +24,15 @@ public class ToDevice extends Device{
      * 需要想下游携带的信息
      */
     private String subject;
+
+    public static ToDevice getInstance(String userId, String ip, int port) {
+        ToDevice toDevice = new ToDevice();
+        toDevice.setUserId(userId);
+        toDevice.setIp(ip);
+        toDevice.setPort(port);
+        toDevice.setTransport(TransModeEnum.UDP.getType());
+        toDevice.setStreamMode(StreamModeEnum.UDP.getType());
+        toDevice.setToTag(null);
+        return toDevice;
+    }
 }

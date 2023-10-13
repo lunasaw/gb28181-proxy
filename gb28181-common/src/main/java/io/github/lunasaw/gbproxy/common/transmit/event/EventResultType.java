@@ -2,7 +2,7 @@ package io.github.lunasaw.gbproxy.common.transmit.event;
 
 /**
  * 事件类型
- * @author weidian
+ * @author luna
  */
 public enum EventResultType {
     // 超时

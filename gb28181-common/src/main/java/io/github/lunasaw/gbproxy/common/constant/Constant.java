@@ -10,4 +10,5 @@ public class Constant {
 
     public static final String UDP = "udp";
 
+    public static final String AGENT = "LunaSaw-GB28181-Proxy";
 }

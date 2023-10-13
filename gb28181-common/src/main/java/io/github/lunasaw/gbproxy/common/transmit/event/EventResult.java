@@ -12,7 +12,7 @@ import javax.sip.message.Response;
 
 /**
  * 事件结果
- * @author weidian
+ * @author luna
  */
 public class EventResult<EventObject> {
     public int                          statusCode;

@@ -9,6 +9,8 @@ import javax.sip.message.Request;
 import io.github.lunasaw.gbproxy.common.enums.ContentTypeEnum;
 import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
+import org.assertj.core.util.Lists;
 
 /**
  * @author luna
@@ -114,7 +116,11 @@ public class SipMessage {
     }
 
     public SipMessage addHeader(Header header) {
-        headers.add(header);
+        if (CollectionUtils.isEmpty(headers)) {
+            headers = Lists.newArrayList(header);
+        } else {
+            headers.add(header);
+        }
         return this;
     }
 }

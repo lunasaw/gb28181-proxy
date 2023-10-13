@@ -10,7 +10,7 @@ import javax.sip.header.UserAgentHeader;
 import javax.sip.message.MessageFactory;
 
 /**
- * @author weidian
+ * @author luna
  */
 public class SipUtils {
 

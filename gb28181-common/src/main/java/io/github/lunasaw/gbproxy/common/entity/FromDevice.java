@@ -1,5 +1,9 @@
 package io.github.lunasaw.gbproxy.common.entity;
 
+import io.github.lunasaw.gbproxy.common.constant.Constant;
+import io.github.lunasaw.gbproxy.common.enums.StreamModeEnum;
+import io.github.lunasaw.gbproxy.common.enums.TransModeEnum;
+import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
 import lombok.Data;
 
 /**
@@ -19,5 +23,16 @@ public class FromDevice extends Device {
      */
     private String agent;
 
+    public static FromDevice getInstance(String userId, String ip, int port) {
+        FromDevice fromDevice = new FromDevice();
+        fromDevice.setUserId(userId);
+        fromDevice.setIp(ip);
+        fromDevice.setPort(port);
+        fromDevice.setTransport(TransModeEnum.UDP.getType());
+        fromDevice.setStreamMode(StreamModeEnum.UDP.getType());
+        fromDevice.setFromTag(SipRequestUtils.getNewFromTag());
+        fromDevice.setAgent(Constant.AGENT);
+        return fromDevice;
+    }
 
 }

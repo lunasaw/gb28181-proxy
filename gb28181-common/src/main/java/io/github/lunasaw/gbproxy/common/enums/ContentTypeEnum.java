@@ -11,7 +11,7 @@ import lombok.SneakyThrows;
 
 /**
  * 消息体类型
- * @author weidian
+ * @author luna
  */
 
 public enum ContentTypeEnum {

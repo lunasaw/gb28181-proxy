@@ -7,7 +7,7 @@ import java.util.EventObject;
 import javax.sip.Dialog;
 
 /**
- * @author weidian
+ * @author luna
  */
 @Getter
 public class DeviceNotFoundEvent extends EventObject {

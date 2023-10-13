@@ -26,19 +26,19 @@ public class SIPRequestHeaderProvider {
      * @param sipMessage 内容
      * @return Request
      */
-    public Request createSipRequest(FromDevice fromDevice, ToDevice toDevice, SipMessage sipMessage) {
+    public static Request createSipRequest(FromDevice fromDevice, ToDevice toDevice, SipMessage sipMessage) {
 
         CallIdHeader callIdHeader = SipRequestUtils.createCallIdHeader(sipMessage.getCallId());
         // sipUri
-        SipURI requestUri = SipRequestUtils.createSipUri(toDevice.getDeviceId(), toDevice.getHostAddress());
+        SipURI requestUri = SipRequestUtils.createSipUri(toDevice.getUserId(), toDevice.getHostAddress());
         // via
         ViaHeader viaHeader =
             SipRequestUtils.createViaHeader(fromDevice.getIp(), fromDevice.getPort(), toDevice.getTransport(), sipMessage.getViaTag());
         List<ViaHeader> viaHeaders = Lists.newArrayList(viaHeader);
         // from
-        FromHeader fromHeader = SipRequestUtils.createFromHeader(fromDevice.getDeviceId(), fromDevice.getHostAddress(), fromDevice.getFromTag());
+        FromHeader fromHeader = SipRequestUtils.createFromHeader(fromDevice.getUserId(), fromDevice.getHostAddress(), fromDevice.getFromTag());
         // to
-        ToHeader toHeader = SipRequestUtils.createToHeader(toDevice.getDeviceId(), toDevice.getHostAddress(), toDevice.getToTag());
+        ToHeader toHeader = SipRequestUtils.createToHeader(toDevice.getUserId(), toDevice.getHostAddress(), toDevice.getToTag());
         // Forwards
         MaxForwardsHeader maxForwards = SipRequestUtils.createMaxForwardsHeader();
         // ceq
@@ -60,7 +60,7 @@ public class SIPRequestHeaderProvider {
      * @param callId callId
      * @return Request
      */
-    public Request createMessageRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+    public static Request createMessageRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         SipMessage sipMessage = SipMessage.getMessageBody();
         sipMessage.setMethod(Request.MESSAGE);
         sipMessage.setContent(content);
@@ -81,14 +81,14 @@ public class SIPRequestHeaderProvider {
      * @param callId callId
      * @return Request
      */
-    public Request createInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+    public static Request createInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         SipMessage sipMessage = SipMessage.getInviteBody();
         sipMessage.setMethod(Request.INVITE);
         sipMessage.setContent(content);
         sipMessage.setCallId(callId);
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
-        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getDeviceId(), fromDevice.getHostAddress());
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
         SubjectHeader subjectHeader = SipRequestUtils.createSubjectHeader(toDevice.getSubject());
 
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader).addHeader(subjectHeader);
@@ -108,7 +108,7 @@ public class SIPRequestHeaderProvider {
      * @param callId callId
      * @return Request
      */
-    public Request createByeRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
+    public static Request createByeRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
 
         SipMessage sipMessage = SipMessage.getByeBody();
         sipMessage.setMethod(Request.INVITE);
@@ -116,7 +116,7 @@ public class SIPRequestHeaderProvider {
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
 
-        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getDeviceId(), fromDevice.getHostAddress());
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage);
@@ -133,14 +133,14 @@ public class SIPRequestHeaderProvider {
      * @param event 事件名称
      * @return Request
      */
-    public Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId, Integer expires, String event) {
+    public static Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId, Integer expires, String event) {
         SipMessage sipMessage = SipMessage.getSubscribeBody();
         sipMessage.setMethod(Request.SUBSCRIBE);
         sipMessage.setContent(content);
         sipMessage.setCallId(callId);
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
-        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getDeviceId(), fromDevice.getHostAddress());
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
         ExpiresHeader expiresHeader = SipRequestUtils.createExpiresHeader(expires);
         EventHeader eventHeader = SipRequestUtils.createEventHeader(event);
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader).addHeader(expiresHeader).addHeader(eventHeader);
@@ -157,7 +157,7 @@ public class SIPRequestHeaderProvider {
      * @param callId callId
      * @return Request
      */
-    public Request createInfoRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+    public static Request createInfoRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
 
         SipMessage sipMessage = SipMessage.getInfoBody();
         sipMessage.setMethod(Request.INFO);
@@ -165,7 +165,7 @@ public class SIPRequestHeaderProvider {
         sipMessage.setCallId(callId);
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
-        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getDeviceId(), fromDevice.getHostAddress());
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
 
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
 
@@ -180,14 +180,14 @@ public class SIPRequestHeaderProvider {
      * @param callId callId
      * @return Request
      */
-    public Request createAckRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
+    public static Request createAckRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
         SipMessage sipMessage = SipMessage.getAckBody();
         sipMessage.setMethod(Request.ACK);
         sipMessage.setCallId(callId);
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
 
-        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getDeviceId(), fromDevice.getHostAddress());
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage);

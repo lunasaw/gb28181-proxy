@@ -10,34 +10,28 @@ import javax.sip.message.Message;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+
+import gov.nist.javax.sip.SipProviderImpl;
 import io.github.lunasaw.gbproxy.common.constant.Constant;
 import io.github.lunasaw.gbproxy.common.layer.SipLayer;
 import io.github.lunasaw.gbproxy.common.transmit.event.Event;
 import io.github.lunasaw.gbproxy.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
-import io.github.lunasaw.gbproxy.common.utils.SipUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
-
-import gov.nist.javax.sip.SipProviderImpl;
 
 /**
  * 发送SIP消息
  * 
  * @author lin
  */
-@Component
 @Slf4j
 @Data
+@Component
 public class SipSender {
-
-    @Value("${sip.agent:gb28181-proxy}")
-    private String       agent;
 
     @Autowired
     private SipLayer     sipLayer;
@@ -62,7 +56,7 @@ public class SipSender {
             transport = viaHeader.getTransport();
         }
         if (message.getHeader(UserAgentHeader.NAME) == null) {
-            message.addHeader(SipRequestUtils.createUserAgentHeader(agent));
+            message.addHeader(SipRequestUtils.createUserAgentHeader(Constant.AGENT));
         }
 
         CallIdHeader callIdHeader = (CallIdHeader)message.getHeader(CallIdHeader.NAME);

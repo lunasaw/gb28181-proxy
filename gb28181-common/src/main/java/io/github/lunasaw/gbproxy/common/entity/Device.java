@@ -1,6 +1,8 @@
 package io.github.lunasaw.gbproxy.common.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author luna
@@ -12,7 +14,7 @@ public class Device {
     /**
      * 设备国标编号
      */
-    private String deviceId;
+    private String userId;
 
     /**
      * 传输协议
@@ -42,4 +44,15 @@ public class Device {
      * wan地址
      */
     private String hostAddress;
+
+    public void setHostAddress(String hostAddress) {
+        this.hostAddress = hostAddress;
+    }
+
+    public String getHostAddress() {
+        if (StringUtils.isBlank(hostAddress)) {
+            return ip + ":" + port;
+        }
+        return hostAddress;
+    }
 }
