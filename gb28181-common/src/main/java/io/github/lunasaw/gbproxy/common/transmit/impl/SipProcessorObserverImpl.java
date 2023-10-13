@@ -9,16 +9,16 @@ import javax.sip.header.CallIdHeader;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
-import io.github.lunasaw.gbproxy.common.transmit.ISipProcessorObserver;
-import io.github.lunasaw.gbproxy.common.transmit.event.Event;
-import io.github.lunasaw.gbproxy.common.transmit.event.EventResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import io.github.lunasaw.gbproxy.common.transmit.ISipProcessorObserver;
+import io.github.lunasaw.gbproxy.common.transmit.event.Event;
 import io.github.lunasaw.gbproxy.common.transmit.event.EventPublisher;
+import io.github.lunasaw.gbproxy.common.transmit.event.EventResult;
 import io.github.lunasaw.gbproxy.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.gbproxy.common.transmit.event.request.ISipRequestProcessor;
 import io.github.lunasaw.gbproxy.common.transmit.event.response.ISipResponseProcessor;
@@ -26,12 +26,13 @@ import io.github.lunasaw.gbproxy.common.transmit.event.timeout.ITimeoutProcessor
 
 /**
  * SIP信令处理类观察者
+ * 
  * @author luna
  */
 @Component
 public class SipProcessorObserverImpl implements ISipProcessorObserver {
 
-    private final static Logger                             logger               = LoggerFactory.getLogger(SipProcessorObserverImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(SipProcessorObserverImpl.class);
 
     /**
      * 对SIP事件进行处理

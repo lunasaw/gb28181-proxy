@@ -54,8 +54,8 @@ public class SipRequestUtils {
      * @param to to – 此消息的 to 值的新 ToHeader 对象。
      * @param via via – 此消息的 ViaHeader 的新列表对象。
      * @param maxForwards contentType – 此消息的内容类型值的新内容类型标头对象。
-     * @param contentType content – 此消息的正文内容值的新对象。
-     * @param content
+     * @param contentType 响应类型 – 此消息的正文内容值的新对象。
+     * @param content 内容
      */
     public static Request createRequest(URI requestUri, String method, CallIdHeader callId, CSeqHeader cSeq, FromHeader from, ToHeader to,
         List<ViaHeader> via, MaxForwardsHeader maxForwards, ContentTypeHeader contentType, Object content) {
@@ -79,7 +79,7 @@ public class SipRequestUtils {
      * transport – tcp / udp。
      * branch – 代理服务器的新字符串值。
      *
-     * @return
+     * @return ViaHeader
      */
     public static ViaHeader createViaHeader(String ip, int port, String transport, String branch) {
         try {
@@ -126,10 +126,10 @@ public class SipRequestUtils {
     }
 
     /**
-     * 
-     * @param user
+     *
+     * @param user sip用户
      * @param host 主机地址 ip:port
-     * @return
+     * @return SipURI
      */
     public static SipURI createSipUri(String user, String host) {
         try {
@@ -149,11 +149,11 @@ public class SipRequestUtils {
     }
 
     /**
-     * 
-     * @param user
+     *
+     * @param user sip用户
      * @param host 主机地址 ip:port
-     * @param tag
-     * @return
+     * @param tag 标签
+     * @return FromHeader
      */
     public static FromHeader createFromHeader(String user, String host, String tag) {
         Address address = createAddress(user, host);
@@ -161,11 +161,11 @@ public class SipRequestUtils {
     }
 
     /**
-     * 
-     * @param user
+     *
+     * @param user sip用户
      * @param host 主机地址 ip:port
-     * @param tag
-     * @return
+     * @param tag 标签
+     * @return FromHeader
      */
     public static ToHeader createToHeader(String user, String host, String tag) {
         Address address = createAddress(user, host);
@@ -177,7 +177,7 @@ public class SipRequestUtils {
      *
      * @param address – 地址的新地址对象。
      * @param tag – 标签的新字符串值。
-     * @return
+     * @return FromHeader
      */
     public static FromHeader createFromHeader(Address address, String tag) {
         try {
@@ -192,7 +192,7 @@ public class SipRequestUtils {
      *
      * @param address – 地址的新地址对象。
      * @param tag – 标签的新字符串值，此值可能为空。
-     * @return
+     * @return ToHeader
      */
     public static ToHeader createToHeader(Address address, String tag) {
         try {
@@ -221,7 +221,7 @@ public class SipRequestUtils {
      *
      * @param contentType contentType – 新的字符串内容类型值。
      * @param contentSubType contentSubType – 新的字符串内容子类型值。
-     * @return
+     * @return ContentTypeHeader
      */
     public static ContentTypeHeader createContentTypeHeader(String contentType, String contentSubType) {
         try {
@@ -261,7 +261,7 @@ public class SipRequestUtils {
      * 
      * @param user 用户设备编号
      * @param host 主机地址 ip:port
-     * @return
+     * @return ContactHeader
      */
     public static ContactHeader createContactHeader(String user, String host) {
         Address address = createAddress(user, host);
