@@ -7,8 +7,8 @@ import javax.sip.message.Response;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.nist.javax.sip.message.SIPResponse;
-import io.github.lunasaw.gbproxy.client.transmit.response.SipResponseProcessorAbstract;
-import io.github.lunasaw.sipproxy.common.entity.SipTransaction;
+import io.github.lunasaw.sip.common.transmit.event.SipResponseProcessorAbstract;
+import io.github.lunasaw.sip.common.entity.SipTransaction;
 import lombok.extern.slf4j.Slf4j;
 
 /**

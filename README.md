@@ -1,4 +1,4 @@
-# luna-gb28181-proxy
+# gb28181-proxy
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.lunasaw/luna-gb28181-proxy)](https://mvnrepository.com/artifact/io.github.lunasaw/gb28181-proxy-common)
 [![GitHub license](https://img.shields.io/badge/MIT_License-blue.svg)](https://raw.githubusercontent.com/lunasaw/luna-gb28181-proxy/master/LICENSE)

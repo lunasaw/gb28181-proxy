@@ -12,10 +12,10 @@ import javax.sip.message.Request;
 import org.assertj.core.util.Lists;
 import org.springframework.util.DigestUtils;
 
-import io.github.lunasaw.sipproxy.common.entity.FromDevice;
-import io.github.lunasaw.sipproxy.common.entity.SipMessage;
-import io.github.lunasaw.sipproxy.common.entity.ToDevice;
-import io.github.lunasaw.sipproxy.common.utils.SipRequestUtils;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.SipMessage;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 
 /**
  * Sip命令request创造器

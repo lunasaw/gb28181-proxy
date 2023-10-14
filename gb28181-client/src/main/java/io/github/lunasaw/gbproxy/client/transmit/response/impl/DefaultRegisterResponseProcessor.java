@@ -6,10 +6,10 @@ import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.SipRequestHeaderProvider;
 import io.github.lunasaw.gbproxy.client.transmit.response.processor.RegisterResponseProcessor;
-import io.github.lunasaw.sipproxy.common.entity.FromDevice;
-import io.github.lunasaw.sipproxy.common.entity.SipTransaction;
-import io.github.lunasaw.sipproxy.common.entity.ToDevice;
-import io.github.lunasaw.sipproxy.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.SipTransaction;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.transmit.SipSender;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

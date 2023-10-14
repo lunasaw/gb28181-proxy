@@ -4,29 +4,28 @@ import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.client.transmit.response.impl.DefaultRegisterResponseProcessor;
 import io.github.lunasaw.gbproxy.client.transmit.response.processor.RegisterResponseProcessor;
-import io.github.lunasaw.sipproxy.common.transmit.event.Event;
-import io.github.lunasaw.sipproxy.common.transmit.event.EventResult;
-import io.github.lunasaw.sipproxy.common.transmit.impl.SipProcessorObserverImpl;
+import io.github.lunasaw.sip.common.transmit.event.Event;
+import io.github.lunasaw.sip.common.transmit.event.EventResult;
+import io.github.lunasaw.sip.common.transmit.impl.SipProcessorObserverImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.luna.common.os.SystemInfoUtil;
 import com.luna.common.text.RandomStrUtil;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.SipRequestHeaderProvider;
-import io.github.lunasaw.sipproxy.common.Gb28181Common;
-import io.github.lunasaw.sipproxy.common.entity.FromDevice;
-import io.github.lunasaw.sipproxy.common.entity.ToDevice;
-import io.github.lunasaw.sipproxy.common.layer.SipLayer;
-import io.github.lunasaw.sipproxy.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.SipCommonApplication;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.layer.SipLayer;
+import io.github.lunasaw.sip.common.transmit.SipSender;
 import lombok.SneakyThrows;
 
 /**
  * @author luna
  * @date 2023/10/13
  */
-@SpringBootTest(classes = Gb28181Common.class)
+@SpringBootTest(classes = SipCommonApplication.class)
 public class ApplicationTest {
 
     FromDevice fromDevice;
@@ -35,8 +34,8 @@ public class ApplicationTest {
 
     @BeforeEach
     public void before() {
-        SipLayer.addListeningPoint(SystemInfoUtil.getIP(), 8117);
-        fromDevice = FromDevice.getInstance("33010602011187000001", SystemInfoUtil.getIP(), 8117);
+        SipLayer.addListeningPoint("192.168.2.102", 8117);
+        fromDevice = FromDevice.getInstance("33010602011187000001", "192.168.2.102", 8117);
         toDevice = ToDevice.getInstance("41010500002000000010", "192.168.2.102", 8116);
         toDevice.setPassword("weidian");
         toDevice.setRealm("4101050000");
