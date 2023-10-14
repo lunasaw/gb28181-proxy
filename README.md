@@ -2,13 +2,31 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.lunasaw/luna-gb28181-proxy)](https://mvnrepository.com/artifact/io.github.lunasaw/gb28181-proxy-common)
 [![GitHub license](https://img.shields.io/badge/MIT_License-blue.svg)](https://raw.githubusercontent.com/lunasaw/luna-gb28181-proxy/master/LICENSE)
-[![Build Status](https://github.com/lunasaw/luna-gb28181-proxy/actions/workflows/maven-publish.yml/badge.svg?branch=master)](https://github.com/lunasaw/luna-gb28181-proxy/actions)
+[![Build Status](https://github.com/lunasaw/gb28181-proxy/actions/workflows/maven-publish.yml/badge.svg?branch=master)](https://github.com/lunasaw/gb28181-proxy/actions)
 
 [www.isluna.ml](http://lunasaw.github.io)
 
 基于sip实现gb28181的通信框架，区分client和server。以便于快速构建发起SIP请求和处理响应。项目不仅限于gb28181协议。也可以利用封装的SIP方法处理其他协议。
 
+## 实现功能
 
+- [x] SIP 通用请求
+    - [x] 端口监听
+        - [x] UDP 监听
+        - [x] TCP 监听
+    - [x] sip请求响应封装
+    - [x] 基于javax的xml转化，写对象的方式写xml
+- [x] Server
+    - [x] GB28181
+        - [x] 设备注册
+        - [x] 设备认证
+        - [x] 设备控制(PTZ)
+            - [x] 云台控制
+            - [x] 安放告警
+            - [x] 设备查询
+        - [x] Play
+- [x] Client
+    - [x] 设备注册
 
 # how to use
 
