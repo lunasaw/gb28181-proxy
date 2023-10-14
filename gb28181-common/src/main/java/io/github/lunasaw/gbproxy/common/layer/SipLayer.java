@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sip.*;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.util.ObjectUtils;
 
@@ -31,9 +30,6 @@ public class SipLayer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
     }
-
-	@Value("${sip.log:false}")
-	private Boolean enableLog;
 
     public static SipProviderImpl getUdpSipProvider(String ip) {
 		if (ObjectUtils.isEmpty(ip)) {
@@ -63,15 +59,15 @@ public class SipLayer implements CommandLineRunner {
 		return tcpSipProviderMap.get(ip);
 	}
 
-	public void addListeningPoint(String monitorIp, int port) {
+    public static void addListeningPoint(String monitorIp, int port) {
         addListeningPoint(monitorIp, port, new SipProcessorObserverImpl(), true);
     }
 
-	public void addListeningPoint(String monitorIp, int port, Boolean enableLog) {
+    public static void addListeningPoint(String monitorIp, int port, Boolean enableLog) {
 		addListeningPoint(monitorIp, port, new SipProcessorObserverImpl(), enableLog);
 	}
 
-    public void addListeningPoint(String monitorIp, int port, ISipProcessorObserver listener, Boolean enableLog) {
+    public synchronized static void addListeningPoint(String monitorIp, int port, ISipProcessorObserver listener, Boolean enableLog) {
 		SipStackImpl sipStack;
 		try {
 			sipStack = (SipStackImpl) SipFactory.getInstance().createSipStack(DefaultProperties.getProperties("GB28181_SIP", enableLog));

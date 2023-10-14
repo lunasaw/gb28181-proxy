@@ -1,7 +1,5 @@
 package io.github.lunasaw.gbproxy.common.transmit;
 
-import java.text.ParseException;
-
 import javax.sip.SipException;
 import javax.sip.header.CallIdHeader;
 import javax.sip.header.UserAgentHeader;
@@ -10,8 +8,6 @@ import javax.sip.message.Message;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import gov.nist.javax.sip.SipProviderImpl;
@@ -30,18 +26,17 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Data
-@Component
 public class SipSender {
 
-    public void transmitRequest(String ip, Message message) throws SipException, ParseException {
+    public static void transmitRequest(String ip, Message message) throws SipException {
         transmitRequest(ip, message, null, null);
     }
 
-    public void transmitRequest(String ip, Message message, Event errorEvent) throws SipException, ParseException {
+    public static void transmitRequest(String ip, Message message, Event errorEvent) throws SipException {
         transmitRequest(ip, message, errorEvent, null);
     }
 
-    public void transmitRequest(String ip, Message message, Event errorEvent, Event okEvent) throws SipException {
+    public static void transmitRequest(String ip, Message message, Event errorEvent, Event okEvent) throws SipException {
         ViaHeader viaHeader = (ViaHeader)message.getHeader(ViaHeader.NAME);
         String transport = "UDP";
         if (viaHeader == null) {

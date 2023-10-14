@@ -25,28 +25,23 @@ import lombok.SneakyThrows;
 @SpringBootTest(classes = Gb28181Common.class)
 public class ApplicationTest {
 
-    @Autowired
-    private SipSender sipSender;
-
-    @Autowired
-    private SipLayer sipLayer;
 
     @BeforeEach
     public void before() {
-        sipLayer.addListeningPoint(SystemInfoUtil.getIP(), 8116);
+        SipLayer.addListeningPoint(SystemInfoUtil.getIP(), 8117);
     }
 
     @SneakyThrows
     @Test
     public void atest() {
 
-        FromDevice fromDevice = FromDevice.getInstance("33010602011187000001", "172.19.128.100", 8116);
+        FromDevice fromDevice = FromDevice.getInstance("33010602011187000001", SystemInfoUtil.getIP(), 8117);
 
-        ToDevice toDevice = ToDevice.getInstance("41010500002000000010", "10.37.5.132", 8116);
+        ToDevice toDevice = ToDevice.getInstance("41010500002000000010", "192.168.2.102", 8116);
 
         String callId = RandomStrUtil.getUUID();
         Request messageRequest = SIPRequestHeaderProvider.createMessageRequest(fromDevice, toDevice, "123123", callId);
 
-        sipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
     }
 }
