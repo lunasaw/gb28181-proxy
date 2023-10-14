@@ -12,9 +12,14 @@ import org.apache.commons.lang3.StringUtils;
 public class Device {
 
     /**
-     * 设备国标编号
+     * 用户Id
      */
     private String userId;
+
+    /**
+     * 域
+     */
+    private String realm;
 
     /**
      * 传输协议
@@ -44,6 +49,11 @@ public class Device {
      * wan地址
      */
     private String hostAddress;
+
+    /**
+     * 密码
+     */
+    private String password;
 
     public void setHostAddress(String hostAddress) {
         this.hostAddress = hostAddress;

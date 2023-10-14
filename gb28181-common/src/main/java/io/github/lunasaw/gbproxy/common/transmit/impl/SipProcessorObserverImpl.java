@@ -15,9 +15,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.common.transmit.ISipProcessorObserver;
+import com.luna.common.thread.AsyncEngineUtils;
+
+import io.github.lunasaw.gbproxy.common.transmit.SipProcessorObserver;
 import io.github.lunasaw.gbproxy.common.transmit.event.Event;
 import io.github.lunasaw.gbproxy.common.transmit.event.EventPublisher;
 import io.github.lunasaw.gbproxy.common.transmit.event.EventResult;
@@ -31,7 +32,7 @@ import io.github.lunasaw.gbproxy.common.transmit.event.timeout.ITimeoutProcessor
  * 
  * @author luna
  */
-public class SipProcessorObserverImpl implements ISipProcessorObserver {
+public class SipProcessorObserverImpl implements SipProcessorObserver {
 
     private final static Logger logger = LoggerFactory.getLogger(SipProcessorObserverImpl.class);
 
@@ -57,7 +58,7 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
      * @param method 方法名
      * @param processor 处理程序
      */
-    public void addRequestProcessor(String method, ISipRequestProcessor processor) {
+    public synchronized static void addRequestProcessor(String method, ISipRequestProcessor processor) {
         REQUEST_PROCESSOR_MAP.put(method, processor);
     }
 
@@ -67,7 +68,7 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
      * @param method 方法名
      * @param processor 处理程序
      */
-    public void addResponseProcessor(String method, ISipResponseProcessor processor) {
+    public synchronized static void addResponseProcessor(String method, ISipResponseProcessor processor) {
         RESPONSE_PROCESSOR_MAP.put(method, processor);
     }
 
@@ -76,7 +77,7 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
      * 
      * @param processor 处理程序
      */
-    public void addTimeoutProcessor(String method, ITimeoutProcessor processor) {
+    public synchronized static void addTimeoutProcessor(String method, ITimeoutProcessor processor) {
         TIMEOUT_PROCESSOR_MAP.put(method, processor);
     }
 
@@ -86,17 +87,17 @@ public class SipProcessorObserverImpl implements ISipProcessorObserver {
      * @param requestEvent RequestEvent事件
      */
     @Override
-    @Async("taskExecutor")
     public void processRequest(RequestEvent requestEvent) {
-        String method = requestEvent.getRequest().getMethod();
-        ISipRequestProcessor sipRequestProcessor = REQUEST_PROCESSOR_MAP.get(method);
-        if (sipRequestProcessor == null) {
-            logger.warn("不支持方法{}的request", method);
-            // TODO 回复错误玛
-            return;
-        }
-        REQUEST_PROCESSOR_MAP.get(method).process(requestEvent);
-
+        AsyncEngineUtils.execute(() -> {
+            String method = requestEvent.getRequest().getMethod();
+            ISipRequestProcessor sipRequestProcessor = REQUEST_PROCESSOR_MAP.get(method);
+            if (sipRequestProcessor == null) {
+                logger.warn("暂不支持方法 {} 的请求", method);
+                // TODO 回复错误玛
+                return;
+            }
+            REQUEST_PROCESSOR_MAP.get(method).process(requestEvent);
+        });
     }
 
     /**

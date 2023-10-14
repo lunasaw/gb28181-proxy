@@ -13,7 +13,7 @@ import gov.nist.javax.sip.SipProviderImpl;
 import gov.nist.javax.sip.SipStackImpl;
 import io.github.lunasaw.gbproxy.common.conf.DefaultProperties;
 import io.github.lunasaw.gbproxy.common.conf.msg.GbStringMsgParserFactory;
-import io.github.lunasaw.gbproxy.common.transmit.ISipProcessorObserver;
+import io.github.lunasaw.gbproxy.common.transmit.SipProcessorObserver;
 import io.github.lunasaw.gbproxy.common.transmit.impl.SipProcessorObserverImpl;
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,7 +67,7 @@ public class SipLayer implements CommandLineRunner {
 		addListeningPoint(monitorIp, port, new SipProcessorObserverImpl(), enableLog);
 	}
 
-    public synchronized static void addListeningPoint(String monitorIp, int port, ISipProcessorObserver listener, Boolean enableLog) {
+    public synchronized static void addListeningPoint(String monitorIp, int port, SipProcessorObserver listener, Boolean enableLog) {
 		SipStackImpl sipStack;
 		try {
 			sipStack = (SipStackImpl) SipFactory.getInstance().createSipStack(DefaultProperties.getProperties("GB28181_SIP", enableLog));

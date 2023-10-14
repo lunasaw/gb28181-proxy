@@ -1,12 +1,16 @@
 package io.github.lunasaw.gbproxy.client.transmit.cmd;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.sip.address.SipURI;
+import javax.sip.address.URI;
 import javax.sip.header.*;
 import javax.sip.message.Request;
 
 import org.assertj.core.util.Lists;
+import org.springframework.util.DigestUtils;
 
 import io.github.lunasaw.gbproxy.common.entity.FromDevice;
 import io.github.lunasaw.gbproxy.common.entity.SipMessage;
@@ -16,7 +20,7 @@ import io.github.lunasaw.gbproxy.common.utils.SipRequestUtils;
 /**
  * Sip命令request创造器
  */
-public class SIPRequestHeaderProvider {
+public class SipRequestHeaderProvider {
 
     /**
      * 创建SIP请求
@@ -139,9 +143,85 @@ public class SIPRequestHeaderProvider {
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
         ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
         ExpiresHeader expiresHeader = SipRequestUtils.createExpiresHeader(expires);
+
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader).addHeader(expiresHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage);
+    }
+
+    /**
+     * 带签名的注册构造器
+     *
+     * 
+     * @param www 认证头
+     * @return Request
+     */
+    public static Request createRegisterRequestWithAuth(FromDevice fromDevice, ToDevice toDevice, String callId, Integer expires,
+        WWWAuthenticateHeader www) {
+
+        Request registerRequest = createRegisterRequest(fromDevice, toDevice, callId, expires);
+        URI requestURI = registerRequest.getRequestURI();
+
+        String userId = toDevice.getUserId();
+        String password = toDevice.getPassword();
+        if (www == null) {
+            try {
+                AuthorizationHeader authorizationHeader = SipRequestUtils.createAuthorizationHeader("Digest");
+                String username = fromDevice.getUserId();
+                authorizationHeader.setUsername(username);
+                authorizationHeader.setURI(requestURI);
+                authorizationHeader.setAlgorithm("MD5");
+                registerRequest.addHeader(authorizationHeader);
+                return registerRequest;
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        String realm = www.getRealm();
+        String nonce = www.getNonce();
+        String scheme = www.getScheme();
+
+        // 参考 https://blog.csdn.net/y673533511/article/details/88388138
+        // qop 保护质量 包含auth（默认的）和auth-int（增加了报文完整性检测）两种策略
+        String qop = www.getQop();
+
+        String cNonce = null;
+        String nc = "00000001";
+        if (qop != null) {
+            if ("auth".equalsIgnoreCase(qop)) {
+                // 客户端随机数，这是一个不透明的字符串值，由客户端提供，并且客户端和服务器都会使用，以避免用明文文本。
+                // 这使得双方都可以查验对方的身份，并对消息的完整性提供一些保护
+                cNonce = UUID.randomUUID().toString();
+
+            } else if ("auth-int".equalsIgnoreCase(qop)) {
+                // TODO
+            }
+        }
+        String HA1 = DigestUtils.md5DigestAsHex((userId + ":" + realm + ":" + password).getBytes());
+        String HA2 = DigestUtils.md5DigestAsHex((Request.REGISTER + ":" + requestURI.toString()).getBytes());
+
+        StringBuffer reStr = new StringBuffer(200);
+        reStr.append(HA1);
+        reStr.append(":");
+        reStr.append(nonce);
+        reStr.append(":");
+        if (qop != null) {
+            reStr.append(nc);
+            reStr.append(":");
+            reStr.append(cNonce);
+            reStr.append(":");
+            reStr.append(qop);
+            reStr.append(":");
+        }
+        reStr.append(HA2);
+
+        String RESPONSE = DigestUtils.md5DigestAsHex(reStr.toString().getBytes());
+
+        AuthorizationHeader authorizationHeader =
+            SipRequestUtils.createAuthorizationHeader(scheme, userId, requestURI, realm, nonce, qop, cNonce, RESPONSE);
+        registerRequest.addHeader(authorizationHeader);
+
+        return registerRequest;
     }
 
     /**

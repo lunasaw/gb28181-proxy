@@ -15,10 +15,10 @@ import javax.sip.header.*;
 import javax.sip.message.MessageFactory;
 import javax.sip.message.Request;
 
-import com.luna.common.text.RandomStrUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.google.common.collect.Lists;
+import com.luna.common.text.RandomStrUtil;
 
 import lombok.SneakyThrows;
 
@@ -302,6 +302,51 @@ public class SipRequestUtils {
             EventHeader eventHeader = HEADER_FACTORY.createEventHeader(eventType);
             eventHeader.setEventId(RandomStrUtil.getValidationCode());
             return eventHeader;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 基于新提供的方案值创建新的授权标头。
+     * 
+     * @param scheme 方案的新字符串值。
+     * @return AuthorizationHeader
+     */
+    public static AuthorizationHeader createAuthorizationHeader(String scheme) {
+        try {
+            return HEADER_FACTORY.createAuthorizationHeader(scheme);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static AuthorizationHeader createAuthorizationHeader(String scheme, String user, URI requestUri, String realm, String nonce, String qop,
+        String cNonce, String response) {
+
+        AuthorizationHeader authorizationHeader = createAuthorizationHeader(scheme);
+
+        try {
+            authorizationHeader.setUsername(user);
+            authorizationHeader.setRealm(realm);
+            authorizationHeader.setNonce(nonce);
+            authorizationHeader.setURI(requestUri);
+            authorizationHeader.setResponse(response);
+            authorizationHeader.setAlgorithm("MD5");
+            if (qop != null) {
+                authorizationHeader.setQop(qop);
+                authorizationHeader.setCNonce(cNonce);
+                authorizationHeader.setNonceCount(1);
+            }
+            return authorizationHeader;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Header createHeader(String name, String value) {
+        try {
+            return HEADER_FACTORY.createHeader(name, value);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
