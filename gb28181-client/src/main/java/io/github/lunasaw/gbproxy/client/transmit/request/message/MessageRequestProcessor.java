@@ -25,7 +25,6 @@ public abstract class MessageRequestProcessor extends SipRequestProcessorAbstrac
     }
 
     public boolean dealMessage(SIPRequest sipRequest) {
-        log.info("dealMessage::sipRequest = {}", sipRequest);
         // 发送方用户
         String userId = SipUtils.getUserIdFromFromHeader(sipRequest);
         SipTransaction sipTransaction = new SipTransaction(sipRequest);

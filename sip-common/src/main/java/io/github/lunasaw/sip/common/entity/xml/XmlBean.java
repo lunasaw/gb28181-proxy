@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.entity;
+package io.github.lunasaw.sip.common.entity.xml;
 
 import java.io.StringReader;
 import java.io.StringWriter;

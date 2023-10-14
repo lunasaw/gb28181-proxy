@@ -8,14 +8,14 @@ import javax.sip.message.Message;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
-import io.github.lunasaw.sip.common.layer.SipLayer;
-import io.github.lunasaw.sip.common.transmit.event.Event;
-import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
-import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.springframework.util.ObjectUtils;
 
 import gov.nist.javax.sip.SipProviderImpl;
 import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.layer.SipLayer;
+import io.github.lunasaw.sip.common.transmit.event.Event;
+import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
+import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,19 +28,19 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class SipSender {
 
-    public static void transmitRequest(String ip, Message message) throws SipException {
+    public static void transmitRequest(String ip, Message message) {
         transmitRequest(ip, message, null, null);
     }
 
-    public static void transmitRequest(String ip, Message message, Event errorEvent) throws SipException {
+    public static void transmitRequest(String ip, Message message, Event errorEvent) {
         transmitRequest(ip, message, errorEvent, null);
     }
 
-    public static void transmitRequestSuccess(String ip, Message message, Event okEvent) throws SipException {
+    public static void transmitRequestSuccess(String ip, Message message, Event okEvent) {
         transmitRequest(ip, message, null, okEvent);
     }
 
-    public static void transmitRequest(String ip, Message message, Event errorEvent, Event okEvent) throws SipException {
+    public static void transmitRequest(String ip, Message message, Event errorEvent, Event okEvent) {
         ViaHeader viaHeader = (ViaHeader)message.getHeader(ViaHeader.NAME);
         String transport = "UDP";
         if (viaHeader == null) {
@@ -69,29 +69,33 @@ public class SipSender {
                 SipSubscribe.removeErrorSubscribe(eventResult.getCallId());
             });
         }
-        if (Constant.TCP.equals(transport)) {
-            SipProviderImpl tcpSipProvider = SipLayer.getTcpSipProvider(ip);
-            if (tcpSipProvider == null) {
-                log.error("[发送信息失败] 未找到tcp://{}的监听信息", ip);
-                return;
-            }
-            if (message instanceof Request) {
-                tcpSipProvider.sendRequest((Request)message);
-            } else if (message instanceof Response) {
-                tcpSipProvider.sendResponse((Response)message);
-            }
+        try {
+            if (Constant.TCP.equals(transport)) {
+                SipProviderImpl tcpSipProvider = SipLayer.getTcpSipProvider(ip);
+                if (tcpSipProvider == null) {
+                    log.error("[发送信息失败] 未找到tcp://{}的监听信息", ip);
+                    return;
+                }
+                if (message instanceof Request) {
+                    tcpSipProvider.sendRequest((Request)message);
+                } else if (message instanceof Response) {
+                    tcpSipProvider.sendResponse((Response)message);
+                }
 
-        } else if (Constant.UDP.equals(transport)) {
-            SipProviderImpl sipProvider = SipLayer.getUdpSipProvider(ip);
-            if (sipProvider == null) {
-                log.error("[发送信息失败] 未找到udp://{}的监听信息", ip);
-                return;
+            } else if (Constant.UDP.equals(transport)) {
+                SipProviderImpl sipProvider = SipLayer.getUdpSipProvider(ip);
+                if (sipProvider == null) {
+                    log.error("[发送信息失败] 未找到udp://{}的监听信息", ip);
+                    return;
+                }
+                if (message instanceof Request) {
+                    sipProvider.sendRequest((Request)message);
+                } else if (message instanceof Response) {
+                    sipProvider.sendResponse((Response)message);
+                }
             }
-            if (message instanceof Request) {
-                sipProvider.sendRequest((Request)message);
-            } else if (message instanceof Response) {
-                sipProvider.sendResponse((Response)message);
-            }
+        } catch (SipException e) {
+            throw new RuntimeException(e);
         }
     }
 

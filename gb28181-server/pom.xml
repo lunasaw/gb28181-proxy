@@ -18,5 +18,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.github.lunasaw</groupId>
+            <artifactId>sip-common</artifactId>
+            <version>${sip-proxy-common.version}</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

@@ -4,7 +4,7 @@ import javax.sip.SipException;
 import javax.sip.header.WWWAuthenticateHeader;
 import javax.sip.message.Request;
 
-import io.github.lunasaw.gbproxy.client.transmit.cmd.SipRequestHeaderProvider;
+import io.github.lunasaw.sip.common.transmit.SipRequestProvider;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
@@ -37,14 +37,10 @@ public class DefaultRegisterResponseProcessor extends RegisterResponseProcessor 
 
         // 构造二次请求
         Request registerRequestWithAuth =
-            SipRequestHeaderProvider.createRegisterRequestWithAuth(fromDevice, toDevice, sipTransaction.getCallId(), expires, www);
+            SipRequestProvider.createRegisterRequestWithAuth(fromDevice, toDevice, sipTransaction.getCallId(), expires, www);
 
         // 发送二次请求
-        try {
-            SipSender.transmitRequest(fromDevice.getIp(), registerRequestWithAuth);
-        } catch (SipException e) {
-            throw new RuntimeException(e);
-        }
+        SipSender.transmitRequest(fromDevice.getIp(), registerRequestWithAuth);
     }
 
     @Override

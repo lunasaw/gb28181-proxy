@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.transmit.cmd;
+package io.github.lunasaw.sip.common.transmit;
 
 import java.text.ParseException;
 import java.util.List;
@@ -20,7 +20,7 @@ import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 /**
  * Sip命令request创造器
  */
-public class SipRequestHeaderProvider {
+public class SipRequestProvider {
 
     /**
      * 创建SIP请求

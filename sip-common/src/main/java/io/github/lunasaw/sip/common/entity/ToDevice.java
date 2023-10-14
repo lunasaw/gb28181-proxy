@@ -19,6 +19,11 @@ public class ToDevice extends Device{
     private String toTag;
 
     /**
+     * 编码
+     */
+    private String charset;
+
+    /**
      * 需要想下游携带的信息
      */
     private String subject;

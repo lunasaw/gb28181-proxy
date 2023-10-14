@@ -8,13 +8,14 @@ import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterRespo
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.impl.SipProcessorObserverImpl;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.luna.common.text.RandomStrUtil;
 
-import io.github.lunasaw.gbproxy.client.transmit.cmd.SipRequestHeaderProvider;
+import io.github.lunasaw.sip.common.transmit.SipRequestProvider;
 import io.github.lunasaw.sip.common.SipCommonApplication;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
@@ -46,7 +47,7 @@ public class ApplicationTest {
     @Test
     public void atest() {
         String callId = RandomStrUtil.getUUID();
-        Request messageRequest = SipRequestHeaderProvider.createMessageRequest(fromDevice, toDevice, "123123", callId);
+        Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, "123123", callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
     }
 
@@ -54,7 +55,7 @@ public class ApplicationTest {
     @Test
     public void register() {
         String callId = RandomStrUtil.getUUID();
-        Request registerRequest = SipRequestHeaderProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
+        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override
             public void response(EventResult eventResult) {
@@ -68,7 +69,7 @@ public class ApplicationTest {
     public void registerResponse() {
 
         String callId = RandomStrUtil.getUUID();
-        Request registerRequest = SipRequestHeaderProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
+        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
         DefaultRegisterResponseProcessor responseProcessor = new DefaultRegisterResponseProcessor(fromDevice, toDevice, 300);
         SipProcessorObserverImpl.addResponseProcessor(RegisterResponseProcessor.METHOD, responseProcessor);
 
@@ -86,23 +87,15 @@ public class ApplicationTest {
     @Test
     public void messageResponse() {
 
-        String callId = RandomStrUtil.getUUID();
-        Request registerRequest = SipRequestHeaderProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
-        DefaultRegisterResponseProcessor responseProcessor = new DefaultRegisterResponseProcessor(fromDevice, toDevice, 300);
-        SipProcessorObserverImpl.addResponseProcessor(RegisterResponseProcessor.METHOD, responseProcessor);
-
-
-        SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
-            @Override
-            public void response(EventResult eventResult) {
-                System.out.println(eventResult);
-            }
-        });
-
         DefaultMessageRequestProcessor messageRequestProcessor = new DefaultMessageRequestProcessor();
         SipProcessorObserverImpl.addRequestProcessor(DefaultMessageRequestProcessor.METHOD, messageRequestProcessor);
 
+    }
 
-        Thread.sleep(30000);
+    @AfterEach
+    public void after() {
+        while (true){
+
+        }
     }
 }
