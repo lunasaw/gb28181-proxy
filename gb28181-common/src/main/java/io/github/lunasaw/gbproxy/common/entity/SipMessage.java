@@ -105,9 +105,7 @@ public class SipMessage {
         sipMessage.setMethod(Request.INFO);
         sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_MAN_SRTSP.getContentTypeHeader());
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
-
         long sequence = GenerateSequenceImpl.getSequence();
-
         sipMessage.setSequence(sequence);
 
         return sipMessage;
@@ -116,6 +114,17 @@ public class SipMessage {
     public static SipMessage getAckBody() {
         SipMessage sipMessage = new SipMessage();
         sipMessage.setMethod(Request.ACK);
+        sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
+        long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setSequence(sequence);
+
+        return sipMessage;
+    }
+
+
+    public static SipMessage getRegisterBody() {
+        SipMessage sipMessage = new SipMessage();
+        sipMessage.setMethod(Request.REGISTER);
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
         long sequence = GenerateSequenceImpl.getSequence();
         sipMessage.setSequence(sequence);

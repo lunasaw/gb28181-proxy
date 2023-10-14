@@ -6,16 +6,9 @@
 
 [www.isluna.ml](http://lunasaw.github.io)
 
-基于sip实现gb28181的通信框架，区分client和server
-
-更新日志
-
-- 
+基于sip实现gb28181的通信框架，区分client和server。以便于快速构建发起SIP请求和处理响应。项目不仅限于gb28181协议。也可以利用封装的SIP方法处理其他协议。
 
 
-# Contributor
-
-- Luna
 
 # how to use
 

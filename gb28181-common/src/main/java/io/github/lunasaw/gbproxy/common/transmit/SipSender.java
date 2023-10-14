@@ -36,6 +36,10 @@ public class SipSender {
         transmitRequest(ip, message, errorEvent, null);
     }
 
+    public static void transmitRequestSuccess(String ip, Message message, Event okEvent) throws SipException {
+        transmitRequest(ip, message, null, okEvent);
+    }
+
     public static void transmitRequest(String ip, Message message, Event errorEvent, Event okEvent) throws SipException {
         ViaHeader viaHeader = (ViaHeader)message.getHeader(ViaHeader.NAME);
         String transport = "UDP";
@@ -53,16 +57,16 @@ public class SipSender {
         if (errorEvent != null) {
             SipSubscribe.addErrorSubscribe(callIdHeader.getCallId(), (eventResult -> {
                 errorEvent.response(eventResult);
-                SipSubscribe.removeErrorSubscribe(eventResult.callId);
-                SipSubscribe.removeOkSubscribe(eventResult.callId);
+                SipSubscribe.removeErrorSubscribe(eventResult.getCallId());
+                SipSubscribe.removeOkSubscribe(eventResult.getCallId());
             }));
         }
         // 添加订阅
         if (okEvent != null) {
             SipSubscribe.addOkSubscribe(callIdHeader.getCallId(), eventResult -> {
                 okEvent.response(eventResult);
-                SipSubscribe.removeOkSubscribe(eventResult.callId);
-                SipSubscribe.removeErrorSubscribe(eventResult.callId);
+                SipSubscribe.removeOkSubscribe(eventResult.getCallId());
+                SipSubscribe.removeErrorSubscribe(eventResult.getCallId());
             });
         }
         if (Constant.TCP.equals(transport)) {

@@ -60,6 +60,9 @@ public class SipRequestUtils {
     public static Request createRequest(URI requestUri, String method, CallIdHeader callId, CSeqHeader cSeq, FromHeader from, ToHeader to,
         List<ViaHeader> via, MaxForwardsHeader maxForwards, ContentTypeHeader contentType, Object content) {
         try {
+            if (contentType == null){
+                return MESSAGE_FACTORY.createRequest(requestUri, method, callId, cSeq, from, to, via, maxForwards);
+            }
             return MESSAGE_FACTORY.createRequest(requestUri, method, callId, cSeq, from, to, via, maxForwards, contentType, content);
         } catch (ParseException e) {
             throw new RuntimeException(e);

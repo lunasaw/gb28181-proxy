@@ -2,7 +2,8 @@ package io.github.lunasw.gbproxy.client.test.cmd;
 
 import javax.sip.message.Request;
 
-import io.github.lunasaw.gbproxy.client.transmit.cmd.SIPRequestHeaderProvider;
+import io.github.lunasaw.gbproxy.common.transmit.event.Event;
+import io.github.lunasaw.gbproxy.common.transmit.event.EventResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.luna.common.os.SystemInfoUtil;
 import com.luna.common.text.RandomStrUtil;
 
+import io.github.lunasaw.gbproxy.client.transmit.cmd.SIPRequestHeaderProvider;
 import io.github.lunasaw.gbproxy.common.Gb28181Common;
 import io.github.lunasaw.gbproxy.common.entity.FromDevice;
 import io.github.lunasaw.gbproxy.common.entity.ToDevice;
@@ -24,23 +26,36 @@ import lombok.SneakyThrows;
 @SpringBootTest(classes = Gb28181Common.class)
 public class ApplicationTest {
 
+    FromDevice fromDevice;
+
+    ToDevice   toDevice;
 
     @BeforeEach
     public void before() {
         SipLayer.addListeningPoint(SystemInfoUtil.getIP(), 8117);
+        fromDevice = FromDevice.getInstance("33010602011187000001", SystemInfoUtil.getIP(), 8117);
+        toDevice = ToDevice.getInstance("41010500002000000010", "192.168.2.102", 8116);
+
     }
 
     @SneakyThrows
     @Test
     public void atest() {
-
-        FromDevice fromDevice = FromDevice.getInstance("33010602011187000001", SystemInfoUtil.getIP(), 8117);
-
-        ToDevice toDevice = ToDevice.getInstance("41010500002000000010", "192.168.2.102", 8116);
-
         String callId = RandomStrUtil.getUUID();
         Request messageRequest = SIPRequestHeaderProvider.createMessageRequest(fromDevice, toDevice, "123123", callId);
-
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+    }
+
+    @SneakyThrows
+    @Test
+    public void register() {
+        String callId = RandomStrUtil.getUUID();
+        Request registerRequest = SIPRequestHeaderProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
+        SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
+            @Override
+            public void response(EventResult eventResult) {
+                System.out.println(eventResult);
+            }
+        });
     }
 }

@@ -1,8 +1,5 @@
 package io.github.lunasaw.gbproxy.common.transmit.event;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gbproxy.common.transmit.event.result.DeviceNotFoundEvent;
-
 import javax.sip.DialogTerminatedEvent;
 import javax.sip.ResponseEvent;
 import javax.sip.TimeoutEvent;
@@ -10,20 +7,26 @@ import javax.sip.TransactionTerminatedEvent;
 import javax.sip.header.CallIdHeader;
 import javax.sip.message.Response;
 
+import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.common.transmit.event.result.DeviceNotFoundEvent;
+import lombok.Data;
+
 /**
  * 事件结果
+ * 
  * @author luna
  */
-public class EventResult<EventObject> {
-    public int                          statusCode;
+@Data
+public class EventResult<T> {
+    public int             statusCode;
     public EventResultType type;
-    public String                       msg;
-    public String                       callId;
-    public EventObject                  event;
+    public String          msg;
+    public String          callId;
+    public T               event;
 
     public EventResult() {}
 
-    public EventResult(EventObject event) {
+    public EventResult(T event) {
         this.event = event;
         if (event instanceof ResponseEvent) {
             ResponseEvent responseEvent = (ResponseEvent)event;

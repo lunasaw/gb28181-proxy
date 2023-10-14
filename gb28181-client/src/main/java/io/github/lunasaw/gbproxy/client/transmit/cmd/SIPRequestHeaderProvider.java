@@ -123,6 +123,28 @@ public class SIPRequestHeaderProvider {
     }
 
     /**
+     * 创建Register请求
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 发送目的设备
+     * @param callId callId
+     * @return Request
+     */
+    public static Request createRegisterRequest(FromDevice fromDevice, ToDevice toDevice, String callId, Integer expires) {
+
+        SipMessage sipMessage = SipMessage.getRegisterBody();
+        sipMessage.setMethod(Request.REGISTER);
+        sipMessage.setCallId(callId);
+
+        UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
+        ExpiresHeader expiresHeader = SipRequestUtils.createExpiresHeader(expires);
+        sipMessage.addHeader(userAgentHeader).addHeader(contactHeader).addHeader(expiresHeader);
+
+        return createSipRequest(fromDevice, toDevice, sipMessage);
+    }
+
+    /**
      * 创建Subscribe请求
      * 
      * @param fromDevice 发送设备
