@@ -40,6 +40,13 @@ public class SipSender {
         return callId;
     }
 
+    public static String doRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, Event errorEvent, Event okEvent) {
+        String callId = RandomStrUtil.getUUID();
+        Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, xmlBean.toString(), callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
+        return callId;
+    }
+
     public static void transmitRequest(String ip, Message message) {
         transmitRequest(ip, message, null, null);
     }

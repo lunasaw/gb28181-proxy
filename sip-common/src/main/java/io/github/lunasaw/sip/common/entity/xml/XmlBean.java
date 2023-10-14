@@ -17,7 +17,10 @@ import lombok.SneakyThrows;
 @Data
 public class XmlBean {
 
-    private String charset = "GB28181";
+    /**
+     * 字符集, 支持 UTF-8 与 gb2312
+     */
+    private String charset = "gb2312";
 
     @SneakyThrows
     @Override
