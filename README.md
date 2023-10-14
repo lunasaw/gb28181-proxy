@@ -10,11 +10,11 @@
 
 ## 实现功能
 
-- [x] SIP 通用请求
+- [x] SIP 通用请求构建
+- [ ] springboot starter封装 
     - [x] 端口监听
         - [x] UDP 监听
         - [x] TCP 监听
-    - [x] sip请求响应封装
     - [x] 基于javax的xml转化，写对象的方式写xml
 - [x] Server
     - [x] GB28181
@@ -24,22 +24,49 @@
             - [x] 云台控制
             - [x] 安放告警
             - [x] 设备查询
-        - [x] Play
+        - [ ] 实时点播
+        - [ ] 视频回放点播
 - [x] Client
     - [x] 设备注册
+    - [ ] 点播响应
+    - [ ] 视频回放点播
+
 
 # how to use
 
 <a href="https://lunasaw.github.io/luna-gb28181-proxy/docs/" target="_blank">文档链接</a>
 
 ```xml
-
+全量包
 <dependency>
     <groupId>io.github.lunasaw</groupId>
     <artifactId>gb28181-proxy</artifactId>
     <version>${last.version}</version>
 </dependency>
 
+按需引入
+
+基于sip的请求封装包
+<dependency>
+    <groupId>io.github.lunasaw</groupId>
+    <artifactId>sip-common</artifactId>
+    <version>${last.version}</version>
+</dependency>
+
+gb28181设备模拟client
+<dependency>
+    <groupId>io.github.lunasaw</groupId>
+    <artifactId>gb28181-client</artifactId>
+    <version>${last.version}</version>
+</dependency>
+
+
+sip服务器server
+<dependency>
+    <groupId>io.github.lunasaw</groupId>
+    <artifactId>gb28181-server</artifactId>
+    <version>${last.version}</version>
+</dependency>
 ```
 
 # 代码规范
