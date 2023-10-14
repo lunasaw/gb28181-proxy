@@ -11,7 +11,7 @@
     <modules>
         <module>gb28181-client</module>
         <module>gb28181-server</module>
-        <module>gb28181-common</module>
+        <module>sip-common</module>
     </modules>
 
     <properties>

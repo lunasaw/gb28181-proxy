@@ -4,12 +4,11 @@ import javax.sip.ResponseEvent;
 import javax.sip.header.WWWAuthenticateHeader;
 import javax.sip.message.Response;
 
-import io.github.lunasaw.gbproxy.common.transmit.event.EventResult;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.gbproxy.client.transmit.response.SipResponseProcessorAbstract;
-import io.github.lunasaw.gbproxy.common.entity.SipTransaction;
+import io.github.lunasaw.sipproxy.common.entity.SipTransaction;
 import lombok.extern.slf4j.Slf4j;
 
 /**

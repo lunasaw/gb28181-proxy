@@ -1,0 +1,78 @@
+package io.github.lunasaw.sipproxy.common.enums;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.sip.header.ContentTypeHeader;
+
+import io.github.lunasaw.sipproxy.common.utils.SipRequestUtils;
+import lombok.SneakyThrows;
+
+/**
+ * 消息体类型
+ * @author luna
+ */
+
+public enum ContentTypeEnum {
+
+    /**
+     * xml
+     */
+    APPLICATION_XML("Application", "MANSCDP+xml"),
+
+    /**
+     * sdp
+     */
+    APPLICATION_SDP("APPLICATION", "SDP"),
+    /**
+     *
+     */
+    APPLICATION_MAN_SRTSP("Application", "MANSRTSP"),
+
+    ;
+
+    private static final Map<String, ContentTypeHeader> MAP = new ConcurrentHashMap<>();
+    private final String                                type;
+    private final String                                subtype;
+
+    ContentTypeEnum(String type, String subtype) {
+        this.type = type;
+        this.subtype = subtype;
+    }
+
+    public static ContentTypeEnum fromContentTypeHeader(ContentTypeHeader header) {
+        for (ContentTypeEnum contentType : values()) {
+            if (contentType.type.equals(header.getContentType())
+                && contentType.subtype.equals(header.getContentSubType())) {
+                return contentType;
+            }
+        }
+        return null;
+    }
+
+    public static ContentTypeEnum fromString(String contentType) {
+        for (ContentTypeEnum contentTypeEnum : values()) {
+            if (contentTypeEnum.toString().equalsIgnoreCase(contentType)) {
+                return contentTypeEnum;
+            }
+        }
+        return null;
+    }
+
+    @SneakyThrows
+    public ContentTypeHeader getContentTypeHeader() {
+        String key = toString();
+        if (MAP.containsKey(key)) {
+            return MAP.get(key);
+        } else {
+            ContentTypeHeader contentTypeHeader = SipRequestUtils.createContentTypeHeader(type, subtype);
+            MAP.put(key, contentTypeHeader);
+            return contentTypeHeader;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return type + "/" + subtype;
+    }
+}
