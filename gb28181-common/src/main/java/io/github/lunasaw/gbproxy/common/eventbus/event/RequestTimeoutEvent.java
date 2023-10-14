@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.common.eventbus.event.device;
+package io.github.lunasaw.gbproxy.common.eventbus.event;
 
 import javax.sip.TimeoutEvent;
 

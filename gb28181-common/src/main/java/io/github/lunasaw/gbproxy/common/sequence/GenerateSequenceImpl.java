@@ -11,16 +11,14 @@ import java.util.Set;
  */
 public class GenerateSequenceImpl implements GenerateSequence {
 
-    @Override
-    public Long generateSequence() {
-        long sequence = getSequence();
-        return sequence;
-    }
-
     public static long getSequence() {
         long timestamp = System.currentTimeMillis();
-        long sequence = (timestamp & 0x3FFF) % Integer.MAX_VALUE;
-        return sequence;
+        return (timestamp & 0x3FFF) % Integer.MAX_VALUE;
+    }
+
+    @Override
+    public Long generateSequence() {
+        return getSequence();
     }
 
 
