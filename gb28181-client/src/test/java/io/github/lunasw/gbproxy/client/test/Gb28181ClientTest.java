@@ -1,4 +1,4 @@
-package io.github.lunasw;
+package io.github.lunasw.gbproxy.client.test;
 
 import io.github.lunasaw.gbproxy.client.Gb28181Client;
 import org.dom4j.Document;

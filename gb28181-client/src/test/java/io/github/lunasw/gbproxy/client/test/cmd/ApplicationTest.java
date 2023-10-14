@@ -1,7 +1,8 @@
-package io.github.lunasaw.gbproxy.common.test;
+package io.github.lunasw.gbproxy.client.test.cmd;
 
 import javax.sip.message.Request;
 
+import io.github.lunasaw.gbproxy.client.transmit.cmd.SIPRequestHeaderProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import io.github.lunasaw.gbproxy.common.Gb28181Common;
 import io.github.lunasaw.gbproxy.common.entity.FromDevice;
 import io.github.lunasaw.gbproxy.common.entity.ToDevice;
 import io.github.lunasaw.gbproxy.common.layer.SipLayer;
+import io.github.lunasaw.gbproxy.common.transmit.SipSender;
 import lombok.SneakyThrows;
 
 /**
@@ -37,6 +39,8 @@ public class ApplicationTest {
         ToDevice toDevice = ToDevice.getInstance("41010500002000000010", "192.168.2.102", 8116);
 
         String callId = RandomStrUtil.getUUID();
+        Request messageRequest = SIPRequestHeaderProvider.createMessageRequest(fromDevice, toDevice, "123123", callId);
 
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
     }
 }

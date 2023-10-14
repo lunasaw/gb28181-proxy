@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.common.transmit.cmd;
+package io.github.lunasaw.gbproxy.client.transmit.cmd;
 
 import java.util.List;
 
