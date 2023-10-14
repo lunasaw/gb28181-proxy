@@ -1,11 +1,11 @@
-package io.github.lunasaw.gbproxy.client.transmit.response.impl;
+package io.github.lunasaw.gbproxy.client.transmit.response.register.impl;
 
 import javax.sip.SipException;
 import javax.sip.header.WWWAuthenticateHeader;
 import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.SipRequestHeaderProvider;
-import io.github.lunasaw.gbproxy.client.transmit.response.processor.RegisterResponseProcessor;
+import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
 import io.github.lunasaw.sip.common.entity.ToDevice;

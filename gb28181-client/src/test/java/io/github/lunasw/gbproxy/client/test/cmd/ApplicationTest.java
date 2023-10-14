@@ -2,8 +2,9 @@ package io.github.lunasw.gbproxy.client.test.cmd;
 
 import javax.sip.message.Request;
 
-import io.github.lunasaw.gbproxy.client.transmit.response.impl.DefaultRegisterResponseProcessor;
-import io.github.lunasaw.gbproxy.client.transmit.response.processor.RegisterResponseProcessor;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.impl.DefaultMessageRequestProcessor;
+import io.github.lunasaw.gbproxy.client.transmit.response.register.impl.DefaultRegisterResponseProcessor;
+import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.impl.SipProcessorObserverImpl;
@@ -78,6 +79,30 @@ public class ApplicationTest {
                 System.out.println(eventResult);
             }
         });
+        Thread.sleep(30000);
+    }
+
+    @SneakyThrows
+    @Test
+    public void messageResponse() {
+
+        String callId = RandomStrUtil.getUUID();
+        Request registerRequest = SipRequestHeaderProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
+        DefaultRegisterResponseProcessor responseProcessor = new DefaultRegisterResponseProcessor(fromDevice, toDevice, 300);
+        SipProcessorObserverImpl.addResponseProcessor(RegisterResponseProcessor.METHOD, responseProcessor);
+
+
+        SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
+            @Override
+            public void response(EventResult eventResult) {
+                System.out.println(eventResult);
+            }
+        });
+
+        DefaultMessageRequestProcessor messageRequestProcessor = new DefaultMessageRequestProcessor();
+        SipProcessorObserverImpl.addRequestProcessor(DefaultMessageRequestProcessor.METHOD, messageRequestProcessor);
+
+
         Thread.sleep(30000);
     }
 }
