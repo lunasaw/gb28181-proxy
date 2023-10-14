@@ -2,10 +2,7 @@ package io.github.lunasaw.gbproxy.server.transimit.cmd;
 
 import com.luna.common.text.RandomStrUtil;
 
-import io.github.lunasaw.gbproxy.server.entity.DeviceBroadcast;
-import io.github.lunasaw.gbproxy.server.entity.DeviceControl;
-import io.github.lunasaw.gbproxy.server.entity.DeviceControlAlarm;
-import io.github.lunasaw.gbproxy.server.entity.DeviceQuery;
+import io.github.lunasaw.gbproxy.server.entity.*;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
@@ -42,10 +39,6 @@ public class DeviceSendCmd {
         return SipSender.doRequest(fromDevice, toDevice, deviceBroadcast);
     }
 
-    public static void main(String[] args) {
-
-    }
-
     /**
      * 报警布防/撤防命令
      *
@@ -77,10 +70,11 @@ public class DeviceSendCmd {
 
     /**
      * 报警复位命令
+     * 
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
-     * @param alarmMethod
-     * @param alarmType
+     * @param alarmMethod 方式
+     * @param alarmType 类型
      * @return
      */
     public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String alarmMethod, String alarmType) {
@@ -89,6 +83,47 @@ public class DeviceSendCmd {
             fromDevice.getUserId(), "ResetAlarm", new DeviceControlAlarm.AlarmInfo(alarmMethod, alarmType));
 
         return SipSender.doRequest(fromDevice, toDevice, deviceControlAlarm);
+    }
+
+    /**
+     *
+     * 看守位控制命令
+     * 
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @param enable 看守位使能：1 = 开启，0 = 关闭
+     * @param resetTime 自动归位时间间隔，开启看守位时使用，单位:秒(s)
+     * @param presetIndex 调用预置位编号，开启看守位时使用，取值范围0~255
+     * @return
+     */
+    public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String enable, String resetTime, String presetIndex) {
+
+        DeviceControlPosition deviceControlPosition =
+            new DeviceControlPosition(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(),
+                fromDevice.getUserId(), new DeviceControlPosition.HomePosition(enable, resetTime, presetIndex));
+
+        return SipSender.doRequest(fromDevice, toDevice, deviceControlPosition);
+    }
+
+    /**
+     * 设备配置命令：basicParam
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @param name 设备/通道名称（可选）
+     * @param expiration 注册过期时间（可选）
+     * @param heartBeatInterval 心跳间隔时间（可选）
+     * @param heartBeatCount 心跳超时次数（可选）
+     * @return
+     */
+    public String deviceConfig(FromDevice fromDevice, ToDevice toDevice, String name, String expiration,
+        String heartBeatInterval, String heartBeatCount) {
+
+        DeviceConfig deviceConfig =
+            new DeviceConfig(CmdTypeEnum.DEVICE_CONFIG.getType(), RandomStrUtil.getValidationCode(),
+                fromDevice.getUserId(), new DeviceConfig.BasicParam(name, expiration, heartBeatInterval, heartBeatCount));
+
+        return SipSender.doRequest(fromDevice, toDevice, deviceConfig);
     }
 
 }

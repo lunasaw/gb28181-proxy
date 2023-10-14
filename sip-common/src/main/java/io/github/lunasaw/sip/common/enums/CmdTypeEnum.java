@@ -21,6 +21,7 @@ public enum CmdTypeEnum {
     MOBILE_POSITION("MobilePosition", "移动位置信息"),
     DEVICE_CONTROL("DeviceControl", "设备控制"),
     BROADCAST("Broadcast", "设备广播"),
+    DEVICE_CONFIG("DeviceConfig", "设备配置"),
 
     ;
 

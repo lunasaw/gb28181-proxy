@@ -40,9 +40,6 @@ public class DeviceControlPosition extends XmlBean {
     @XmlElement(name = "DeviceID")
     public String    deviceId;
 
-    @XmlElement(name = "AlarmCmd")
-    public String    alarmCmd;
-
     @XmlElement(name = "HomePosition")
     public HomePosition homePosition;
 
