@@ -4,35 +4,28 @@ import java.util.Map;
 import java.util.TooManyListenersException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.sip.*;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.util.ObjectUtils;
+
+import gov.nist.javax.sip.SipProviderImpl;
 import gov.nist.javax.sip.SipStackImpl;
 import io.github.lunasaw.gbproxy.common.conf.DefaultProperties;
 import io.github.lunasaw.gbproxy.common.conf.msg.GbStringMsgParserFactory;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-import gov.nist.javax.sip.SipProviderImpl;
 import io.github.lunasaw.gbproxy.common.transmit.ISipProcessorObserver;
-import org.springframework.util.ObjectUtils;
-
-import javax.sip.*;
+import io.github.lunasaw.gbproxy.common.transmit.impl.SipProcessorObserverImpl;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author luna
  */
-@Component
-@Order(value = 10)
 @Slf4j
 public class SipLayer implements CommandLineRunner {
 
-    private final Map<String, SipProviderImpl> tcpSipProviderMap = new ConcurrentHashMap<>();
-    private final Map<String, SipProviderImpl> udpSipProviderMap = new ConcurrentHashMap<>();
-    @Autowired
-    private ISipProcessorObserver              sipProcessorObserver;
+    private static final Map<String, SipProviderImpl> tcpSipProviderMap = new ConcurrentHashMap<>();
+    private static final Map<String, SipProviderImpl> udpSipProviderMap = new ConcurrentHashMap<>();
 
     @Override
     public void run(String... args) throws Exception {
@@ -42,8 +35,43 @@ public class SipLayer implements CommandLineRunner {
 	@Value("${sip.log:false}")
 	private Boolean enableLog;
 
+    public static SipProviderImpl getUdpSipProvider(String ip) {
+		if (ObjectUtils.isEmpty(ip)) {
+			return null;
+		}
+		return udpSipProviderMap.get(ip);
+	}
+
+    public static SipProviderImpl getUdpSipProvider() {
+        if (udpSipProviderMap.size() < 1) {
+            throw new RuntimeException("ListeningPoint Not Exist");
+		}
+		return udpSipProviderMap.values().stream().findFirst().get();
+	}
+
+    public static SipProviderImpl getTcpSipProvider() {
+		if (tcpSipProviderMap.size() != 1) {
+			return null;
+		}
+		return tcpSipProviderMap.values().stream().findFirst().get();
+	}
+
+    public static SipProviderImpl getTcpSipProvider(String ip) {
+		if (ObjectUtils.isEmpty(ip)) {
+			return null;
+		}
+		return tcpSipProviderMap.get(ip);
+	}
 
 	public void addListeningPoint(String monitorIp, int port) {
+        addListeningPoint(monitorIp, port, new SipProcessorObserverImpl(), true);
+    }
+
+	public void addListeningPoint(String monitorIp, int port, Boolean enableLog) {
+		addListeningPoint(monitorIp, port, new SipProcessorObserverImpl(), enableLog);
+	}
+
+    public void addListeningPoint(String monitorIp, int port, ISipProcessorObserver listener, Boolean enableLog) {
 		SipStackImpl sipStack;
 		try {
 			sipStack = (SipStackImpl) SipFactory.getInstance().createSipStack(DefaultProperties.getProperties("GB28181_SIP", enableLog));
@@ -58,7 +86,7 @@ public class SipLayer implements CommandLineRunner {
 			SipProviderImpl tcpSipProvider = (SipProviderImpl) sipStack.createSipProvider(tcpListeningPoint);
 
 			tcpSipProvider.setDialogErrorsAutomaticallyHandled();
-			tcpSipProvider.addSipListener(sipProcessorObserver);
+            tcpSipProvider.addSipListener(listener);
 			tcpSipProviderMap.put(monitorIp, tcpSipProvider);
 			log.info("[SIP SERVER] tcp://{}:{} 启动成功", monitorIp, port);
 		} catch (TransportNotSupportedException
@@ -73,7 +101,7 @@ public class SipLayer implements CommandLineRunner {
 			ListeningPoint udpListeningPoint = sipStack.createListeningPoint(monitorIp, port, "UDP");
 
 			SipProviderImpl udpSipProvider = (SipProviderImpl) sipStack.createSipProvider(udpListeningPoint);
-			udpSipProvider.addSipListener(sipProcessorObserver);
+            udpSipProvider.addSipListener(listener);
 
 			udpSipProviderMap.put(monitorIp, udpSipProvider);
 
@@ -85,34 +113,6 @@ public class SipLayer implements CommandLineRunner {
 			log.error("[SIP SERVER] udp://{}:{} SIP服务启动失败,请检查端口是否被占用或者ip是否正确"
 					, monitorIp, port);
 		}
-	}
-
-	public SipProviderImpl getUdpSipProvider(String ip) {
-		if (ObjectUtils.isEmpty(ip)) {
-			return null;
-		}
-		return udpSipProviderMap.get(ip);
-	}
-
-	public SipProviderImpl getUdpSipProvider() {
-		if (udpSipProviderMap.size() != 1) {
-			return null;
-		}
-		return udpSipProviderMap.values().stream().findFirst().get();
-	}
-
-	public SipProviderImpl getTcpSipProvider() {
-		if (tcpSipProviderMap.size() != 1) {
-			return null;
-		}
-		return tcpSipProviderMap.values().stream().findFirst().get();
-	}
-
-	public SipProviderImpl getTcpSipProvider(String ip) {
-		if (ObjectUtils.isEmpty(ip)) {
-			return null;
-		}
-		return tcpSipProviderMap.get(ip);
 	}
 
 	public String getLocalIp(String deviceLocalIp) {

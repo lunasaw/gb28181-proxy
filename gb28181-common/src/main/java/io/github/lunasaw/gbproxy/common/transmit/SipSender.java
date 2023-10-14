@@ -33,12 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class SipSender {
 
-    @Autowired
-    private SipLayer     sipLayer;
-
-    @Autowired
-    private SipSubscribe sipSubscribe;
-
     public void transmitRequest(String ip, Message message) throws SipException, ParseException {
         transmitRequest(ip, message, null, null);
     }
@@ -62,22 +56,22 @@ public class SipSender {
         CallIdHeader callIdHeader = (CallIdHeader)message.getHeader(CallIdHeader.NAME);
         // 添加错误订阅
         if (errorEvent != null) {
-            sipSubscribe.addErrorSubscribe(callIdHeader.getCallId(), (eventResult -> {
+            SipSubscribe.addErrorSubscribe(callIdHeader.getCallId(), (eventResult -> {
                 errorEvent.response(eventResult);
-                sipSubscribe.removeErrorSubscribe(eventResult.callId);
-                sipSubscribe.removeOkSubscribe(eventResult.callId);
+                SipSubscribe.removeErrorSubscribe(eventResult.callId);
+                SipSubscribe.removeOkSubscribe(eventResult.callId);
             }));
         }
         // 添加订阅
         if (okEvent != null) {
-            sipSubscribe.addOkSubscribe(callIdHeader.getCallId(), eventResult -> {
+            SipSubscribe.addOkSubscribe(callIdHeader.getCallId(), eventResult -> {
                 okEvent.response(eventResult);
-                sipSubscribe.removeOkSubscribe(eventResult.callId);
-                sipSubscribe.removeErrorSubscribe(eventResult.callId);
+                SipSubscribe.removeOkSubscribe(eventResult.callId);
+                SipSubscribe.removeErrorSubscribe(eventResult.callId);
             });
         }
         if (Constant.TCP.equals(transport)) {
-            SipProviderImpl tcpSipProvider = sipLayer.getTcpSipProvider(ip);
+            SipProviderImpl tcpSipProvider = SipLayer.getTcpSipProvider(ip);
             if (tcpSipProvider == null) {
                 log.error("[发送信息失败] 未找到tcp://{}的监听信息", ip);
                 return;
@@ -89,7 +83,7 @@ public class SipSender {
             }
 
         } else if (Constant.UDP.equals(transport)) {
-            SipProviderImpl sipProvider = sipLayer.getUdpSipProvider(ip);
+            SipProviderImpl sipProvider = SipLayer.getUdpSipProvider(ip);
             if (sipProvider == null) {
                 log.error("[发送信息失败] 未找到udp://{}的监听信息", ip);
                 return;
@@ -104,26 +98,21 @@ public class SipSender {
 
     public CallIdHeader getNewCallIdHeader(String ip, String transport) {
         if (ObjectUtils.isEmpty(transport)) {
-            return sipLayer.getUdpSipProvider().getNewCallId();
+            return SipLayer.getUdpSipProvider().getNewCallId();
         }
         SipProviderImpl sipProvider;
         if (ObjectUtils.isEmpty(ip)) {
-            sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? sipLayer.getTcpSipProvider()
-                : sipLayer.getUdpSipProvider();
+            sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? SipLayer.getTcpSipProvider()
+                : SipLayer.getUdpSipProvider();
         } else {
-            sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? sipLayer.getTcpSipProvider(ip)
-                : sipLayer.getUdpSipProvider(ip);
+            sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? SipLayer.getTcpSipProvider(ip)
+                : SipLayer.getUdpSipProvider(ip);
         }
 
         if (sipProvider == null) {
-            sipProvider = sipLayer.getUdpSipProvider();
+            sipProvider = SipLayer.getUdpSipProvider();
         }
 
-        if (sipProvider != null) {
-            return sipProvider.getNewCallId();
-        } else {
-            log.warn("[新建CallIdHeader失败]， ip={}, transport={}", ip, transport);
-            return null;
-        }
+        return sipProvider.getNewCallId();
     }
 }
