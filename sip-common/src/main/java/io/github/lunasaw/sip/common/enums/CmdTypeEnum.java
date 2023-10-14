@@ -11,8 +11,16 @@ public enum CmdTypeEnum {
     /**
      * 请求类型
      */
-    Device_Info("DeviceInfo", "查询设备信息"),
-    TCP(Constant.TCP, "TCP"),
+    DEVICE_INFO("DeviceInfo", "查询设备信息"),
+    DEVICE_STATUS("DeviceStatus", "查询设备状态"),
+    CATALOG("Catalog", "设备目录"),
+    RECORD_INFO("RecordInfo", "查询设备录像信息"),
+    ALARM("Alarm", "查询设备告警信息"),
+    CONFIG_DOWNLOAD("ConfigDownload", "设备配置下载"),
+    PRESET_QUERY("PresetQuery", "查询预置位"),
+    MOBILE_POSITION("MobilePosition", "移动位置信息"),
+    DEVICE_CONTROL("DeviceControl", "设备控制"),
+    BROADCAST("Broadcast", "设备广播"),
 
     ;
 

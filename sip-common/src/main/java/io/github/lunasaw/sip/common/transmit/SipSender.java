@@ -10,8 +10,13 @@ import javax.sip.message.Response;
 
 import org.springframework.util.ObjectUtils;
 
+import com.luna.common.text.RandomStrUtil;
+
 import gov.nist.javax.sip.SipProviderImpl;
 import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.entity.xml.XmlBean;
 import io.github.lunasaw.sip.common.layer.SipLayer;
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
@@ -27,6 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 public class SipSender {
+
+    public static String doRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean) {
+        String callId = RandomStrUtil.getUUID();
+        Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, xmlBean.toString(), callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
 
     public static void transmitRequest(String ip, Message message) {
         transmitRequest(ip, message, null, null);

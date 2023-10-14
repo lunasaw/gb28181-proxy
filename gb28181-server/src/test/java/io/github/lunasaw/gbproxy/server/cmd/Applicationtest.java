@@ -1,7 +1,7 @@
 package io.github.lunasaw.gbproxy.server.cmd;
 
 import io.github.lunasaw.gbproxy.server.Gb28181Server;
-import io.github.lunasaw.gbproxy.server.transimit.cmd.DeviceQueryCmd;
+import io.github.lunasaw.gbproxy.server.transimit.cmd.DeviceSendCmd;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.layer.SipLayer;
@@ -32,7 +32,7 @@ public class Applicationtest {
 
     @Test
     public void atest() {
-        String infoQueryCallId = DeviceQueryCmd.deviceInfoQuery(fromDevice, toDevice);
+        String infoQueryCallId = DeviceSendCmd.deviceInfoQuery(fromDevice, toDevice);
         System.out.println(infoQueryCallId);
     }
 }
