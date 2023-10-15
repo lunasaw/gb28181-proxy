@@ -26,6 +26,8 @@
             <Parental>0</Parental>
             <!-- 父设备/区域/系统ID(必选)-->
             <ParentID>${DEVICE_ID}</ParentID>
+            <!-- 业务分组-->
+            <BusinessGroupID>0</BusinessGroupID>
             <!-- 信令安全模式(可选)缺省为0; 0:不采用;2:S/MIME 签名方式;3:S/ MIME加密签名同时采用方式;4:数字摘要方式-->
             <SafetyWay>0</SafetyWay>
             <!-- 注册方式(必选)缺省为1;1:符合IETFRFC3261标准的认证注册模 式;2:基于口令的双向认证注册模式;3:基于数字证书的双向认证注册模式-->
@@ -46,14 +48,14 @@
             <Port>5060</Port>
             <!-- 设备口令(可选)-->
             <Password>Password1</Password>
-            <!-- 云台类型(可选)-->
+            <!-- 云台类型(可选) 1-球机;2-半球;3-固定枪机;4-遥控枪机-->
             <PTZType>1</PTZType>
             <!-- 设备状态(必选)-->
             <Status>Status1</Status>
             <!-- 经度(可选)-->
-            <Longitude>171.4</Longitude>
+            <Longitude>121.472644</Longitude>
             <!-- 纬度(可选)-->
-            <Latitude>34.2</Latitude>
+            <Latitude>31.231706</Latitude>
         </Item>
     </DeviceList>
 </Response>

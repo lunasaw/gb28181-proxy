@@ -1,13 +1,16 @@
 package io.github.lunasaw.gbproxy.client.entity.response;
 
-import io.github.lunasaw.sip.common.entity.xml.XmlBean;
-import lombok.Getter;
-import lombok.Setter;
-import org.assertj.core.util.Lists;
+import java.util.List;
 
 import javax.xml.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.assertj.core.util.Lists;
+
+import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <?xml version="1.0"?>
@@ -49,47 +52,30 @@ import java.util.List;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @XmlRootElement(name = "Response")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceChanel extends XmlBean {
-    @XmlElement(name = "CmdType")
-    public String cmdType;
-
-    @XmlElement(name = "SN")
-    public String sn;
-
-    @XmlElement(name = "DeviceID")
-    public String deviceId;
+public class DeviceResponse extends DeviceBase {
 
     @XmlElement(name = "SumNum")
-    public int sumNum;
+    private int              sumNum;
 
-    @XmlElement(name = "DeviceList")
-    private DeviceList deviceList;
+    @XmlElement(name = "Item")
+    @XmlElementWrapper(name = "DeviceList")
+    private List<DeviceItem> deviceItemList;
 
-    public static void main(String[] args) {
-        DeviceChanel deviceChanel = new DeviceChanel();
-
-        DeviceItem deviceItem = new DeviceItem();
-        deviceItem.setDeviceId("12312312");
-
-        DeviceList deviceList1 = new DeviceList();
-
-        deviceList1.setDeviceItemList(Lists.newArrayList(deviceItem, deviceItem));
-
-        deviceChanel.setDeviceList(deviceList1);
-        System.out.println(deviceChanel);
+    public DeviceResponse(String cmdType, String sn, String deviceId) {
+        super(cmdType, sn, deviceId);
     }
 
-    @Getter
-    @Setter
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public static class DeviceList{
+    public static void main(String[] args) {
+        DeviceResponse deviceResponse = new DeviceResponse();
 
-        @XmlElement(name = "Item")
-        public List<DeviceItem> deviceItemList;
+        DeviceItem deviceItem = DeviceItem.getInstanceExample("12312312");
 
-        @XmlAttribute(name = "Num")
-        private String num = "1";
+        deviceResponse.setDeviceItemList(Lists.newArrayList(deviceItem, deviceItem));
+
+        System.out.println(deviceResponse);
     }
 }
