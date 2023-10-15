@@ -1,5 +1,7 @@
-package io.github.lunasaw.gbproxy.server.entity;
+package io.github.lunasaw.sip.common.entity.xml;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
@@ -11,15 +13,16 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DeviceBase extends XmlBean {
     @XmlElement(name = "CmdType")
-    public String cmdType;
+    private String cmdType;
 
     @XmlElement(name = "SN")
-    public String sn;
+    private String sn;
 
     @XmlElement(name = "DeviceID")
-    public String deviceId;
+    private String deviceId;
 
     public DeviceBase() {
     }

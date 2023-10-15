@@ -5,8 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import io.github.lunasaw.gbproxy.server.entity.DeviceBase;
-import io.github.lunasaw.gbproxy.server.entity.query.DeviceQuery;
+import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
 import lombok.*;
 
 /**
@@ -27,9 +26,7 @@ public class DeviceControl extends DeviceBase {
     public String iFameCmd;
 
     public DeviceControl(String cmdType, String sn, String deviceId) {
-        this.cmdType = cmdType;
-        this.sn = sn;
-        this.deviceId = deviceId;
+        super(cmdType, sn, deviceId);
     }
 
 

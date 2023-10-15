@@ -40,9 +40,7 @@ public class DeviceConfigDownload extends DeviceQuery {
     public String configType;
 
     public DeviceConfigDownload(String cmdType, String sn, String deviceId) {
-        this.cmdType = cmdType;
-        this.sn = sn;
-        this.deviceId = deviceId;
+        super(cmdType, sn, deviceId);
     }
 
 }

@@ -6,15 +6,21 @@ import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 /**
  * @author luna
  * @date 2023/10/12
  */
-@Data
+@Getter
+@Setter
+@XmlAccessorType(XmlAccessType.NONE)
 public class XmlBean {
 
     /**

@@ -5,8 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import io.github.lunasaw.gbproxy.server.entity.DeviceBase;
-import io.github.lunasaw.gbproxy.server.entity.query.DeviceQuery;
+import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,12 +38,10 @@ public class DeviceConfigControl extends DeviceBase {
 
 
     @XmlElement(name = "BasicParam")
-    public BasicParam basicParam;
+    private BasicParam basicParam;
 
     public DeviceConfigControl(String cmdType, String sn, String deviceId) {
-        this.cmdType = cmdType;
-        this.sn = sn;
-        this.deviceId = deviceId;
+        super(cmdType, sn, deviceId);
     }
 
     @Getter
@@ -56,13 +53,13 @@ public class DeviceConfigControl extends DeviceBase {
     public static class BasicParam {
 
         @XmlElement(name = "Name")
-        public String name;
+        private String name;
         @XmlElement(name = "Expiration")
-        public String expiration;
+        private String expiration;
         @XmlElement(name = "HeartBeatInterval")
-        public String heartBeatInterval;
+        private String heartBeatInterval;
         @XmlElement(name = "HeartBeatCount")
-        public String heartBeatCount;
+        private String heartBeatCount;
 
     }
 

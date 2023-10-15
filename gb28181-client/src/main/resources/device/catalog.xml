@@ -46,6 +46,8 @@
             <Port>5060</Port>
             <!-- 设备口令(可选)-->
             <Password>Password1</Password>
+            <!-- 云台类型(可选)-->
+            <PTZType>1</PTZType>
             <!-- 设备状态(必选)-->
             <Status>Status1</Status>
             <!-- 经度(可选)-->

@@ -5,8 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import io.github.lunasaw.gbproxy.server.entity.DeviceBase;
-import io.github.lunasaw.gbproxy.server.entity.query.DeviceQuery;
+import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,18 +41,16 @@ public class DeviceControlDrag extends DeviceBase {
      * 放大
      */
     @XmlElement(name = "DragZoomIn")
-    public DragZoom dragZoomIn;
+    private DragZoom dragZoomIn;
 
     /**
      * 缩小
      */
     @XmlElement(name = "DragZoomOut")
-    public DragZoom dragZoomOut;
+    private DragZoom dragZoomOut;
 
     public DeviceControlDrag(String cmdType, String sn, String deviceId) {
-        this.cmdType = cmdType;
-        this.sn = sn;
-        this.deviceId = deviceId;
+        super(cmdType, sn, deviceId);
     }
 
     public static void main(String[] args) {
