@@ -45,23 +45,6 @@ public class DeviceConfig extends DeviceQuery {
         this.deviceId = deviceId;
     }
 
-    public static void main(String[] args) {
-        DeviceConfig alarm = new DeviceConfig();
-        alarm.setCmdType("DeviceControl");
-        alarm.setSn("179173");
-        alarm.setDeviceId("123");
-
-        BasicParam basicParam = new BasicParam();
-        basicParam.setExpiration("30");
-        basicParam.setHeartBeatCount("31");
-        basicParam.setHeartBeatInterval("300");
-        basicParam.setName("QWWQ");
-        alarm.setBasicParam(basicParam);
-
-        System.out.println(alarm);
-
-    }
-
     @Getter
     @Setter
     @AllArgsConstructor
@@ -78,6 +61,23 @@ public class DeviceConfig extends DeviceQuery {
         public String heartBeatInterval;
         @XmlElement(name = "HeartBeatCount")
         public String heartBeatCount;
+
+    }
+
+    public static void main(String[] args) {
+        DeviceConfig alarm = new DeviceConfig();
+        alarm.setCmdType("DeviceControl");
+        alarm.setSn("179173");
+        alarm.setDeviceId("123");
+
+        BasicParam basicParam = new BasicParam();
+        basicParam.setExpiration("30");
+        basicParam.setHeartBeatCount("31");
+        basicParam.setHeartBeatInterval("300");
+        basicParam.setName("QWWQ");
+        alarm.setBasicParam(basicParam);
+
+        System.out.println(alarm);
 
     }
 }

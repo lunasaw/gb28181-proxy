@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -73,5 +74,8 @@ public class DeviceRecordQuery extends XmlBean {
 
         String format = dateTimeFormatter.format(formatter.parse("2023-11-11 10:10:10"));
         System.out.println(format);
+
+        String s = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, new Date());
+        System.out.println(s);
     }
 }

@@ -1,5 +1,8 @@
 package io.github.lunasaw.gbproxy.server.transimit.cmd;
 
+import java.util.Date;
+
+import com.luna.common.date.DateUtils;
 import com.luna.common.text.RandomStrUtil;
 
 import io.github.lunasaw.gbproxy.server.entity.*;
@@ -44,18 +47,49 @@ public class DeviceSendCmd {
      * @param toDevice 接收设备
      * @return callId
      */
-    public static String deviceCatalog(FromDevice fromDevice, ToDevice toDevice) {
-        DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
-        return SipSender.doRequest(fromDevice, toDevice, deviceQuery);
+    public static String deviceCatalog(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime, String secrecy, String type) {
+        DeviceRecordQuery recordQuery = new DeviceRecordQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+
+        recordQuery.setStartTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startTime));
+        recordQuery.setEndTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime));
+        recordQuery.setSecrecy(secrecy);
+        recordQuery.setType(type);
+
+        return SipSender.doRequest(fromDevice, toDevice, recordQuery);
     }
 
+    /**
+     * 告警查询
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @param startPriority 报警起始级别（可选）
+     * @param endPriority 报警终止级别（可选）
+     * @param alarmMethod 报警方式条件（可选）
+     * @param alarmType 报警类型
+     * @param startTime 报警发生起始时间（可选）
+     * @param endTime 报警发生终止时间（可选）
+     * @return callId
+     */
+    public static String deviceAlarmQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime, String startPriority,
+        String endPriority, String alarmMethod, String alarmType) {
+        DeviceAlarmQuery deviceAlarmQuery =
+            new DeviceAlarmQuery(CmdTypeEnum.ALARM.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
+        deviceAlarmQuery.setStartTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startTime));
+        deviceAlarmQuery.setEndTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime));
+        deviceAlarmQuery.setStartAlarmPriority(startPriority);
+        deviceAlarmQuery.setEndAlarmPriority(endPriority);
+        deviceAlarmQuery.setAlarmType(alarmType);
+
+        return SipSender.doRequest(fromDevice, toDevice, deviceAlarmQuery);
+    }
 
     /**
      * 设备广播
-     * 
-     * @param fromDevice
-     * @param toDevice
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
      * @return
      */
     public String deviceBroadcast(FromDevice fromDevice, ToDevice toDevice) {
@@ -153,6 +187,24 @@ public class DeviceSendCmd {
                 fromDevice.getUserId());
 
         deviceConfig.setBasicParam(new DeviceConfig.BasicParam(name, expiration, heartBeatInterval, heartBeatCount));
+
+        return SipSender.doRequest(fromDevice, toDevice, deviceConfig);
+    }
+
+    /**
+     * 下载设备配置
+     * @param fromDevice
+     * @param toDevice
+     * @param configType 配置类型
+     * @return
+     */
+    public String deviceConfigDownload(FromDevice fromDevice, ToDevice toDevice, String configType) {
+
+        DeviceConfigDownload deviceConfig =
+            new DeviceConfigDownload(CmdTypeEnum.DEVICE_CONFIG.getType(), RandomStrUtil.getValidationCode(),
+                fromDevice.getUserId());
+
+        deviceConfig.setConfigType(configType);
 
         return SipSender.doRequest(fromDevice, toDevice, deviceConfig);
     }
