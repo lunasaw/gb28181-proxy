@@ -1,10 +1,9 @@
-package io.github.lunasaw.gbproxy.client.entity.device;
+package io.github.lunasaw.gbproxy.client.entity;
 
 import com.google.common.collect.Lists;
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;

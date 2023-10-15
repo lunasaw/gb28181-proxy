@@ -2,7 +2,7 @@ package io.github.lunasaw.gbproxy.server.cmd;
 
 import com.luna.common.os.SystemInfoUtil;
 import io.github.lunasaw.gbproxy.server.Gb28181Server;
-import io.github.lunasaw.gbproxy.server.transimit.cmd.DeviceSendCmd;
+import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.layer.SipLayer;
@@ -35,7 +35,7 @@ public class Applicationtest {
 
     @Test
     public void test_device_info() {
-        String infoQueryCallId = DeviceSendCmd.deviceInfo(fromDevice, toDevice);
+        String infoQueryCallId = ServerSendCmd.deviceInfo(fromDevice, toDevice);
         System.out.println(infoQueryCallId);
     }
 }

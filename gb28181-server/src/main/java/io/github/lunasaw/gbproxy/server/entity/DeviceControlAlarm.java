@@ -85,6 +85,5 @@ public class DeviceControlAlarm extends XmlBean {
 
         @XmlElement(name = "AlarmType")
         public String alarmType;
-
     }
 }

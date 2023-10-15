@@ -17,7 +17,7 @@ import io.github.lunasaw.sip.common.transmit.SipSender;
  * @author weidian
  * @date 2023/10/14
  */
-public class DeviceSendCmd {
+public class ServerSendCmd {
 
     /**
      * 设备信息查询

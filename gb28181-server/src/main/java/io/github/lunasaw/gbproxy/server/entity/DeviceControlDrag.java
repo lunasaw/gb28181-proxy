@@ -66,7 +66,6 @@ public class DeviceControlDrag extends DeviceQuery {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    @XmlRootElement(name = "Info")
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class DragZoom {
 

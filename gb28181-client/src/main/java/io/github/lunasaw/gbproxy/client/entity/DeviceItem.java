@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.entity.device;
+package io.github.lunasaw.gbproxy.client.entity;
 
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
 import lombok.Getter;
