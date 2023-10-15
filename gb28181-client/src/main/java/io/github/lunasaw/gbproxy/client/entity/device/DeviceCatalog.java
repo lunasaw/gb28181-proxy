@@ -33,11 +33,7 @@ public class DeviceCatalog extends XmlBean {
     @XmlElementWrapper(name = "DeviceList")
     public List<DeviceItem> deviceItemList;
 
-    @SneakyThrows
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+
 
     public static void main(String[] args) {
         DeviceCatalog deviceCatalog = new DeviceCatalog();

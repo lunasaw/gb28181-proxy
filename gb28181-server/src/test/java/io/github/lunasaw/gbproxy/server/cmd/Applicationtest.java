@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.server.cmd;
 
+import com.luna.common.os.SystemInfoUtil;
 import io.github.lunasaw.gbproxy.server.Gb28181Server;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.DeviceSendCmd;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -21,18 +22,20 @@ public class Applicationtest {
 
     ToDevice   toDevice;
 
+    static String localIp = SystemInfoUtil.getNoLoopbackIP();
+
     @BeforeEach
     public void before() {
-        SipLayer.addListeningPoint("192.168.2.102", 8118);
-        fromDevice = FromDevice.getInstance("41010500002000000010", "192.168.2.102", 8118);
-        toDevice = ToDevice.getInstance("33010602011187000001", "192.168.2.102", 8117);
+        SipLayer.addListeningPoint(localIp, 8118);
+        fromDevice = FromDevice.getInstance("41010500002000000010", localIp, 8118);
+        toDevice = ToDevice.getInstance("33010602011187000001", localIp, 8117);
         toDevice.setPassword("weidian");
         toDevice.setRealm("4101050000");
     }
 
     @Test
-    public void atest() {
-        String infoQueryCallId = DeviceSendCmd.deviceInfoQuery(fromDevice, toDevice);
+    public void test_device_info() {
+        String infoQueryCallId = DeviceSendCmd.deviceInfo(fromDevice, toDevice);
         System.out.println(infoQueryCallId);
     }
 }

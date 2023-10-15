@@ -30,9 +30,5 @@ public class DeviceBroadcast extends XmlBean {
     @XmlElement(name = "TargetID")
     public String targetId;
 
-    @SneakyThrows
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+
 }

@@ -5,7 +5,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import io.github.lunasaw.sip.common.entity.xml.XmlBean;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,18 +33,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceConfig extends XmlBean {
-    @XmlElement(name = "CmdType")
-    public String     cmdType;
+public class DeviceConfig extends DeviceQuery {
 
-    @XmlElement(name = "SN")
-    public String     sn;
-
-    @XmlElement(name = "DeviceID")
-    public String     deviceId;
 
     @XmlElement(name = "BasicParam")
     public BasicParam basicParam;
+
+    public DeviceConfig(String cmdType, String sn, String deviceId) {
+        this.cmdType = cmdType;
+        this.sn = sn;
+        this.deviceId = deviceId;
+    }
 
     public static void main(String[] args) {
         DeviceConfig alarm = new DeviceConfig();

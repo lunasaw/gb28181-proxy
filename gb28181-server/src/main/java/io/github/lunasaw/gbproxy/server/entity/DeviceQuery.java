@@ -36,9 +36,5 @@ public class DeviceQuery extends XmlBean {
         this.deviceId = deviceId;
     }
 
-    @SneakyThrows
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+
 }

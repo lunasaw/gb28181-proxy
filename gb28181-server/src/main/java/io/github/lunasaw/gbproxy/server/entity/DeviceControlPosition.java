@@ -59,11 +59,7 @@ public class DeviceControlPosition extends XmlBean {
 
     }
 
-    @SneakyThrows
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+
 
     @Getter
     @Setter

@@ -20,10 +20,36 @@ public class DeviceSendCmd {
      * @param toDevice 接收设备
      * @return callId
      */
-    public static String deviceInfoQuery(FromDevice fromDevice, ToDevice toDevice) {
+    public static String deviceInfo(FromDevice fromDevice, ToDevice toDevice) {
         DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.DEVICE_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
         return SipSender.doRequest(fromDevice, toDevice, deviceQuery);
     }
+
+    /**
+     * 设备状态查询
+     * 
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @return callId
+     */
+    public static String deviceStatus(FromDevice fromDevice, ToDevice toDevice) {
+        DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.DEVICE_STATUS.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+        return SipSender.doRequest(fromDevice, toDevice, deviceQuery);
+    }
+
+    /**
+     * 查询目录列表
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @return callId
+     */
+    public static String deviceCatalog(FromDevice fromDevice, ToDevice toDevice) {
+        DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+        return SipSender.doRequest(fromDevice, toDevice, deviceQuery);
+    }
+
+
 
     /**
      * 设备广播
@@ -80,7 +106,10 @@ public class DeviceSendCmd {
     public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String alarmMethod, String alarmType) {
 
         DeviceControlAlarm deviceControlAlarm = new DeviceControlAlarm(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(),
-            fromDevice.getUserId(), "ResetAlarm", new DeviceControlAlarm.AlarmInfo(alarmMethod, alarmType));
+            fromDevice.getUserId());
+
+        deviceControlAlarm.setAlarmCmd("ResetAlarm");
+        deviceControlAlarm.setAlarmInfo(new DeviceControlAlarm.AlarmInfo(alarmMethod, alarmType));
 
         return SipSender.doRequest(fromDevice, toDevice, deviceControlAlarm);
     }
@@ -121,7 +150,9 @@ public class DeviceSendCmd {
 
         DeviceConfig deviceConfig =
             new DeviceConfig(CmdTypeEnum.DEVICE_CONFIG.getType(), RandomStrUtil.getValidationCode(),
-                fromDevice.getUserId(), new DeviceConfig.BasicParam(name, expiration, heartBeatInterval, heartBeatCount));
+                fromDevice.getUserId());
+
+        deviceConfig.setBasicParam(new DeviceConfig.BasicParam(name, expiration, heartBeatInterval, heartBeatCount));
 
         return SipSender.doRequest(fromDevice, toDevice, deviceConfig);
     }

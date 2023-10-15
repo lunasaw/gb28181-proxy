@@ -17,15 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControl extends XmlBean {
-    @XmlElement(name = "CmdType")
-    public String cmdType;
-
-    @XmlElement(name = "SN")
-    public String sn;
-
-    @XmlElement(name = "DeviceID")
-    public String deviceId;
+public class DeviceControl extends DeviceQuery {
 
     @XmlElement(name = "GuardCmd")
     public String guardCmd;
@@ -39,9 +31,5 @@ public class DeviceControl extends XmlBean {
         this.deviceId = deviceId;
     }
 
-    @SneakyThrows
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+
 }

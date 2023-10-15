@@ -2,6 +2,7 @@ package io.github.lunasw.gbproxy.client.test.cmd;
 
 import javax.sip.message.Request;
 
+import com.luna.common.os.SystemInfoUtil;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.impl.DefaultMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.impl.DefaultRegisterResponseProcessor;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
@@ -34,11 +35,13 @@ public class ApplicationTest {
 
     ToDevice   toDevice;
 
+    static String localIp = SystemInfoUtil.getNoLoopbackIP();
+
     @BeforeEach
     public void before() {
-        SipLayer.addListeningPoint("192.168.2.102", 8117);
-        fromDevice = FromDevice.getInstance("33010602011187000001", "192.168.2.102", 8117);
-        toDevice = ToDevice.getInstance("41010500002000000010", "192.168.2.102", 8116);
+        SipLayer.addListeningPoint(localIp, 8117);
+        fromDevice = FromDevice.getInstance("33010602011187000001", localIp, 8117);
+        toDevice = ToDevice.getInstance("41010500002000000010", localIp, 8116);
         toDevice.setPassword("weidian");
         toDevice.setRealm("4101050000");
     }
@@ -80,7 +83,6 @@ public class ApplicationTest {
                 System.out.println(eventResult);
             }
         });
-        Thread.sleep(30000);
     }
 
     @SneakyThrows

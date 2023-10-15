@@ -6,7 +6,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
@@ -45,7 +48,13 @@ public class DeviceControlAlarm extends XmlBean {
     public String    alarmCmd;
 
     @XmlElement(name = "Info")
-    public AlarmInfo info;
+    public AlarmInfo alarmInfo;
+
+    public DeviceControlAlarm(String cmdType, String sn, String deviceId) {
+        this.cmdType = cmdType;
+        this.sn = sn;
+        this.deviceId = deviceId;
+    }
 
     public static void main(String[] args) {
         DeviceControlAlarm alarm = new DeviceControlAlarm();
@@ -57,16 +66,10 @@ public class DeviceControlAlarm extends XmlBean {
         AlarmInfo alarmInfo = new AlarmInfo();
         alarmInfo.setAlarmMethod("!231");
         alarmInfo.setAlarmType("alarmType");
-        alarm.setInfo(alarmInfo);
+        alarm.setAlarmInfo(alarmInfo);
 
         System.out.println(alarm);
 
-    }
-
-    @SneakyThrows
-    @Override
-    public String toString() {
-        return super.toString();
     }
 
     @Getter
@@ -76,10 +79,11 @@ public class DeviceControlAlarm extends XmlBean {
     @XmlRootElement(name = "Info")
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class AlarmInfo {
+
         @XmlElement(name = "AlarmMethod")
         public String alarmMethod;
-
         @XmlElement(name = "AlarmType")
         public String alarmType;
+
     }
 }
