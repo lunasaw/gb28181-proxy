@@ -6,7 +6,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
@@ -71,9 +74,9 @@ public class DeviceControlPosition extends XmlBean {
 
         @XmlElement(name = "Enabled")
         public String enabled;
+
         @XmlElement(name = "ResetTime")
         public String resetTime;
-
         @XmlElement(name = "PresetIndex")
         private String presetIndex;
 

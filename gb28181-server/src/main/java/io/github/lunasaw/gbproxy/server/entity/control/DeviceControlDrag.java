@@ -70,6 +70,7 @@ public class DeviceControlDrag extends DeviceBase {
 
         @XmlElement(name = "Length")
         public String length;
+
         @XmlElement(name = "Width")
         public String width;
         @XmlElement(name = "MidPointX")
@@ -81,5 +82,4 @@ public class DeviceControlDrag extends DeviceBase {
         @XmlElement(name = "LengthY")
         public String lengthY;
     }
-
 }
