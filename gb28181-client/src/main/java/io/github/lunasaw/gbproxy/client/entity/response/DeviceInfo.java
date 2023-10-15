@@ -5,8 +5,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -14,17 +17,14 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @XmlRootElement(name = "Response")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceInfo extends XmlBean {
-    @XmlElement(name = "CmdType")
-    private String cmdType;
-    @XmlElement(name = "SN")
-    private String sn;
+public class DeviceInfo extends DeviceBase {
+
     @XmlElement(name = "DeviceName")
     private String deviceName;
-    @XmlElement(name = "DeviceID")
-    private String deviceId;
 
     @XmlElement(name = "Result")
     private String result;
@@ -48,6 +48,10 @@ public class DeviceInfo extends XmlBean {
      */
     @XmlElement(name = "Channel")
     private int    channel;
+
+    public DeviceInfo(String cmdType, String sn, String deviceId) {
+        super(cmdType, sn, deviceId);
+    }
 
     public static void main(String[] args) {
         DeviceInfo deviceInfo = new DeviceInfo();

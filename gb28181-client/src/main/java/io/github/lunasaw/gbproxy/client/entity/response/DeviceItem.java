@@ -170,7 +170,7 @@ public class DeviceItem extends XmlBean {
         DeviceGbType deviceGbType = DeviceGbType.fromCode(Integer.parseInt(substring));
 
         deviceItem.setBlock("block");
-        deviceItem.setAddress("上海市xxx区xxx接到");
+        deviceItem.setAddress("上海市xxx区xxx街道");
         deviceItem.setCertifiable(0);
         deviceItem.setErrCode(500);
         deviceItem.setEndTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, DateUtils.parseDate("2099-01-01 01:01:01")));

@@ -72,7 +72,7 @@ public class DeviceResponse extends DeviceBase {
     public static void main(String[] args) {
         DeviceResponse deviceResponse = new DeviceResponse();
 
-        DeviceItem deviceItem = DeviceItem.getInstanceExample("12312312");
+        DeviceItem deviceItem = DeviceItem.getInstanceExample("33010602011187000001");
 
         deviceResponse.setDeviceItemList(Lists.newArrayList(deviceItem, deviceItem));
 

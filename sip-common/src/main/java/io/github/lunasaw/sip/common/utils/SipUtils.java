@@ -30,4 +30,11 @@ public class SipUtils {
         return uri.getUser();
     }
 
+    public static String generateGB28181Code(int centerCode, int industryCode, int typeCode, int serialNumber) {
+        String centerCodeStr = String.format("%08d", centerCode);
+        String industryCodeStr = String.format("%02d", industryCode);
+        String typeCodeStr = String.format("%03d", typeCode);
+        String serialNumberStr = String.format("%07d", serialNumber);
+        return centerCodeStr + industryCodeStr + typeCodeStr + serialNumberStr;
+    }
 }

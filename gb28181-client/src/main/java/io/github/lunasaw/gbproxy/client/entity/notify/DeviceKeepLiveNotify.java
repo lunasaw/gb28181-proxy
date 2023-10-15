@@ -20,14 +20,14 @@ import lombok.Setter;
 @Setter
 @XmlRootElement(name = "Notify")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceKeepLive extends DeviceBase {
+public class DeviceKeepLiveNotify extends DeviceBase {
 
 
     @XmlElement(name = "Status")
     public String status;
 
 
-    public DeviceKeepLive(String cmdType, String sn, String deviceId) {
+    public DeviceKeepLiveNotify(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
     }
 }

@@ -39,7 +39,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Notify")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceNotifyAlarm extends XmlBean {
+public class DeviceAlarmNotify extends XmlBean {
     @XmlElement(name = "CmdType")
     public String     cmdType;
 
@@ -76,21 +76,21 @@ public class DeviceNotifyAlarm extends XmlBean {
     @XmlElement(name = "Info")
     private AlarmInfo info;
 
-    public DeviceNotifyAlarm(String cmdType, String sn, String deviceId) {
+    public DeviceAlarmNotify(String cmdType, String sn, String deviceId) {
         this.cmdType = cmdType;
         this.sn = sn;
         this.deviceId = deviceId;
     }
 
     public static void main(String[] args) {
-        DeviceNotifyAlarm deviceCatalog = new DeviceNotifyAlarm();
+        DeviceAlarmNotify deviceCatalog = new DeviceAlarmNotify();
         deviceCatalog.setDeviceId("123");
         DeviceItem deviceItem = new DeviceItem();
         deviceItem.setAddress("!23");
         System.out.println(deviceCatalog);
     }
 
-    public DeviceNotifyAlarm setAlarm(DeviceAlarm deviceAlarm) {
+    public DeviceAlarmNotify setAlarm(DeviceAlarm deviceAlarm) {
         setAlarmPriority(deviceAlarm.getAlarmPriority());
         setAlarmMethod(deviceAlarm.getAlarmMethod());
         setAlarmTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, deviceAlarm.getAlarmTime()));
