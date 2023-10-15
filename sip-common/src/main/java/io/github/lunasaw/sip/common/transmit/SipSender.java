@@ -33,14 +33,21 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class SipSender {
 
-    public static String doRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean) {
+    public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, Integer expires, String event) {
+        String callId = RandomStrUtil.getUUID();
+        Request messageRequest = SipRequestProvider.createSubscribeRequest(fromDevice, toDevice, xmlBean.toString(), callId, expires, event);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
+
+    public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean) {
         String callId = RandomStrUtil.getUUID();
         Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, xmlBean.toString(), callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
         return callId;
     }
 
-    public static String doRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, Event errorEvent, Event okEvent) {
+    public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, Event errorEvent, Event okEvent) {
         String callId = RandomStrUtil.getUUID();
         Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, xmlBean.toString(), callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
