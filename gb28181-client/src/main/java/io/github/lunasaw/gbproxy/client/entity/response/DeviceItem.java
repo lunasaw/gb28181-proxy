@@ -11,7 +11,7 @@ import com.luna.common.check.Assert;
 import com.luna.common.date.DateUtils;
 import com.luna.common.os.SystemInfoUtil;
 
-import io.github.lunasaw.sip.common.entity.xml.XmlBean;
+import io.github.lunasaw.gbproxy.client.entity.DeviceCatalog;
 import io.github.lunasaw.sip.common.enums.DeviceGbType;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,73 +24,17 @@ import lombok.Setter;
 @Setter
 @XmlRootElement(name = "Item")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceItem extends XmlBean {
+public class DeviceItem extends DeviceCatalog {
     /**
-     * 设备/区域/系(必选)
-     * 通道ID
+     * 业务分组
      */
-    @XmlElement(name = "DeviceID")
-    private String deviceId;
-    /**
-     * 设备/区域/系(必选)
-     */
-    @XmlElement(name = "Name")
-    private String name;
-    /**
-     * 当为设备时,设备厂商(必选)
-     */
-    @XmlElement(name = "Manufacturer")
-    private String manufacturer;
-    /**
-     * 当为设备时,设备型号(必选)
-     */
-    @XmlElement(name = "Model")
-    private String model;
-    /**
-     * 当为设备时,设备归属(必选)
-     */
-    @XmlElement(name = "Owner")
-    private String owner;
-    /**
-     * 行政区域(必选)
-     */
-    @XmlElement(name = "CivilCode")
-    private String civilCode;
+    @XmlElement(name = "BusinessGroupID")
+    private String  businessGroupId;
     /**
      * 警区(可选)
      */
     @XmlElement(name = "Block")
     private String block;
-    /**
-     * 当为设备时,安装地址(必选)
-     */
-    @XmlElement(name = "Address")
-    private String address;
-    /**
-     * 当为设备时,是否有子设备 (必选)1有,0没有
-     */
-    @XmlElement(name = "Parental")
-    private int parental;
-    /**
-     * 父设备/区域/系统ID(必选)
-     */
-    @XmlElement(name = "ParentID")
-    private String parentId;
-    /**
-     * 业务分组
-     */
-    @XmlElement(name = "BusinessGroupID")
-    private String businessGroupId;
-    /**
-     * 信令安全模式(可选)缺省为0:不采用;2:S/MIME 签名方式;3:S/ MIME加密签名同时采用方式;4:数字摘要方式
-     */
-    @XmlElement(name = "SafetyWay")
-    private int safetyWay;
-    /**
-     * 注册方式(必选)缺省为1;1:符合IETFRFC3261标准的认证注册模 式;2:基于口令的双向认证注册模式;3:基于数字证书的双向认证注册模式
-     */
-    @XmlElement(name = "RegisterWay")
-    private int registerWay;
     /**
      * 证书序列号(有证书的设备必选)
      */
@@ -100,22 +44,18 @@ public class DeviceItem extends XmlBean {
      * 证书有效标识(有证书的设备必选) 缺省为0;证书有效标识:0:无效 1: 有效
      */
     @XmlElement(name = "Certifiable")
-    private int certifiable;
+    private int     certifiable = 0;
     /**
      * 无效原因码(有证书且证书无效的设备必选)
      */
     @XmlElement(name = "ErrCode")
-    private int errCode;
+    private Integer errCode;
     /**
      * 证书终止有效期(有证书的设备必选)
      */
     @XmlElement(name = "EndTime")
     private String endTime;
-    /**
-     * 保密属性(必选)缺省为0 :不涉密,1:涉密
-     */
-    @XmlElement(name = "Secrecy")
-    private int secrecy;
+
     /**
      * 设备/区域/系统IP地址(可选)
      */
@@ -125,32 +65,27 @@ public class DeviceItem extends XmlBean {
      * 设备/区域/系统端口(可选)
      */
     @XmlElement(name = "Port")
-    private int port;
+    private Integer port;
     /**
      * 设备口令(可选)
      */
     @XmlElement(name = "Password")
     private String password;
     /**
-     * 云台类型(可选)
+     * 云台类型(可选) 1-球机;2-半球;3-固定枪机;4-遥控枪机
      */
     @XmlElement(name = "PTZType")
-    private int    ptzType;
-    /**
-     * 设备状态(必选)
-     */
-    @XmlElement(name = "Status")
-    private String status;
+    private Integer ptzType;
     /**
      * 经度(可选)
      */
     @XmlElement(name = "Longitude")
-    private double longitude;
+    private Double  longitude;
     /**
      * 纬度(可选)
      */
     @XmlElement(name = "Latitude")
-    private double latitude;
+    private Double  latitude;
 
     public static DeviceItem getInstanceExample(String deviceId) {
         Assert.notNull(deviceId, "设备ID不能为空");
@@ -159,18 +94,13 @@ public class DeviceItem extends XmlBean {
         DeviceItem deviceItem = new DeviceItem();
         deviceItem.setName("Camera");
         deviceItem.setManufacturer("Lunasaw");
-        deviceItem.setModel("Model-2312");
-        deviceItem.setOwner("luna");
-        if (StringUtils.isNotBlank(deviceId)) {
-            deviceItem.setCivilCode(deviceId.substring(0, 6));
-        }
+
 
         String substring = deviceId.substring(10, 13);
 
         DeviceGbType deviceGbType = DeviceGbType.fromCode(Integer.parseInt(substring));
 
         deviceItem.setBlock("block");
-        deviceItem.setAddress("上海市xxx区xxx街道");
         deviceItem.setCertifiable(0);
         deviceItem.setErrCode(500);
         deviceItem.setEndTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, DateUtils.parseDate("2099-01-01 01:01:01")));
@@ -190,6 +120,14 @@ public class DeviceItem extends XmlBean {
         }
         if (DeviceGbType.VIRTUAL_ORGANIZATION_DIRECTORY.equals(deviceGbType)) {
             deviceItem.setParentId("0");
+        } else {
+            // 业务分组/虚拟组织/行政区划 不设置以下属性
+            deviceItem.setModel("Model-2312");
+            deviceItem.setOwner("luna");
+            if (StringUtils.isNotBlank(deviceId)) {
+                deviceItem.setCivilCode(deviceId.substring(0, 6));
+            }
+            deviceItem.setAddress("上海市xxx区xxx街道");
         }
         if (DeviceGbType.CENTER_SIGNAL_CONTROL_SERVER.equals(deviceGbType)) {
             deviceItem.setParentId("0");

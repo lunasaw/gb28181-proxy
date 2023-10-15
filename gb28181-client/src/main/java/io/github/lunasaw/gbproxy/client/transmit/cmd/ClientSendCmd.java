@@ -4,8 +4,7 @@ import java.util.List;
 
 import com.luna.common.text.RandomStrUtil;
 
-import io.github.lunasaw.gbproxy.client.entity.notify.DeviceKeepLiveNotify;
-import io.github.lunasaw.gbproxy.client.entity.notify.DeviceAlarmNotify;
+import io.github.lunasaw.gbproxy.client.entity.notify.*;
 import io.github.lunasaw.gbproxy.client.entity.response.DeviceInfo;
 import io.github.lunasaw.gbproxy.client.entity.response.DeviceItem;
 import io.github.lunasaw.gbproxy.client.entity.response.DeviceResponse;
@@ -62,7 +61,7 @@ public class ClientSendCmd {
      * @param deviceItems 通道状态
      * @return
      */
-    public static String deviceChanelCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems) {
+    public static String deviceChannelCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems) {
         DeviceResponse deviceResponse =
             new DeviceResponse(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
@@ -105,5 +104,36 @@ public class ClientSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceStatus);
     }
 
+    /**
+     * 设备位置推送
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @param mobilePositionNotify
+     * @return
+     */
+    public static String MobilePositionNotify(FromDevice fromDevice, ToDevice toDevice, MobilePositionNotify mobilePositionNotify) {
+        mobilePositionNotify.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
+        mobilePositionNotify.setSn(RandomStrUtil.getValidationCode());
+        mobilePositionNotify.setDeviceId(toDevice.getUserId());
+        return SipSender.doMessageRequest(fromDevice, toDevice, mobilePositionNotify);
+    }
 
+    /**
+     * 设备通道更新通知
+     * 
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @param deviceItems
+     * @return
+     */
+    public static String deviceChannelUpdateCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceUpdateItem> deviceItems) {
+        DeviceUpdateNotify deviceUpdateNotify =
+            new DeviceUpdateNotify(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+
+        deviceUpdateNotify.setSumNum(deviceItems.size());
+        deviceUpdateNotify.setDeviceItemList(deviceItems);
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceUpdateNotify);
+    }
 }

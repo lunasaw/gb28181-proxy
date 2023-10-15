@@ -14,12 +14,17 @@ import lombok.Setter;
 /**
  * <?xml version="1.0" encoding="gb2312"?>
  * <Notify>
- * <CmdType>MediaStatusNotify</CmdType>
- * <SN>226063</SN>
- * <DeviceID>12312</DeviceID>
- * <NotifyType>121</NotifyType>
+ * <CmdType>MobilePosition</CmdType>
+ * <SN>383451</SN>
+ * <DeviceID>123</DeviceID>
+ * <Time>gpsMsgInfo.getTime() </Time>
+ * <Longitude> gpsMsgInfo.getLng() </Longitude>
+ * <Latitude>gpsMsgInfo.getLat() </Latitude>
+ * <Speed>gpsMsgInfo.getSpeed()</Speed>
+ * <Direction>gpsMsgInfo.getDirection()</Direction>
+ * <Altitude>gpsMsgInfo.getAltitude()</Altitude>
  * </Notify>
-
+ * 
  * @author luna
  */
 @Getter
@@ -31,8 +36,18 @@ import lombok.Setter;
 public class MobilePositionNotify extends DeviceBase {
 
 
-    @XmlElement(name = "NotifyType")
-    private String notifyType;
+    @XmlElement(name = "Time")
+    private String time;
+    @XmlElement(name = "Longitude")
+    private String longitude;
+    @XmlElement(name = "Latitude")
+    private String latitude;
+    @XmlElement(name = "Speed")
+    private String speed;
+    @XmlElement(name = "Direction")
+    private String direction;
+    @XmlElement(name = "Altitude")
+    private String altitude;
 
     public MobilePositionNotify(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);

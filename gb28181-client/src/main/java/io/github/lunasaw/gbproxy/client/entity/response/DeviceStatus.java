@@ -26,7 +26,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement(name = "Response")
 @XmlAccessorType(XmlAccessType.FIELD)
