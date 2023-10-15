@@ -1,10 +1,12 @@
-package io.github.lunasaw.gbproxy.server.entity;
+package io.github.lunasaw.gbproxy.server.entity.control;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.github.lunasaw.gbproxy.server.entity.DeviceBase;
+import io.github.lunasaw.gbproxy.server.entity.query.DeviceQuery;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,13 +35,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceConfig extends DeviceQuery {
+public class DeviceConfigControl extends DeviceBase {
 
 
     @XmlElement(name = "BasicParam")
     public BasicParam basicParam;
 
-    public DeviceConfig(String cmdType, String sn, String deviceId) {
+    public DeviceConfigControl(String cmdType, String sn, String deviceId) {
         this.cmdType = cmdType;
         this.sn = sn;
         this.deviceId = deviceId;
@@ -65,7 +67,7 @@ public class DeviceConfig extends DeviceQuery {
     }
 
     public static void main(String[] args) {
-        DeviceConfig alarm = new DeviceConfig();
+        DeviceConfigControl alarm = new DeviceConfigControl();
         alarm.setCmdType("DeviceControl");
         alarm.setSn("179173");
         alarm.setDeviceId("123");

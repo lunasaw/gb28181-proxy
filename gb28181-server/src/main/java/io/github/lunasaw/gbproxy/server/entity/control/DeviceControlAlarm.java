@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.server.entity;
+package io.github.lunasaw.gbproxy.server.entity.control;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -85,5 +85,6 @@ public class DeviceControlAlarm extends XmlBean {
 
         @XmlElement(name = "AlarmType")
         public String alarmType;
+
     }
 }

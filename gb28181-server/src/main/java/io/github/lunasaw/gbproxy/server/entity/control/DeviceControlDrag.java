@@ -1,10 +1,12 @@
-package io.github.lunasaw.gbproxy.server.entity;
+package io.github.lunasaw.gbproxy.server.entity.control;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.github.lunasaw.gbproxy.server.entity.DeviceBase;
+import io.github.lunasaw.gbproxy.server.entity.query.DeviceQuery;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +36,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlDrag extends DeviceQuery {
+public class DeviceControlDrag extends DeviceBase {
 
     /**
      * 放大

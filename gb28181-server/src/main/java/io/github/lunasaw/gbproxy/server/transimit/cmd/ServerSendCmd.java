@@ -2,12 +2,14 @@ package io.github.lunasaw.gbproxy.server.transimit.cmd;
 
 import java.util.Date;
 
+import io.github.lunasaw.gbproxy.server.entity.control.*;
+import io.github.lunasaw.gbproxy.server.entity.notify.DeviceBroadcastNotify;
+import io.github.lunasaw.gbproxy.server.entity.query.*;
 import org.apache.commons.lang3.StringUtils;
 
 import com.luna.common.date.DateUtils;
 import com.luna.common.text.RandomStrUtil;
 
-import io.github.lunasaw.gbproxy.server.entity.*;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
@@ -160,10 +162,10 @@ public class ServerSendCmd {
      * @return
      */
     public String deviceBroadcast(FromDevice fromDevice, ToDevice toDevice) {
-        DeviceBroadcast deviceBroadcast =
-            new DeviceBroadcast(CmdTypeEnum.BROADCAST.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId(), toDevice.getUserId());
+        DeviceBroadcastNotify deviceBroadcastNotify =
+            new DeviceBroadcastNotify(CmdTypeEnum.BROADCAST.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId(), toDevice.getUserId());
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceBroadcast);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceBroadcastNotify);
     }
 
     /**
@@ -235,13 +237,13 @@ public class ServerSendCmd {
     public String deviceConfig(FromDevice fromDevice, ToDevice toDevice, String name, String expiration,
         String heartBeatInterval, String heartBeatCount) {
 
-        DeviceConfig deviceConfig =
-            new DeviceConfig(CmdTypeEnum.DEVICE_CONFIG.getType(), RandomStrUtil.getValidationCode(),
+        DeviceConfigControl deviceConfigControl =
+            new DeviceConfigControl(CmdTypeEnum.DEVICE_CONFIG.getType(), RandomStrUtil.getValidationCode(),
                 fromDevice.getUserId());
 
-        deviceConfig.setBasicParam(new DeviceConfig.BasicParam(name, expiration, heartBeatInterval, heartBeatCount));
+        deviceConfigControl.setBasicParam(new DeviceConfigControl.BasicParam(name, expiration, heartBeatInterval, heartBeatCount));
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfig);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfigControl);
     }
 
     /**

@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.server.entity;
+package io.github.lunasaw.gbproxy.server.entity.control;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -43,6 +43,8 @@ public class DeviceControlPosition extends XmlBean {
     @XmlElement(name = "HomePosition")
     public HomePosition homePosition;
 
+
+
     public static void main(String[] args) {
         DeviceControlPosition alarm = new DeviceControlPosition();
         alarm.setCmdType("DeviceControl");
@@ -59,8 +61,6 @@ public class DeviceControlPosition extends XmlBean {
 
     }
 
-
-
     @Getter
     @Setter
     @AllArgsConstructor
@@ -68,13 +68,14 @@ public class DeviceControlPosition extends XmlBean {
     @XmlRootElement(name = "HomePosition")
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class HomePosition {
+
         @XmlElement(name = "Enabled")
         public String enabled;
-
         @XmlElement(name = "ResetTime")
         public String resetTime;
 
         @XmlElement(name = "PresetIndex")
         private String presetIndex;
+
     }
 }
