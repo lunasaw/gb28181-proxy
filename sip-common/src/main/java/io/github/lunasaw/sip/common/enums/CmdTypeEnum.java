@@ -22,6 +22,7 @@ public enum CmdTypeEnum {
     DEVICE_CONTROL("DeviceControl", "设备控制"),
     BROADCAST("Broadcast", "设备广播"),
     DEVICE_CONFIG("DeviceConfig", "设备配置"),
+    MEDIA_STATUS("MediaStatus", "媒体状态信息"),
 
     ;
 

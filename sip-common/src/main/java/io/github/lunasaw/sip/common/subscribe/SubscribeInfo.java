@@ -17,10 +17,13 @@ import lombok.NoArgsConstructor;
 public class SubscribeInfo {
 
     private String id;
-    private SIPRequest request;
     private int expires;
     private String eventId;
     private String eventType;
+    /**
+     * 上一次的请求
+     */
+    private SIPRequest request;
     private SIPResponse response;
     /**
      * 以下为可选字段
@@ -37,7 +40,6 @@ public class SubscribeInfo {
         EventHeader eventHeader = (EventHeader) request.getHeader(EventHeader.NAME);
         this.eventId = eventHeader.getEventId();
         this.eventType = eventHeader.getEventType();
-
     }
 
 }

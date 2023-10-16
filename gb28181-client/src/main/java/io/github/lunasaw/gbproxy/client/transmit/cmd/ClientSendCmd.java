@@ -36,7 +36,7 @@ public class ClientSendCmd {
     }
 
     /**
-     * 上报状态
+     * 上报设备状态
      * 
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
@@ -146,14 +146,14 @@ public class ClientSendCmd {
      * @param deviceItems 推送事件
      * @return
      */
-    public static String deviceOtherUpdateCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceOtherUpdateNotify.OtherItem> deviceItems) {
+    public static String deviceOtherUpdateCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceOtherUpdateNotify.OtherItem> deviceItems, SubscribeInfo subscribeInfo) {
         DeviceOtherUpdateNotify deviceUpdateNotify =
                 new DeviceOtherUpdateNotify(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         deviceUpdateNotify.setSumNum(deviceItems.size());
         deviceUpdateNotify.setDeviceItemList(deviceItems);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceUpdateNotify);
+        return SipSender.doNotifyRequest(fromDevice, toDevice, deviceUpdateNotify, subscribeInfo);
     }
 
     /**
@@ -172,6 +172,24 @@ public class ClientSendCmd {
         deviceRecord.setRecordList(deviceRecordItems);
 
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceRecord);
+    }
+
+
+    /**
+     * 流媒体状态推送
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param notifyType 121
+     * @return
+     */
+    public static String deviceMediaStatusNotify(FromDevice fromDevice, ToDevice toDevice, String notifyType) {
+        MediaStatusNotify mediaStatusNotify =
+                new MediaStatusNotify(CmdTypeEnum.MEDIA_STATUS.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+
+        mediaStatusNotify.setNotifyType(notifyType);
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, mediaStatusNotify);
     }
 
     /**

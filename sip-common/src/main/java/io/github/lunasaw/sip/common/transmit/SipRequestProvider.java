@@ -267,12 +267,10 @@ public class SipRequestProvider {
      * @param toDevice 发送目的设备
      * @param content 内容
      * @param callId callId
-     * @param expires 过期时间
-     * @param event 事件名称
+
      * @return Request
      */
-    public static Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId, Integer expires,
-                                                 String event) {
+    public static Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, SubscribeInfo subscribeInfo, String callId) {
         SipMessage sipMessage = SipMessage.getSubscribeBody();
         sipMessage.setMethod(Request.SUBSCRIBE);
         sipMessage.setContent(content);
@@ -280,11 +278,10 @@ public class SipRequestProvider {
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
         ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
-        ExpiresHeader expiresHeader = SipRequestUtils.createExpiresHeader(expires);
-        EventHeader eventHeader = SipRequestUtils.createEventHeader(event);
-        sipMessage.addHeader(userAgentHeader).addHeader(contactHeader).addHeader(expiresHeader).addHeader(eventHeader);
 
-        return createSipRequest(fromDevice, toDevice, sipMessage);
+        sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
+
+        return createSipRequest(fromDevice, toDevice, sipMessage, subscribeInfo);
     }
 
     /**

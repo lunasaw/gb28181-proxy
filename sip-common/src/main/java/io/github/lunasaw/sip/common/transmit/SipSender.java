@@ -8,7 +8,6 @@ import javax.sip.message.Message;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
-import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import org.springframework.util.ObjectUtils;
 
 import com.luna.common.text.RandomStrUtil;
@@ -19,6 +18,7 @@ import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
 import io.github.lunasaw.sip.common.layer.SipLayer;
+import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
@@ -34,24 +34,33 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class SipSender {
 
-    public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, Integer expires, String event) {
+    public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo) {
+
+        return doSubscribeRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
+    }
+
+    public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo, Event errorEvent,
+                                            Event okEvent) {
         String callId = RandomStrUtil.getUUID();
-        Request messageRequest = SipRequestProvider.createSubscribeRequest(fromDevice, toDevice, xmlBean.toString(), callId, expires, event);
-        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+
+        Request messageRequest = SipRequestProvider.createSubscribeRequest(fromDevice, toDevice, xmlBean.toString(), subscribeInfo, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }
 
     public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean) {
-        String callId = RandomStrUtil.getUUID();
-        Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, xmlBean.toString(), callId);
-        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
-        return callId;
+        return doMessageRequest(fromDevice, toDevice, xmlBean, null, null);
     }
 
     public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo) {
+        return doNotifyRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
+    }
+
+    public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo, Event errorEvent,
+                                         Event okEvent) {
         String callId = RandomStrUtil.getUUID();
         Request messageRequest = SipRequestProvider.createNotifyRequest(fromDevice, toDevice, xmlBean.toString(), subscribeInfo, callId);
-        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }
 
