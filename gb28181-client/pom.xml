@@ -11,6 +11,9 @@
 
     <artifactId>gb28181-client</artifactId>
     <packaging>jar</packaging>
+    <name>gb28181-client</name>
+    <description>轻量级Gb28181客户端框架</description>
+    <url>https://github.com/lunasaw/gb28181-proxy</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

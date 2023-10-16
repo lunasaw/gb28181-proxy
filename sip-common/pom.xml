@@ -10,6 +10,9 @@
     </parent>
 
     <artifactId>sip-common</artifactId>
+    <name>sip-common</name>
+    <description>轻量级SIP框架封装</description>
+    <url>https://github.com/lunasaw/gb28181-proxy</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
