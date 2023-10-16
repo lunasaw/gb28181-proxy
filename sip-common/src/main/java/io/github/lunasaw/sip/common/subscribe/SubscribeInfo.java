@@ -24,8 +24,6 @@ public class SubscribeInfo {
     private SIPResponse response;
     /**
      * 以下为可选字段
-     *
-     * @return
      */
     private String sn;
     private int gpsInterval;

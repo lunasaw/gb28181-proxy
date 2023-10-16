@@ -113,11 +113,11 @@ public class ClientSendCmd {
      * @param mobilePositionNotify
      * @return
      */
-    public static String MobilePositionNotify(FromDevice fromDevice, ToDevice toDevice, MobilePositionNotify mobilePositionNotify) {
+    public static String MobilePositionNotify(FromDevice fromDevice, ToDevice toDevice, MobilePositionNotify mobilePositionNotify, SubscribeInfo subscribeInfo) {
         mobilePositionNotify.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
         mobilePositionNotify.setSn(RandomStrUtil.getValidationCode());
         mobilePositionNotify.setDeviceId(toDevice.getUserId());
-        return SipSender.doMessageRequest(fromDevice, toDevice, mobilePositionNotify);
+        return SipSender.doNotifyRequest(fromDevice, toDevice, mobilePositionNotify, subscribeInfo);
     }
 
     /**
