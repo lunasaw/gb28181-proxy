@@ -8,6 +8,7 @@ import javax.sip.message.Message;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import org.springframework.util.ObjectUtils;
 
 import com.luna.common.text.RandomStrUtil;
@@ -47,10 +48,24 @@ public class SipSender {
         return callId;
     }
 
+    public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo) {
+        String callId = RandomStrUtil.getUUID();
+        Request messageRequest = SipRequestProvider.createNotifyRequest(fromDevice, toDevice, xmlBean.toString(), subscribeInfo, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
+
     public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, Event errorEvent, Event okEvent) {
         String callId = RandomStrUtil.getUUID();
         Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, xmlBean.toString(), callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
+        return callId;
+    }
+
+    public static String doByeRequest(FromDevice fromDevice, ToDevice toDevice) {
+        String callId = RandomStrUtil.getUUID();
+        Request messageRequest = SipRequestProvider.createByeRequest(fromDevice, toDevice, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
         return callId;
     }
 

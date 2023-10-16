@@ -111,6 +111,17 @@ public class SipMessage {
         return sipMessage;
     }
 
+    public static SipMessage getNotifyBody() {
+        SipMessage sipMessage = new SipMessage();
+        sipMessage.setMethod(Request.NOTIFY);
+        sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_XML.getContentTypeHeader());
+        sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
+        long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setSequence(sequence);
+
+        return sipMessage;
+    }
+
     public static SipMessage getAckBody() {
         SipMessage sipMessage = new SipMessage();
         sipMessage.setMethod(Request.ACK);

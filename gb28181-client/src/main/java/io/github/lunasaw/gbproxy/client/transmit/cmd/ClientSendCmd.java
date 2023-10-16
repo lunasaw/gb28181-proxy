@@ -10,6 +10,7 @@ import io.github.lunasaw.sip.common.entity.DeviceAlarm;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
+import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
 
 /**
@@ -26,7 +27,8 @@ public class ClientSendCmd {
      * @return callId
      */
     public static String deviceAlarmNotify(FromDevice fromDevice, ToDevice toDevice, DeviceAlarm deviceAlarm) {
-        DeviceAlarmNotify deviceAlarmNotify = new DeviceAlarmNotify(CmdTypeEnum.DEVICE_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+        DeviceAlarmNotify deviceAlarmNotify =
+                new DeviceAlarmNotify(CmdTypeEnum.DEVICE_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         deviceAlarmNotify.setAlarm(deviceAlarm);
 
@@ -70,6 +72,7 @@ public class ClientSendCmd {
 
     /**
      * 向上级回复DeviceInfo查询信息
+     * 
      * @param fromDevice
      * @param toDevice
      * @param deviceInfo
@@ -84,6 +87,7 @@ public class ClientSendCmd {
 
     /**
      * 推送设备状态信息
+     * 
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
      * @param online "ONLINE":"OFFLINE"
@@ -124,22 +128,21 @@ public class ClientSendCmd {
      * @param deviceItems 通道列表
      * @return
      */
-    public static String deviceChannelUpdateCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceUpdateItem> deviceItems) {
+    public static String deviceChannelUpdateCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceUpdateItem> deviceItems, SubscribeInfo subscribeInfo) {
         DeviceUpdateNotify deviceUpdateNotify =
             new DeviceUpdateNotify(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         deviceUpdateNotify.setSumNum(deviceItems.size());
         deviceUpdateNotify.setDeviceItemList(deviceItems);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceUpdateNotify);
+        return SipSender.doNotifyRequest(fromDevice, toDevice, deviceUpdateNotify, subscribeInfo);
     }
-
 
     /**
      * 事件更新推送
      *
-     * @param fromDevice  发送设备
-     * @param toDevice    接收设备
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
      * @param deviceItems 推送事件
      * @return
      */
@@ -156,14 +159,14 @@ public class ClientSendCmd {
     /**
      * 设备录像上报
      *
-     * @param fromDevice        发送设备
-     * @param toDevice          接收设备
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
      * @param deviceRecordItems 录像文件
      * @return
      */
     public static String deviceCatalogResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceRecord.RecordItem> deviceRecordItems) {
         DeviceRecord deviceRecord =
-                new DeviceRecord(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceRecord(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         deviceRecord.setSumNum(deviceRecordItems.size());
         deviceRecord.setRecordList(deviceRecordItems);
@@ -171,4 +174,14 @@ public class ClientSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceRecord);
     }
 
+    /**
+     * 向上级发送BYE
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
+        return SipSender.doByeRequest(fromDevice, toDevice);
+    }
 }

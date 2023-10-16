@@ -60,7 +60,7 @@ public class SipRequestUtils {
     public static Request createRequest(URI requestUri, String method, CallIdHeader callId, CSeqHeader cSeq, FromHeader from, ToHeader to,
         List<ViaHeader> via, MaxForwardsHeader maxForwards, ContentTypeHeader contentType, Object content) {
         try {
-            if (contentType == null){
+            if (contentType == null) {
                 return MESSAGE_FACTORY.createRequest(requestUri, method, callId, cSeq, from, to, via, maxForwards);
             }
             return MESSAGE_FACTORY.createRequest(requestUri, method, callId, cSeq, from, to, via, maxForwards, contentType, content);
@@ -298,10 +298,13 @@ public class SipRequestUtils {
     }
 
     public static EventHeader createEventHeader(String eventType) {
+        return createEventHeader(eventType, RandomStrUtil.getValidationCode());
+    }
+
+    public static SubscriptionStateHeader createSubscriptionStateHeader(String subscriptionState) {
         try {
-            EventHeader eventHeader = HEADER_FACTORY.createEventHeader(eventType);
-            eventHeader.setEventId(RandomStrUtil.getValidationCode());
-            return eventHeader;
+            SubscriptionStateHeader subscriptionStateHeader = HEADER_FACTORY.createSubscriptionStateHeader(subscriptionState);
+            return subscriptionStateHeader;
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

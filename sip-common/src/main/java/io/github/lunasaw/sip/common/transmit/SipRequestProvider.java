@@ -2,6 +2,7 @@ package io.github.lunasaw.sip.common.transmit;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.sip.address.SipURI;
@@ -12,15 +13,54 @@ import javax.sip.message.Request;
 import org.assertj.core.util.Lists;
 import org.springframework.util.DigestUtils;
 
+import gov.nist.javax.sip.message.SIPRequest;
+import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.SipMessage;
 import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 
 /**
  * Sip命令request创造器
  */
 public class SipRequestProvider {
+
+    /**
+     * 带订阅创建SIP请求
+     *
+     * @param fromDevice    发送设备
+     * @param toDevice      发送目的设备
+     * @param sipMessage    内容
+     * @param subscribeInfo 订阅消息
+     * @return
+     */
+    public static Request createSipRequest(FromDevice fromDevice, ToDevice toDevice, SipMessage sipMessage, SubscribeInfo subscribeInfo) {
+        if (subscribeInfo != null) {
+
+            Optional.ofNullable(subscribeInfo.getRequest()).map(SIPRequest::getCallIdHeader).map(CallIdHeader::getCallId)
+                    .ifPresent(sipMessage::setCallId);
+            Optional.ofNullable(subscribeInfo.getResponse()).map(SIPResponse::getToTag).ifPresent(fromDevice::setFromTag);
+            Optional.ofNullable(subscribeInfo.getRequest()).map(SIPRequest::getFromTag).ifPresent(toDevice::setToTag);
+
+            if (subscribeInfo.getExpires() > 0) {
+                ExpiresHeader expiresHeader = SipRequestUtils.createExpiresHeader(subscribeInfo.getExpires());
+                sipMessage.addHeader(expiresHeader);
+            }
+
+            if (subscribeInfo.getEventType() != null && subscribeInfo.getEventId() != null) {
+                EventHeader eventHeader = SipRequestUtils.createEventHeader(subscribeInfo.getEventType(), subscribeInfo.getEventId());
+                sipMessage.addHeader(eventHeader);
+            }
+
+            if (subscribeInfo.getSubscriptionState() != null) {
+                SubscriptionStateHeader subscriptionStateHeader = SipRequestUtils.createSubscriptionStateHeader(subscribeInfo.getSubscriptionState());
+                sipMessage.addHeader(subscriptionStateHeader);
+            }
+        }
+
+        return createSipRequest(fromDevice, toDevice, sipMessage);
+    }
 
     /**
      * 创建SIP请求
@@ -100,13 +140,9 @@ public class SipRequestProvider {
         return createSipRequest(fromDevice, toDevice, sipMessage);
     }
 
-    public Request createPlaybackInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
-        return createInviteRequest(fromDevice, toDevice, content, callId);
-    }
-
     /**
      * 创建Bye请求
-     * 
+     *
      * @param fromDevice 发送设备
      * @param toDevice 发送目的设备
      * @param callId callId
@@ -152,7 +188,7 @@ public class SipRequestProvider {
     /**
      * 带签名的注册构造器
      *
-     * 
+     *
      * @param www 认证头
      * @return Request
      */
@@ -226,7 +262,7 @@ public class SipRequestProvider {
 
     /**
      * 创建Subscribe请求
-     * 
+     *
      * @param fromDevice 发送设备
      * @param toDevice 发送目的设备
      * @param content 内容
@@ -235,7 +271,8 @@ public class SipRequestProvider {
      * @param event 事件名称
      * @return Request
      */
-    public static Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId, Integer expires, String event) {
+    public static Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId, Integer expires,
+                                                 String event) {
         SipMessage sipMessage = SipMessage.getSubscribeBody();
         sipMessage.setMethod(Request.SUBSCRIBE);
         sipMessage.setContent(content);
@@ -252,7 +289,7 @@ public class SipRequestProvider {
 
     /**
      * 创建INFO 请求
-     * 
+     *
      * @param fromDevice 发送设备
      * @param toDevice 发送目的设备
      * @param content 内容
@@ -276,7 +313,7 @@ public class SipRequestProvider {
 
     /**
      * 创建ACK请求
-     * 
+     *
      * @param fromDevice 发送设备
      * @param toDevice 发送目的设备
      * @param callId callId
@@ -293,5 +330,30 @@ public class SipRequestProvider {
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage);
+    }
+
+    /**
+     * 创建Notify请求
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   发送目的设备
+     * @param callId     callId
+     * @return Request
+     */
+    public static Request createNotifyRequest(FromDevice fromDevice, ToDevice toDevice, String content, SubscribeInfo subscribeInfo, String callId) {
+        SipMessage sipMessage = SipMessage.getNotifyBody();
+        sipMessage.setMethod(Request.NOTIFY);
+        sipMessage.setCallId(callId);
+        sipMessage.setContent(content);
+
+        UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
+        sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
+
+        return createSipRequest(fromDevice, toDevice, sipMessage, subscribeInfo);
+    }
+
+    public Request createPlaybackInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+        return createInviteRequest(fromDevice, toDevice, content, callId);
     }
 }
