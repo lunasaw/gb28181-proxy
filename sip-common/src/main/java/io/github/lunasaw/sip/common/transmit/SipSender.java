@@ -8,6 +8,7 @@ import javax.sip.message.Message;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import org.springframework.util.ObjectUtils;
 
 import com.luna.common.text.RandomStrUtil;
@@ -74,6 +75,14 @@ public class SipSender {
     public static String doByeRequest(FromDevice fromDevice, ToDevice toDevice) {
         String callId = RandomStrUtil.getUUID();
         Request messageRequest = SipRequestProvider.createByeRequest(fromDevice, toDevice, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
+
+
+    public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice) {
+        String callId = RandomStrUtil.getUUID();
+        Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, toDevice, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
         return callId;
     }

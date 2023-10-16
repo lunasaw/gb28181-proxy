@@ -26,5 +26,10 @@
             <groupId>io.github.lunasaw</groupId>
             <artifactId>sip-common</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
     </dependencies>
 </project>

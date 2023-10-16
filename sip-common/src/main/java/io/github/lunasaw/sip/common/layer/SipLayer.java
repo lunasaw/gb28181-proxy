@@ -7,9 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.sip.*;
 
 import io.github.lunasaw.sip.common.conf.DefaultProperties;
-import io.github.lunasaw.sip.common.transmit.impl.SipProcessorObserverImpl;
-import io.github.lunasaw.sip.common.conf.msg.StringMsgParserFactory;
 import io.github.lunasaw.sip.common.transmit.SipProcessorObserver;
+import io.github.lunasaw.sip.common.conf.msg.StringMsgParserFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.util.ObjectUtils;
 
@@ -60,14 +59,14 @@ public class SipLayer implements CommandLineRunner {
 	}
 
     public static void addListeningPoint(String monitorIp, int port) {
-        addListeningPoint(monitorIp, port, new SipProcessorObserverImpl(), true);
+		addListeningPoint(monitorIp, port, new SipProcessorObserver(), true);
     }
 
     public static void addListeningPoint(String monitorIp, int port, Boolean enableLog) {
-		addListeningPoint(monitorIp, port, new SipProcessorObserverImpl(), enableLog);
+		addListeningPoint(monitorIp, port, new SipProcessorObserver(), enableLog);
 	}
 
-    public synchronized static void addListeningPoint(String monitorIp, int port, SipProcessorObserver listener, Boolean enableLog) {
+	public synchronized static void addListeningPoint(String monitorIp, int port, SipListener listener, Boolean enableLog) {
 		SipStackImpl sipStack;
 		try {
 			sipStack = (SipStackImpl) SipFactory.getInstance().createSipStack(DefaultProperties.getProperties("GB28181_SIP", enableLog));

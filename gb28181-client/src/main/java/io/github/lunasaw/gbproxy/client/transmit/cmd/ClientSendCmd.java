@@ -202,4 +202,15 @@ public class ClientSendCmd {
     public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
         return SipSender.doByeRequest(fromDevice, toDevice);
     }
+
+    /**
+     * 回复ACK
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
+        return SipSender.doAckRequest(fromDevice, toDevice);
+    }
 }

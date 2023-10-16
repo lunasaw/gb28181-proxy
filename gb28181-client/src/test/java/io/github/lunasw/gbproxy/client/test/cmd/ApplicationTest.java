@@ -2,40 +2,37 @@ package io.github.lunasw.gbproxy.client.test.cmd;
 
 import javax.sip.message.Request;
 
-import com.luna.common.os.SystemInfoUtil;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.impl.DefaultMessageRequestProcessor;
-import io.github.lunasaw.gbproxy.client.transmit.response.register.impl.DefaultRegisterResponseProcessor;
-import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
-import io.github.lunasaw.sip.common.transmit.event.Event;
-import io.github.lunasaw.sip.common.transmit.event.EventResult;
-import io.github.lunasaw.sip.common.transmit.impl.SipProcessorObserverImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.luna.common.os.SystemInfoUtil;
 import com.luna.common.text.RandomStrUtil;
 
-import io.github.lunasaw.sip.common.transmit.SipRequestProvider;
-import io.github.lunasaw.sip.common.SipCommonApplication;
+import io.github.lunasaw.gbproxy.client.Gb28181Client;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.impl.DefaultMessageRequestProcessor;
+import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.layer.SipLayer;
+import io.github.lunasaw.sip.common.transmit.SipProcessorObserver;
 import io.github.lunasaw.sip.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.transmit.event.Event;
+import io.github.lunasaw.sip.common.transmit.event.EventResult;
+import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import lombok.SneakyThrows;
 
 /**
  * @author luna
  * @date 2023/10/13
  */
-@SpringBootTest(classes = SipCommonApplication.class)
+@SpringBootTest(classes = Gb28181Client.class)
 public class ApplicationTest {
 
-    FromDevice fromDevice;
-
-    ToDevice   toDevice;
-
     static String localIp = SystemInfoUtil.getNoLoopbackIP();
+    FromDevice fromDevice;
+    ToDevice toDevice;
 
     @BeforeEach
     public void before() {
@@ -75,10 +72,9 @@ public class ApplicationTest {
         // 构造请求 fromDevice：当前发送的设备 toDevice 接收消息的设备
         Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
         // 响应处理器
-        DefaultRegisterResponseProcessor responseProcessor = new DefaultRegisterResponseProcessor(fromDevice, toDevice, 300);
+        RegisterResponseProcessor responseProcessor = new RegisterResponseProcessor(fromDevice, toDevice, 300);
         // 添加响应处理器
-        SipProcessorObserverImpl.addResponseProcessor(RegisterResponseProcessor.METHOD, responseProcessor);
-
+        SipProcessorObserver.addResponseProcessor(RegisterResponseProcessor.METHOD, responseProcessor);
 
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override
@@ -93,14 +89,19 @@ public class ApplicationTest {
     public void messageResponse() {
 
         DefaultMessageRequestProcessor messageRequestProcessor = new DefaultMessageRequestProcessor();
-        SipProcessorObserverImpl.addRequestProcessor(DefaultMessageRequestProcessor.METHOD, messageRequestProcessor);
+        SipProcessorObserver.addRequestProcessor(DefaultMessageRequestProcessor.METHOD, messageRequestProcessor);
 
     }
 
     @AfterEach
     public void after() {
-        while (true){
+        while (true) {
 
         }
+    }
+
+    @Test
+    public void demo() {
+
     }
 }

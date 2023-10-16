@@ -2,13 +2,22 @@ package io.github.lunasaw.gbproxy.client.transmit.response.register;
 
 import javax.sip.ResponseEvent;
 import javax.sip.header.WWWAuthenticateHeader;
+import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPResponse;
-import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
+import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,9 +26,25 @@ import lombok.extern.slf4j.Slf4j;
  * @author luna
  */
 @Slf4j
-public abstract class RegisterResponseProcessor extends SipResponseProcessorAbstract {
+@Component
+@Getter
+@Setter
+@NoArgsConstructor
+public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
 
     public static final String METHOD = "REGISTER";
+
+    public String method = METHOD;
+
+    private FromDevice fromDevice;
+    private ToDevice toDevice;
+    private Integer expires;
+
+    public RegisterResponseProcessor(FromDevice fromDevice, ToDevice toDevice, Integer expires) {
+        this.fromDevice = fromDevice;
+        this.toDevice = toDevice;
+        this.expires = expires;
+    }
 
     /**
      * 处理Register响应
@@ -45,10 +70,17 @@ public abstract class RegisterResponseProcessor extends SipResponseProcessorAbst
     }
 
     public void unAuthorized(WWWAuthenticateHeader www, SipTransaction sipTransaction) {
-        // 二次验证
+        log.info("unAuthorized::www = {}, sipTransaction = {}", www, sipTransaction);
+
+        // 构造二次请求
+        Request registerRequestWithAuth =
+                SipRequestProvider.createRegisterRequestWithAuth(fromDevice, toDevice, sipTransaction.getCallId(), expires, www);
+
+        // 发送二次请求
+        SipSender.transmitRequest(fromDevice.getIp(), registerRequestWithAuth);
     }
 
     public void success() {
-        // 注册完成
+        log.info("success::注册成功");
     }
 }
