@@ -42,7 +42,7 @@ public class ApplicationTest {
         SipLayer.addListeningPoint(localIp, 8118);
         fromDevice = FromDevice.getInstance("33010602011187000001", localIp, 8118);
         toDevice = ToDevice.getInstance("41010500002000000010", localIp, 8116);
-        toDevice.setPassword("weidian");
+        toDevice.setPassword("luna");
         toDevice.setRealm("4101050000");
     }
 

@@ -13,7 +13,7 @@ import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.transmit.SipSender;
 
 /**
- * @author weidian
+ * @author luna
  * @date 2023/10/15
  */
 public class ClientSendCmd {

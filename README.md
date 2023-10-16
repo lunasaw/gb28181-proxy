@@ -11,29 +11,31 @@
 ## 实现功能
 
 - [x] SIP 通用请求构建
-- [ ] springboot starter封装 
+- [ ] springboot starter封装
     - [x] 端口监听
         - [x] UDP 监听
         - [x] TCP 监听
     - [x] 基于javax的xml转化，写对象的方式写xml
 - [x] GB28181
-  - [x] Server
-      - [x] 设备注册
-      - [x] 设备认证
-      - [x] 设备控制(PTZ)
-      - [x] 云台控制
-      - [x] 安放告警
-      - [x] 设备查询
-      - [ ] 实时点播
-      - [ ] 视频回放点播
-      - [ ] 设备移动订阅
-  - [x] Client
-      - [x] 设备注册
-      - [ ] 点播响应
-      - [x] 设备移动
-      - [x] 告警上报
-      - [ ] 视频回放点播
-
+    - [x] Server
+        - [x] 设备注册
+        - [x] 设备认证
+        - [x] 设备控制(PTZ)
+        - [x] 云台控制
+        - [x] 安放告警
+        - [x] 设备查询
+        - [ ] 实时点播
+        - [ ] 视频回放点播
+        - [ ] 设备移动订阅
+    - [x] Client
+        - [x] 设备注册
+        - [x] 设备控制响应
+        - [x] 告警上报
+        - [x] 事件推送
+        - [x] 设备状态回复
+        - [x] 设备录像上报
+        - [ ] 实时点播响应
+        - [ ] 视频回放点播
 
 # how to use
 
@@ -47,28 +49,28 @@
     <version>${last.version}</version>
 </dependency>
 
-按需引入
+        按需引入
 
-基于sip的请求封装包
+        基于sip的请求封装包
 <dependency>
-    <groupId>io.github.lunasaw</groupId>
-    <artifactId>sip-common</artifactId>
-    <version>${last.version}</version>
+<groupId>io.github.lunasaw</groupId>
+<artifactId>sip-common</artifactId>
+<version>${last.version}</version>
 </dependency>
 
-gb28181设备模拟client
+        gb28181设备模拟client
 <dependency>
-    <groupId>io.github.lunasaw</groupId>
-    <artifactId>gb28181-client</artifactId>
-    <version>${last.version}</version>
+<groupId>io.github.lunasaw</groupId>
+<artifactId>gb28181-client</artifactId>
+<version>${last.version}</version>
 </dependency>
 
 
-sip服务器server
+        sip服务器server
 <dependency>
-    <groupId>io.github.lunasaw</groupId>
-    <artifactId>gb28181-server</artifactId>
-    <version>${last.version}</version>
+<groupId>io.github.lunasaw</groupId>
+<artifactId>gb28181-server</artifactId>
+<version>${last.version}</version>
 </dependency>
 ```
 

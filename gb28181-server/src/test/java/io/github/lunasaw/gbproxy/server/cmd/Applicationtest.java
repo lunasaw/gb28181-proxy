@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * @author weidian
+ * @author luna
  * @date 2023/10/14
  */
 @SpringBootTest(classes = Gb28181Server.class)
@@ -29,7 +29,7 @@ public class Applicationtest {
         SipLayer.addListeningPoint(localIp, 8118);
         fromDevice = FromDevice.getInstance("41010500002000000010", localIp, 8118);
         toDevice = ToDevice.getInstance("33010602011187000001", localIp, 8117);
-        toDevice.setPassword("weidian");
+        toDevice.setPassword("luna");
         toDevice.setRealm("4101050000");
     }
 
