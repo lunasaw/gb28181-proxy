@@ -6,7 +6,7 @@
 
     <groupId>io.github.lunasaw</groupId>
     <artifactId>sip-proxy</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>pom</packaging>
     <modules>
         <module>gb28181-client</module>
@@ -26,7 +26,7 @@
         <app.profiles>${project.name}</app.profiles>
         <sip.version>1.3.0-91</sip.version>
         <dom4j.version>2.1.4</dom4j.version>
-        <sip-proxy-common.version>1.0.3</sip-proxy-common.version>
+        <sip-proxy-common.version>1.0.4</sip-proxy-common.version>
     </properties>
 
     <developers>
