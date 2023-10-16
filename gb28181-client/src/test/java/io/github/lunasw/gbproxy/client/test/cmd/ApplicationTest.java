@@ -30,7 +30,7 @@ import lombok.SneakyThrows;
 @SpringBootTest(classes = Gb28181Client.class)
 public class ApplicationTest {
 
-    static String localIp = SystemInfoUtil.getNoLoopbackIP();
+    static String localIp = "172.19.128.100";
     FromDevice fromDevice;
     ToDevice toDevice;
 

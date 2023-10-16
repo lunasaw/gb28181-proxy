@@ -314,4 +314,16 @@ public class ServerSendCmd {
     public String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
         return SipSender.doAckRequest(fromDevice, toDevice);
     }
+
+
+    /**
+     * 发送BYE
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
+        return SipSender.doByeRequest(fromDevice, toDevice);
+    }
 }

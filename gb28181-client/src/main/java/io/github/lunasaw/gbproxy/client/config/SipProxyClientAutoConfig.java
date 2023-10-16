@@ -3,7 +3,6 @@ package io.github.lunasaw.gbproxy.client.config;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -11,6 +10,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.sip.common.transmit.SipProcessorObserver;
+import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessor;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessor;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;

@@ -2,6 +2,8 @@ package io.github.lunasaw.gbproxy.client.transmit.response.bye;
 
 import javax.sip.ResponseEvent;
 
+import gov.nist.javax.sip.message.SIPResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
@@ -14,6 +16,7 @@ import lombok.Data;
  */
 @Component
 @Data
+@Slf4j
 public class ByeResponseProcessor extends SipResponseProcessorAbstract {
 
     public static final String METHOD = "BYE";
@@ -27,7 +30,9 @@ public class ByeResponseProcessor extends SipResponseProcessorAbstract {
      */
     @Override
     public void process(ResponseEvent evt) {
-        // Auto-generated method stub
+        SIPResponse response = (SIPResponse) evt.getResponse();
+        String callId = response.getCallIdHeader().getCallId();
+        log.info("process::evt = {}", evt);
     }
 
 }

@@ -32,7 +32,7 @@ public class ServerLoggerImpl implements ServerLogger {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(sender ? from + "发送：目标--->" + to : from + " 接收：来自--->" + from)
+        stringBuilder.append(sender ? from + "发送：目标--->" + to : from + " 接收：来自--->" + to)
             .append("\r\n")
             .append(DateUtils.formatDateTime(new Date(time)))
                 .append("\r\n")

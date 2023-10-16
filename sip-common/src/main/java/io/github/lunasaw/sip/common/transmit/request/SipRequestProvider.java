@@ -151,7 +151,7 @@ public class SipRequestProvider {
     public static Request createByeRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
 
         SipMessage sipMessage = SipMessage.getByeBody();
-        sipMessage.setMethod(Request.INVITE);
+        sipMessage.setMethod(Request.BYE);
         sipMessage.setCallId(callId);
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
