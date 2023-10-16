@@ -1,4 +1,4 @@
-# gb28181-proxy
+# sip-proxy
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.lunasaw/luna-gb28181-proxy)](https://mvnrepository.com/artifact/io.github.lunasaw/gb28181-proxy-common)
 [![GitHub license](https://img.shields.io/badge/MIT_License-blue.svg)](https://raw.githubusercontent.com/lunasaw/luna-gb28181-proxy/master/LICENSE)
@@ -37,36 +37,45 @@
         - [ ] 实时点播响应
         - [ ] 视频回放点播
 
-# how to use
+# 如何使用
 
-<a href="https://lunasaw.github.io/luna-gb28181-proxy/docs/" target="_blank">文档链接</a>
+<a href="https://lunasaw.github.io/gb28181-proxy/" target="_blank">文档链接</a>
+
+> 全量包
 
 ```xml
-全量包
+
 <dependency>
     <groupId>io.github.lunasaw</groupId>
     <artifactId>gb28181-proxy</artifactId>
     <version>${last.version}</version>
 </dependency>
+```
 
-        按需引入
+> 按需引入 基于sip的请求封装包。注意：因为涉及到github action打包识别问题。故sip-common永远比client和sever小一个版本
 
-        基于sip的请求封装包
+```xml
+
 <dependency>
 <groupId>io.github.lunasaw</groupId>
 <artifactId>sip-common</artifactId>
 <version>${last.version}</version>
 </dependency>
+```
 
-        gb28181设备模拟client
+> gb28181设备模拟client
+
+```xml
 <dependency>
 <groupId>io.github.lunasaw</groupId>
 <artifactId>gb28181-client</artifactId>
 <version>${last.version}</version>
 </dependency>
+```
 
+> sip服务器server
 
-        sip服务器server
+```xml
 <dependency>
 <groupId>io.github.lunasaw</groupId>
 <artifactId>gb28181-server</artifactId>
