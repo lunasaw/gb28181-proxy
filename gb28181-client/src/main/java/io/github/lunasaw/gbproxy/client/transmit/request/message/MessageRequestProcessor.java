@@ -8,6 +8,9 @@ import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAb
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author luna
+ */
 @Slf4j
 public abstract class MessageRequestProcessor extends SipRequestProcessorAbstract {
 

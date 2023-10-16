@@ -2,8 +2,10 @@ package io.github.lunasaw.gbproxy.client.entity.notify;
 
 import javax.xml.bind.annotation.*;
 
-import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
+import io.github.lunasaw.sip.common.entity.base.DeviceBase;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -18,6 +20,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @XmlRootElement(name = "Notify")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DeviceKeepLiveNotify extends DeviceBase {
@@ -29,5 +33,11 @@ public class DeviceKeepLiveNotify extends DeviceBase {
 
     public DeviceKeepLiveNotify(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+    }
+
+    public static void main(String[] args) {
+        DeviceKeepLiveNotify deviceKeepLiveNotify = new DeviceKeepLiveNotify();
+        deviceKeepLiveNotify.setStatus("OK");
+        System.out.println(deviceKeepLiveNotify);
     }
 }

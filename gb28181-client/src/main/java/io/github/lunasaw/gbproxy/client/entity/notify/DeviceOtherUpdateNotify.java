@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.*;
 
 import org.assertj.core.util.Lists;
 
-import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
+import io.github.lunasaw.sip.common.entity.base.DeviceBase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

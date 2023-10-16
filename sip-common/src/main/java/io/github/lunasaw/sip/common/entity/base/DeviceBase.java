@@ -1,4 +1,4 @@
-package io.github.lunasaw.sip.common.entity.xml;
+package io.github.lunasaw.sip.common.entity.base;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

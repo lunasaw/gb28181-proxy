@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.lunasaw</groupId>
         <artifactId>sip-proxy</artifactId>
-        <version>1.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>gb28181-client</artifactId>
@@ -25,7 +25,6 @@
         <dependency>
             <groupId>io.github.lunasaw</groupId>
             <artifactId>sip-common</artifactId>
-            <version>${sip-proxy-common.version}</version>
         </dependency>
     </dependencies>
 </project>

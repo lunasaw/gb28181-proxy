@@ -2,10 +2,9 @@ package io.github.lunasaw.gbproxy.server.entity.query;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
+import io.github.lunasaw.sip.common.entity.base.DeviceBase;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
+import io.github.lunasaw.sip.common.entity.base.DeviceBase;
 import lombok.*;
 
 /**

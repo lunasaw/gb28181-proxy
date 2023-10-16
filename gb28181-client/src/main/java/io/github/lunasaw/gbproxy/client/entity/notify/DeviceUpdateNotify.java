@@ -2,8 +2,7 @@ package io.github.lunasaw.gbproxy.client.entity.notify;
 
 import javax.xml.bind.annotation.*;
 
-import io.github.lunasaw.gbproxy.client.entity.response.DeviceItem;
-import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
+import io.github.lunasaw.sip.common.entity.base.DeviceBase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.*;
 
-import io.github.lunasaw.sip.common.entity.xml.DeviceBase;
+import io.github.lunasaw.sip.common.entity.base.DeviceBase;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
