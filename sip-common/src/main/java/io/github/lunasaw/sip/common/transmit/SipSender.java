@@ -82,6 +82,10 @@ public class SipSender {
 
     public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice) {
         String callId = RandomStrUtil.getUUID();
+        return doAckRequest(fromDevice, toDevice, callId);
+    }
+
+    public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
         Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, toDevice, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
         return callId;

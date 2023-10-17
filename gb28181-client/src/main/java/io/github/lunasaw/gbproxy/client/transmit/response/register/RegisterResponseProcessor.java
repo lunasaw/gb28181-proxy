@@ -21,8 +21,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * description Register 响应处理器
- * 
+ * description 发起后 Register 的响应处理器
+ * 业务逻辑直接继承该类，实现方法即可
  * @author luna
  */
 @Slf4j

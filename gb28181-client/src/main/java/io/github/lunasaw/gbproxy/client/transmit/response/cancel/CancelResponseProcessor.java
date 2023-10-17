@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.response.cancel;
 
 import javax.sip.ResponseEvent;
 
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
@@ -11,6 +12,7 @@ import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessor
  *
  * @author weidian
  */
+@Data
 @Component
 public class CancelResponseProcessor extends SipResponseProcessorAbstract {
 

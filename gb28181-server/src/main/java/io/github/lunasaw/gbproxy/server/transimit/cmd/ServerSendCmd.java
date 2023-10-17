@@ -311,8 +311,12 @@ public class ServerSendCmd {
      * @param toDevice   接收设备
      * @return
      */
-    public String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
+    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
         return SipSender.doAckRequest(fromDevice, toDevice);
+    }
+
+    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice, String callId) {
+        return SipSender.doAckRequest(fromDevice, toDevice, callId);
     }
 
 
