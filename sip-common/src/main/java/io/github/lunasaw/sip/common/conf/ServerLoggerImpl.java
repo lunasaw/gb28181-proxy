@@ -15,11 +15,9 @@ import gov.nist.javax.sip.stack.SIPTransactionStack;
 
 public class ServerLoggerImpl implements ServerLogger {
 
-    private boolean showLog = true;
-
-    private SIPTransactionStack sipStack;
-
     protected StackLogger stackLogger;
+    private boolean showLog = true;
+    private SIPTransactionStack sipStack;
 
     @Override
     public void closeLogFile() {
@@ -43,23 +41,12 @@ public class ServerLoggerImpl implements ServerLogger {
 
     @Override
     public void logMessage(SIPMessage message, String from, String to, String status, boolean sender, long time) {
-        if (!showLog) {
-            return;
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(sender ? from + "发送：目标--->" + to : from + " 接收：来自--->" + to)
-            .append("\r\n")
-            .append(DateUtils.formatDateTime(new Date(time)))
-                .append("\r\n")
-                .append(message);
-        this.stackLogger.logInfo(stringBuilder.toString());
+
     }
 
     @Override
     public void logMessage(SIPMessage message, String from, String to, String status, boolean sender) {
-        if (!showLog) {
-            return;
-        }
+
     }
 
     @Override

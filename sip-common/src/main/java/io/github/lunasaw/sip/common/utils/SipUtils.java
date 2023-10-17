@@ -28,8 +28,8 @@ public class SipUtils {
         return getUserIdFromFromHeader(fromHeader);
     }
 
-    public static String getUserIdFromFromHeader(HeaderAddress fromHeader) {
-        AddressImpl address = (AddressImpl)fromHeader.getAddress();
+    public static String getUserIdFromFromHeader(HeaderAddress headerAddress) {
+        AddressImpl address = (AddressImpl) headerAddress.getAddress();
         SipUri uri = (SipUri)address.getURI();
         return uri.getUser();
     }

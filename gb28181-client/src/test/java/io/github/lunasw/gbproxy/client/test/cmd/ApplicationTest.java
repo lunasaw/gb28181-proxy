@@ -36,9 +36,9 @@ public class ApplicationTest {
 
     @BeforeEach
     public void before() {
-        SipLayer.addListeningPoint(localIp, 8118);
-        fromDevice = FromDevice.getInstance("33010602011187000001", localIp, 8118);
-        toDevice = ToDevice.getInstance("41010500002000000010", localIp, 8116);
+        SipLayer.addListeningPoint(localIp, 8117);
+        fromDevice = FromDevice.getInstance("33010602011187000001", localIp, 8117);
+        toDevice = ToDevice.getInstance("41010500002000000010", localIp, 8118);
         toDevice.setPassword("luna");
         toDevice.setRealm("4101050000");
     }
@@ -72,7 +72,7 @@ public class ApplicationTest {
         // 构造请求 fromDevice：当前发送的设备 toDevice 接收消息的设备
         Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
         // 响应处理器
-        RegisterResponseProcessor responseProcessor = new RegisterResponseProcessor(fromDevice, toDevice, 300);
+        RegisterResponseProcessor responseProcessor = new RegisterResponseProcessor();
         // 添加响应处理器
         SipProcessorObserver.addResponseProcessor(RegisterResponseProcessor.METHOD, responseProcessor);
 

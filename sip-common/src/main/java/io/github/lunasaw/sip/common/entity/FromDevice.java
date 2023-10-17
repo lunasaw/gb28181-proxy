@@ -7,6 +7,7 @@ import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.Data;
 
 /**
+ * 继承这个类，自定义参数
  * @author luna
  * @date 2023/10/12
  */
