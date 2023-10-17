@@ -2,23 +2,21 @@ package io.github.lunasaw.gbproxy.server.transimit.cmd.response.invite;
 
 import java.text.ParseException;
 
-import javax.sdp.SdpParseException;
-import javax.sdp.SessionDescription;
 import javax.sip.ResponseEvent;
 import javax.sip.header.CallIdHeader;
 import javax.sip.message.Response;
 
-import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
-import org.springframework.stereotype.Component;
-
 import gov.nist.javax.sip.ResponseEventExt;
 import gov.nist.javax.sip.message.SIPResponse;
+import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,16 +24,20 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author weidian
  */
-@Component
 @Slf4j
-@Data
+@Getter
+@Setter
 public class InviteResponseProcessor extends SipResponseProcessorAbstract {
 
     private static final String METHOD = "INVITE";
 
     private String method = METHOD;
 
-    private FromDevice fromDevice;
+    private SipUserGenerate sipUserGenerate;
+
+    public InviteResponseProcessor(SipUserGenerate sipUserGenerate) {
+        this.sipUserGenerate = sipUserGenerate;
+    }
 
     /**
      * 处理invite响应
@@ -66,18 +68,16 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
 
     }
 
-    public void responseAck(ResponseEventExt evt) throws SdpParseException {
+    public void responseAck(ResponseEventExt evt) {
         // 成功响应
         SIPResponse response = (SIPResponse) evt.getResponse();
 
-        String contentString = new String(response.getRawContent());
-        SdpSessionDescription sessionDescription = SipUtils.parseSdp(contentString);
-        SessionDescription sdp = sessionDescription.getBaseSdb();
-
-        String username = sdp.getOrigin().getUsername();
-
-        ToDevice toDevice = ToDevice.getInstance(username, evt.getRemoteIpAddress(), evt.getRemotePort());
+        String toUserId = SipUtils.getUserIdFromFromHeader(response.getToHeader());
+        String fromUserId = SipUtils.getUserIdFromFromHeader(response.getFromHeader());
         CallIdHeader callIdHeader = response.getCallIdHeader();
+        FromDevice fromDevice = sipUserGenerate.getFromDevice(fromUserId);
+
+        ToDevice toDevice = ToDevice.getInstance(toUserId, evt.getRemoteIpAddress(), evt.getRemotePort());
 
         // 回复ack
         ServerSendCmd.deviceAck(fromDevice, toDevice, callIdHeader.getCallId());

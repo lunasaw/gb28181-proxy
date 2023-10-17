@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.github.lunasaw.gbproxy.client.config.SipProxyClientAutoConfig;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorUser;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
+import io.github.lunasaw.gbproxy.server.transimit.cmd.response.invite.InviteResponseProcessor;
+import io.github.lunasaw.sip.common.conf.SipProxyClientAutoConfig;
 
 /**
  * @author luna
@@ -23,6 +24,11 @@ public class SipProcessorConfiguration {
         RegisterResponseProcessor registerResponseProcessor = new RegisterResponseProcessor();
         registerResponseProcessor.setRegisterProcessorUser(registerProcessorUser);
         return registerResponseProcessor;
+    }
+
+    @Bean
+    public InviteResponseProcessor inviteResponseProcessor() {
+        return new InviteResponseProcessor(registerProcessorUser);
     }
 
     @Bean
