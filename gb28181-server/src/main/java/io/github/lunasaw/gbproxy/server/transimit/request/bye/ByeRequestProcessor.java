@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.server.transimit.cmd.request.bye;
+package io.github.lunasaw.gbproxy.server.transimit.request.bye;
 
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import lombok.Getter;

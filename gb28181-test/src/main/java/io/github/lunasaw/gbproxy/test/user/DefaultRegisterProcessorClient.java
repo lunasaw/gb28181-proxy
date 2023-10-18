@@ -1,9 +1,10 @@
 package io.github.lunasaw.gbproxy.test.user;
 
+import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorUser;
+import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 
@@ -12,25 +13,25 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
  * @date 2023/10/17
  */
 @Component
-public class DefaultRegisterProcessorUser implements RegisterProcessorUser {
+public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
 
     @Autowired
-    private FromDevice fromDevice;
+    private Device fromDevice;
     @Autowired
-    private ToDevice toDevice;
+    private Device toDevice;
 
     @Override
     public Integer getExpire(String userId) {
-        return RegisterProcessorUser.super.getExpire(userId);
+        return RegisterProcessorClient.super.getExpire(userId);
     }
 
     @Override
-    public ToDevice getToDevice(String userId) {
+    public Device getToDevice(String userId) {
         return toDevice;
     }
 
     @Override
-    public FromDevice getFromDevice(String userId) {
+    public Device getFromDevice(String userId) {
         return fromDevice;
     }
 }

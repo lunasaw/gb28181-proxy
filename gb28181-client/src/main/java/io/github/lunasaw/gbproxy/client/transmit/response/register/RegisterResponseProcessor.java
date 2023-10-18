@@ -21,7 +21,6 @@ import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.DependsOn;
 
 /**
  * description 发起后 Register 的响应处理器
@@ -38,7 +37,7 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
 
     public String method = METHOD;
 
-    private RegisterProcessorUser registerProcessorUser;
+    private RegisterProcessorClient registerProcessorClient;
 
     /**
      * 处理Register响应
@@ -72,9 +71,9 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
         String toUserId = SipUtils.getUserIdFromFromHeader(response.getToHeader());
         String fromUserId = SipUtils.getUserIdFromFromHeader(response.getFromHeader());
         CallIdHeader callIdHeader = response.getCallIdHeader();
-        Integer expire = registerProcessorUser.getExpire(toUserId);
-        FromDevice fromDevice = registerProcessorUser.getFromDevice(fromUserId);
-        ToDevice toDevice = registerProcessorUser.getToDevice(toUserId);
+        Integer expire = registerProcessorClient.getExpire(toUserId);
+        FromDevice fromDevice = (FromDevice) registerProcessorClient.getFromDevice(fromUserId);
+        ToDevice toDevice = (ToDevice) registerProcessorClient.getToDevice(toUserId);
 
 
         WWWAuthenticateHeader www = (WWWAuthenticateHeader) response.getHeader(WWWAuthenticateHeader.NAME);

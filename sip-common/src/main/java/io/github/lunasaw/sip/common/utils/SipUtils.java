@@ -8,15 +8,20 @@ import javax.sip.header.HeaderAddress;
 import javax.sip.header.ToHeader;
 import javax.sip.message.Request;
 
+import org.springframework.util.ObjectUtils;
+
 import gov.nist.javax.sip.address.AddressImpl;
 import gov.nist.javax.sip.address.SipUri;
+import gov.nist.javax.sip.message.SIPRequest;
+import gov.nist.javax.sip.message.SIPResponse;
+import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
+import io.github.lunasaw.sip.common.entity.SipTransaction;
 
 /**
  * @author luna
  */
 public class SipUtils {
-
 
     public static String getUserIdFromToHeader(Request request) {
         ToHeader toHeader = (ToHeader)request.getHeader(ToHeader.NAME);
@@ -28,10 +33,66 @@ public class SipUtils {
         return getUserIdFromFromHeader(fromHeader);
     }
 
+    public static SipTransaction getSipTransaction(SIPResponse response) {
+        SipTransaction sipTransaction = new SipTransaction();
+        sipTransaction.setCallId(response.getCallIdHeader().getCallId());
+        sipTransaction.setFromTag(response.getFromTag());
+        sipTransaction.setToTag(response.getToTag());
+        sipTransaction.setViaBranch(response.getTopmostViaHeader().getBranch());
+        return sipTransaction;
+    }
+
+    public static SipTransaction getSipTransaction(SIPRequest request) {
+        SipTransaction sipTransaction = new SipTransaction();
+        sipTransaction.setCallId(request.getCallIdHeader().getCallId());
+        sipTransaction.setFromTag(request.getFromTag());
+        sipTransaction.setToTag(request.getToTag());
+        sipTransaction.setViaBranch(request.getTopmostViaHeader().getBranch());
+        return sipTransaction;
+    }
+
     public static String getUserIdFromFromHeader(HeaderAddress headerAddress) {
         AddressImpl address = (AddressImpl) headerAddress.getAddress();
         SipUri uri = (SipUri)address.getURI();
         return uri.getUser();
+    }
+
+    public static String getCallId(SIPRequest request) {
+        return request.getCallIdHeader().getCallId();
+    }
+
+    public static RemoteAddressInfo getRemoteAddressFromRequest(SIPRequest request) {
+        return getRemoteAddressFromRequest(request, false);
+    }
+
+    /**
+     * 从请求中获取设备ip地址和端口号
+     *
+     * @param request                       请求
+     * @param sipUseSourceIpAsRemoteAddress false 从via中获取地址， true 直接获取远程地址
+     * @return 地址信息
+     */
+    public static RemoteAddressInfo getRemoteAddressFromRequest(SIPRequest request, boolean sipUseSourceIpAsRemoteAddress) {
+
+        String remoteAddress;
+        int remotePort;
+        if (sipUseSourceIpAsRemoteAddress) {
+            remoteAddress = request.getPeerPacketSourceAddress().getHostAddress();
+            remotePort = request.getPeerPacketSourcePort();
+
+        } else {
+            // 判断RPort是否改变，改变则说明路由nat信息变化，修改设备信息
+            // 获取到通信地址等信息
+            remoteAddress = request.getTopmostViaHeader().getReceived();
+            remotePort = request.getTopmostViaHeader().getRPort();
+            // 解析本地地址替代
+            if (ObjectUtils.isEmpty(remoteAddress) || remotePort == -1) {
+                remoteAddress = request.getPeerPacketSourceAddress().getHostAddress();
+                remotePort = request.getPeerPacketSourcePort();
+            }
+        }
+
+        return new RemoteAddressInfo(remoteAddress, remotePort);
     }
 
     public static String generateGB28181Code(int centerCode, int industryCode, int typeCode, int serialNumber) {

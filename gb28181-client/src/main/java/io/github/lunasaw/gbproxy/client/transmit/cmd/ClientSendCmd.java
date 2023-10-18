@@ -12,12 +12,27 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
+
+import javax.sip.message.Request;
 
 /**
  * @author luna
  * @date 2023/10/15
  */
 public class ClientSendCmd {
+
+    /**
+     * 设备注册
+     *
+     * @param fromDevice 当前设备
+     * @param toDevice   注册平台
+     * @param expires    注册时间 0注销
+     * @return
+     */
+    public String deviceRegister(FromDevice fromDevice, ToDevice toDevice, Integer expires) {
+        return SipSender.doRegisterRequest(fromDevice, toDevice, expires);
+    }
 
     /**
      * 告警上报

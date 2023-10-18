@@ -6,7 +6,7 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  * @author luna
  * @date 2023/10/17
  */
-public interface RegisterProcessorUser extends SipUserGenerate {
+public interface RegisterProcessorClient extends SipUserGenerate {
 
     /**
      * 过期时间

@@ -1,5 +1,6 @@
 package io.github.lunasaw.sip.common.service;
 
+import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public interface SipUserGenerate {
      * @param userId sip用户id
      * @return ToDevice
      */
-    ToDevice getToDevice(String userId);
+    Device getToDevice(String userId);
 
     /**
      * 发送设备
@@ -25,5 +26,5 @@ public interface SipUserGenerate {
      * @param userId 用户id
      * @return FromDevice
      */
-    FromDevice getFromDevice(String userId);
+    Device getFromDevice(String userId);
 }

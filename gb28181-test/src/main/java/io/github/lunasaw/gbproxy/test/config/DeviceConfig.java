@@ -1,5 +1,7 @@
 package io.github.lunasaw.gbproxy.test.config;
 
+import io.github.lunasaw.sip.common.entity.Device;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,13 +20,19 @@ public class DeviceConfig {
     public static final String REMOTE_IP = "10.37.5.132";
 
     @Bean
-    public FromDevice fromDevice() {
+    public Device fromDevice() {
         return FromDevice.getInstance("33010602011187000001", LOCAL_IP, 8118);
     }
 
     @Bean
-    public ToDevice toDevice() {
-        return ToDevice.getInstance("41010500002000000010", REMOTE_IP, 8117);
+    @Qualifier("toDevice")
+    public Device toDevice() {
+        return ToDevice.getInstance("41010500002000000010", REMOTE_IP, 8116);
     }
 
+    @Bean
+    @Qualifier("serverDevice")
+    public Device serverDevice() {
+        return FromDevice.getInstance("41010500002000000010", LOCAL_IP, 8117);
+    }
 }

@@ -40,6 +40,21 @@ public class SipSender {
         return doSubscribeRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
     }
 
+    public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean) {
+        return doMessageRequest(fromDevice, toDevice, xmlBean, null, null);
+    }
+
+    public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo) {
+        return doNotifyRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
+    }
+
+    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expire) {
+        String callId = RandomStrUtil.getUUID();
+        Request messageRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, expire);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
+
     public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo, Event errorEvent,
                                             Event okEvent) {
         String callId = RandomStrUtil.getUUID();
@@ -47,14 +62,6 @@ public class SipSender {
         Request messageRequest = SipRequestProvider.createSubscribeRequest(fromDevice, toDevice, xmlBean.toString(), subscribeInfo, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
-    }
-
-    public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean) {
-        return doMessageRequest(fromDevice, toDevice, xmlBean, null, null);
-    }
-
-    public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo) {
-        return doNotifyRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
     }
 
     public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo, Event errorEvent,

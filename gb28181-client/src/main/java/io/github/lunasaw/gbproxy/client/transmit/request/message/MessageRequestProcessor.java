@@ -39,8 +39,9 @@ public class MessageRequestProcessor extends SipRequestProcessorAbstract {
     public boolean dealMessage(SIPRequest sipRequest) {
         // 发送方用户
         String userId = SipUtils.getUserIdFromFromHeader(sipRequest);
-        SipTransaction sipTransaction = new SipTransaction(sipRequest);
         // 收到处理
+
+        // 根据不同cmdType处理
         return true;
     }
 

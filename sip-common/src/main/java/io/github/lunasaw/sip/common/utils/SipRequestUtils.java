@@ -14,7 +14,9 @@ import javax.sip.address.URI;
 import javax.sip.header.*;
 import javax.sip.message.MessageFactory;
 import javax.sip.message.Request;
+import javax.sip.message.Response;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.google.common.collect.Lists;
@@ -70,6 +72,9 @@ public class SipRequestUtils {
     }
 
     public static void setRequestHeader(Request request, List<Header> headers) {
+        if (CollectionUtils.isEmpty(headers)) {
+            return;
+        }
         for (Header header : headers) {
             request.addHeader(header);
         }
@@ -351,6 +356,60 @@ public class SipRequestUtils {
         try {
             return HEADER_FACTORY.createHeader(name, value);
         } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // === 以下是ResponseHeader ===
+
+    /**
+     * 创建响应
+     *
+     * @param statusCode 状态码
+     * @param request    回复的请求
+     * @return
+     */
+    public static Response createResponse(int statusCode, Request request) {
+        return createResponse(statusCode, request, null);
+    }
+
+    public static Response createResponse(int statusCode, Request request, List<Header> headers) {
+        try {
+            Response response = MESSAGE_FACTORY.createResponse(statusCode, request);
+            setResponseHeader(response, headers);
+            return response;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void setResponseHeader(Response response, List<Header> headers) {
+        if (CollectionUtils.isEmpty(headers)) {
+            return;
+        }
+        for (Header header : headers) {
+            response.addHeader(header);
+        }
+    }
+
+    public static WWWAuthenticateHeader createWWWAuthenticateHeader(String scheme) {
+        try {
+            return HEADER_FACTORY.createWWWAuthenticateHeader(scheme);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static WWWAuthenticateHeader createWWWAuthenticateHeader(String scheme, String realm, String nonce, String algorithm) {
+        try {
+            WWWAuthenticateHeader wwwAuthenticateHeader = createWWWAuthenticateHeader(scheme);
+            wwwAuthenticateHeader.setParameter("realm", realm);
+            wwwAuthenticateHeader.setParameter("qop", "auth");
+            wwwAuthenticateHeader.setParameter("nonce", nonce);
+            wwwAuthenticateHeader.setParameter("algorithm", algorithm);
+
+            return wwwAuthenticateHeader;
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
