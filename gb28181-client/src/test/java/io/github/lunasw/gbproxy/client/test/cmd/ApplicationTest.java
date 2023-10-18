@@ -2,6 +2,7 @@ package io.github.lunasw.gbproxy.client.test.cmd;
 
 import javax.sip.message.Request;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,7 +89,7 @@ public class ApplicationTest {
     @Test
     public void messageResponse() {
 
-        DefaultMessageRequestProcessor messageRequestProcessor = new DefaultMessageRequestProcessor();
+        MessageRequestProcessor messageRequestProcessor = new MessageRequestProcessor();
         SipProcessorObserver.addRequestProcessor(DefaultMessageRequestProcessor.METHOD, messageRequestProcessor);
 
     }
