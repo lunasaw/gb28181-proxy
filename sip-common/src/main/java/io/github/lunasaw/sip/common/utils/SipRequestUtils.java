@@ -1,6 +1,7 @@
 package io.github.lunasaw.sip.common.utils;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +17,12 @@ import javax.sip.message.MessageFactory;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import gov.nist.javax.sip.SipProviderImpl;
+import gov.nist.javax.sip.header.Via;
+import gov.nist.javax.sip.header.ViaList;
+import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.layer.SipLayer;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -23,6 +30,7 @@ import com.google.common.collect.Lists;
 import com.luna.common.text.RandomStrUtil;
 
 import lombok.SneakyThrows;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author luna
@@ -127,10 +135,41 @@ public class SipRequestUtils {
 
     public static CallIdHeader createCallIdHeader(String callId) {
         try {
+            if (callId == null) {
+                return getNewCallIdHeader();
+            }
             return HEADER_FACTORY.createCallIdHeader(callId);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String getNewCallId() {
+        return getNewCallIdHeader(null, null).getCallId();
+    }
+
+    public static CallIdHeader getNewCallIdHeader() {
+        return getNewCallIdHeader(null, null);
+    }
+
+    public static CallIdHeader getNewCallIdHeader(String ip, String transport) {
+        if (ObjectUtils.isEmpty(transport)) {
+            return SipLayer.getUdpSipProvider().getNewCallId();
+        }
+        SipProviderImpl sipProvider;
+        if (ObjectUtils.isEmpty(ip)) {
+            sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? SipLayer.getTcpSipProvider()
+                    : SipLayer.getUdpSipProvider();
+        } else {
+            sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? SipLayer.getTcpSipProvider(ip)
+                    : SipLayer.getUdpSipProvider(ip);
+        }
+
+        if (sipProvider == null) {
+            sipProvider = SipLayer.getUdpSipProvider();
+        }
+
+        return sipProvider.getNewCallId();
     }
 
     /**
@@ -370,13 +409,11 @@ public class SipRequestUtils {
      * @return
      */
     public static Response createResponse(int statusCode, Request request) {
-        FromHeader fromHeader = (FromHeader) request.getHeader(FromHeader.NAME);
-        Address address = fromHeader.getAddress();
-        ToHeader toHeader = (ToHeader) request.getHeader(ToHeader.NAME);
-        Address toAddress = toHeader.getAddress();
-        toHeader.setAddress(address);
-        fromHeader.setAddress(toAddress);
-        return createResponse(statusCode, request, null);
+        try {
+            return MESSAGE_FACTORY.createResponse(statusCode, request);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

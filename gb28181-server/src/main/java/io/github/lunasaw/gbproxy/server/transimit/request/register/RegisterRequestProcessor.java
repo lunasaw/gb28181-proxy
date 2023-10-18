@@ -11,6 +11,7 @@ import javax.sip.header.WWWAuthenticateHeader;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.transmit.response.SipResponseProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -89,11 +90,9 @@ public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
             String callId = SipUtils.getCallId(request);
             if (toDevice != null && transaction != null && callId.equals(transaction.getCallId())) {
                 log.info(title + "设备：{}, 注册续订: {}", userId, expires);
-                // 续订
-                // TODO 暂不清楚
+                //
                 Response registerOkResponse = getRegisterOkResponse(request);
                 SipSender.transmitRequest(request.getLocalAddress().getHostAddress(), registerOkResponse);
-
                 return;
             }
 
@@ -108,15 +107,18 @@ public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
                 // 认证密码不是空, 但是请求头中没有AuthorizationHeader
 
                 log.info(title + " 设备：{}, 回复401: {}", userId, requestAddress);
+
+
                 Response response = SipRequestUtils.createResponse(Response.UNAUTHORIZED, request);
 
                 String nonce = DigestServerAuthenticationHelper.generateNonce();
                 WWWAuthenticateHeader wwwAuthenticateHeader =
                         SipRequestUtils.createWWWAuthenticateHeader(DigestServerAuthenticationHelper.DEFAULT_SCHEME, fromDevice.getRealm(), nonce,
                                 DigestServerAuthenticationHelper.DEFAULT_ALGORITHM);
+                // okResponse.addHeader(wwwAuthenticateHeader);
                 response.addHeader(wwwAuthenticateHeader);
-
                 SipSender.transmitRequest(request.getLocalAddress().getHostAddress(), response);
+
                 return;
             }
 

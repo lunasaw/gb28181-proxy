@@ -57,6 +57,11 @@ public class SipMessage {
      */
     private List<Header>      headers;
 
+    /**
+     * 响应状态码
+     */
+    private Integer statusCode;
+
     public static SipMessage getMessageBody() {
         SipMessage sipMessage = new SipMessage();
         sipMessage.setMethod(Request.MESSAGE);
@@ -132,12 +137,21 @@ public class SipMessage {
         return sipMessage;
     }
 
-
     public static SipMessage getRegisterBody() {
         SipMessage sipMessage = new SipMessage();
         sipMessage.setMethod(Request.REGISTER);
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
         long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setSequence(sequence);
+
+        return sipMessage;
+    }
+
+    public static SipMessage getResponse(int statusCode) {
+        SipMessage sipMessage = new SipMessage();
+        sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
+        long sequence = GenerateSequenceImpl.getSequence();
+        sipMessage.setStatusCode(statusCode);
         sipMessage.setSequence(sequence);
 
         return sipMessage;
