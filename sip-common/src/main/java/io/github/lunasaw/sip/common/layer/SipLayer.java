@@ -38,7 +38,7 @@ public class SipLayer implements CommandLineRunner {
 	}
 
     public static SipProviderImpl getUdpSipProvider() {
-        if (udpSipProviderMap.size() < 1) {
+		if (udpSipProviderMap.isEmpty()) {
             throw new RuntimeException("ListeningPoint Not Exist");
 		}
 		return udpSipProviderMap.values().stream().findFirst().get();

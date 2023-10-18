@@ -49,7 +49,7 @@ public class SipSender {
     }
 
     public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expire) {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         Request messageRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, expire);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
         return callId;
@@ -57,7 +57,7 @@ public class SipSender {
 
     public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo, Event errorEvent,
                                             Event okEvent) {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
 
         Request messageRequest = SipRequestProvider.createSubscribeRequest(fromDevice, toDevice, xmlBean.toString(), subscribeInfo, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
@@ -66,29 +66,28 @@ public class SipSender {
 
     public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo, Event errorEvent,
                                          Event okEvent) {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         Request messageRequest = SipRequestProvider.createNotifyRequest(fromDevice, toDevice, xmlBean.toString(), subscribeInfo, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }
 
     public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, Event errorEvent, Event okEvent) {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, xmlBean.toString(), callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }
 
     public static String doByeRequest(FromDevice fromDevice, ToDevice toDevice) {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         Request messageRequest = SipRequestProvider.createByeRequest(fromDevice, toDevice, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
         return callId;
     }
 
-
     public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice) {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         return doAckRequest(fromDevice, toDevice, callId);
     }
 
@@ -140,7 +139,7 @@ public class SipSender {
             });
         }
         try {
-            if (Constant.TCP.equals(transport)) {
+            if (Constant.TCP.equalsIgnoreCase(transport)) {
                 SipProviderImpl tcpSipProvider = SipLayer.getTcpSipProvider(ip);
                 if (tcpSipProvider == null) {
                     log.error("[发送信息失败] 未找到tcp://{}的监听信息", ip);
@@ -152,7 +151,7 @@ public class SipSender {
                     tcpSipProvider.sendResponse((Response)message);
                 }
 
-            } else if (Constant.UDP.equals(transport)) {
+            } else if (Constant.UDP.equalsIgnoreCase(transport)) {
                 SipProviderImpl sipProvider = SipLayer.getUdpSipProvider(ip);
                 if (sipProvider == null) {
                     log.error("[发送信息失败] 未找到udp://{}的监听信息", ip);
@@ -169,23 +168,4 @@ public class SipSender {
         }
     }
 
-    public CallIdHeader getNewCallIdHeader(String ip, String transport) {
-        if (ObjectUtils.isEmpty(transport)) {
-            return SipLayer.getUdpSipProvider().getNewCallId();
-        }
-        SipProviderImpl sipProvider;
-        if (ObjectUtils.isEmpty(ip)) {
-            sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? SipLayer.getTcpSipProvider()
-                : SipLayer.getUdpSipProvider();
-        } else {
-            sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? SipLayer.getTcpSipProvider(ip)
-                : SipLayer.getUdpSipProvider(ip);
-        }
-
-        if (sipProvider == null) {
-            sipProvider = SipLayer.getUdpSipProvider();
-        }
-
-        return sipProvider.getNewCallId();
-    }
 }

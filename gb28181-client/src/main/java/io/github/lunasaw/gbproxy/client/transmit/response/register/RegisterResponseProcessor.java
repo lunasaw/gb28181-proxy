@@ -85,10 +85,10 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
     }
 
     public void responseOk(ResponseEventExt evt) {
-        log.info("success::注册成功");
+        log.info("success::注册成功 evt = {}", evt);
     }
 
     public void success(EventResult eventResult) {
-        log.info("success::注册成功");
+        log.info("success::注册成功 eventResult = {}", eventResult);
     }
 }

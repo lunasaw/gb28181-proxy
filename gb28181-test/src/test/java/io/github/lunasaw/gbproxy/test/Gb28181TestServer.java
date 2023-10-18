@@ -2,6 +2,8 @@ package io.github.lunasaw.gbproxy.test;
 
 import javax.sip.message.Request;
 
+import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +51,7 @@ public class Gb28181TestServer {
 
     @Test
     public void btest() throws Exception {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, callId, 300);
 
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
@@ -71,6 +73,7 @@ public class Gb28181TestServer {
 
     }
 
+    @SneakyThrows
     @AfterEach
     public void after() {
         while (true) {

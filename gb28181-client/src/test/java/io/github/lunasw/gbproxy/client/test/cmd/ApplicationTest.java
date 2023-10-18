@@ -3,6 +3,7 @@ package io.github.lunasw.gbproxy.client.test.cmd;
 import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
+import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class ApplicationTest {
     @SneakyThrows
     @Test
     public void atest() {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, "123123", callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
     }
@@ -55,7 +56,7 @@ public class ApplicationTest {
     @SneakyThrows
     @Test
     public void register() {
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override
@@ -69,7 +70,7 @@ public class ApplicationTest {
     @Test
     public void registerResponse() {
 
-        String callId = RandomStrUtil.getUUID();
+        String callId = SipRequestUtils.getNewCallId();
         // 构造请求 fromDevice：当前发送的设备 toDevice 接收消息的设备
         Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
         // 响应处理器

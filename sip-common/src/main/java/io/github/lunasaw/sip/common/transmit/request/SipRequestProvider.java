@@ -64,9 +64,9 @@ public class SipRequestProvider {
 
     /**
      * 创建SIP请求
-     * 
+     *
      * @param fromDevice 发送设备
-     * @param toDevice 发送目的设备
+     * @param toDevice   发送目的设备
      * @param sipMessage 内容
      * @return Request
      */
@@ -77,7 +77,7 @@ public class SipRequestProvider {
         SipURI requestUri = SipRequestUtils.createSipUri(toDevice.getUserId(), toDevice.getHostAddress());
         // via
         ViaHeader viaHeader =
-            SipRequestUtils.createViaHeader(fromDevice.getIp(), fromDevice.getPort(), toDevice.getTransport(), sipMessage.getViaTag());
+                SipRequestUtils.createViaHeader(fromDevice.getIp(), fromDevice.getPort(), toDevice.getTransport(), sipMessage.getViaTag());
         List<ViaHeader> viaHeaders = Lists.newArrayList(viaHeader);
         // from
         FromHeader fromHeader = SipRequestUtils.createFromHeader(fromDevice.getUserId(), fromDevice.getHostAddress(), fromDevice.getFromTag());
@@ -89,7 +89,7 @@ public class SipRequestProvider {
         CSeqHeader cSeqHeader = SipRequestUtils.createCSeqHeader(sipMessage.getSequence(), sipMessage.getMethod());
         // request
         Request request = SipRequestUtils.createRequest(requestUri, sipMessage.getMethod(), callIdHeader, cSeqHeader, fromHeader,
-            toHeader, viaHeaders, maxForwards, sipMessage.getContentTypeHeader(), sipMessage.getContent());
+                toHeader, viaHeaders, maxForwards, sipMessage.getContentTypeHeader(), sipMessage.getContent());
 
         SipRequestUtils.setRequestHeader(request, sipMessage.getHeaders());
         return request;
@@ -97,11 +97,11 @@ public class SipRequestProvider {
 
     /**
      * 创建Message请求
-     * 
+     *
      * @param fromDevice 发送设备
-     * @param toDevice 发送目的设备
-     * @param content 内容
-     * @param callId callId
+     * @param toDevice   发送目的设备
+     * @param content    内容
+     * @param callId     callId
      * @return Request
      */
     public static Request createMessageRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
@@ -120,9 +120,9 @@ public class SipRequestProvider {
      * 创建Invite请求
      *
      * @param fromDevice 发送设备
-     * @param toDevice 发送目的设备
-     * @param content 内容
-     * @param callId callId
+     * @param toDevice   发送目的设备
+     * @param content    内容
+     * @param callId     callId
      * @return Request
      */
     public static Request createInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
@@ -144,8 +144,8 @@ public class SipRequestProvider {
      * 创建Bye请求
      *
      * @param fromDevice 发送设备
-     * @param toDevice 发送目的设备
-     * @param callId callId
+     * @param toDevice   发送目的设备
+     * @param callId     callId
      * @return Request
      */
     public static Request createByeRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
@@ -166,8 +166,8 @@ public class SipRequestProvider {
      * 创建Register请求
      *
      * @param fromDevice 发送设备
-     * @param toDevice 发送目的设备
-     * @param callId callId
+     * @param toDevice   发送目的设备
+     * @param callId     callId
      * @return Request
      */
     public static Request createRegisterRequest(FromDevice fromDevice, ToDevice toDevice, String callId, Integer expires) {
@@ -188,12 +188,11 @@ public class SipRequestProvider {
     /**
      * 带签名的注册构造器
      *
-     *
      * @param www 认证头
      * @return Request
      */
     public static Request createRegisterRequestWithAuth(FromDevice fromDevice, ToDevice toDevice, String callId, Integer expires,
-        WWWAuthenticateHeader www) {
+                                                        WWWAuthenticateHeader www) {
 
         Request registerRequest = createRegisterRequest(fromDevice, toDevice, callId, expires);
         URI requestURI = registerRequest.getRequestURI();
@@ -254,7 +253,7 @@ public class SipRequestProvider {
         String RESPONSE = DigestUtils.md5DigestAsHex(reStr.toString().getBytes());
 
         AuthorizationHeader authorizationHeader =
-            SipRequestUtils.createAuthorizationHeader(scheme, userId, requestURI, realm, nonce, qop, cNonce, RESPONSE);
+                SipRequestUtils.createAuthorizationHeader(scheme, userId, requestURI, realm, nonce, qop, cNonce, RESPONSE);
         registerRequest.addHeader(authorizationHeader);
 
         return registerRequest;
@@ -264,10 +263,9 @@ public class SipRequestProvider {
      * 创建Subscribe请求
      *
      * @param fromDevice 发送设备
-     * @param toDevice 发送目的设备
-     * @param content 内容
-     * @param callId callId
-
+     * @param toDevice   发送目的设备
+     * @param content    内容
+     * @param callId     callId
      * @return Request
      */
     public static Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, SubscribeInfo subscribeInfo, String callId) {
@@ -288,9 +286,9 @@ public class SipRequestProvider {
      * 创建INFO 请求
      *
      * @param fromDevice 发送设备
-     * @param toDevice 发送目的设备
-     * @param content 内容
-     * @param callId callId
+     * @param toDevice   发送目的设备
+     * @param content    内容
+     * @param callId     callId
      * @return Request
      */
     public static Request createInfoRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
@@ -312,8 +310,8 @@ public class SipRequestProvider {
      * 创建ACK请求
      *
      * @param fromDevice 发送设备
-     * @param toDevice 发送目的设备
-     * @param callId callId
+     * @param toDevice   发送目的设备
+     * @param callId     callId
      * @return Request
      */
     public static Request createAckRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
