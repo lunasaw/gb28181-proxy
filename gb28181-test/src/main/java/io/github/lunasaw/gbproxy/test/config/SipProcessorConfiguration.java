@@ -1,5 +1,7 @@
 package io.github.lunasaw.gbproxy.test.config;
 
+import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterProcessorServer;
+import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterRequestProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,9 @@ public class SipProcessorConfiguration {
     @Autowired
     private RegisterProcessorClient registerProcessorClient;
 
+    @Autowired
+    private RegisterProcessorServer registerProcessorServer;
+
     @Bean
     public RegisterResponseProcessor registerResponseProcessor() {
         RegisterResponseProcessor registerResponseProcessor = new RegisterResponseProcessor();
@@ -29,6 +34,13 @@ public class SipProcessorConfiguration {
     @Bean
     public InviteResponseProcessor inviteResponseProcessor() {
         return new InviteResponseProcessor(registerProcessorClient);
+    }
+
+    @Bean
+    public RegisterRequestProcessor registerRequestProcessor() {
+        RegisterRequestProcessor registerRequestProcessor = new RegisterRequestProcessor();
+        registerRequestProcessor.setRegisterProcessorServer(registerProcessorServer);
+        return registerRequestProcessor;
     }
 
     @Bean

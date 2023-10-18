@@ -98,7 +98,7 @@ public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
             }
 
             String password = StringUtils.EMPTY;
-            if (fromDevice != null && StringUtils.isBlank(fromDevice.getPassword())) {
+            if (fromDevice != null && StringUtils.isNotBlank(fromDevice.getPassword())) {
                 password = fromDevice.getPassword();
             }
 

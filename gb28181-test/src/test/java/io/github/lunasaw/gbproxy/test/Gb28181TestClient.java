@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.test;
 
 import javax.sip.message.Request;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,20 +26,23 @@ import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
  * @author luna
  * @date 2023/10/12
  */
+@Slf4j
 @SpringBootTest(classes = Gb28181ApplicationTest.class)
 public class Gb28181TestClient {
 
 
     @Autowired
+    @Qualifier("clientFrom")
     private Device fromDevice;
 
     @Autowired
-    @Qualifier("toLocalDevice")
+    @Qualifier("clientTo")
     private Device toLocalDevice;
 
     @BeforeEach
     public void before() {
         // 本地端口监听
+        log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
         SipLayer.addListeningPoint(fromDevice.getIp(), fromDevice.getPort());
 
 

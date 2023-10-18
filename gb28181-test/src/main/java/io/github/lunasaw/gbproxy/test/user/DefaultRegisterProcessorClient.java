@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.test.user;
 
 import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
@@ -16,8 +17,10 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
 
     @Autowired
+    @Qualifier("clientFrom")
     private Device fromDevice;
     @Autowired
+    @Qualifier("clientTo")
     private Device toDevice;
 
     @Override

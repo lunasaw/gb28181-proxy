@@ -370,8 +370,38 @@ public class SipRequestUtils {
      * @return
      */
     public static Response createResponse(int statusCode, Request request) {
+        FromHeader fromHeader = (FromHeader) request.getHeader(FromHeader.NAME);
+        Address address = fromHeader.getAddress();
+        ToHeader toHeader = (ToHeader) request.getHeader(ToHeader.NAME);
+        Address toAddress = toHeader.getAddress();
+        toHeader.setAddress(address);
+        fromHeader.setAddress(toAddress);
         return createResponse(statusCode, request, null);
     }
+
+    /**
+     * @param statusCode  statusCode – 状态码 {@link Response}
+     * @param callId      callId – 此消息的 callId 值的新 CallIdHeader 对象。
+     * @param cSeq        cSeq – 此消息的 cSeq 值的新 CSeqHeader 对象。
+     * @param from        from – 此消息的 from 值的新 FromHeader 对象。
+     * @param to          to – 此消息的 to 值的新 ToHeader 对象。
+     * @param via         via – 此消息的 ViaHeader 的新列表对象。
+     * @param maxForwards contentType – 此消息的内容类型值的新内容类型标头对象。
+     * @param contentType 响应类型 – 此消息的正文内容值的新对象。
+     * @param content     内容
+     */
+    public static Response createResponse(int statusCode, CallIdHeader callId, CSeqHeader cSeq, FromHeader from, ToHeader to,
+                                          List<ViaHeader> via, MaxForwardsHeader maxForwards, ContentTypeHeader contentType, Object content) {
+        try {
+            if (contentType == null) {
+                return MESSAGE_FACTORY.createResponse(statusCode, callId, cSeq, from, to, via, maxForwards);
+            }
+            return MESSAGE_FACTORY.createResponse(statusCode, callId, cSeq, from, to, via, maxForwards, contentType, content);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static Response createResponse(int statusCode, Request request, List<Header> headers) {
         try {
