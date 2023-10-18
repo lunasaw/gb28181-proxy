@@ -25,7 +25,7 @@ import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
  * @date 2023/10/12
  */
 @SpringBootTest(classes = Gb28181ApplicationTest.class)
-public class Gb28181Test {
+public class Gb28181TestServer {
 
     @Autowired
     private Device toDevice;
@@ -39,14 +39,7 @@ public class Gb28181Test {
     public void before() {
         // 本地端口监听
         SipLayer.addListeningPoint(serverDevice.getIp(), serverDevice.getPort());
-        SipLayer.addListeningPoint(fromDevice.getIp(), fromDevice.getPort());
-        // fromDevice = FromDevice.getInstance("33010602011187000001", localIp, 8118);
-        // toDevice = ToDevice.getInstance("41010500002000000010", remoteIp, 8116);
-        toDevice.setPassword("luna");
-        toDevice.setRealm("4101050000");
 
-        serverDevice.setPassword("luna");
-        serverDevice.setRealm("4101050000");
     }
 
     @Test

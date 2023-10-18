@@ -25,7 +25,7 @@ public class DeviceConfig {
     }
 
     @Bean
-    @Qualifier("toDevice")
+    @Qualifier("toRemoteDevice")
     public Device toDevice() {
         return ToDevice.getInstance("41010500002000000010", REMOTE_IP, 8116);
     }
@@ -34,5 +34,12 @@ public class DeviceConfig {
     @Qualifier("serverDevice")
     public Device serverDevice() {
         return FromDevice.getInstance("41010500002000000010", LOCAL_IP, 8117);
+    }
+
+
+    @Bean
+    @Qualifier("toLocalDevice")
+    public Device cleientDevice() {
+        return ToDevice.getInstance("41010500002000000010", LOCAL_IP, 8117);
     }
 }

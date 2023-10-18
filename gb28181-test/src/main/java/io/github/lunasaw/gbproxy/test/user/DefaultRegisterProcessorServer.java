@@ -6,11 +6,13 @@ import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterInfo;
 import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterProcessorServer;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
+import org.springframework.stereotype.Component;
 
 /**
  * @author luna
  * @date 2023/10/18
  */
+@Component
 public class DefaultRegisterProcessorServer implements RegisterProcessorServer {
 
     @Autowired
