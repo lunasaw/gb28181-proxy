@@ -6,15 +6,24 @@ import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * @author luna
  */
+@Component
+@Getter
+@Setter
 @Slf4j
-public abstract class MessageRequestProcessor extends SipRequestProcessorAbstract {
+public class MessageRequestProcessor extends SipRequestProcessorAbstract {
 
     public static final String METHOD = "MESSAGE";
+
+
+    private String method = METHOD;
 
     @Override
     public void process(RequestEvent evt) {
@@ -30,8 +39,9 @@ public abstract class MessageRequestProcessor extends SipRequestProcessorAbstrac
     public boolean dealMessage(SIPRequest sipRequest) {
         // 发送方用户
         String userId = SipUtils.getUserIdFromFromHeader(sipRequest);
-        SipTransaction sipTransaction = new SipTransaction(sipRequest);
         // 收到处理
+
+        // 根据不同cmdType处理
         return true;
     }
 

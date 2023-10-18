@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
  * @date 2023/10/12
  */
 @Data
-public class Device {
+public abstract class Device {
 
     /**
      * 用户Id

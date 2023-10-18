@@ -303,4 +303,31 @@ public class ServerSendCmd {
 
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlDrag);
     }
+
+    /**
+     * 回复ACK
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
+        return SipSender.doAckRequest(fromDevice, toDevice);
+    }
+
+    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice, String callId) {
+        return SipSender.doAckRequest(fromDevice, toDevice, callId);
+    }
+
+
+    /**
+     * 发送BYE
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
+        return SipSender.doByeRequest(fromDevice, toDevice);
+    }
 }

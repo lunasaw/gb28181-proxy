@@ -22,13 +22,13 @@ public class Applicationtest {
 
     ToDevice   toDevice;
 
-    static String localIp = SystemInfoUtil.getNoLoopbackIP();
+    static String localIp = "172.19.128.100";
 
     @BeforeEach
     public void before() {
-        SipLayer.addListeningPoint(localIp, 8118);
-        fromDevice = FromDevice.getInstance("41010500002000000010", localIp, 8118);
-        toDevice = ToDevice.getInstance("33010602011187000001", localIp, 8117);
+        SipLayer.addListeningPoint(localIp, 8117);
+        fromDevice = FromDevice.getInstance("41010500002000000010", localIp, 8117);
+        toDevice = ToDevice.getInstance("33010602011187000001", localIp, 8118);
         toDevice.setPassword("luna");
         toDevice.setRealm("4101050000");
     }
@@ -37,5 +37,10 @@ public class Applicationtest {
     public void test_device_info() {
         String infoQueryCallId = ServerSendCmd.deviceInfo(fromDevice, toDevice);
         System.out.println(infoQueryCallId);
+    }
+
+    @Test
+    public void test_bye() {
+        ServerSendCmd.deviceBye(fromDevice, toDevice);
     }
 }
