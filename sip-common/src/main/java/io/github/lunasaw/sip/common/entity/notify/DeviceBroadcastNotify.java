@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.server.entity.query;
+package io.github.lunasaw.sip.common.entity.notify;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -6,7 +6,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -14,29 +16,22 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@XmlRootElement(name = "Query")
+@NoArgsConstructor
+@AllArgsConstructor
+@XmlRootElement(name = "Notify")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceMobileQuery extends XmlBean {
+public class DeviceBroadcastNotify extends XmlBean {
     @XmlElement(name = "CmdType")
     public String cmdType;
 
     @XmlElement(name = "SN")
     public String sn;
 
-    @XmlElement(name = "DeviceID")
-    public String deviceId;
+    @XmlElement(name = "SourceID")
+    public String sourceId;
 
-    @XmlElement(name = "interval")
-    private String Interval;
-
-    public DeviceMobileQuery() {
-    }
-
-    public DeviceMobileQuery(String cmdType, String sn, String deviceId) {
-        this.cmdType = cmdType;
-        this.sn = sn;
-        this.deviceId = deviceId;
-    }
+    @XmlElement(name = "TargetID")
+    public String targetId;
 
 
 }

@@ -7,6 +7,7 @@ import javax.sip.header.FromHeader;
 import javax.sip.header.HeaderAddress;
 import javax.sip.header.ToHeader;
 import javax.sip.message.Request;
+import javax.sip.message.Response;
 
 import org.springframework.util.ObjectUtils;
 
@@ -23,14 +24,25 @@ import io.github.lunasaw.sip.common.entity.SipTransaction;
  */
 public class SipUtils {
 
+    public static String getUserIdFromToHeader(Response response) {
+        ToHeader toHeader = (ToHeader) response.getHeader(ToHeader.NAME);
+        return getUserIdFromHeader(toHeader);
+    }
+
+
+    public static String getUserIdFromFromHeader(Response response) {
+        FromHeader fromHeader = (FromHeader) response.getHeader(FromHeader.NAME);
+        return getUserIdFromHeader(fromHeader);
+    }
+
     public static String getUserIdFromToHeader(Request request) {
         ToHeader toHeader = (ToHeader)request.getHeader(ToHeader.NAME);
-        return getUserIdFromFromHeader(toHeader);
+        return getUserIdFromHeader(toHeader);
     }
 
     public static String getUserIdFromFromHeader(Request request) {
         FromHeader fromHeader = (FromHeader)request.getHeader(FromHeader.NAME);
-        return getUserIdFromFromHeader(fromHeader);
+        return getUserIdFromHeader(fromHeader);
     }
 
     public static SipTransaction getSipTransaction(SIPResponse response) {
@@ -51,7 +63,7 @@ public class SipUtils {
         return sipTransaction;
     }
 
-    public static String getUserIdFromFromHeader(HeaderAddress headerAddress) {
+    public static String getUserIdFromHeader(HeaderAddress headerAddress) {
         AddressImpl address = (AddressImpl) headerAddress.getAddress();
         SipUri uri = (SipUri)address.getURI();
         return uri.getUser();

@@ -5,11 +5,11 @@ import java.util.Date;
 import com.luna.common.date.DateUtils;
 import com.luna.common.text.RandomStrUtil;
 
-import io.github.lunasaw.gbproxy.server.entity.control.*;
-import io.github.lunasaw.gbproxy.server.entity.notify.DeviceBroadcastNotify;
-import io.github.lunasaw.gbproxy.server.entity.query.*;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.entity.control.*;
+import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
+import io.github.lunasaw.sip.common.entity.query.*;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
@@ -159,6 +159,32 @@ public class ServerSendCmd {
     }
 
     /**
+     * 回复ACK
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
+        return SipSender.doAckRequest(fromDevice, toDevice);
+    }
+
+    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice, String callId) {
+        return SipSender.doAckRequest(fromDevice, toDevice, callId);
+    }
+
+    /**
+     * 发送BYE
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
+        return SipSender.doByeRequest(fromDevice, toDevice);
+    }
+
+    /**
      * 设备广播
      *
      * @param fromDevice 发送设备
@@ -253,7 +279,7 @@ public class ServerSendCmd {
 
     /**
      * 下载设备配置
-     * 
+     *
      * @param fromDevice
      * @param toDevice
      * @param configType 配置类型
@@ -302,32 +328,5 @@ public class ServerSendCmd {
         deviceControlDrag.setDragZoomOut(dragZoomOut);
 
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlDrag);
-    }
-
-    /**
-     * 回复ACK
-     *
-     * @param fromDevice 发送设备
-     * @param toDevice   接收设备
-     * @return
-     */
-    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
-        return SipSender.doAckRequest(fromDevice, toDevice);
-    }
-
-    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice, String callId) {
-        return SipSender.doAckRequest(fromDevice, toDevice, callId);
-    }
-
-
-    /**
-     * 发送BYE
-     *
-     * @param fromDevice 发送设备
-     * @param toDevice   接收设备
-     * @return
-     */
-    public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
-        return SipSender.doByeRequest(fromDevice, toDevice);
     }
 }

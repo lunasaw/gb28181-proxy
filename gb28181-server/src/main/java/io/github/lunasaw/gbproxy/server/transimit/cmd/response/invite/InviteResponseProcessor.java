@@ -72,8 +72,8 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
         // 成功响应
         SIPResponse response = (SIPResponse) evt.getResponse();
 
-        String toUserId = SipUtils.getUserIdFromFromHeader(response.getToHeader());
-        String fromUserId = SipUtils.getUserIdFromFromHeader(response.getFromHeader());
+        String toUserId = SipUtils.getUserIdFromToHeader(response);
+        String fromUserId = SipUtils.getUserIdFromFromHeader(response);
         CallIdHeader callIdHeader = response.getCallIdHeader();
         FromDevice fromDevice = (FromDevice) sipUserGenerate.getFromDevice(fromUserId);
 
