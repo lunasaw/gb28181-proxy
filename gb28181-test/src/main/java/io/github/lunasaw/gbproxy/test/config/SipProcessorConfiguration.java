@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.test.config;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
 import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterProcessorServer;
 import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterRequestProcessor;
+import io.github.lunasaw.gbproxy.test.user.DefaultMessageProcessorClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,9 @@ public class SipProcessorConfiguration {
 
     @Autowired
     private RegisterProcessorServer registerProcessorServer;
+
+    @Autowired
+    private DefaultMessageProcessorClient defaultMessageProcessorClient;
 
     @Bean
     public RegisterResponseProcessor registerResponseProcessor() {
@@ -50,7 +54,7 @@ public class SipProcessorConfiguration {
     @Bean
     public MessageRequestProcessor messageRequestProcessor() {
         MessageRequestProcessor messageRequestProcessor = new MessageRequestProcessor();
-        messageRequestProcessor.setMessageProcessorClient(null);
+        messageRequestProcessor.setMessageProcessorClient(defaultMessageProcessorClient);
         return messageRequestProcessor;
     }
 

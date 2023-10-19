@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<Response>
+    <CmdType>DeviceInfo</CmdType>
+    <SN>${SN}</SN>
+    <DeviceName>gb28181-client</DeviceName>
+    <DeviceID>${DEVICE_ID}</DeviceID>
+    <Result>OK</Result>
+    <!-- 设备生产商 -->
+    <Manufacturer>海康威视</Manufacturer>
+    <!-- 设备型号(可选)-->
+    <Model>TC-2808AN-HD</Model>
+    <!-- 设备固件版本(可选)-->
+    <Firmware>V2.1,build091111</Firmware>
+    <!-- 视频输入通道数(可选)-->
+    <Channel>1</Channel>/>
+</Response>

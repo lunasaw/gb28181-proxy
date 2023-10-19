@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
+import io.github.lunasaw.gbproxy.client.entity.response.DeviceInfo;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 
@@ -10,11 +11,12 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
 public interface MessageProcessorClient extends SipUserGenerate {
 
     /**
-     * 获取之前的事务
+     * 获取设备信息
+     * DeviceInfo
+     * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.DeviceInfoQueryMessageHandler}
      *
-     * @param callId 事物Id
+     * @param userId
      * @return
      */
-    SipTransaction getTransaction(String callId);
-
+    DeviceInfo getDeviceInfo(String userId);
 }

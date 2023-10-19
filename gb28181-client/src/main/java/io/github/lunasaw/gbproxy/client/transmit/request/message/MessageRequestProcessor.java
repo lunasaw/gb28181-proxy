@@ -59,12 +59,11 @@ public class MessageRequestProcessor extends SipRequestProcessorAbstract {
 
         if (messageHandler == null) {
             log.info("no process::evt = {}, xmlStr = {}", evt.getRequest(), xmlStr);
+
             return;
         }
 
         messageHandler.handForEvt(evt);
-
-        System.out.println(xmlStr);
     }
 
 }

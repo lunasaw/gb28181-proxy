@@ -9,9 +9,9 @@ public interface MessageHandler {
     /**
      * 处理消息
      *
-     * @param evt
+     * @param event
      */
-    void handForEvt(RequestEvent evt);
+    void handForEvt(RequestEvent event);
 
     /**
      * 处理消息类型

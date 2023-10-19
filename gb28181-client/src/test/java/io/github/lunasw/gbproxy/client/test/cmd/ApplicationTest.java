@@ -2,17 +2,13 @@ package io.github.lunasw.gbproxy.client.test.cmd;
 
 import javax.sip.message.Request;
 
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
-import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.luna.common.os.SystemInfoUtil;
-import com.luna.common.text.RandomStrUtil;
-
 import io.github.lunasaw.gbproxy.client.Gb28181Client;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.impl.DefaultMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -23,6 +19,7 @@ import io.github.lunasaw.sip.common.transmit.SipSender;
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
+import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.SneakyThrows;
 
 /**
@@ -91,7 +88,7 @@ public class ApplicationTest {
     public void messageResponse() {
 
         MessageRequestProcessor messageRequestProcessor = new MessageRequestProcessor();
-        SipProcessorObserver.addRequestProcessor(DefaultMessageRequestProcessor.METHOD, messageRequestProcessor);
+        SipProcessorObserver.addRequestProcessor(MessageRequestProcessor.METHOD, messageRequestProcessor);
 
     }
 
