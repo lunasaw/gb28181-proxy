@@ -1,7 +1,9 @@
 package io.github.lunasaw.gbproxy.test.config;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
 import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterProcessorServer;
 import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterRequestProcessor;
+import io.github.lunasaw.gbproxy.test.user.DefaultMessageProcessorClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.response.invite.InviteResponseProcessor;
-import io.github.lunasaw.sip.common.conf.SipProxyClientAutoConfig;
+import io.github.lunasaw.sip.common.conf.SipProxyAutoConfig;
 
 /**
  * @author luna
@@ -23,6 +25,9 @@ public class SipProcessorConfiguration {
 
     @Autowired
     private RegisterProcessorServer registerProcessorServer;
+
+    @Autowired
+    private DefaultMessageProcessorClient defaultMessageProcessorClient;
 
     @Bean
     public RegisterResponseProcessor registerResponseProcessor() {
@@ -43,8 +48,18 @@ public class SipProcessorConfiguration {
         return registerRequestProcessor;
     }
 
+
+    // message---------
+
     @Bean
-    public SipProxyClientAutoConfig sipProxyClientAutoConfig() {
-        return new SipProxyClientAutoConfig();
+    public MessageRequestProcessor messageRequestProcessor() {
+        MessageRequestProcessor messageRequestProcessor = new MessageRequestProcessor();
+        messageRequestProcessor.setMessageProcessorClient(defaultMessageProcessorClient);
+        return messageRequestProcessor;
+    }
+
+    @Bean
+    public SipProxyAutoConfig sipProxyClientAutoConfig() {
+        return new SipProxyAutoConfig();
     }
 }

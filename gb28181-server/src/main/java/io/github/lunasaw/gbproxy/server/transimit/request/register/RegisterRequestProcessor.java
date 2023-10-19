@@ -18,7 +18,7 @@ import com.luna.common.date.DateUtils;
 
 import gov.nist.javax.sip.header.SIPDateHeader;
 import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerResponseCmd;
+import io.github.lunasaw.sip.common.transmit.ServerResponseCmd;
 import io.github.lunasaw.sip.common.entity.*;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
@@ -66,7 +66,9 @@ public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
             if (fromDevice == null || toDevice == null) {
                 return;
             }
-
+            // 设备接收到的IP地址，有可能是Nat之后的, 本地回复直接使用这个地址即可
+            String receiveIp = request.getLocalAddress().getHostAddress();
+            // 设备发送请求的地址。主动发送需要nat转换后的地址
             RemoteAddressInfo remoteAddressInfo = SipUtils.getRemoteAddressFromRequest(request);
             String requestAddress = remoteAddressInfo.getIp() + ":" + remoteAddressInfo.getPort();
 
@@ -74,8 +76,7 @@ public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
             log.info(title + "设备：{}, 开始处理: {}", userId, requestAddress);
 
             SipTransaction transaction = registerProcessorServer.getTransaction(userId);
-            // 设备接收到的IP地址，有可能是Nat之后的
-            String receiveIp = request.getLocalAddress().getHostAddress();
+
 
             RegisterInfo registerInfo = new RegisterInfo();
             registerInfo.setExpire(expires);

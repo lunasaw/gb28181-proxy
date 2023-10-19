@@ -3,6 +3,7 @@ package io.github.lunasaw.sip.common.conf;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -22,9 +23,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-public class SipProxyClientAutoConfig implements InitializingBean, ApplicationContextAware {
+public class SipProxyAutoConfig implements InitializingBean, ApplicationContextAware {
 
     private static final String METHOD = "method";
+    private static final String CMDTYPE = "cmdType";
+
     private ApplicationContext applicationContext;
 
     @Override

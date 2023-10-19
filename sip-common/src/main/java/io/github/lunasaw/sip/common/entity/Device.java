@@ -55,6 +55,19 @@ public abstract class Device {
      */
     private String password;
 
+
+    /**
+     * 编码
+     */
+    private String charset;
+
+    public String getCharset() {
+        if (this.charset == null) {
+            return "gb2312";
+        }
+        return charset;
+    }
+
     public void setHostAddress(String hostAddress) {
         this.hostAddress = hostAddress;
     }

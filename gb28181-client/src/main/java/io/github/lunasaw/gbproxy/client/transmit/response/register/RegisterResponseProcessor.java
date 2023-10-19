@@ -68,12 +68,15 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
         // 成功响应
         SIPResponse response = (SIPResponse) evt.getResponse();
 
-        String toUserId = SipUtils.getUserIdFromFromHeader(response.getToHeader());
-        String fromUserId = SipUtils.getUserIdFromFromHeader(response.getFromHeader());
+        String toUserId = SipUtils.getUserIdFromFromHeader(response);
+        String fromUserId = SipUtils.getUserIdFromFromHeader(response);
         CallIdHeader callIdHeader = response.getCallIdHeader();
         Integer expire = registerProcessorClient.getExpire(toUserId);
         FromDevice fromDevice = (FromDevice) registerProcessorClient.getFromDevice(fromUserId);
         ToDevice toDevice = (ToDevice) registerProcessorClient.getToDevice(toUserId);
+        if (fromDevice == null || toDevice == null) {
+            return;
+        }
 
 
         WWWAuthenticateHeader www = (WWWAuthenticateHeader) response.getHeader(WWWAuthenticateHeader.NAME);

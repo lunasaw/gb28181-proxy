@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2023/10/12
  */
 @Data
-public class ToDevice extends Device{
+public class ToDevice extends Device {
 
     /**
      * 及联的处理的时候，需要将上游的toTag往下带
@@ -17,11 +17,6 @@ public class ToDevice extends Device{
      * 用于标识该消息的接收方。在SIP消息的传输过程中，每个中间节点都会将toTag字段的值保留不变，以确保消息的接收方不变。
      */
     private String toTag;
-
-    /**
-     * 编码
-     */
-    private String charset;
 
     /**
      * 需要想下游携带的信息

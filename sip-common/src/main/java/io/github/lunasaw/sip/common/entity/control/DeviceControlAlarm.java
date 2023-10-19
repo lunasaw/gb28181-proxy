@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.server.entity.control;
+package io.github.lunasaw.sip.common.entity.control;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -13,16 +13,17 @@ import lombok.Setter;
 
 /**
  *
+ * /**
  * <?xml version="1.0" encoding="gb2312"?>
  * <Control>
  * <CmdType>DeviceControl</CmdType>
- * <SN>840481</SN>
- * <DeviceID>channelId</DeviceID>
- * <HomePosition>
- * <Enabled>1</Enabled>
- * <ResetTime>resetTime</ResetTime>
- * <PresetIndex>presetIndex</PresetIndex>
- * </HomePosition>
+ * <SN>179173</SN>
+ * <DeviceID>213</DeviceID>
+ * <AlarmCmd>ResetAlarm</AlarmCmd>
+ * <Info>
+ * <AlarmMethod>123</AlarmMethod>
+ * <AlarmType>alarmType</AlarmType>
+ * </Info>
  * </Control>
  * 
  * @author luna
@@ -33,7 +34,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlPosition extends XmlBean {
+public class DeviceControlAlarm extends XmlBean {
     @XmlElement(name = "CmdType")
     public String    cmdType;
 
@@ -43,22 +44,29 @@ public class DeviceControlPosition extends XmlBean {
     @XmlElement(name = "DeviceID")
     public String    deviceId;
 
-    @XmlElement(name = "HomePosition")
-    public HomePosition homePosition;
+    @XmlElement(name = "AlarmCmd")
+    public String    alarmCmd;
 
+    @XmlElement(name = "Info")
+    public AlarmInfo alarmInfo;
 
+    public DeviceControlAlarm(String cmdType, String sn, String deviceId) {
+        this.cmdType = cmdType;
+        this.sn = sn;
+        this.deviceId = deviceId;
+    }
 
     public static void main(String[] args) {
-        DeviceControlPosition alarm = new DeviceControlPosition();
+        DeviceControlAlarm alarm = new DeviceControlAlarm();
         alarm.setCmdType("DeviceControl");
         alarm.setSn("179173");
         alarm.setDeviceId("123");
+        alarm.setAlarmCmd("ResetAlarm");
 
-        HomePosition homePosition = new HomePosition();
-        homePosition.setEnabled("1");
-        homePosition.setResetTime("222");
-        homePosition.setPresetIndex("2");
-        alarm.setHomePosition(homePosition);
+        AlarmInfo alarmInfo = new AlarmInfo();
+        alarmInfo.setAlarmMethod("!231");
+        alarmInfo.setAlarmType("alarmType");
+        alarm.setAlarmInfo(alarmInfo);
 
         System.out.println(alarm);
 
@@ -68,17 +76,15 @@ public class DeviceControlPosition extends XmlBean {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    @XmlRootElement(name = "HomePosition")
+    @XmlRootElement(name = "Info")
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class HomePosition {
+    public static class AlarmInfo {
 
-        @XmlElement(name = "Enabled")
-        public String enabled;
+        @XmlElement(name = "AlarmMethod")
+        public String alarmMethod;
 
-        @XmlElement(name = "ResetTime")
-        public String resetTime;
-        @XmlElement(name = "PresetIndex")
-        private String presetIndex;
+        @XmlElement(name = "AlarmType")
+        public String alarmType;
 
     }
 }

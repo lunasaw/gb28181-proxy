@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.test;
 
 import javax.sip.message.Request;
 
+import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +72,12 @@ public class Gb28181TestServer {
     @Test
     public void test_register_server() {
 
+    }
+
+
+    @Test
+    public void test_query() {
+        ServerSendCmd.deviceInfo((FromDevice) fromDevice, (ToDevice) toDevice);
     }
 
     @SneakyThrows

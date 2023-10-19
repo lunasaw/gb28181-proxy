@@ -30,20 +30,20 @@ public class DeviceConfig {
     public static Map<String, Device> DEVICE_MAP = new ConcurrentHashMap<>();
 
     static {
-        FromDevice clientFrom = FromDevice.getInstance("33010602011187000001", LOCAL_IP, 8118);
+        FromDevice clientFrom = FromDevice.getInstance("33010602011187000001", LOOP_IP, 8118);
         DEVICE_MAP.put("client_from", clientFrom);
 
-        ToDevice clientTo = ToDevice.getInstance("41010500002000000010", LOCAL_IP, 8117);
+        ToDevice clientTo = ToDevice.getInstance("41010500002000000010", LOOP_IP, 8117);
         clientTo.setPassword("luna");
         clientTo.setRealm("4101050000");
         DEVICE_MAP.put("client_to", clientTo);
 
-        FromDevice serverFrom = FromDevice.getInstance("41010500002000000010", LOCAL_IP, 8117);
+        FromDevice serverFrom = FromDevice.getInstance("41010500002000000010", LOOP_IP, 8117);
         serverFrom.setPassword("luna");
         serverFrom.setRealm("4101050000");
         DEVICE_MAP.put("server_from", serverFrom);
 
-        ToDevice serverTo = ToDevice.getInstance("33010602011187000001", LOCAL_IP, 8118);
+        ToDevice serverTo = ToDevice.getInstance("33010602011187000001", LOOP_IP, 8118);
         DEVICE_MAP.put("server_to", serverTo);
     }
 

@@ -8,6 +8,7 @@ import lombok.Data;
 
 /**
  * 继承这个类，自定义参数
+ * 
  * @author luna
  * @date 2023/10/12
  */
@@ -23,6 +24,7 @@ public class FromDevice extends Device {
      * 发送设备标识 类似浏览器User-Agent
      */
     private String agent;
+
 
     public static FromDevice getInstance(String userId, String ip, int port) {
         FromDevice fromDevice = new FromDevice();
