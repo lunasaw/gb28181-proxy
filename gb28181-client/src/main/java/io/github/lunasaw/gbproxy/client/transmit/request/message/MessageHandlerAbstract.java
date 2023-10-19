@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
 /**
- * @author weidian
+ * @author luna
  */
 @Component
 public abstract class MessageHandlerAbstract implements MessageHandler {

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
  * SIP命令类型： 收到Invite请求
  * 客户端发起Invite请求, Invite Request消息实现，请求视频指令
  *
- * @author weidian
+ * @author luna
  */
 @Component
 @Getter

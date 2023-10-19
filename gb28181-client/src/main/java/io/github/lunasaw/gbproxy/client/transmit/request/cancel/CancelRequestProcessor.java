@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 /**
  * SIP命令类型： CANCEL请求
  *
- * @author weidian
+ * @author luna
  */
 @Component
 @Getter

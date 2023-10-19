@@ -8,7 +8,7 @@ import gov.nist.javax.sip.header.SIPDate;
 /**
  * 重写jain sip的SIPDate解决与国标时间格式不一致的问题
  *
- * @author weidian
+ * @author luna
  */
 public class GbSipDate extends SIPDate {
 

@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * sip事物交换信息
- * @author weidian
+ * @author luna
  */
 @Data
 public class SipTransaction {

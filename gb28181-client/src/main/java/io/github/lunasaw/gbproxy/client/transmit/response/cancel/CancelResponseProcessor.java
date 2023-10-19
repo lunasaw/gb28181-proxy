@@ -10,7 +10,7 @@ import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessor
 /**
  * CANCEL响应处理器
  *
- * @author weidian
+ * @author luna
  */
 @Data
 @Component

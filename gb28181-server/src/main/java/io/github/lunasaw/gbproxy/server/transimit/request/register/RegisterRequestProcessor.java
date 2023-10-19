@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * SIP命令类型： REGISTER请求
  *
- * @author weidian
+ * @author luna
  */
 @Getter
 @Setter
