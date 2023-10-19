@@ -30,4 +30,11 @@ public class RegisterInfo {
      * 设备注册地址当前IP
      */
     private String localIp;
+
+    private String remoteIp;
+
+    /**
+     * 经过rpotocol转换后的端口
+     */
+    private Integer remotePort;
 }

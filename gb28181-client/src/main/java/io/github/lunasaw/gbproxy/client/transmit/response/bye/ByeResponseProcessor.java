@@ -12,7 +12,7 @@ import lombok.Data;
 /**
  * BYE请求响应器
  *
- * @author weidian
+ * @author luna
  */
 @Component
 @Data

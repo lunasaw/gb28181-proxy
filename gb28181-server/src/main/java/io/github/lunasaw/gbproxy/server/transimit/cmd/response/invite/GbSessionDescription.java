@@ -8,7 +8,7 @@ import lombok.Data;
 /**
  * 28181 的SDP解析器
  *
- * @author weidian
+ * @author luna
  */
 @Data
 public class GbSessionDescription extends SdpSessionDescription {

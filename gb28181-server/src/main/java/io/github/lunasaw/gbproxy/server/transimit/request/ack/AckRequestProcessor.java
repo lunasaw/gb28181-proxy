@@ -11,7 +11,7 @@ import javax.sip.RequestEvent;
  * SIP命令类型： 收到ACK请求
  * 被叫方收到INVITE请求后，回复200OK，然后发起ACK请求
  *
- * @author weidian
+ * @author luna
  */
 @Component
 @Getter

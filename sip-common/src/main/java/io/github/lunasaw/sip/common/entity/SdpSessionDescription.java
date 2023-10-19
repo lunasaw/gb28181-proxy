@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * SDP解析器
  *
- * @author weidian
+ * @author luna
  */
 @Data
 @AllArgsConstructor

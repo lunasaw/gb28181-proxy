@@ -10,7 +10,7 @@ import javax.sip.RequestEvent;
 /**
  * SIP命令类型： 收到Bye请求
  * 客户端发起Bye请求，结束通话
- * @author weidian
+ * @author luna
  */
 @Component
 @Getter

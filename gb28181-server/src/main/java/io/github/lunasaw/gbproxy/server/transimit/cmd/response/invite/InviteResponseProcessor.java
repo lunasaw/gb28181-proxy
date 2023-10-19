@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 发起INVITE响应
  *
- * @author weidian
+ * @author luna
  */
 @Slf4j
 @Getter
