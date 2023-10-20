@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2023/10/19
  */
 @Component
-@Data
 @Slf4j
 public class BaseMessageHandler extends MessageHandlerAbstract {
 
@@ -23,6 +22,10 @@ public class BaseMessageHandler extends MessageHandlerAbstract {
     private String cmdType = CMD_TYPE;
 
     private MessageProcessorClient messageProcessorClient;
+
+    public BaseMessageHandler(MessageProcessorClient messageProcessorClient) {
+        super(messageProcessorClient);
+    }
 
     @Override
     public void handForEvt(RequestEvent event) {

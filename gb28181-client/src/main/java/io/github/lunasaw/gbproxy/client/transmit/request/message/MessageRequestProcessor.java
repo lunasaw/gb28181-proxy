@@ -4,8 +4,10 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.luna.common.text.StringTools;
@@ -33,6 +35,8 @@ public class MessageRequestProcessor extends SipRequestProcessorAbstract {
 
     public static final String METHOD = "MESSAGE";
     public static final Map<String, MessageHandler> MESSAGE_HANDLER_MAP = new ConcurrentHashMap<>();
+
+    @Resource
     private MessageProcessorClient messageProcessorClient;
     private String method = METHOD;
 
@@ -58,8 +62,6 @@ public class MessageRequestProcessor extends SipRequestProcessorAbstract {
         MessageHandler messageHandler = MESSAGE_HANDLER_MAP.get(cmdType);
 
         if (messageHandler == null) {
-            log.info("no process::evt = {}, xmlStr = {}", evt.getRequest(), xmlStr);
-
             return;
         }
 

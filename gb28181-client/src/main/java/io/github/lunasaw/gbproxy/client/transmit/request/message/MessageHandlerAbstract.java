@@ -2,10 +2,12 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
 import java.nio.charset.Charset;
 
+import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.luna.common.text.StringTools;
@@ -25,7 +27,12 @@ import lombok.Data;
 @Component
 public abstract class MessageHandlerAbstract implements MessageHandler {
 
+    @Resource
     public MessageProcessorClient messageProcessorClient;
+
+    public MessageHandlerAbstract(MessageProcessorClient messageProcessorClient) {
+        this.messageProcessorClient = messageProcessorClient;
+    }
 
     public DeviceSession responseAck(RequestEvent event) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();

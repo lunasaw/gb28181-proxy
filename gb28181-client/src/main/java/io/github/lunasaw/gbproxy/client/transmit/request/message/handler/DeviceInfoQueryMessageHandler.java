@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
  * 响应设备信息
  */
 @Component
-@Data
 @Slf4j
 public class DeviceInfoQueryMessageHandler extends MessageHandlerAbstract {
 
@@ -28,6 +27,10 @@ public class DeviceInfoQueryMessageHandler extends MessageHandlerAbstract {
     private String cmdType = CMD_TYPE;
 
     private MessageProcessorClient messageProcessorClient;
+
+    public DeviceInfoQueryMessageHandler(MessageProcessorClient messageProcessorClient) {
+        super(messageProcessorClient);
+    }
 
     @Override
     public void handForEvt(RequestEvent evt) {

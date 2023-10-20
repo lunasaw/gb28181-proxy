@@ -1,16 +1,24 @@
 package io.github.lunasaw.gbproxy.test.user;
 
-import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
-import io.github.lunasaw.sip.common.entity.response.DeviceItem;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
+import com.google.common.base.Joiner;
+
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
-
-import java.util.ArrayList;
-import java.util.List;
+import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
+import io.github.lunasaw.sip.common.entity.response.DeviceItem;
+import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
+import io.github.lunasaw.sip.common.utils.XmlUtils;
 
 /**
  * @author luna
@@ -45,6 +53,17 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public List<DeviceItem> getDeviceItem(String userId) {
-        return new ArrayList<>();
+
+        try {
+            File file = ResourceUtils.getFile("classpath:device/catalog.xml");
+            List<String> strings = Files.readAllLines(Paths.get(file.getAbsolutePath()));
+
+            String join = Joiner.on("\n").join(strings);
+            DeviceResponse response = (DeviceResponse)XmlUtils.parseObj(join, DeviceResponse.class);
+
+            return response.getDeviceItemList();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

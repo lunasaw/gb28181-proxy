@@ -54,7 +54,7 @@ public class SipProcessorConfiguration {
 
     // message---------
 
-    @Bean
+    // @Bean
     public MessageRequestProcessor messageRequestProcessor() {
         MessageRequestProcessor messageRequestProcessor = new MessageRequestProcessor();
         messageRequestProcessor.setMessageProcessorClient(defaultMessageProcessorClient);
@@ -62,7 +62,7 @@ public class SipProcessorConfiguration {
     }
 
     @Bean
-    public SipProxyAutoConfig sipProxyClientAutoConfig() {
+    public SipProxyAutoConfig sipProxyAutoConfig() {
         return new SipProxyAutoConfig();
     }
 }
