@@ -1,13 +1,11 @@
 package io.github.lunasaw.gbproxy.test.user;
 
-import io.github.lunasaw.gbproxy.client.entity.response.DeviceInfo;
+import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
-import io.github.lunasaw.sip.common.entity.SipTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
 
 /**

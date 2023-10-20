@@ -93,7 +93,19 @@ public class ServerSendCmd {
     }
 
     /**
-     * 查询目录列表
+     * 设备通道列表查询
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return callId
+     */
+    public static String deviceCatalogQuery(FromDevice fromDevice, ToDevice toDevice) {
+        DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery);
+    }
+
+    /**
+     * 查询录像列表
      *
      * @param fromDevice 发送设备
      * @param toDevice 接收设备

@@ -1,8 +1,10 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
-import io.github.lunasaw.gbproxy.client.entity.response.DeviceInfo;
-import io.github.lunasaw.sip.common.entity.SipTransaction;
+import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
+import io.github.lunasaw.sip.common.entity.response.DeviceItem;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
+import java.util.List;
 
 /**
  * @author luna
@@ -15,8 +17,18 @@ public interface MessageProcessorClient extends SipUserGenerate {
      * DeviceInfo
      * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.DeviceInfoQueryMessageHandler}
      *
+     * @param userId 设备Id
+     * @return DeviceInfo
+     */
+    DeviceInfo getDeviceInfo(String userId);
+
+    /**
+     * 获取设备通道信息
+     * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.CatalogQueryMessageHandler}
+     *
      * @param userId
      * @return
      */
-    DeviceInfo getDeviceInfo(String userId);
+    List<DeviceItem> getDeviceItem(String userId);
+
 }

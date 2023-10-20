@@ -1,25 +1,17 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message.handler;
 
-import java.nio.charset.Charset;
-
 import javax.sip.RequestEvent;
-import javax.sip.message.Response;
 
 import org.springframework.stereotype.Component;
 
-import com.luna.common.text.StringTools;
-
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gbproxy.client.entity.response.DeviceInfo;
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.transmit.ServerResponseCmd;
-import io.github.lunasaw.sip.common.utils.SipUtils;
-import io.github.lunasaw.sip.common.utils.XmlUtils;
+import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,19 +32,15 @@ public class DeviceInfoQueryMessageHandler extends MessageHandlerAbstract {
     @Override
     public void handForEvt(RequestEvent evt) {
 
-        SIPRequest sipRequest = (SIPRequest) evt.getRequest();
-        String userId = SipUtils.getUserIdFromToHeader(sipRequest);
-        String sipId = SipUtils.getUserIdFromFromHeader(sipRequest);
-        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ServerResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
+        DeviceSession deviceSession = responseAck(evt);
+        String userId = deviceSession.getUserId();
+        String sipId = deviceSession.getSipId();
 
         // 设备查询
         FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
         ToDevice toDevice = (ToDevice) messageProcessorClient.getToDevice(sipId);
 
-        byte[] rawContent = sipRequest.getRawContent();
-        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(fromDevice.getCharset()));
-        DeviceQuery deviceQuery = (DeviceQuery) XmlUtils.parseObj(xmlStr, DeviceQuery.class);
+        DeviceQuery deviceQuery = parseRequest(evt, fromDevice.getCharset(), DeviceQuery.class);
 
         String sn = deviceQuery.getSn();
         DeviceInfo deviceInfo = messageProcessorClient.getDeviceInfo(userId);

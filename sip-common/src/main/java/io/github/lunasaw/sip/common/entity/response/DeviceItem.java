@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.entity.response;
+package io.github.lunasaw.sip.common.entity.response;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -11,7 +11,6 @@ import com.luna.common.check.Assert;
 import com.luna.common.date.DateUtils;
 import com.luna.common.os.SystemInfoUtil;
 
-import io.github.lunasaw.gbproxy.client.entity.DeviceCatalog;
 import io.github.lunasaw.sip.common.enums.DeviceGbType;
 import lombok.Getter;
 import lombok.Setter;

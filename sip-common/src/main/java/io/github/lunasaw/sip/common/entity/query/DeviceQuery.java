@@ -9,6 +9,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * <?xml version="1.0" encoding="gb2312"?>
+ * <Query>
+ *   <CmdType>Catalog</CmdType>
+ *   <SN>123</SN>
+ *   <DeviceID>123</DeviceID>
+ * </Query>
  * @author luna
  */
 @Getter
