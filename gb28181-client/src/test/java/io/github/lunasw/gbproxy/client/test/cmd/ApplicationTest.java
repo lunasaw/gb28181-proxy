@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import io.github.lunasaw.gbproxy.client.Gb28181Client;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.impl.DefaultMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;

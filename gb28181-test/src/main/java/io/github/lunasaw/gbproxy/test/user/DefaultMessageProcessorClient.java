@@ -2,11 +2,15 @@ package io.github.lunasaw.gbproxy.test.user;
 
 import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
+import io.github.lunasaw.sip.common.entity.response.DeviceItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.sip.common.entity.Device;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author luna
@@ -36,6 +40,11 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
     @Override
     public DeviceInfo getDeviceInfo(String userId) {
         // 获取文件解析转为模型返回
-        return null;
+        return new DeviceInfo();
+    }
+
+    @Override
+    public List<DeviceItem> getDeviceItem(String userId) {
+        return new ArrayList<>();
     }
 }

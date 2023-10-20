@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.cmd;
 
 import java.util.List;
 
+import com.luna.common.check.Assert;
 import com.luna.common.text.RandomStrUtil;
 
 import io.github.lunasaw.sip.common.entity.DeviceAlarm;
@@ -83,6 +84,7 @@ public class ClientSendCmd {
      * @return
      */
     public static String deviceInfoResponse(FromDevice fromDevice, ToDevice toDevice, DeviceInfo deviceInfo) {
+        Assert.notNull(deviceInfo, "deviceInfo is null");
         deviceInfo.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
         deviceInfo.setSn(RandomStrUtil.getValidationCode());
         deviceInfo.setDeviceId(toDevice.getUserId());
