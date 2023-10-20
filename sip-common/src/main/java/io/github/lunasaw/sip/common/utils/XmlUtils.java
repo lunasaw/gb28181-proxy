@@ -1,11 +1,19 @@
 package io.github.lunasaw.sip.common.utils;
 
+import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+
+import org.springframework.util.ResourceUtils;
+
+import com.google.common.base.Joiner;
 
 import lombok.SneakyThrows;
 
@@ -32,6 +40,15 @@ public class XmlUtils {
         JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         return unmarshaller.unmarshal(new StringReader(xmlStr));
+    }
+
+    @SneakyThrows
+    public static <T> Object parseFile(String resource, Class<T> clazz) {
+        File file = ResourceUtils.getFile(resource);
+        List<String> strings = Files.readAllLines(Paths.get(file.getAbsolutePath()));
+
+        String join = Joiner.on("\n").join(strings);
+        return parseObj(join, clazz);
     }
 
 }

@@ -1,17 +1,10 @@
 package io.github.lunasaw.gbproxy.test.user;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
-
-import com.google.common.base.Joiner;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
@@ -47,23 +40,12 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public DeviceInfo getDeviceInfo(String userId) {
-        // 获取文件解析转为模型返回
-        return new DeviceInfo();
+        return (DeviceInfo)XmlUtils.parseFile("classpath:device/deviceInfo.xml", DeviceInfo.class);
     }
 
     @Override
     public List<DeviceItem> getDeviceItem(String userId) {
-
-        try {
-            File file = ResourceUtils.getFile("classpath:device/catalog.xml");
-            List<String> strings = Files.readAllLines(Paths.get(file.getAbsolutePath()));
-
-            String join = Joiner.on("\n").join(strings);
-            DeviceResponse response = (DeviceResponse)XmlUtils.parseObj(join, DeviceResponse.class);
-
-            return response.getDeviceItemList();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        DeviceResponse response = (DeviceResponse)XmlUtils.parseFile("classpath:device/catalog.xml", DeviceResponse.class);
+        return response.getDeviceItemList();
     }
 }

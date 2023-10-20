@@ -2,6 +2,8 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler;
 
 import javax.sip.RequestEvent;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
@@ -20,13 +22,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
+@Getter
+@Setter
 public class DeviceInfoQueryMessageHandler extends MessageHandlerAbstract {
 
     public static final String CMD_TYPE = "DeviceInfo";
 
     private String cmdType = CMD_TYPE;
-
-    private MessageProcessorClient messageProcessorClient;
 
     public DeviceInfoQueryMessageHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);

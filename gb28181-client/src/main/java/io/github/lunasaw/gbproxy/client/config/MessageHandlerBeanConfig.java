@@ -6,8 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.CatalogQueryMessageHandler;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.DeviceInfoQueryMessageHandler;
 
 /**
  * @author luna

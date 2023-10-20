@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sip.RequestEvent;
 
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
@@ -14,6 +15,7 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import io.github.lunasaw.sip.common.entity.response.DeviceItem;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
+@Getter
+@Setter
 public class CatalogQueryMessageHandler extends MessageHandlerAbstract {
 
     public static final String CMD_TYPE = "Catalog";

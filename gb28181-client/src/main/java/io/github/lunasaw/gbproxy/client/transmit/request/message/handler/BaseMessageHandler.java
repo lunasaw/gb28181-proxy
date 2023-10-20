@@ -2,6 +2,8 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler;
 
 import javax.sip.RequestEvent;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageHandlerAbstract;
@@ -15,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
+@Getter
+@Setter
 public class BaseMessageHandler extends MessageHandlerAbstract {
 
     public static final String CMD_TYPE = "Catalog";
