@@ -9,7 +9,8 @@
         <version>1.0.7</version>
     </parent>
 
-    <version>${sip-proxy-common.version}</version>
+    <packaging>jar</packaging>
+    <version>1.0.7</version>
     <artifactId>sip-common</artifactId>
     <name>sip-common</name>
     <description>轻量级SIP框架封装</description>

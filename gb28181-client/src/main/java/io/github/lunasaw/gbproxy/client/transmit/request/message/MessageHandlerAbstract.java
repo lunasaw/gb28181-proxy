@@ -7,7 +7,6 @@ import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.luna.common.text.StringTools;

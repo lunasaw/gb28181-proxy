@@ -9,6 +9,7 @@
         <version>1.0.7</version>
     </parent>
 
+    <version>${gb28181-proxy.version}</version>
     <artifactId>gb28181-server</artifactId>
     <packaging>jar</packaging>
     <name>gb28181-server</name>
