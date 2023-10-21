@@ -68,7 +68,12 @@ public class MessageRequestProcessor extends SipRequestProcessorAbstract {
 
         messageHandler.responseAck(evt);
 
-        messageHandler.handForEvt(evt);
+        try {
+            messageHandler.handForEvt(evt);
+        } catch (Exception e) {
+            log.error("process::evt = {} ", evt, e);
+            messageHandler.responseError(evt);
+        }
     }
 
 }

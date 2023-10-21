@@ -13,6 +13,8 @@ public interface MessageHandler {
      */
     void responseAck(RequestEvent event);
 
+    void responseError(RequestEvent event);
+
     /**
      * 处理消息
      *

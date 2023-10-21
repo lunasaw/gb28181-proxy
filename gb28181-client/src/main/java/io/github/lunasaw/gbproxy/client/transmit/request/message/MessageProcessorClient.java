@@ -1,7 +1,9 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
+import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
 import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
 import io.github.lunasaw.sip.common.entity.response.DeviceItem;
+import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
 import io.github.lunasaw.sip.common.entity.response.DeviceStatus;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 
@@ -14,8 +16,18 @@ import java.util.List;
 public interface MessageProcessorClient extends SipUserGenerate {
 
     /**
+     * 获取设备录像信息
+     * DeviceRecord
+     * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.DeviceInfoQueryMessageHandler}
+     *
+     * @param deviceRecordQuery 设备Id
+     * @return DeviceInfo
+     */
+    DeviceRecord getDeviceRecord(DeviceRecordQuery deviceRecordQuery);
+
+    /**
      * 获取设备信息
-     * DeviceInfo
+     * DeviceStatus
      * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.DeviceStatusQueryMessageHandler}
      *
      * @param userId 设备Id
@@ -41,5 +53,4 @@ public interface MessageProcessorClient extends SipUserGenerate {
      * @return
      */
     List<DeviceItem> getDeviceItem(String userId);
-
 }

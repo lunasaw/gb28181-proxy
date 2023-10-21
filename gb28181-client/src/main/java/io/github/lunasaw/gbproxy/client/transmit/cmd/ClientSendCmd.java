@@ -170,17 +170,30 @@ public class ClientSendCmd {
      *
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
+     * @param deviceRecord 录像响应
+     * @return
+     */
+    public static String deviceRecordResponse(FromDevice fromDevice, ToDevice toDevice, DeviceRecord deviceRecord) {
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceRecord);
+    }
+
+    /**
+     * 设备录像上报
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
      * @param deviceRecordItems 录像文件
      * @return
      */
-    public static String deviceCatalogResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceRecord.RecordItem> deviceRecordItems) {
+    public static String deviceRecordResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceRecord.RecordItem> deviceRecordItems) {
         DeviceRecord deviceRecord =
                 new DeviceRecord(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         deviceRecord.setSumNum(deviceRecordItems.size());
         deviceRecord.setRecordList(deviceRecordItems);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceRecord);
+        return deviceRecordResponse(fromDevice, toDevice, deviceRecord);
     }
 
     /**

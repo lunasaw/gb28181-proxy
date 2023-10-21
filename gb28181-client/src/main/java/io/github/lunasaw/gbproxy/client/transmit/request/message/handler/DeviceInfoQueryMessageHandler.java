@@ -35,9 +35,9 @@ public class DeviceInfoQueryMessageHandler extends MessageHandlerAbstract {
     }
 
     @Override
-    public void handForEvt(RequestEvent evt) {
+    public void handForEvt(RequestEvent event) {
 
-        DeviceSession deviceSession = getDeviceSession(evt);
+        DeviceSession deviceSession = getDeviceSession(event);
         String userId = deviceSession.getUserId();
         String sipId = deviceSession.getSipId();
 
@@ -45,7 +45,7 @@ public class DeviceInfoQueryMessageHandler extends MessageHandlerAbstract {
         FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
         ToDevice toDevice = (ToDevice) messageProcessorClient.getToDevice(sipId);
 
-        DeviceQuery deviceQuery = parseRequest(evt, fromDevice.getCharset(), DeviceQuery.class);
+        DeviceQuery deviceQuery = parseRequest(event, fromDevice.getCharset(), DeviceQuery.class);
 
         String sn = deviceQuery.getSn();
         DeviceInfo deviceInfo = messageProcessorClient.getDeviceInfo(userId);

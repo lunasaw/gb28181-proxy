@@ -2,16 +2,14 @@ package io.github.lunasaw.gbproxy.test.user;
 
 import java.util.List;
 
-import io.github.lunasaw.sip.common.entity.response.DeviceStatus;
+import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
+import io.github.lunasaw.sip.common.entity.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
-import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
-import io.github.lunasaw.sip.common.entity.response.DeviceItem;
-import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 
 /**
@@ -38,6 +36,11 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
         return fromDevice;
     }
 
+
+    @Override
+    public DeviceRecord getDeviceRecord(DeviceRecordQuery userId) {
+        return (DeviceRecord)XmlUtils.parseFile("classpath:device/deviceRecord.xml", DeviceRecord.class);
+    }
 
     @Override
     public DeviceStatus getDeviceStatus(String userId) {

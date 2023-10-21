@@ -50,6 +50,12 @@ public abstract class MessageHandlerAbstract implements MessageHandler {
         ServerResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
     }
 
+    public void responseError(RequestEvent event) {
+        SIPRequest sipRequest = (SIPRequest)event.getRequest();
+        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
+        ServerResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "OK", receiveIp, sipRequest);
+    }
+
     public <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         byte[] rawContent = sipRequest.getRawContent();
