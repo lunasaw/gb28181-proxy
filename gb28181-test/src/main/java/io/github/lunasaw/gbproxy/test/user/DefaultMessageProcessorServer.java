@@ -1,7 +1,10 @@
 package io.github.lunasaw.gbproxy.test.user;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
+import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
+import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
+import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,5 +47,20 @@ public class DefaultMessageProcessorServer implements MessageProcessorServer {
     @Override
     public void keepLiveDevice(DeviceKeepLiveNotify deviceKeepLiveNotify) {
         log.info("接收到设备的心跳 keepLiveDevice::deviceKeepLiveNotify = {}", deviceKeepLiveNotify);
+    }
+
+    @Override
+    public void updateRemoteAddress(RemoteAddressInfo remoteAddressInfo) {
+        log.info("接收到设备的地址信息 updateRemoteAddress::remoteAddressInfo = {}", remoteAddressInfo);
+    }
+
+    @Override
+    public void updateDeviceAlarm(DeviceAlarmNotify deviceAlarmNotify) {
+        log.info("接收到设备的告警信息 updateDeviceAlarm::deviceAlarmNotify = {}", deviceAlarmNotify);
+    }
+
+    @Override
+    public void updateMobilePosition(MobilePositionNotify mobilePositionNotify) {
+        log.info("接收到设备的位置信息 updateMobilePosition::mobilePositionNotify = {}", mobilePositionNotify);
     }
 }

@@ -2,15 +2,11 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
 
 import javax.sip.RequestEvent;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterInfo;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.utils.SipUtils;
+import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
+import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
@@ -27,18 +23,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract {
+public class MobilePositionNotifyMessageHandler extends MessageServerHandlerAbstract {
 
-    public static final String CMD_TYPE = "Keepalive";
+    public static final String CMD_TYPE = "MobilePosition";
 
     private String             cmdType  = CMD_TYPE;
 
-    public KeepaliveNotifyMessageHandler(MessageProcessorServer messageProcessorServer) {
+    public MobilePositionNotifyMessageHandler(MessageProcessorServer messageProcessorServer) {
         super(messageProcessorServer);
     }
 
     @Override
     public void handForEvt(RequestEvent event) {
+
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
@@ -51,11 +48,10 @@ public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract 
             // 未注册的设备不做处理
             return;
         }
-        DeviceKeepLiveNotify deviceKeepLiveNotify = parseRequest(event, fromDevice.getCharset(), DeviceKeepLiveNotify.class);
-        messageProcessorServer.keepLiveDevice(deviceKeepLiveNotify);
 
-        RemoteAddressInfo remoteAddressInfo = SipUtils.getRemoteAddressFromRequest((SIPRequest)event.getRequest());
-        messageProcessorServer.updateRemoteAddress(remoteAddressInfo);
+        MobilePositionNotify mobilePositionNotify = parseRequest(event, fromDevice.getCharset(), MobilePositionNotify.class);
+
+        messageProcessorServer.updateMobilePosition(mobilePositionNotify);
     }
 
     @Override
