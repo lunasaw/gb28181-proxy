@@ -7,6 +7,13 @@ import javax.sip.RequestEvent;
  */
 public interface MessageHandler {
     /**
+     * 响应ack
+     * 
+     * @param event 请求事件
+     */
+    void responseAck(RequestEvent event);
+
+    /**
      * 处理消息
      *
      * @param event

@@ -6,6 +6,9 @@ import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -33,14 +36,18 @@ public abstract class MessageHandlerAbstract implements MessageHandler {
         this.messageProcessorClient = messageProcessorClient;
     }
 
-    public DeviceSession responseAck(RequestEvent event) {
+    public DeviceSession getDeviceSession(RequestEvent event) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         String userId = SipUtils.getUserIdFromToHeader(sipRequest);
         String sipId = SipUtils.getUserIdFromFromHeader(sipRequest);
-        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ServerResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
 
         return new DeviceSession(userId, sipId);
+    }
+
+    public void responseAck(RequestEvent event) {
+        SIPRequest sipRequest = (SIPRequest)event.getRequest();
+        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
+        ServerResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
     }
 
     public <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {

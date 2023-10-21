@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.test.user;
 
 import java.util.List;
 
+import io.github.lunasaw.sip.common.entity.response.DeviceStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,11 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
         return fromDevice;
     }
 
+
+    @Override
+    public DeviceStatus getDeviceStatus(String userId) {
+        return (DeviceStatus)XmlUtils.parseFile("classpath:device/deviceInfo.xml", DeviceStatus.class);
+    }
 
     @Override
     public DeviceInfo getDeviceInfo(String userId) {

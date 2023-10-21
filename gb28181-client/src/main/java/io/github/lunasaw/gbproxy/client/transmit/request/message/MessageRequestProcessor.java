@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
+import com.luna.common.thread.AsyncEngineUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -64,6 +65,8 @@ public class MessageRequestProcessor extends SipRequestProcessorAbstract {
         if (messageHandler == null) {
             return;
         }
+
+        messageHandler.responseAck(evt);
 
         messageHandler.handForEvt(evt);
     }

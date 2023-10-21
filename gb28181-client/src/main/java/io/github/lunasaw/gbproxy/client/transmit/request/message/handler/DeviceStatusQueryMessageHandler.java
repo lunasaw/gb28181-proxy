@@ -1,10 +1,7 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message.handler;
 
-import java.util.List;
-
 import javax.sip.RequestEvent;
 
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
@@ -14,8 +11,9 @@ import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.entity.response.DeviceItem;
+import io.github.lunasaw.sip.common.entity.response.DeviceStatus;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,35 +24,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class CatalogQueryMessageHandler extends MessageHandlerAbstract {
+public class DeviceStatusQueryMessageHandler extends MessageHandlerAbstract {
 
-    public static final String CMD_TYPE = "Catalog";
+    public static final String     CMD_TYPE = "DeviceStatus";
 
-    private String cmdType = CMD_TYPE;
+    private String                 cmdType  = CMD_TYPE;
 
-    public CatalogQueryMessageHandler(MessageProcessorClient messageProcessorClient) {
+    private MessageProcessorClient messageProcessorClient;
+
+    public DeviceStatusQueryMessageHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
     }
 
     @Override
     public void handForEvt(RequestEvent event) {
         DeviceSession deviceSession = getDeviceSession(event);
-
         String userId = deviceSession.getUserId();
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
-        ToDevice toDevice = (ToDevice) messageProcessorClient.getToDevice(sipId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
+        ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
         DeviceQuery deviceQuery = parseRequest(event, fromDevice.getCharset(), DeviceQuery.class);
 
-        // 请求序列化，上游后续处理
         String sn = deviceQuery.getSn();
 
-        List<DeviceItem> deviceItem = messageProcessorClient.getDeviceItem(userId);
+        DeviceStatus deviceStatus = messageProcessorClient.getDeviceStatus(userId);
+        deviceStatus.setSn(sn);
 
-        ClientSendCmd.deviceChannelCatalogResponse(fromDevice, toDevice, deviceItem, sn);
+        ClientSendCmd.deviceStatusResponse(fromDevice, toDevice, deviceStatus.getOnline());
     }
 
     @Override

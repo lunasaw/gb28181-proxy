@@ -37,7 +37,7 @@ public class DeviceInfoQueryMessageHandler extends MessageHandlerAbstract {
     @Override
     public void handForEvt(RequestEvent evt) {
 
-        DeviceSession deviceSession = responseAck(evt);
+        DeviceSession deviceSession = getDeviceSession(evt);
         String userId = deviceSession.getUserId();
         String sipId = deviceSession.getSipId();
 
