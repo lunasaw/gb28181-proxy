@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.sip.common.transmit.SipProcessorObserver;
@@ -23,10 +24,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
+@Configuration
 public class SipProxyAutoConfig implements InitializingBean, ApplicationContextAware {
 
     private static final String METHOD = "method";
-    private static final String CMDTYPE = "cmdType";
 
     private ApplicationContext applicationContext;
 

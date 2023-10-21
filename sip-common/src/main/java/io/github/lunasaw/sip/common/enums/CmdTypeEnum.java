@@ -22,6 +22,8 @@ public enum CmdTypeEnum {
     DEVICE_CONFIG("DeviceConfig", "设备配置"),
     MEDIA_STATUS("MediaStatus", "媒体状态信息"),
 
+    KEEPALIVE("Keepalive", "心跳"),
+
     ;
 
     private final String type;

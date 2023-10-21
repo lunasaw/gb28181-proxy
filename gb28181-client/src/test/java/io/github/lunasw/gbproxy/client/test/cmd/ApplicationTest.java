@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import io.github.lunasaw.gbproxy.client.Gb28181Client;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.ClientMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterResponseProcessor;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
@@ -86,8 +86,8 @@ public class ApplicationTest {
     @Test
     public void messageResponse() {
 
-        MessageRequestProcessor messageRequestProcessor = new MessageRequestProcessor();
-        SipProcessorObserver.addRequestProcessor(MessageRequestProcessor.METHOD, messageRequestProcessor);
+        ClientMessageRequestProcessor clientMessageRequestProcessor = new ClientMessageRequestProcessor();
+        SipProcessorObserver.addRequestProcessor(ClientMessageRequestProcessor.METHOD, clientMessageRequestProcessor);
 
     }
 

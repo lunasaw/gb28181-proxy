@@ -2,24 +2,21 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
 
 import javax.sip.RequestEvent;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterInfo;
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
-import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.utils.SipUtils;
+import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageServerHandlerAbstract;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 处理设备告警信息
+ * 
  * @author luna
  * @date 2023/10/19
  */
@@ -27,18 +24,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract {
+public class AlarmNotifyMessageHandler extends MessageServerHandlerAbstract {
 
-    public static final String CMD_TYPE = "Keepalive";
+    public static final String CMD_TYPE = "Alarm";
 
     private String             cmdType  = CMD_TYPE;
 
-    public KeepaliveNotifyMessageHandler(MessageProcessorServer messageProcessorServer) {
+    public AlarmNotifyMessageHandler(MessageProcessorServer messageProcessorServer) {
         super(messageProcessorServer);
     }
 
     @Override
     public void handForEvt(RequestEvent event) {
+
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
@@ -51,11 +49,10 @@ public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract 
             // 未注册的设备不做处理
             return;
         }
-        DeviceKeepLiveNotify deviceKeepLiveNotify = parseRequest(event, fromDevice.getCharset(), DeviceKeepLiveNotify.class);
-        messageProcessorServer.keepLiveDevice(deviceKeepLiveNotify);
 
-        RemoteAddressInfo remoteAddressInfo = SipUtils.getRemoteAddressFromRequest((SIPRequest)event.getRequest());
-        messageProcessorServer.updateRemoteAddress(remoteAddressInfo);
+        DeviceAlarmNotify deviceAlarmNotify = parseRequest(event, fromDevice.getCharset(), DeviceAlarmNotify.class);
+
+        messageProcessorServer.updateDeviceAlarm(deviceAlarmNotify);
     }
 
     @Override

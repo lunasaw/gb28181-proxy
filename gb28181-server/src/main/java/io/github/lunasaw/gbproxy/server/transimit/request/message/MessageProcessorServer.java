@@ -1,6 +1,10 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
+import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
+import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
+import io.github.lunasaw.sip.common.entity.notify.MediaStatusNotify;
+import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 
 /**
@@ -9,5 +13,33 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  */
 public interface MessageProcessorServer extends SipUserGenerate {
 
+    /**
+     * 更新设备心跳信息
+     * @param deviceKeepLiveNotify
+     */
     void keepLiveDevice(DeviceKeepLiveNotify deviceKeepLiveNotify);
+
+    /**
+     * 更新设备地址信息
+     * @param remoteAddressInfo
+     */
+    void updateRemoteAddress(RemoteAddressInfo remoteAddressInfo);
+
+    /**
+     * 更新报警信息
+     * @param deviceAlarmNotify
+     */
+    void updateDeviceAlarm(DeviceAlarmNotify deviceAlarmNotify);
+
+    /**
+     * 更新位置信息
+     * @param mobilePositionNotify
+     */
+    void updateMobilePosition(MobilePositionNotify mobilePositionNotify);
+
+    /**
+     * 更新媒体状态
+     * @param mediaStatusNotify
+     */
+    void updateMediaStatus(MediaStatusNotify mediaStatusNotify);
 }

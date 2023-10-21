@@ -10,5 +10,4 @@ import org.springframework.stereotype.Component;
 public abstract class SipResponseProcessorAbstract implements SipResponseProcessor {
 
 
-
 }

@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.test.user;
+package io.github.lunasaw.gbproxy.test.user.client;
 
 import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.beans.factory.annotation.Autowired;

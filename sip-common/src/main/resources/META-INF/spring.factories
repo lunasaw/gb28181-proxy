@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-io.github.lunasaw.gbproxy.client.config.SipProxyClientAutoConfig
+io.github.lunasaw.sip.common.conf.SipProxyAutoConfig

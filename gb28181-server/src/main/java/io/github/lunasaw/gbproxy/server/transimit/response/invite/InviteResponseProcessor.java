@@ -1,10 +1,12 @@
-package io.github.lunasaw.gbproxy.server.transimit.cmd.response.invite;
+package io.github.lunasaw.gbproxy.server.transimit.response.invite;
 
 import java.text.ParseException;
 
 import javax.sip.ResponseEvent;
 import javax.sip.header.CallIdHeader;
 import javax.sip.message.Response;
+
+import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.ResponseEventExt;
 import gov.nist.javax.sip.message.SIPResponse;
@@ -14,7 +16,6 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,16 +28,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
+@Component
 public class InviteResponseProcessor extends SipResponseProcessorAbstract {
 
     private static final String METHOD = "INVITE";
 
     private String method = METHOD;
 
-    private SipUserGenerate sipUserGenerate;
+    public InviteProcessorServer inviteProcessorServer;
 
-    public InviteResponseProcessor(SipUserGenerate sipUserGenerate) {
-        this.sipUserGenerate = sipUserGenerate;
+    public InviteResponseProcessor(InviteProcessorServer inviteProcessorServer) {
+        this.inviteProcessorServer = inviteProcessorServer;
     }
 
     /**
@@ -75,7 +77,7 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
         String toUserId = SipUtils.getUserIdFromToHeader(response);
         String fromUserId = SipUtils.getUserIdFromFromHeader(response);
         CallIdHeader callIdHeader = response.getCallIdHeader();
-        FromDevice fromDevice = (FromDevice) sipUserGenerate.getFromDevice(fromUserId);
+        FromDevice fromDevice = (FromDevice)inviteProcessorServer.getFromDevice(fromUserId);
 
         ToDevice toDevice = ToDevice.getInstance(toUserId, evt.getRemoteIpAddress(), evt.getRemotePort());
 
