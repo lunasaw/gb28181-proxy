@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.transmit.request.message;
+package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -7,8 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import com.luna.common.thread.AsyncEngineUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.luna.common.text.StringTools;
@@ -28,18 +26,18 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author luna
  */
-@Component("messageClientRequestProcessor")
+@Component("messageServerRequestProcessor")
 @Getter
 @Setter
 @Slf4j
 public class MessageRequestProcessor extends SipRequestProcessorAbstract {
 
-    public static final String METHOD = "MESSAGE";
+    public static final String                      METHOD              = "MESSAGE";
     public static final Map<String, MessageHandler> MESSAGE_HANDLER_MAP = new ConcurrentHashMap<>();
 
     @Resource
-    private MessageProcessorClient messageProcessorClient;
-    private String method = METHOD;
+    private MessageProcessorServer                  messageProcessorClient;
+    private String                                  method              = METHOD;
 
     public static void addHandler(MessageHandler messageHandler) {
         MESSAGE_HANDLER_MAP.put(messageHandler.getCmdType(), messageHandler);
@@ -47,17 +45,17 @@ public class MessageRequestProcessor extends SipRequestProcessorAbstract {
 
     @Override
     public void process(RequestEvent evt) {
-        SIPRequest request = (SIPRequest) evt.getRequest();
+        SIPRequest request = (SIPRequest)evt.getRequest();
 
         // 在客户端看来 收到请求的时候fromHeader还是服务端的 toHeader才是自己的，这里是要查询自己的信息
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
         // 解析xml
         byte[] rawContent = request.getRawContent();
         String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(fromDevice.getCharset()));
-        DeviceBase deviceBase = (DeviceBase) XmlUtils.parseObj(xmlStr, DeviceQuery.class);
+        DeviceBase deviceBase = (DeviceBase)XmlUtils.parseObj(xmlStr, DeviceQuery.class);
         String cmdType = deviceBase.getCmdType();
 
         MessageHandler messageHandler = MESSAGE_HANDLER_MAP.get(cmdType);

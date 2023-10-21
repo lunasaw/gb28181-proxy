@@ -18,7 +18,7 @@ import com.luna.common.date.DateUtils;
 
 import gov.nist.javax.sip.header.SIPDateHeader;
 import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.sip.common.transmit.ServerResponseCmd;
+import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.entity.*;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
@@ -98,7 +98,7 @@ public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
             if (transaction != null && callId.equals(transaction.getCallId())) {
                 log.info(title + "设备：{}, 注册续订: {}", userId, expires);
 
-                ServerResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, request, okHeaderList);
+                ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, request, okHeaderList);
                 registerProcessorServer.updateSipTransaction(userId, sipTransaction);
                 return;
             }
@@ -119,7 +119,7 @@ public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
                         SipRequestUtils.createWWWAuthenticateHeader(DigestServerAuthenticationHelper.DEFAULT_SCHEME, fromDevice.getRealm(), nonce,
                                 DigestServerAuthenticationHelper.DEFAULT_ALGORITHM);
 
-                ServerResponseCmd.doResponseCmd(Response.UNAUTHORIZED, "Unauthorized", receiveIp, request, wwwAuthenticateHeader);
+                ResponseCmd.doResponseCmd(Response.UNAUTHORIZED, "Unauthorized", receiveIp, request, wwwAuthenticateHeader);
                 return;
             }
 
@@ -130,12 +130,12 @@ public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
             if (!passwordCorrect) {
                 // 注册失败
                 log.info(title + " 设备：{}, 密码/SIP服务器ID错误, 回复403: {}", userId, requestAddress);
-                ServerResponseCmd.doResponseCmd(Response.FORBIDDEN, "wrong password", receiveIp, request);
+                ResponseCmd.doResponseCmd(Response.FORBIDDEN, "wrong password", receiveIp, request);
                 return;
             }
 
             // 携带授权头并且密码正确
-            ServerResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, request, okHeaderList);
+            ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, request, okHeaderList);
             // 注册成功
             registerProcessorServer.updateSipTransaction(userId, sipTransaction);
         } catch (Exception e) {

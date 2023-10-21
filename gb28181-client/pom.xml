@@ -6,9 +6,10 @@
     <parent>
         <groupId>io.github.lunasaw</groupId>
         <artifactId>sip-proxy</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
     </parent>
 
+    <version>${gb28181-proxy.version}</version>
     <artifactId>gb28181-client</artifactId>
     <packaging>jar</packaging>
     <name>gb28181-client</name>

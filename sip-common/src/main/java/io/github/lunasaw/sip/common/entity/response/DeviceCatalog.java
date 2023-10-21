@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.entity;
+package io.github.lunasaw.sip.common.entity.response;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

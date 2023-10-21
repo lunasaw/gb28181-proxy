@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.entity.response;
+package io.github.lunasaw.sip.common.entity.response;
 
 import java.util.List;
 

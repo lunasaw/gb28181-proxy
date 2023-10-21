@@ -1,0 +1,6 @@
+com.github.ipcam.connection.HikvisionCameraConnection
+com.github.ipcam.connection.XmEyeCameraConnection
+com.github.ipcam.connection.OnvifCameraConnection
+com.github.ipcam.connection.DahuaCameraConnection
+com.github.ipcam.connection.IRayCameraConnection
+com.github.ipcam.connection.MinKingCameraConnection

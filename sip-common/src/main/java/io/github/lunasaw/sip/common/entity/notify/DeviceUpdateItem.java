@@ -1,11 +1,11 @@
-package io.github.lunasaw.gbproxy.client.entity.notify;
+package io.github.lunasaw.sip.common.entity.notify;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import io.github.lunasaw.gbproxy.client.entity.DeviceCatalog;
+import io.github.lunasaw.sip.common.entity.response.DeviceCatalog;
 import lombok.Getter;
 import lombok.Setter;
 

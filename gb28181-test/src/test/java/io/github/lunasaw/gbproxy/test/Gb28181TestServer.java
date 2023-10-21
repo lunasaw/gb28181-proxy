@@ -80,6 +80,11 @@ public class Gb28181TestServer {
         ServerSendCmd.deviceInfo((FromDevice) fromDevice, (ToDevice) toDevice);
     }
 
+    @Test
+    public void test_query_catalog() {
+        ServerSendCmd.deviceCatalogQuery((FromDevice)fromDevice, (ToDevice)toDevice);
+    }
+
     @SneakyThrows
     @AfterEach
     public void after() {

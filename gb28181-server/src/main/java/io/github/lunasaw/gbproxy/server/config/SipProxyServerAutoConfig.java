@@ -1,15 +1,14 @@
-package io.github.lunasaw.gbproxy.client.config;
+package io.github.lunasaw.gbproxy.server.config;
 
 import java.util.Map;
 
+import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageRequestProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
-public class SipProxyClientAutoConfig implements InitializingBean, ApplicationContextAware {
+public class SipProxyServerAutoConfig implements InitializingBean, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 

@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.entity.notify;
+package io.github.lunasaw.sip.common.entity.notify;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.luna.common.date.DateUtils;
-import io.github.lunasaw.gbproxy.client.entity.response.DeviceItem;
+import io.github.lunasaw.sip.common.entity.response.DeviceItem;
 import io.github.lunasaw.sip.common.entity.DeviceAlarm;
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
 import lombok.AllArgsConstructor;

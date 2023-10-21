@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.entity.notify;
+package io.github.lunasaw.sip.common.entity.notify;
 
 import javax.xml.bind.annotation.*;
 

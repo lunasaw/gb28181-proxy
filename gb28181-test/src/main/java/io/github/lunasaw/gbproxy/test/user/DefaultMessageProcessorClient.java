@@ -1,14 +1,16 @@
 package io.github.lunasaw.gbproxy.test.user;
 
-import io.github.lunasaw.gbproxy.client.entity.response.DeviceInfo;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
-import io.github.lunasaw.sip.common.entity.SipTransaction;
+import java.util.List;
+
+import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
+import io.github.lunasaw.sip.common.entity.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
+import io.github.lunasaw.sip.common.utils.XmlUtils;
 
 /**
  * @author luna
@@ -36,8 +38,23 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
 
     @Override
+    public DeviceRecord getDeviceRecord(DeviceRecordQuery userId) {
+        return (DeviceRecord)XmlUtils.parseFile("classpath:device/deviceRecord.xml", DeviceRecord.class);
+    }
+
+    @Override
+    public DeviceStatus getDeviceStatus(String userId) {
+        return (DeviceStatus)XmlUtils.parseFile("classpath:device/deviceInfo.xml", DeviceStatus.class);
+    }
+
+    @Override
     public DeviceInfo getDeviceInfo(String userId) {
-        // 获取文件解析转为模型返回
-        return null;
+        return (DeviceInfo)XmlUtils.parseFile("classpath:device/deviceInfo.xml", DeviceInfo.class);
+    }
+
+    @Override
+    public DeviceResponse getDeviceItem(String userId) {
+        DeviceResponse response = (DeviceResponse)XmlUtils.parseFile("classpath:device/catalog.xml", DeviceResponse.class);
+        return response;
     }
 }

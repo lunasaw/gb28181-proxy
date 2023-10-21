@@ -36,7 +36,7 @@ public class SipProcessorObserver implements SipListener {
     /**
      * 对SIP事件进行处理
      */
-    private static final Map<String, SipRequestProcessor> REQUEST_PROCESSOR_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, List<SipRequestProcessor>> REQUEST_PROCESSOR_MAP  = new ConcurrentHashMap<>();
     /**
      * 处理接收IPCamera发来的SIP协议响应消息
      */
@@ -55,7 +55,14 @@ public class SipProcessorObserver implements SipListener {
      * @param processor 处理程序
      */
     public synchronized static void addRequestProcessor(String method, SipRequestProcessor processor) {
-        REQUEST_PROCESSOR_MAP.put(method, processor);
+        if (REQUEST_PROCESSOR_MAP.containsKey(method)) {
+            List<SipRequestProcessor> processors = REQUEST_PROCESSOR_MAP.get(method);
+            processors.add(processor);
+        } else {
+            List<SipRequestProcessor> processors = new ArrayList<>();
+            processors.add(processor);
+            REQUEST_PROCESSOR_MAP.put(method, processors);
+        }
     }
 
     /**
@@ -86,13 +93,15 @@ public class SipProcessorObserver implements SipListener {
     public void processRequest(RequestEvent requestEvent) {
         AsyncEngineUtils.execute(() -> {
             String method = requestEvent.getRequest().getMethod();
-            SipRequestProcessor sipRequestProcessor = REQUEST_PROCESSOR_MAP.get(method);
-            if (sipRequestProcessor == null) {
+            List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
+            if (CollectionUtils.isEmpty(sipRequestProcessors)) {
                 log.warn("暂不支持方法 {} 的请求", method);
                 // TODO 回复错误玛
                 return;
             }
-            REQUEST_PROCESSOR_MAP.get(method).process(requestEvent);
+            for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
+                sipRequestProcessor.process(requestEvent);
+            }
         });
     }
 
