@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.test;
 
 import javax.sip.message.Request;
 
+import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -10,9 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import com.alibaba.fastjson2.JSON;
-import com.luna.common.text.RandomStrUtil;
 
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -38,7 +36,7 @@ public class Gb28181TestClient {
 
     @Autowired
     @Qualifier("clientTo")
-    private Device toLocalDevice;
+    private Device toDevice;
 
     @BeforeEach
     public void before() {
@@ -48,9 +46,9 @@ public class Gb28181TestClient {
     }
 
     @Test
-    public void btest() throws Exception {
+    public void test_register_client() throws Exception {
         String callId = SipRequestUtils.getNewCallId();
-        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toLocalDevice, callId, 300);
+        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice)fromDevice, (ToDevice)toDevice, callId, 300);
 
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override
@@ -62,8 +60,8 @@ public class Gb28181TestClient {
 
 
     @Test
-    public void test_register_server() {
-
+    public void test_keep_live() {
+        ClientSendCmd.deviceKeepLiveNotify((FromDevice)fromDevice, (ToDevice)toDevice, "ok");
     }
 
     @AfterEach

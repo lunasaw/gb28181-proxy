@@ -1,9 +1,10 @@
-package io.github.lunasaw.gbproxy.test.user;
+package io.github.lunasaw.gbproxy.test.user.server;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
+import io.github.lunasaw.sip.common.entity.notify.MediaStatusNotify;
 import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,10 @@ public class DefaultMessageProcessorServer implements MessageProcessorServer {
     @Override
     public void updateMobilePosition(MobilePositionNotify mobilePositionNotify) {
         log.info("接收到设备的位置信息 updateMobilePosition::mobilePositionNotify = {}", mobilePositionNotify);
+    }
+
+    @Override
+    public void updateMediaStatus(MediaStatusNotify mediaStatusNotify) {
+        log.info("接收到设备的媒体状态信息 updateMediaStatus::mediaStatusNotify = {}", mediaStatusNotify);
     }
 }

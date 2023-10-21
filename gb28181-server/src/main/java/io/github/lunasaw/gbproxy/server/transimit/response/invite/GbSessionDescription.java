@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.server.transimit.cmd.response.invite;
+package io.github.lunasaw.gbproxy.server.transimit.response.invite;
 
 import javax.sdp.SessionDescription;
 

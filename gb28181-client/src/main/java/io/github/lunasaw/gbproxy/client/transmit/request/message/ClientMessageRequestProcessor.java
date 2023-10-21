@@ -2,21 +2,19 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import com.luna.common.thread.AsyncEngineUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.stereotype.Component;
 
 import com.luna.common.text.StringTools;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.base.DeviceBase;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -28,11 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author luna
  */
-@Component("messageClientRequestProcessor")
+@Component
 @Getter
 @Setter
 @Slf4j
-public class MessageRequestProcessor extends SipRequestProcessorAbstract {
+public class ClientMessageRequestProcessor extends SipRequestProcessorAbstract {
 
     public static final String METHOD = "MESSAGE";
     public static final Map<String, MessageHandler> MESSAGE_HANDLER_MAP = new ConcurrentHashMap<>();
@@ -54,25 +52,26 @@ public class MessageRequestProcessor extends SipRequestProcessorAbstract {
 
         // 获取设备
         FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
+        String charset = Optional.of(fromDevice).map(Device::getCharset).orElse("gb2312");
+
         // 解析xml
         byte[] rawContent = request.getRawContent();
-        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(fromDevice.getCharset()));
-        DeviceBase deviceBase = (DeviceBase) XmlUtils.parseObj(xmlStr, DeviceQuery.class);
-        String cmdType = deviceBase.getCmdType();
+        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
+        String cmdType = XmlUtils.getCmdType(xmlStr);
 
-        MessageHandler messageHandler = MESSAGE_HANDLER_MAP.get(cmdType);
+        MessageHandler clientMessageHandler = MESSAGE_HANDLER_MAP.get(cmdType);
 
-        if (messageHandler == null) {
+        if (clientMessageHandler == null) {
             return;
         }
 
-        messageHandler.responseAck(evt);
+        clientMessageHandler.responseAck(evt);
 
         try {
-            messageHandler.handForEvt(evt);
+            clientMessageHandler.handForEvt(evt);
         } catch (Exception e) {
             log.error("process::evt = {} ", evt, e);
-            messageHandler.responseError(evt);
+            clientMessageHandler.responseError(evt);
         }
     }
 

@@ -15,35 +15,30 @@ public interface MessageProcessorServer extends SipUserGenerate {
 
     /**
      * 更新设备心跳信息
-     * 
      * @param deviceKeepLiveNotify
      */
     void keepLiveDevice(DeviceKeepLiveNotify deviceKeepLiveNotify);
 
     /**
      * 更新设备地址信息
-     * 
      * @param remoteAddressInfo
      */
     void updateRemoteAddress(RemoteAddressInfo remoteAddressInfo);
 
     /**
      * 更新报警信息
-     * 
      * @param deviceAlarmNotify
      */
     void updateDeviceAlarm(DeviceAlarmNotify deviceAlarmNotify);
 
     /**
      * 更新位置信息
-     * 
      * @param mobilePositionNotify
      */
     void updateMobilePosition(MobilePositionNotify mobilePositionNotify);
 
     /**
      * 更新媒体状态
-     * 
      * @param mediaStatusNotify
      */
     void updateMediaStatus(MediaStatusNotify mediaStatusNotify);

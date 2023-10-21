@@ -51,16 +51,8 @@ public class Gb28181TestServer {
     }
 
     @Test
-    public void btest() throws Exception {
-        String callId = SipRequestUtils.getNewCallId();
-        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, callId, 300);
+    public void test_register_server() throws Exception {
 
-        SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
-            @Override
-            public void response(EventResult eventResult) {
-                System.out.println(eventResult);
-            }
-        });
     }
 
     @Test
@@ -68,12 +60,6 @@ public class Gb28181TestServer {
         System.out.println(JSON.toJSONString(fromDevice));
         System.out.println(JSON.toJSONString(toDevice));
     }
-
-    @Test
-    public void test_register_server() {
-
-    }
-
 
     @Test
     public void test_query() {

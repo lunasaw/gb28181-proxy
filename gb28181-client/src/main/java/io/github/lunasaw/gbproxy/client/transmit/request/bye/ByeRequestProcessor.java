@@ -15,7 +15,7 @@ import lombok.Setter;
  *
  * @author luna
  */
-@Component
+@Component("clientRequestProcessor")
 @Getter
 @Setter
 @Slf4j

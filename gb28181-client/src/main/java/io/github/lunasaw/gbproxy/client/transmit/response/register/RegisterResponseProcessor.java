@@ -21,6 +21,7 @@ import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * description 发起后 Register 的响应处理器
@@ -31,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
+@Component
 public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
 
     public static final String METHOD = "REGISTER";

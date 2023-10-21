@@ -34,9 +34,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Getter
 @Setter
-@Component
+@Component("serverRegisterRequestProcessor")
 @Slf4j
-public class RegisterRequestProcessor extends SipRequestProcessorAbstract {
+public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract {
 
     public final String METHOD = "REGISTER";
 

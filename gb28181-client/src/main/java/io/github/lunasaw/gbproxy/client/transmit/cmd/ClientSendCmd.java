@@ -37,7 +37,7 @@ public class ClientSendCmd {
     }
 
     /**
-     * 上报设备状态
+     * 心跳设备状态
      *
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
@@ -46,7 +46,7 @@ public class ClientSendCmd {
      */
     public static String deviceKeepLiveNotify(FromDevice fromDevice, ToDevice toDevice, String status) {
         DeviceKeepLiveNotify deviceKeepLiveNotify =
-            new DeviceKeepLiveNotify(CmdTypeEnum.DEVICE_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+            new DeviceKeepLiveNotify(CmdTypeEnum.KEEPALIVE.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         deviceKeepLiveNotify.setStatus(status);
 

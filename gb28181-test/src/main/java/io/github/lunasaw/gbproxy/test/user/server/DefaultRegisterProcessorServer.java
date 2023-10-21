@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.test.user;
+package io.github.lunasaw.gbproxy.test.user.server;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
