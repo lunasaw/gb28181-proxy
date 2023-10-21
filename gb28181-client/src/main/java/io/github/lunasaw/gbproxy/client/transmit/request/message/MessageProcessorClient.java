@@ -1,8 +1,13 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.notify.BroadcastNotifyMessageHandler;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.CatalogQueryMessageClientHandler;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.DeviceInfoQueryMessageClientHandler;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.DeviceStatusQueryMessageClientHandler;
+import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
+import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
+import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
+import io.github.lunasaw.sip.common.entity.query.DeviceConfigDownload;
 import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
 import io.github.lunasaw.sip.common.entity.response.*;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
@@ -51,4 +56,29 @@ public interface MessageProcessorClient extends SipUserGenerate {
      * @return
      */
     DeviceResponse getDeviceItem(String userId);
+
+    /**
+     * 语音广播通知
+     * {@link BroadcastNotifyMessageHandler}
+     *
+     * @param broadcastNotify
+     * @return
+     */
+    void broadcastNotify(DeviceBroadcastNotify broadcastNotify);
+
+    /**
+     * 设备告警通知
+     * 
+     * @param deviceAlarmQuery
+     * @return
+     */
+    DeviceAlarmNotify getDeviceAlarmNotify(DeviceAlarmQuery deviceAlarmQuery);
+
+    /**
+     * 设备配置查询
+     * 
+     * @param deviceConfigDownload
+     * @return
+     */
+    DeviceConfigResponse getDeviceConfigResponse(DeviceConfigDownload deviceConfigDownload);
 }

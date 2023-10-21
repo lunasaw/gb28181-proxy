@@ -17,6 +17,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 响应设备目录查询
+ * 
  * @author luna
  * @date 2023/10/19
  */

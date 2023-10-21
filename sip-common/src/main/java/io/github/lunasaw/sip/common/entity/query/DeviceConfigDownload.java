@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.github.lunasaw.sip.common.entity.base.DeviceBase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,9 +34,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Query")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceConfigDownload extends DeviceQuery {
+public class DeviceConfigDownload extends DeviceBase {
 
 
+    /**
+     * 查询配置参数类型(必选),可查询的配 置 类 型 包 括
+     * 基 本 参 数 配 置:BasicParam,
+     * 视 频 参数范围:VideoParamOpt,SVAC
+     * 编 码 配 置:SVACEncodeConfig,SVAC
+     * 解 码 配 置:SVACDe-codeConfig。
+     * 可同时查询多个配置类型,各类型以“/”分隔,可返回与查询
+     * SN 值相同的多个响应,每个响应对应一个配置类型
+     */
     @XmlElement(name = "ConfigType")
     public String configType;
 
