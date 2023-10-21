@@ -2,7 +2,7 @@ name: Publish package to the Maven Central Repository and GitHub Packages
 'on':
   push:
     branches:
-      - main_tag
+      - master
 jobs:
   publish:
     runs-on: ubuntu-latest
