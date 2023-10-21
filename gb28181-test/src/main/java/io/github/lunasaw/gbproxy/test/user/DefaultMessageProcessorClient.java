@@ -53,8 +53,8 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
     }
 
     @Override
-    public List<DeviceItem> getDeviceItem(String userId) {
+    public DeviceResponse getDeviceItem(String userId) {
         DeviceResponse response = (DeviceResponse)XmlUtils.parseFile("classpath:device/catalog.xml", DeviceResponse.class);
-        return response.getDeviceItemList();
+        return response;
     }
 }

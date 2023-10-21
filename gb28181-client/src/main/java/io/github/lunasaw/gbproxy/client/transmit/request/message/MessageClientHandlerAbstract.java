@@ -6,9 +6,6 @@ import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +13,7 @@ import com.luna.common.text.StringTools;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.transmit.ServerResponseCmd;
+import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
@@ -27,17 +24,19 @@ import lombok.Data;
  */
 @Data
 @Component
-public abstract class MessageHandlerAbstract implements MessageHandler {
+public abstract class MessageClientHandlerAbstract implements MessageHandler {
 
     @Resource
     public MessageProcessorClient messageProcessorClient;
 
-    public MessageHandlerAbstract(MessageProcessorClient messageProcessorClient) {
+    public MessageClientHandlerAbstract(MessageProcessorClient messageProcessorClient) {
         this.messageProcessorClient = messageProcessorClient;
     }
 
     public DeviceSession getDeviceSession(RequestEvent event) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
+
+        // 特别注意。这里的userId和sipId是反的，因为是客户端没收到消息，所以这里的from和to是反的
         String userId = SipUtils.getUserIdFromToHeader(sipRequest);
         String sipId = SipUtils.getUserIdFromFromHeader(sipRequest);
 
@@ -47,13 +46,13 @@ public abstract class MessageHandlerAbstract implements MessageHandler {
     public void responseAck(RequestEvent event) {
         SIPRequest sipRequest = (SIPRequest)event.getRequest();
         String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ServerResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
+        ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
     }
 
     public void responseError(RequestEvent event) {
         SIPRequest sipRequest = (SIPRequest)event.getRequest();
         String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ServerResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "OK", receiveIp, sipRequest);
+        ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "OK", receiveIp, sipRequest);
     }
 
     public <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {

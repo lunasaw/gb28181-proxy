@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.test.config;
 
-import io.github.lunasaw.gbproxy.client.config.MessageHandlerBeanConfig;
+import io.github.lunasaw.gbproxy.client.config.MessageClientHandlerBeanConfig;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageRequestProcessor;
 import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterProcessorServer;
 import io.github.lunasaw.gbproxy.server.transimit.request.register.RegisterRequestProcessor;
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Import;
  * @date 2023/10/17
  */
 @Configuration
-@Import(value = MessageHandlerBeanConfig.class)
+@Import(value = MessageClientHandlerBeanConfig.class)
 public class SipProcessorConfiguration {
 
     @Autowired

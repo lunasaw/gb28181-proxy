@@ -1,17 +1,16 @@
-package io.github.lunasaw.gbproxy.client.transmit.request.message.handler;
+package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
 import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class RecordInfoQueryMessageHandler extends MessageHandlerAbstract {
+public class RecordInfoQueryMessageClientHandler extends MessageClientHandlerAbstract {
 
     public static final String     CMD_TYPE = "RecordInfo";
 
@@ -33,7 +32,7 @@ public class RecordInfoQueryMessageHandler extends MessageHandlerAbstract {
 
     private MessageProcessorClient messageProcessorClient;
 
-    public RecordInfoQueryMessageHandler(MessageProcessorClient messageProcessorClient) {
+    public RecordInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
     }
 

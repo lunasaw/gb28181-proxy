@@ -53,6 +53,10 @@ public class ClientSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceKeepLiveNotify);
     }
 
+    public static String deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, DeviceResponse deviceResponse) {
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceResponse);
+    }
+
     public static String deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems, String sn) {
         DeviceResponse deviceResponse =
                 new DeviceResponse(CmdTypeEnum.CATALOG.getType(), sn, toDevice.getUserId());
@@ -60,7 +64,7 @@ public class ClientSendCmd {
         deviceResponse.setSumNum(deviceItems.size());
         deviceResponse.setDeviceItemList(deviceItems);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceResponse);
+        return deviceChannelCatalogResponse(fromDevice, toDevice, deviceResponse);
     }
 
     /**

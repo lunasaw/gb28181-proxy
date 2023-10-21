@@ -1,7 +1,5 @@
 package io.github.lunasaw.sip.common.enums;
 
-import io.github.lunasaw.sip.common.constant.Constant;
-
 /**
  * @author luna
  * @date 2023/10/13

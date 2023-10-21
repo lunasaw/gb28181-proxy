@@ -1,13 +1,11 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.CatalogQueryMessageClientHandler;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.DeviceInfoQueryMessageClientHandler;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.DeviceStatusQueryMessageClientHandler;
 import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
-import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
-import io.github.lunasaw.sip.common.entity.response.DeviceItem;
-import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
-import io.github.lunasaw.sip.common.entity.response.DeviceStatus;
+import io.github.lunasaw.sip.common.entity.response.*;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
-
-import java.util.List;
 
 /**
  * @author luna
@@ -18,7 +16,7 @@ public interface MessageProcessorClient extends SipUserGenerate {
     /**
      * 获取设备录像信息
      * DeviceRecord
-     * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.DeviceInfoQueryMessageHandler}
+     * {@link DeviceInfoQueryMessageClientHandler}
      *
      * @param deviceRecordQuery 设备Id
      * @return DeviceInfo
@@ -28,7 +26,7 @@ public interface MessageProcessorClient extends SipUserGenerate {
     /**
      * 获取设备信息
      * DeviceStatus
-     * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.DeviceStatusQueryMessageHandler}
+     * {@link DeviceStatusQueryMessageClientHandler}
      *
      * @param userId 设备Id
      * @return DeviceInfo
@@ -38,7 +36,7 @@ public interface MessageProcessorClient extends SipUserGenerate {
     /**
      * 获取设备信息
      * DeviceInfo
-     * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.DeviceInfoQueryMessageHandler}
+     * {@link DeviceInfoQueryMessageClientHandler}
      *
      * @param userId 设备Id
      * @return DeviceInfo
@@ -47,10 +45,10 @@ public interface MessageProcessorClient extends SipUserGenerate {
 
     /**
      * 获取设备通道信息
-     * {@link io.github.lunasaw.gbproxy.client.transmit.request.message.handler.CatalogQueryMessageHandler}
+     * {@link CatalogQueryMessageClientHandler}
      *
      * @param userId
      * @return
      */
-    List<DeviceItem> getDeviceItem(String userId);
+    DeviceResponse getDeviceItem(String userId);
 }

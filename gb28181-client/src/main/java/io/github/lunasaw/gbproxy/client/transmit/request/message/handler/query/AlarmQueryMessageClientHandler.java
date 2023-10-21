@@ -1,14 +1,13 @@
-package io.github.lunasaw.gbproxy.client.transmit.request.message.handler;
+package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 
 import javax.sip.RequestEvent;
 
-import lombok.Getter;
-import lombok.Setter;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,15 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class BaseMessageHandler extends MessageHandlerAbstract {
+public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract {
 
-    public static final String CMD_TYPE = "Catalog";
+    public static final String     CMD_TYPE = "Alarm";
 
-    private String cmdType = CMD_TYPE;
+    private String                 cmdType  = CMD_TYPE;
 
     private MessageProcessorClient messageProcessorClient;
 
-    public BaseMessageHandler(MessageProcessorClient messageProcessorClient) {
+    public AlarmQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
     }
 

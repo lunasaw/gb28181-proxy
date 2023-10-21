@@ -15,7 +15,7 @@ import io.github.lunasaw.sip.common.utils.SipRequestUtils;
  * @author luna
  * @date 2023/10/19
  */
-public class ServerResponseCmd {
+public class ResponseCmd {
 
     public static void doResponseCmd(int statusCode, String phrase, String ip, Request request) {
         doResponseCmd(statusCode, phrase, ip, request, new ArrayList<>());
