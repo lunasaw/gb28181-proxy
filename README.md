@@ -2,7 +2,6 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.lunasaw/sip-proxy)](https://mvnrepository.com/artifact/io.github.lunasaw/sip-common)
 [![GitHub license](https://img.shields.io/badge/MIT_License-blue.svg)](https://raw.githubusercontent.com/lunasaw/gb28181-proxy/master/LICENSE)
-[![Build Status](https://github.com/lunasaw/gb28181-proxy/actions/workflows/maven-publish.yml/badge.svg?branch=master)](https://github.com/lunasaw/gb28181-proxy/actions)
 
 [www.isluna.ml](http://lunasaw.github.io)
 

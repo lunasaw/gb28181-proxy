@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.constant.Constant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +37,7 @@ public abstract class MessageClientHandlerAbstract implements MessageHandler {
     public DeviceSession getDeviceSession(RequestEvent event) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
 
-        // 特别注意。这里的userId和sipId是反的，因为是客户端没收到消息，所以这里的from和to是反的
+        // 特别注意。这里的userId和sipId是反的，因为是客户端收到消息，所以这里的from是服务端，to是客户端
         String userId = SipUtils.getUserIdFromToHeader(sipRequest);
         String sipId = SipUtils.getUserIdFromFromHeader(sipRequest);
 
@@ -59,10 +60,10 @@ public abstract class MessageClientHandlerAbstract implements MessageHandler {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         byte[] rawContent = sipRequest.getRawContent();
         if (StringUtils.isBlank(charset)) {
-            charset = "gb2312";
+            charset = Constant.GB2312;
         }
         String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
-        T obj = (T) XmlUtils.parseObj(xmlStr, clazz);
-        return obj;
+        Object o = XmlUtils.parseObj(xmlStr, clazz);
+        return (T) o;
     }
 }
