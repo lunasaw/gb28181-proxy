@@ -97,7 +97,7 @@ public class ServerSendCmd {
      * 设备通道列表查询
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
+     * @param toDevice 接收设备
      * @return callId
      */
     public static String deviceCatalogQuery(FromDevice fromDevice, ToDevice toDevice) {
@@ -175,7 +175,7 @@ public class ServerSendCmd {
      * 回复ACK
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
+     * @param toDevice 接收设备
      * @return
      */
     public static String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
@@ -190,7 +190,7 @@ public class ServerSendCmd {
      * 发送BYE
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
+     * @param toDevice 接收设备
      * @return
      */
     public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
@@ -257,10 +257,10 @@ public class ServerSendCmd {
     /**
      * 看守位控制命令
      *
-     * @param fromDevice  发送设备
-     * @param toDevice    接收设备
-     * @param enable      看守位使能：1 = 开启，0 = 关闭
-     * @param resetTime   自动归位时间间隔，开启看守位时使用，单位:秒(s)
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @param enable 看守位使能：1 = 开启，0 = 关闭
+     * @param resetTime 自动归位时间间隔，开启看守位时使用，单位:秒(s)
      * @param presetIndex 调用预置位编号，开启看守位时使用，取值范围0~255
      * @return
      */
@@ -332,19 +332,34 @@ public class ServerSendCmd {
      * 伸缩控制
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
-     * @param dragZoomIn 放大
-     * @param dragZoomOut 缩小
+     * @param toDevice   接收设备
+     * @param dragZoom   缩小
      * @return
      */
-    public String deviceControlDrag(FromDevice fromDevice, ToDevice toDevice, DeviceControlDrag.DragZoom dragZoomIn,
-                                    DeviceControlDrag.DragZoom dragZoomOut) {
-        DeviceControlDrag deviceControlDrag =
-                new DeviceControlDrag(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+    public String deviceControlDragOut(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
+        DeviceControlDragOut dragZoomOut =
+                new DeviceControlDragOut(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
-        deviceControlDrag.setDragZoomIn(dragZoomIn);
-        deviceControlDrag.setDragZoomOut(dragZoomOut);
+        dragZoomOut.setDragZoomOut(dragZoom);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlDrag);
+        return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomOut);
+    }
+
+    /**
+     * 伸缩控制
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice 接收设备
+     * @param dragZoom 放大
+     * 
+     * @return
+     */
+    public String deviceControlDrag(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
+        DeviceControlDragIn dragZoomIn =
+                new DeviceControlDragIn(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        dragZoomIn.setDragZoomIn(dragZoom);
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomIn);
     }
 }
