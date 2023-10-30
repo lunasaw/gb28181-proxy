@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +53,7 @@ public class ClientMessageRequestProcessor extends SipRequestProcessorAbstract {
 
         // 获取设备
         FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
-        String charset = Optional.of(fromDevice).map(Device::getCharset).orElse("gb2312");
+        String charset = Optional.of(fromDevice).map(Device::getCharset).orElse(Constant.GB2312);
 
         // 解析xml
         byte[] rawContent = request.getRawContent();

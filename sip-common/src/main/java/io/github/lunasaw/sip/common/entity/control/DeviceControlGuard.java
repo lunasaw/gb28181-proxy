@@ -6,7 +6,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.github.lunasaw.sip.common.entity.base.DeviceBase;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author luna
@@ -17,15 +20,13 @@ import lombok.*;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControl extends DeviceBase {
+public class DeviceControlGuard extends DeviceBase {
 
     @XmlElement(name = "GuardCmd")
     public String guardCmd;
 
-    @XmlElement(name = "IFameCmd")
-    public String iFameCmd;
 
-    public DeviceControl(String cmdType, String sn, String deviceId) {
+    public DeviceControlGuard(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
     }
 

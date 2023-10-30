@@ -1,6 +1,7 @@
 package io.github.lunasaw.gbproxy.server.transimit.cmd;
 
 import java.util.Date;
+import java.util.Optional;
 
 import com.luna.common.date.DateUtils;
 import com.luna.common.text.RandomStrUtil;
@@ -219,9 +220,9 @@ public class ServerSendCmd {
      * @param guardCmdStr "SetGuard"/"ResetGuard"
      * @return
      */
-    public String deviceControl(FromDevice fromDevice, ToDevice toDevice, String guardCmdStr) {
-        DeviceControl deviceControl =
-            new DeviceControl(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+    public String deviceControlGuardCmd(FromDevice fromDevice, ToDevice toDevice, String guardCmdStr) {
+        DeviceControlGuard deviceControl =
+                new DeviceControlGuard(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
         deviceControl.setGuardCmd(guardCmdStr);
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControl);
     }
@@ -246,24 +247,28 @@ public class ServerSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlAlarm);
     }
 
+    public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, DeviceControlPosition.HomePosition homePosition) {
+        DeviceControlPosition deviceControlPosition =
+                new DeviceControlPosition(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPosition);
+    }
+
     /**
-     *
      * 看守位控制命令
      *
-     * @param fromDevice 发送设备
-     * @param toDevice 接收设备
-     * @param enable 看守位使能：1 = 开启，0 = 关闭
-     * @param resetTime 自动归位时间间隔，开启看守位时使用，单位:秒(s)
+     * @param fromDevice  发送设备
+     * @param toDevice    接收设备
+     * @param enable      看守位使能：1 = 开启，0 = 关闭
+     * @param resetTime   自动归位时间间隔，开启看守位时使用，单位:秒(s)
      * @param presetIndex 调用预置位编号，开启看守位时使用，取值范围0~255
      * @return
      */
     public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String enable, String resetTime, String presetIndex) {
 
-        DeviceControlPosition deviceControlPosition =
-            new DeviceControlPosition(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(),
-                fromDevice.getUserId(), new DeviceControlPosition.HomePosition(enable, resetTime, presetIndex));
+        DeviceControlPosition.HomePosition homePosition = new DeviceControlPosition.HomePosition(enable, resetTime, presetIndex);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPosition);
+        return deviceControlAlarm(fromDevice, toDevice, homePosition);
     }
 
     /**
@@ -315,11 +320,12 @@ public class ServerSendCmd {
      * @param toDevice 接收设备
      * @return
      */
-    public String deviceControlIdr(FromDevice fromDevice, ToDevice toDevice) {
-        DeviceControl deviceControl =
-                new DeviceControl(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
-        deviceControl.setIFameCmd("Send");
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControl);
+    public String deviceControlIdr(FromDevice fromDevice, ToDevice toDevice, String cmdStr) {
+        DeviceControlIFame deviceControlIFame =
+                new DeviceControlIFame(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+        String cmd = Optional.ofNullable(cmdStr).orElse("Send");
+        deviceControlIFame.setIFameCmd(cmd);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlIFame);
     }
 
     /**
