@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.contro
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.sip.common.entity.control.ControlBase;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
@@ -41,7 +42,7 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
         // 设备查询
         FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
 
-        DeviceControlBase deviceControlBase = parseRequest(event, fromDevice.getCharset(), DeviceControlBase.class);
+        ControlBase deviceControlBase = parseRequest(event, fromDevice.getCharset(), ControlBase.class);
 
         String controlType = deviceControlBase.getControlType();
 
@@ -50,8 +51,6 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
         Object o = parseRequest(event, fromDevice.getCharset(), deviceControlType.getClazz());
 
         messageProcessorClient.deviceControl(o);
-
-        log.info("handForEvt::event = {}", event);
     }
 
     @Override

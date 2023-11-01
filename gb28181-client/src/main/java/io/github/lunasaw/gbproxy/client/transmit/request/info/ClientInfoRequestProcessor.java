@@ -14,7 +14,7 @@ import javax.sip.RequestEvent;
 @Component
 @Getter
 @Setter
-public class InfoRequestProcessor extends SipRequestProcessorAbstract {
+public class ClientInfoRequestProcessor extends SipRequestProcessorAbstract {
 
 
     public static final String METHOD = "INFO";

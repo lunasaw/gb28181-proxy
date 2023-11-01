@@ -204,7 +204,7 @@ public class ServerSendCmd {
      * @param toDevice 接收设备
      * @return
      */
-    public String deviceBroadcast(FromDevice fromDevice, ToDevice toDevice) {
+    public static String deviceBroadcast(FromDevice fromDevice, ToDevice toDevice) {
         DeviceBroadcastNotify deviceBroadcastNotify =
                 new DeviceBroadcastNotify(CmdTypeEnum.BROADCAST.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId(),
                         toDevice.getUserId());
@@ -220,7 +220,7 @@ public class ServerSendCmd {
      * @param guardCmdStr "SetGuard"/"ResetGuard"
      * @return
      */
-    public String deviceControlGuardCmd(FromDevice fromDevice, ToDevice toDevice, String guardCmdStr) {
+    public static String deviceControlGuardCmd(FromDevice fromDevice, ToDevice toDevice, String guardCmdStr) {
         DeviceControlGuard deviceControl =
                 new DeviceControlGuard(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
         deviceControl.setGuardCmd(guardCmdStr);
@@ -236,7 +236,7 @@ public class ServerSendCmd {
      * @param alarmType 类型
      * @return
      */
-    public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String alarmMethod, String alarmType) {
+    public static String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String alarmMethod, String alarmType) {
 
         DeviceControlAlarm deviceControlAlarm = new DeviceControlAlarm(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(),
             fromDevice.getUserId());
@@ -247,7 +247,7 @@ public class ServerSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlAlarm);
     }
 
-    public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, DeviceControlPosition.HomePosition homePosition) {
+    public static String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, DeviceControlPosition.HomePosition homePosition) {
         DeviceControlPosition deviceControlPosition =
                 new DeviceControlPosition(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
@@ -264,7 +264,7 @@ public class ServerSendCmd {
      * @param presetIndex 调用预置位编号，开启看守位时使用，取值范围0~255
      * @return
      */
-    public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String enable, String resetTime, String presetIndex) {
+    public static String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String enable, String resetTime, String presetIndex) {
 
         DeviceControlPosition.HomePosition homePosition = new DeviceControlPosition.HomePosition(enable, resetTime, presetIndex);
 
@@ -282,7 +282,7 @@ public class ServerSendCmd {
      * @param heartBeatCount 心跳超时次数（可选）
      * @return
      */
-    public String deviceConfig(FromDevice fromDevice, ToDevice toDevice, String name, String expiration,
+    public static String deviceConfig(FromDevice fromDevice, ToDevice toDevice, String name, String expiration,
         String heartBeatInterval, String heartBeatCount) {
 
         DeviceConfigControl deviceConfigControl =
@@ -302,7 +302,7 @@ public class ServerSendCmd {
      * @param configType 配置类型
      * @return
      */
-    public String deviceConfigDownload(FromDevice fromDevice, ToDevice toDevice, String configType) {
+    public static String deviceConfigDownload(FromDevice fromDevice, ToDevice toDevice, String configType) {
 
         DeviceConfigDownload deviceConfig =
             new DeviceConfigDownload(CmdTypeEnum.CONFIG_DOWNLOAD.getType(), RandomStrUtil.getValidationCode(),
@@ -320,7 +320,7 @@ public class ServerSendCmd {
      * @param toDevice 接收设备
      * @return
      */
-    public String deviceControlIdr(FromDevice fromDevice, ToDevice toDevice, String cmdStr) {
+    public static String deviceControlIdr(FromDevice fromDevice, ToDevice toDevice, String cmdStr) {
         DeviceControlIFame deviceControlIFame =
                 new DeviceControlIFame(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
         String cmd = Optional.ofNullable(cmdStr).orElse("Send");
@@ -336,7 +336,7 @@ public class ServerSendCmd {
      * @param dragZoom   缩小
      * @return
      */
-    public String deviceControlDragOut(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
+    public static String deviceControlDragOut(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
         DeviceControlDragOut dragZoomOut =
                 new DeviceControlDragOut(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
@@ -354,7 +354,7 @@ public class ServerSendCmd {
      * 
      * @return
      */
-    public String deviceControlDrag(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
+    public static String deviceControlDrag(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
         DeviceControlDragIn dragZoomIn =
                 new DeviceControlDragIn(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 

@@ -5,6 +5,7 @@ import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
 import io.github.lunasaw.sip.common.entity.query.DeviceConfigDownload;
 import io.github.lunasaw.sip.common.entity.response.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import io.github.lunasaw.sip.common.utils.XmlUtils;
  * @date 2023/10/17
  */
 @Component
+@Slf4j
 public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Autowired
@@ -73,5 +75,10 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
     @Override
     public DeviceConfigResponse getDeviceConfigResponse(DeviceConfigDownload deviceConfigDownload) {
         return null;
+    }
+
+    @Override
+    public <T> void deviceControl(T deviceControlBase) {
+        log.info("deviceControl::deviceControlBase = {}", deviceControlBase);
     }
 }

@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.test;
 import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
+import io.github.lunasaw.sip.common.entity.control.DragZoom;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +70,20 @@ public class Gb28181TestServer {
     @Test
     public void test_query_catalog() {
         ServerSendCmd.deviceCatalogQuery((FromDevice)fromDevice, (ToDevice)toDevice);
+    }
+
+    @Test
+    public void control_test() {
+        DragZoom dragZoom = new DragZoom();
+        dragZoom.setLength("1");
+        dragZoom.setWidth("1");
+        dragZoom.setMidPointX("1");
+        dragZoom.setMidPointY("1");
+        dragZoom.setLengthX("1");
+        dragZoom.setLengthY("1");
+
+        String s = ServerSendCmd.deviceControlDrag((FromDevice) fromDevice, (ToDevice) toDevice, dragZoom);
+        System.out.println(s);
     }
 
     @SneakyThrows

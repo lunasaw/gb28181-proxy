@@ -16,7 +16,7 @@ import lombok.Setter;
 @Component
 @Getter
 @Setter
-public class InfoRequestProcessor extends SipRequestProcessorAbstract {
+public class ServerInfoRequestProcessor extends SipRequestProcessorAbstract {
 
     public static final String METHOD = "INFO";
 
