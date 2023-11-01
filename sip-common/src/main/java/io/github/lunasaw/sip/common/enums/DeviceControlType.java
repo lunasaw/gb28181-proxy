@@ -1,30 +1,30 @@
 package io.github.lunasaw.sip.common.enums;
 
-import io.github.lunasaw.sip.common.entity.control.*;
-import io.github.lunasaw.sip.common.utils.SipRequestUtils;
-import lombok.SneakyThrows;
-import org.dom4j.Element;
-import org.springframework.util.ObjectUtils;
-
-import javax.sip.header.ContentTypeHeader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import lombok.Getter;
+import org.springframework.util.ObjectUtils;
+
+import io.github.lunasaw.sip.common.entity.control.*;
+import lombok.SneakyThrows;
+
+@Getter
 public enum DeviceControlType {
 
     /**
      * 云台控制
      * 上下左右，预置位，扫描，辅助功能，巡航
      */
-    PTZ("PTZCmd", "云台控制", null),
+    PTZ("PTZCmd", "云台控制", DeviceControlPtz.class),
     /**
      * 远程启动
      */
-    TELE_BOOT("TeleBoot", "远程启动", null),
+    TELE_BOOT("TeleBoot", "远程启动", DeviceControlTeleBoot.class),
     /**
      * 录像控制
      */
-    RECORD("RecordCmd", "录像控制", null),
+    RECORD("RecordCmd", "录像控制", DeviceControlRecordCmd.class),
     /**
      * 布防撤防
      */
@@ -50,14 +50,10 @@ public enum DeviceControlType {
      */
     HOME_POSITION("HomePosition", "看守位", DeviceControlPosition.class);
 
-    private final String val;
-
-    private final String desc;
-
-    private final Class<?> clazz;
-
     private static final Map<String, DeviceControlType> MAP = new ConcurrentHashMap<>();
-
+    private final String val;
+    private final String desc;
+    private final Class<?> clazz;
 
     DeviceControlType(String val, String desc, Class<?> clazz) {
         this.val = val;
@@ -89,16 +85,4 @@ public enum DeviceControlType {
         }
     }
 
-
-    public Class<?> getClazz() {
-        return clazz;
-    }
-
-    public String getVal() {
-        return val;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
 }

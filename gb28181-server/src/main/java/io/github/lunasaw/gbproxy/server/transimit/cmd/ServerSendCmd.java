@@ -354,7 +354,7 @@ public class ServerSendCmd {
      * 
      * @return
      */
-    public static String deviceControlDrag(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
+    public static String deviceControlDragIn(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
         DeviceControlDragIn dragZoomIn =
                 new DeviceControlDragIn(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 

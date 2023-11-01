@@ -82,7 +82,7 @@ public class Gb28181TestServer {
         dragZoom.setLengthX("1");
         dragZoom.setLengthY("1");
 
-        String s = ServerSendCmd.deviceControlDrag((FromDevice) fromDevice, (ToDevice) toDevice, dragZoom);
+        String s = ServerSendCmd.deviceControlDragIn((FromDevice) fromDevice, (ToDevice) toDevice, dragZoom);
         System.out.println(s);
     }
 
