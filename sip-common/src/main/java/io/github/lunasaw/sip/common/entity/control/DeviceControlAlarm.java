@@ -35,7 +35,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlAlarm extends DeviceBase {
+public class DeviceControlAlarm extends DeviceControlBase {
 
     @XmlElement(name = "AlarmCmd")
     public String    alarmCmd;
@@ -45,6 +45,7 @@ public class DeviceControlAlarm extends DeviceBase {
 
     public DeviceControlAlarm(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+        this.setControlType("AlarmCmd");
     }
 
     public static void main(String[] args) {

@@ -2,12 +2,14 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.contro
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.base.DeviceSession;
+import io.github.lunasaw.sip.common.entity.control.DeviceControlBase;
+import io.github.lunasaw.sip.common.enums.DeviceControlType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,6 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
 
     private String cmdType = CMD_TYPE;
 
-
     public DeviceControlMessageHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
     }
@@ -40,8 +41,15 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
         // 设备查询
         FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
 
-//        DeviceControl deviceControl = parseRequest(event, fromDevice.getCharset(), DeviceControl.class);
+        DeviceControlBase deviceControlBase = parseRequest(event, fromDevice.getCharset(), DeviceControlBase.class);
 
+        String controlType = deviceControlBase.getControlType();
+
+        DeviceControlType deviceControlType = DeviceControlType.getDeviceControlType(controlType);
+
+        Object o = parseRequest(event, fromDevice.getCharset(), deviceControlType.getClazz());
+
+        messageProcessorClient.deviceControl(o);
 
         log.info("handForEvt::event = {}", event);
     }

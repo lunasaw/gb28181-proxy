@@ -35,7 +35,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlDragOut extends DeviceBase {
+public class DeviceControlDragOut extends DeviceControlBase {
 
 
     /**
@@ -46,6 +46,7 @@ public class DeviceControlDragOut extends DeviceBase {
 
     public DeviceControlDragOut(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+        this.setControlType("DragZoomOut");
     }
 
     public static void main(String[] args) {

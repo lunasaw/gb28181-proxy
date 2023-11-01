@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlGuard extends DeviceBase {
+public class DeviceControlGuard extends DeviceControlBase {
 
     @XmlElement(name = "GuardCmd")
     public String guardCmd;
@@ -28,6 +28,7 @@ public class DeviceControlGuard extends DeviceBase {
 
     public DeviceControlGuard(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+        this.setControlType("GuardCmd");
     }
 
 

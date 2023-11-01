@@ -34,7 +34,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlPosition extends DeviceBase {
+public class DeviceControlPosition extends DeviceControlBase {
 
 
     @XmlElement(name = "HomePosition")
@@ -42,6 +42,7 @@ public class DeviceControlPosition extends DeviceBase {
 
     public DeviceControlPosition(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+        this.setControlType("HomePosition");
     }
 
     public static void main(String[] args) {

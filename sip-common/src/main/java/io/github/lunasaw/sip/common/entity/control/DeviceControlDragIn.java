@@ -35,7 +35,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlDragIn extends DeviceBase {
+public class DeviceControlDragIn extends DeviceControlBase {
 
     /**
      * 放大
@@ -46,6 +46,7 @@ public class DeviceControlDragIn extends DeviceBase {
 
     public DeviceControlDragIn(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+        this.setControlType("DragZoomIn");
     }
 
     public static void main(String[] args) {

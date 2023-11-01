@@ -4,6 +4,7 @@ import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.notify.
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.CatalogQueryMessageClientHandler;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.DeviceInfoQueryMessageClientHandler;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.DeviceStatusQueryMessageClientHandler;
+import io.github.lunasaw.sip.common.entity.control.DeviceControlBase;
 import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
@@ -81,4 +82,12 @@ public interface MessageProcessorClient extends SipUserGenerate {
      * @return
      */
     DeviceConfigResponse getDeviceConfigResponse(DeviceConfigDownload deviceConfigDownload);
+
+    /**
+     * 设备控制
+     *
+     * @param deviceControlBase
+     */
+    <T> void deviceControl(T deviceControlBase);
+
 }
