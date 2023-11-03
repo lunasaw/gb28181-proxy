@@ -14,7 +14,6 @@ import javax.xml.bind.Unmarshaller;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.dom4j.tree.DefaultDocument;
 import org.springframework.util.ResourceUtils;
 
 import com.google.common.base.Joiner;
