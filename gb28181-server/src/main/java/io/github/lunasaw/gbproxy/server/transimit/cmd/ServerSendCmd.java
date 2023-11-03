@@ -1,6 +1,7 @@
 package io.github.lunasaw.gbproxy.server.transimit.cmd;
 
 import java.util.Date;
+import java.util.Optional;
 
 import com.luna.common.date.DateUtils;
 import com.luna.common.text.RandomStrUtil;
@@ -96,7 +97,7 @@ public class ServerSendCmd {
      * 设备通道列表查询
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
+     * @param toDevice 接收设备
      * @return callId
      */
     public static String deviceCatalogQuery(FromDevice fromDevice, ToDevice toDevice) {
@@ -174,7 +175,7 @@ public class ServerSendCmd {
      * 回复ACK
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
+     * @param toDevice 接收设备
      * @return
      */
     public static String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
@@ -189,7 +190,7 @@ public class ServerSendCmd {
      * 发送BYE
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
+     * @param toDevice 接收设备
      * @return
      */
     public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
@@ -203,7 +204,7 @@ public class ServerSendCmd {
      * @param toDevice 接收设备
      * @return
      */
-    public String deviceBroadcast(FromDevice fromDevice, ToDevice toDevice) {
+    public static String deviceBroadcast(FromDevice fromDevice, ToDevice toDevice) {
         DeviceBroadcastNotify deviceBroadcastNotify =
                 new DeviceBroadcastNotify(CmdTypeEnum.BROADCAST.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId(),
                         toDevice.getUserId());
@@ -219,9 +220,9 @@ public class ServerSendCmd {
      * @param guardCmdStr "SetGuard"/"ResetGuard"
      * @return
      */
-    public String deviceControl(FromDevice fromDevice, ToDevice toDevice, String guardCmdStr) {
-        DeviceControl deviceControl =
-            new DeviceControl(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+    public static String deviceControlGuardCmd(FromDevice fromDevice, ToDevice toDevice, String guardCmdStr) {
+        DeviceControlGuard deviceControl =
+                new DeviceControlGuard(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
         deviceControl.setGuardCmd(guardCmdStr);
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControl);
     }
@@ -235,7 +236,7 @@ public class ServerSendCmd {
      * @param alarmType 类型
      * @return
      */
-    public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String alarmMethod, String alarmType) {
+    public static String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String alarmMethod, String alarmType) {
 
         DeviceControlAlarm deviceControlAlarm = new DeviceControlAlarm(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(),
             fromDevice.getUserId());
@@ -246,8 +247,14 @@ public class ServerSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlAlarm);
     }
 
+    public static String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, DeviceControlPosition.HomePosition homePosition) {
+        DeviceControlPosition deviceControlPosition =
+                new DeviceControlPosition(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPosition);
+    }
+
     /**
-     *
      * 看守位控制命令
      *
      * @param fromDevice 发送设备
@@ -257,13 +264,11 @@ public class ServerSendCmd {
      * @param presetIndex 调用预置位编号，开启看守位时使用，取值范围0~255
      * @return
      */
-    public String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String enable, String resetTime, String presetIndex) {
+    public static String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String enable, String resetTime, String presetIndex) {
 
-        DeviceControlPosition deviceControlPosition =
-            new DeviceControlPosition(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(),
-                fromDevice.getUserId(), new DeviceControlPosition.HomePosition(enable, resetTime, presetIndex));
+        DeviceControlPosition.HomePosition homePosition = new DeviceControlPosition.HomePosition(enable, resetTime, presetIndex);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPosition);
+        return deviceControlAlarm(fromDevice, toDevice, homePosition);
     }
 
     /**
@@ -277,7 +282,7 @@ public class ServerSendCmd {
      * @param heartBeatCount 心跳超时次数（可选）
      * @return
      */
-    public String deviceConfig(FromDevice fromDevice, ToDevice toDevice, String name, String expiration,
+    public static String deviceConfig(FromDevice fromDevice, ToDevice toDevice, String name, String expiration,
         String heartBeatInterval, String heartBeatCount) {
 
         DeviceConfigControl deviceConfigControl =
@@ -297,7 +302,7 @@ public class ServerSendCmd {
      * @param configType 配置类型
      * @return
      */
-    public String deviceConfigDownload(FromDevice fromDevice, ToDevice toDevice, String configType) {
+    public static String deviceConfigDownload(FromDevice fromDevice, ToDevice toDevice, String configType) {
 
         DeviceConfigDownload deviceConfig =
             new DeviceConfigDownload(CmdTypeEnum.CONFIG_DOWNLOAD.getType(), RandomStrUtil.getValidationCode(),
@@ -315,11 +320,29 @@ public class ServerSendCmd {
      * @param toDevice 接收设备
      * @return
      */
-    public String deviceControlIdr(FromDevice fromDevice, ToDevice toDevice) {
-        DeviceControl deviceControl =
-                new DeviceControl(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
-        deviceControl.setIFameCmd("Send");
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControl);
+    public static String deviceControlIdr(FromDevice fromDevice, ToDevice toDevice, String cmdStr) {
+        DeviceControlIFame deviceControlIFame =
+                new DeviceControlIFame(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+        String cmd = Optional.ofNullable(cmdStr).orElse("Send");
+        deviceControlIFame.setIFameCmd(cmd);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlIFame);
+    }
+
+    /**
+     * 伸缩控制
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param dragZoom   缩小
+     * @return
+     */
+    public static String deviceControlDragOut(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
+        DeviceControlDragOut dragZoomOut =
+                new DeviceControlDragOut(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        dragZoomOut.setDragZoomOut(dragZoom);
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomOut);
     }
 
     /**
@@ -327,18 +350,16 @@ public class ServerSendCmd {
      *
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
-     * @param dragZoomIn 放大
-     * @param dragZoomOut 缩小
+     * @param dragZoom 放大
+     * 
      * @return
      */
-    public String deviceControlDrag(FromDevice fromDevice, ToDevice toDevice, DeviceControlDrag.DragZoom dragZoomIn,
-                                    DeviceControlDrag.DragZoom dragZoomOut) {
-        DeviceControlDrag deviceControlDrag =
-                new DeviceControlDrag(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+    public static String deviceControlDragIn(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
+        DeviceControlDragIn dragZoomIn =
+                new DeviceControlDragIn(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
-        deviceControlDrag.setDragZoomIn(dragZoomIn);
-        deviceControlDrag.setDragZoomOut(dragZoomOut);
+        dragZoomIn.setDragZoomIn(dragZoom);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlDrag);
+        return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomIn);
     }
 }

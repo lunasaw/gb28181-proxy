@@ -1,5 +1,11 @@
 package io.github.lunasaw.gbproxy.test.user.client;
 
+import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
+import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
+import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
+import io.github.lunasaw.sip.common.entity.query.DeviceConfigDownload;
+import io.github.lunasaw.sip.common.entity.response.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -7,10 +13,6 @@ import org.springframework.stereotype.Component;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
-import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
-import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
-import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
-import io.github.lunasaw.sip.common.entity.response.DeviceStatus;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 
 /**
@@ -18,6 +20,7 @@ import io.github.lunasaw.sip.common.utils.XmlUtils;
  * @date 2023/10/17
  */
 @Component
+@Slf4j
 public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Autowired
@@ -57,5 +60,25 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
     public DeviceResponse getDeviceItem(String userId) {
         DeviceResponse response = (DeviceResponse)XmlUtils.parseFile("classpath:device/catalog.xml", DeviceResponse.class);
         return response;
+    }
+
+    @Override
+    public void broadcastNotify(DeviceBroadcastNotify broadcastNotify) {
+
+    }
+
+    @Override
+    public DeviceAlarmNotify getDeviceAlarmNotify(DeviceAlarmQuery deviceAlarmQuery) {
+        return null;
+    }
+
+    @Override
+    public DeviceConfigResponse getDeviceConfigResponse(DeviceConfigDownload deviceConfigDownload) {
+        return null;
+    }
+
+    @Override
+    public <T> void deviceControl(T deviceControlBase) {
+        log.info("deviceControl::deviceControlBase = {}", deviceControlBase);
     }
 }

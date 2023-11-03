@@ -17,16 +17,15 @@ import lombok.*;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControl extends DeviceBase {
+public class DeviceControlIFame extends DeviceControlBase {
 
-    @XmlElement(name = "GuardCmd")
-    public String guardCmd;
 
     @XmlElement(name = "IFameCmd")
     public String iFameCmd;
 
-    public DeviceControl(String cmdType, String sn, String deviceId) {
+    public DeviceControlIFame(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+        this.setControlType("IFameCmd");
     }
 
 

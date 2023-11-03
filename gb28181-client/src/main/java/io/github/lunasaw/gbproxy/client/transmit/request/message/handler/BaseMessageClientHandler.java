@@ -24,7 +24,6 @@ public class BaseMessageClientHandler extends MessageClientHandlerAbstract {
 
     private String cmdType = CMD_TYPE;
 
-    private MessageProcessorClient messageProcessorClient;
 
     public BaseMessageClientHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);

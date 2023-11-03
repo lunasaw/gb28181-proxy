@@ -17,14 +17,14 @@ import lombok.Setter;
  * <CmdType>DeviceControl</CmdType>
  * <SN>331004</SN>
  * <DeviceID>1231</DeviceID>
- * <DragZoomIn>
+ * <DragZoomOut>
  * <Length>dragZoom.getLength()</Length>
  * <Width>dragZoom.getWidth()</Width>
  * <MidPointX>ragZoom.getMidPointX()</MidPointX>
  * <MidPointY> dragZoom.getMidPointY()</MidPointY>
  * <LengthX>ragZoom.getLengthX()</LengthX>
  * <LengthY> dragZoom.getLengthY()</LengthY>
- * </DragZoomIn>
+ * </DragZoomOut>
  * </Control>
  *
  * @author luna
@@ -35,13 +35,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlDrag extends DeviceBase {
+public class DeviceControlDragOut extends DeviceControlBase {
 
-    /**
-     * 放大
-     */
-    @XmlElement(name = "DragZoomIn")
-    private DragZoom dragZoomIn;
 
     /**
      * 缩小
@@ -49,37 +44,17 @@ public class DeviceControlDrag extends DeviceBase {
     @XmlElement(name = "DragZoomOut")
     private DragZoom dragZoomOut;
 
-    public DeviceControlDrag(String cmdType, String sn, String deviceId) {
+    public DeviceControlDragOut(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+        this.setControlType("DragZoomOut");
     }
 
     public static void main(String[] args) {
-        DeviceControlDrag deviceControlDrag = new DeviceControlDrag();
+        DeviceControlDragOut deviceControlDrag = new DeviceControlDragOut();
 
-        deviceControlDrag.setDragZoomIn(new DragZoom("1","2","3","4","5","6"));
+        deviceControlDrag.setDragZoomOut(new DragZoom("1", "2", "3", "4", "5", "6"));
 
         System.out.println(deviceControlDrag);
     }
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public static class DragZoom {
-
-        @XmlElement(name = "Length")
-        public String length;
-
-        @XmlElement(name = "Width")
-        public String width;
-        @XmlElement(name = "MidPointX")
-        public String midPointX;
-        @XmlElement(name = "MidPointY")
-        public String midPointY;
-        @XmlElement(name = "LengthX")
-        public String lengthX;
-        @XmlElement(name = "LengthY")
-        public String lengthY;
-    }
 }

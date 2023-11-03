@@ -3,23 +3,22 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
-import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
+import io.github.lunasaw.sip.common.entity.query.DeviceConfigDownload;
 import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
+import io.github.lunasaw.sip.common.entity.response.DeviceConfigResponse;
 import org.springframework.stereotype.Component;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 响应设备告警查询
+ * 响应设备配置查询
  * 
  * @author luna
  * @date 2023/10/19
@@ -28,22 +27,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract {
+public class ConfigDownloadMessageHandler extends MessageClientHandlerAbstract {
 
-    public static final String     CMD_TYPE = "Alarm";
+    public static final String CMD_TYPE = "ConfigDownload";
 
-    private String                 cmdType  = CMD_TYPE;
+    private String             cmdType  = CMD_TYPE;
 
-    private MessageProcessorClient messageProcessorClient;
-
-    public AlarmQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
+    public ConfigDownloadMessageHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
     }
 
     @Override
     public void handForEvt(RequestEvent event) {
         DeviceSession deviceSession = getDeviceSession(event);
-
         String userId = deviceSession.getUserId();
         String sipId = deviceSession.getSipId();
 
@@ -51,14 +47,12 @@ public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract
         FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
         ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
-        DeviceAlarmQuery deviceAlarmQuery = parseRequest(event, fromDevice.getCharset(), DeviceAlarmQuery.class);
+        DeviceConfigDownload deviceConfigDownload = parseRequest(event, fromDevice.getCharset(), DeviceConfigDownload.class);
 
-        // 请求序列化编号，上游后续处理
-        String sn = deviceAlarmQuery.getSn();
-        DeviceAlarmNotify deviceAlarmNotify = messageProcessorClient.getDeviceAlarmNotify(deviceAlarmQuery);
-        deviceAlarmNotify.setSn(sn);
+        DeviceConfigResponse deviceConfigResponse = messageProcessorClient.getDeviceConfigResponse(deviceConfigDownload);
+        deviceConfigResponse.setSn(deviceConfigDownload.getSn());
 
-        ClientSendCmd.deviceAlarmNotify(fromDevice, toDevice, deviceAlarmNotify);
+        ClientSendCmd.deviceConfigResponse(fromDevice, toDevice, deviceConfigResponse);
     }
 
     @Override

@@ -13,4 +13,6 @@ public class Constant {
     public static final String AGENT = "LunaSaw-GB28181-Proxy";
 
     public static final String PASSWORD_HEADER = "AUTH_PASSWORD";
+
+    public static final String GB2312 = "gb2312";
 }

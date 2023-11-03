@@ -1,28 +1,29 @@
-package io.github.lunasaw.gbproxy.client.transmit.request.info;
+package io.github.lunasaw.gbproxy.server.transimit.request.info;
+
+import javax.sip.RequestEvent;
+
+import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
-
-import javax.sip.RequestEvent;
 
 /**
+ * SIP命令类型： 收到info请求
+ *
  * @author luna
- * @date 2023/10/18
  */
 @Component
 @Getter
 @Setter
-public class InfoRequestProcessor extends SipRequestProcessorAbstract {
-
+public class ServerInfoRequestProcessor extends SipRequestProcessorAbstract {
 
     public static final String METHOD = "INFO";
 
     private String method = METHOD;
 
     /**
-     * 收到ACK请求 处理
+     * 收到Bye请求 处理
      *
      * @param evt
      */

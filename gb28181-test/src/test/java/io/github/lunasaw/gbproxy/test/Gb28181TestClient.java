@@ -42,7 +42,7 @@ public class Gb28181TestClient {
     public void before() {
         // 本地端口监听
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint(fromDevice.getIp(), fromDevice.getPort());
+        SipLayer.addListeningPoint("0.0.0.0", fromDevice.getPort());
     }
 
     @Test

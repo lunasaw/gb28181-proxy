@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 import javax.sip.header.*;
 import javax.sip.message.Request;
@@ -42,6 +43,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
 
     private String method = METHOD;
 
+    @Resource
     private RegisterProcessorServer registerProcessorServer;
 
     /**

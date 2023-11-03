@@ -1,71 +1,88 @@
 package io.github.lunasaw.sip.common.enums;
 
-import org.dom4j.Element;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import lombok.Getter;
 import org.springframework.util.ObjectUtils;
 
+import io.github.lunasaw.sip.common.entity.control.*;
+import lombok.SneakyThrows;
+
+@Getter
 public enum DeviceControlType {
 
     /**
      * 云台控制
      * 上下左右，预置位，扫描，辅助功能，巡航
      */
-    PTZ("PTZCmd", "云台控制"),
+    PTZ("PTZCmd", "云台控制", DeviceControlPtz.class),
     /**
      * 远程启动
      */
-    TELE_BOOT("TeleBoot", "远程启动"),
+    TELE_BOOT("TeleBoot", "远程启动", DeviceControlTeleBoot.class),
     /**
      * 录像控制
      */
-    RECORD("RecordCmd", "录像控制"),
+    RECORD("RecordCmd", "录像控制", DeviceControlRecordCmd.class),
     /**
      * 布防撤防
      */
-    GUARD("GuardCmd", "布防撤防"),
+    GUARD("GuardCmd", "布防撤防", DeviceControlGuard.class),
     /**
      * 告警控制
      */
-    ALARM("AlarmCmd", "告警控制"),
+    ALARM("AlarmCmd", "告警控制", DeviceControlAlarm.class),
     /**
      * 强制关键帧
      */
-    I_FRAME("IFameCmd", "强制关键帧"),
+    I_FRAME("IFameCmd", "强制关键帧", DeviceControlIFame.class),
     /**
      * 拉框放大
      */
-    DRAG_ZOOM_IN("DragZoomIn", "拉框放大"),
+    DRAG_ZOOM_IN("DragZoomIn", "拉框放大", DeviceControlDragIn.class),
     /**
      * 拉框缩小
      */
-    DRAG_ZOOM_OUT("DragZoomOut", "拉框缩小"),
+    DRAG_ZOOM_OUT("DragZoomOut", "拉框缩小", DeviceControlDragOut.class),
     /**
      * 看守位
      */
-    HOME_POSITION("HomePosition", "看守位");
+    HOME_POSITION("HomePosition", "看守位", DeviceControlPosition.class);
 
+    private static final Map<String, DeviceControlType> MAP = new ConcurrentHashMap<>();
     private final String val;
-
     private final String desc;
+    private final Class<?> clazz;
 
-    DeviceControlType(String val, String desc) {
+    DeviceControlType(String val, String desc, Class<?> clazz) {
         this.val = val;
         this.desc = desc;
+        this.clazz = clazz;
     }
 
-    public static DeviceControlType typeOf(Element rootElement) {
-        for (DeviceControlType item : DeviceControlType.values()) {
-            if (!ObjectUtils.isEmpty(rootElement.element(item.val)) || !ObjectUtils.isEmpty(rootElement.elements(item.val))) {
-                return item;
+    // hash Map
+    public static DeviceControlType getType(String val) {
+        if (ObjectUtils.isEmpty(val)) {
+            return null;
+        }
+        for (DeviceControlType deviceControlType : DeviceControlType.values()) {
+            if (deviceControlType.getVal().equals(val)) {
+                return deviceControlType;
             }
         }
         return null;
     }
 
-    public String getVal() {
-        return val;
+    @SneakyThrows
+    public static DeviceControlType getDeviceControlType(String key) {
+        if (MAP.containsKey(key)) {
+            return MAP.get(key);
+        } else {
+            DeviceControlType type = getType(key);
+            MAP.put(key, type);
+            return type;
+        }
     }
 
-    public String getDesc() {
-        return desc;
-    }
 }

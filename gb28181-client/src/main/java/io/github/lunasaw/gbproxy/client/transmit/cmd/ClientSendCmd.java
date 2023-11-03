@@ -19,6 +19,17 @@ import io.github.lunasaw.sip.common.transmit.SipSender;
  * @date 2023/10/15
  */
 public class ClientSendCmd {
+    /**
+     * 告警上报
+     * 
+     * @param fromDevice
+     * @param toDevice
+     * @param deviceAlarmNotify
+     * @return
+     */
+    public static String deviceAlarmNotify(FromDevice fromDevice, ToDevice toDevice, DeviceAlarmNotify deviceAlarmNotify) {
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceAlarmNotify);
+    }
 
     /**
      * 告警上报
@@ -53,6 +64,14 @@ public class ClientSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceKeepLiveNotify);
     }
 
+    /**
+     * 设备目录查询
+     * 
+     * @param fromDevice
+     * @param toDevice
+     * @param deviceResponse
+     * @return
+     */
     public static String deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, DeviceResponse deviceResponse) {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceResponse);
     }
@@ -198,6 +217,28 @@ public class ClientSendCmd {
         deviceRecord.setRecordList(deviceRecordItems);
 
         return deviceRecordResponse(fromDevice, toDevice, deviceRecord);
+    }
+
+    /**
+     * 设备配置上报
+     * 
+     * @param fromDevice
+     * @param toDevice
+     * @param deviceConfigResponse
+     * @return
+     */
+    public static String deviceConfigResponse(FromDevice fromDevice, ToDevice toDevice, DeviceConfigResponse deviceConfigResponse) {
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfigResponse);
+    }
+
+    public static String deviceConfigResponse(FromDevice fromDevice, ToDevice toDevice, DeviceConfigResponse.BasicParam basicParam) {
+        DeviceConfigResponse configResponse =
+            new DeviceConfigResponse(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+
+        configResponse.setBasicParam(basicParam);
+        configResponse.setResult("ok");
+
+        return deviceConfigResponse(fromDevice, toDevice, configResponse);
     }
 
     /**

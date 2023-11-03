@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import io.github.lunasaw.sip.common.entity.base.DeviceBase;
 import io.github.lunasaw.sip.common.entity.xml.XmlBean;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,15 +35,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceControlAlarm extends XmlBean {
-    @XmlElement(name = "CmdType")
-    public String    cmdType;
-
-    @XmlElement(name = "SN")
-    public String    sn;
-
-    @XmlElement(name = "DeviceID")
-    public String    deviceId;
+public class DeviceControlAlarm extends DeviceControlBase {
 
     @XmlElement(name = "AlarmCmd")
     public String    alarmCmd;
@@ -51,9 +44,8 @@ public class DeviceControlAlarm extends XmlBean {
     public AlarmInfo alarmInfo;
 
     public DeviceControlAlarm(String cmdType, String sn, String deviceId) {
-        this.cmdType = cmdType;
-        this.sn = sn;
-        this.deviceId = deviceId;
+        super(cmdType, sn, deviceId);
+        this.setControlType("AlarmCmd");
     }
 
     public static void main(String[] args) {

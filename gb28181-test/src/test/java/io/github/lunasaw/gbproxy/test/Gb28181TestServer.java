@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.test;
 import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
+import io.github.lunasaw.sip.common.entity.control.DragZoom;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,7 @@ public class Gb28181TestServer {
     public void before() {
         // 本地端口监听
         log.info("before::服务端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint(fromDevice.getIp(), fromDevice.getPort());
+        SipLayer.addListeningPoint("0.0.0.0", fromDevice.getPort());
 
     }
 
@@ -69,6 +70,20 @@ public class Gb28181TestServer {
     @Test
     public void test_query_catalog() {
         ServerSendCmd.deviceCatalogQuery((FromDevice)fromDevice, (ToDevice)toDevice);
+    }
+
+    @Test
+    public void control_test() {
+        DragZoom dragZoom = new DragZoom();
+        dragZoom.setLength("1");
+        dragZoom.setWidth("1");
+        dragZoom.setMidPointX("1");
+        dragZoom.setMidPointY("1");
+        dragZoom.setLengthX("1");
+        dragZoom.setLengthY("1");
+
+        String s = ServerSendCmd.deviceControlDragIn((FromDevice) fromDevice, (ToDevice) toDevice, dragZoom);
+        System.out.println(s);
     }
 
     @SneakyThrows

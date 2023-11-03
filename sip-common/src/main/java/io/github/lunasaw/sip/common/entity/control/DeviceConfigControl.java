@@ -34,7 +34,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @XmlRootElement(name = "Control")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeviceConfigControl extends DeviceBase {
+public class DeviceConfigControl extends DeviceControlBase {
 
 
     @XmlElement(name = "BasicParam")
@@ -42,6 +42,7 @@ public class DeviceConfigControl extends DeviceBase {
 
     public DeviceConfigControl(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
+        this.setControlType("BasicParam");
     }
 
     @Getter
