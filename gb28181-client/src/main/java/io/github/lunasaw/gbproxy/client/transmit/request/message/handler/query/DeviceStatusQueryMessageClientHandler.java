@@ -51,6 +51,9 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
 
         // 设备查询
         FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
+        if (fromDevice == null) {
+            return;
+        }
         ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
         DeviceQuery deviceQuery = parseRequest(event, fromDevice.getCharset(), DeviceQuery.class);

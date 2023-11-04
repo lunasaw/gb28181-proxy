@@ -99,8 +99,12 @@ public class SipProcessorObserver implements SipListener {
                 // TODO 回复错误玛
                 return;
             }
-            for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
-                sipRequestProcessor.process(requestEvent);
+            try {
+                for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
+                    sipRequestProcessor.process(requestEvent);
+                }
+            } catch (Exception e) {
+                log.error("processRequest::requestEvent = {} ", requestEvent, e);
             }
         });
     }
