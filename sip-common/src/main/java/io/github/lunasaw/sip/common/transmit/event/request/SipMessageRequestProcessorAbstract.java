@@ -44,15 +44,18 @@ public abstract class SipMessageRequestProcessorAbstract extends SipRequestProce
         // 解析xml
         byte[] rawContent = request.getRawContent();
         String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
+
+
         String cmdType = XmlUtils.getCmdType(xmlStr);
-        List<MessageHandler> messageHandlers = MESSAGE_HANDLER_MAP.get(cmdType);
+        String rootType = XmlUtils.getRootType(xmlStr);
+        List<MessageHandler> messageHandlers = MESSAGE_HANDLER_MAP.get(rootType);
 
         for (MessageHandler messageHandler : messageHandlers) {
 
             if (messageHandler == null) {
                 return;
             }
-
+            messageHandler.setXmlStr(xmlStr);
             messageHandler.responseAck(evt);
             try {
                 if (messageHandler.getCmdType().equals(cmdType)) {

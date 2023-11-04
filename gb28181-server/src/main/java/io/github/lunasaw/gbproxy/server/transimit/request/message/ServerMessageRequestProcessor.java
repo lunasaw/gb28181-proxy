@@ -40,9 +40,6 @@ public class ServerMessageRequestProcessor extends SipMessageRequestProcessorAbs
     private MessageProcessorServer messageProcessorServer;
     private String                                  method              = METHOD;
 
-    public static void addHandler(MessageHandler messageHandler) {
-        MESSAGE_HANDLER_MAP.put(messageHandler.getCmdType(), messageHandler);
-    }
 
     @Override
     public void process(RequestEvent evt) {

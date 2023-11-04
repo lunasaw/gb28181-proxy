@@ -12,6 +12,7 @@ import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
 import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
+import io.github.lunasaw.sip.common.utils.XmlUtils;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
@@ -53,7 +54,9 @@ public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract
         FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
         ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
-        DeviceAlarmQuery deviceAlarmQuery = parseRequest(event, fromDevice.getCharset(), DeviceAlarmQuery.class);
+        DeviceAlarmQuery deviceAlarmQuery = parseXml(DeviceAlarmQuery.class);
+
+        DeviceAlarmQuery deviceAlarmQuery2 = parseRequest(event, fromDevice.getCharset(), DeviceAlarmQuery.class);
 
         // 请求序列化编号，上游后续处理
         String sn = deviceAlarmQuery.getSn();

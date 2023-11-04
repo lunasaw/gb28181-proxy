@@ -7,13 +7,20 @@ import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 import java.nio.charset.Charset;
 
+@Getter
+@Setter
 public class MessageHandlerAbstract implements MessageHandler {
+
+    private String xmlStr;
+
 
     @Override
     public void handForEvt(RequestEvent event) {
@@ -28,6 +35,11 @@ public class MessageHandlerAbstract implements MessageHandler {
     @Override
     public String getCmdType() {
         return null;
+    }
+
+    @Override
+    public void setXmlStr(String xmlStr) {
+        this.xmlStr = xmlStr;
     }
 
     public DeviceSession getDeviceSession(RequestEvent event) {
@@ -47,7 +59,14 @@ public class MessageHandlerAbstract implements MessageHandler {
         ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "OK", receiveIp, sipRequest);
     }
 
-    public <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
+    public <T> T parseXml(Class<T> clazz) {
+        if (StringUtils.isBlank(xmlStr)) {
+            return null;
+        }
+        return (T) XmlUtils.parseObj(xmlStr, clazz);
+    }
+
+    public static <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         byte[] rawContent = sipRequest.getRawContent();
         if (StringUtils.isBlank(charset)) {
@@ -58,7 +77,7 @@ public class MessageHandlerAbstract implements MessageHandler {
         return (T) o;
     }
 
-    public String parseRequest(RequestEvent event, String charset) {
+    public static String parseRequest(RequestEvent event, String charset) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         byte[] rawContent = sipRequest.getRawContent();
         if (StringUtils.isBlank(charset)) {

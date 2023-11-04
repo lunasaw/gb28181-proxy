@@ -47,4 +47,9 @@ public interface MessageHandler {
      * @return
      */
     String getCmdType();
+
+    /**
+     * 当前接受到的原始消息
+     */
+    void setXmlStr(String xmlStr);
 }
