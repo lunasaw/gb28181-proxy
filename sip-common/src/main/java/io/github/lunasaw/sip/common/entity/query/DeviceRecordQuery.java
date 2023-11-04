@@ -54,6 +54,8 @@ public class DeviceRecordQuery extends XmlBean {
 
     /**
      * 大华NVR要求必须增加一个值为all的文本元素节点Type
+     *
+     * all（time 或 alarm 或 manual 或 all）
      */
     @XmlElement(name = "Type")
     public String type;

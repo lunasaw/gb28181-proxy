@@ -25,7 +25,7 @@ public class ServerSendCmd {
 
     /**
      * 设备信息查询
-     * 
+     *
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
      * @return callId
@@ -37,7 +37,7 @@ public class ServerSendCmd {
 
     /**
      * 设备预设位置查询
-     * 
+     *
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
      * @return callId
@@ -85,7 +85,7 @@ public class ServerSendCmd {
 
     /**
      * 设备状态查询
-     * 
+     *
      * @param fromDevice 发送设备
      * @param toDevice 接收设备
      * @return callId
@@ -107,6 +107,41 @@ public class ServerSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery);
     }
 
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, String startTime, String endTime) {
+        return deviceRecordInfoQuery(fromDevice, toDevice, startTime, endTime, null, "all");
+    }
+
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, long startTime, long endTime) {
+        return deviceRecordInfoQuery(fromDevice, toDevice, new Date(startTime), new Date(endTime));
+    }
+
+    /**
+     * 查询录像列表
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param startTime  开始时间 ISO8601格式
+     * @param endTime    结束时间 ISO8601格式
+     * @param secrecy
+     * @param type       all（time 或 alarm 或 manual 或 all）
+     * @return
+     */
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, String startTime, String endTime, String secrecy,
+                                               String type) {
+        DeviceRecordQuery recordQuery = new DeviceRecordQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+
+        recordQuery.setStartTime(startTime);
+        recordQuery.setEndTime(endTime);
+        recordQuery.setSecrecy(secrecy);
+        recordQuery.setType(type);
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, recordQuery);
+    }
+
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime) {
+        return deviceRecordInfoQuery(fromDevice, toDevice, startTime, endTime, null, "all");
+    }
+
     /**
      * 查询录像列表
      *
@@ -114,15 +149,12 @@ public class ServerSendCmd {
      * @param toDevice 接收设备
      * @return callId
      */
-    public static String deviceCatalogQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime, String secrecy, String type) {
-        DeviceRecordQuery recordQuery = new DeviceRecordQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime, String secrecy, String type) {
 
-        recordQuery.setStartTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startTime));
-        recordQuery.setEndTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime));
-        recordQuery.setSecrecy(secrecy);
-        recordQuery.setType(type);
+        String endTimeStr = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime);
+        String startTimeStr = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startTime);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, recordQuery);
+        return deviceRecordInfoQuery(fromDevice, toDevice, startTimeStr, endTimeStr, secrecy, type);
     }
 
     /**
@@ -334,8 +366,8 @@ public class ServerSendCmd {
      * 伸缩控制
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
-     * @param dragZoom   缩小
+     * @param toDevice 接收设备
+     * @param dragZoom 缩小
      * @return
      */
     public static String deviceControlDragOut(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
@@ -369,9 +401,9 @@ public class ServerSendCmd {
      * 云台控制命令
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
+     * @param toDevice 接收设备
      * @param ptzCmdEnum 命令
-     * @param speed      速度
+     * @param speed 速度
      * @return
      */
     public static String deviceControlPtzCmd(FromDevice fromDevice, ToDevice toDevice, PtzCmdEnum ptzCmdEnum, Integer speed) {
@@ -383,8 +415,8 @@ public class ServerSendCmd {
      * 设备命令控制
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
-     * @param ptzCmd     控制代码
+     * @param toDevice 接收设备
+     * @param ptzCmd 控制代码
      * @return
      */
     public static String deviceControlPtzCmd(FromDevice fromDevice, ToDevice toDevice, String ptzCmd) {
@@ -401,13 +433,12 @@ public class ServerSendCmd {
      * 设备重启
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
+     * @param toDevice 接收设备
      * @return
      */
     public static String deviceControlTeleBoot(FromDevice fromDevice, ToDevice toDevice) {
         DeviceControlTeleBoot deviceControlTeleBoot =
                 new DeviceControlTeleBoot(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
-
 
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlTeleBoot);
     }
@@ -416,8 +447,8 @@ public class ServerSendCmd {
      * 录像控制
      *
      * @param fromDevice 发送设备
-     * @param toDevice   接收设备
-     * @param recordCmd  Record 开启录像， StopRecord 停止录像
+     * @param toDevice 接收设备
+     * @param recordCmd Record 开启录像， StopRecord 停止录像
      * @return
      */
     public static String deviceControlTeleBoot(FromDevice fromDevice, ToDevice toDevice, String recordCmd) {
