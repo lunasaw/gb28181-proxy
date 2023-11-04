@@ -34,6 +34,12 @@ public class MobilePositionNotifyMessageHandler extends MessageServerHandlerAbst
     }
 
     @Override
+    public String getRootType() {
+        return Notify;
+    }
+
+
+    @Override
     public void handForEvt(RequestEvent event) {
 
         DeviceSession deviceSession = getDeviceSession(event);

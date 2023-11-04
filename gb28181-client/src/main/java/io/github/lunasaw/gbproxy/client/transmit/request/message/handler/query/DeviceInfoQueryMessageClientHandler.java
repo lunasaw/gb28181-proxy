@@ -34,6 +34,12 @@ public class DeviceInfoQueryMessageClientHandler extends MessageClientHandlerAbs
     }
 
     @Override
+    public String getRootType() {
+        return Query;
+    }
+
+
+    @Override
     public void handForEvt(RequestEvent event) {
 
         DeviceSession deviceSession = getDeviceSession(event);

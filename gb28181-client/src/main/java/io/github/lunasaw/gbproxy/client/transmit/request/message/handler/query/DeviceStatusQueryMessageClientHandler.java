@@ -38,6 +38,12 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
     }
 
     @Override
+    public String getRootType() {
+        return Query;
+    }
+
+
+    @Override
     public void handForEvt(RequestEvent event) {
         DeviceSession deviceSession = getDeviceSession(event);
         String userId = deviceSession.getUserId();

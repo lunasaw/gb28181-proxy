@@ -34,6 +34,11 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
     }
 
     @Override
+    public String getRootType() {
+        return Notify;
+    }
+
+    @Override
     public void handForEvt(RequestEvent event) {
         DeviceSession deviceSession = getDeviceSession(event);
         String userId = deviceSession.getUserId();

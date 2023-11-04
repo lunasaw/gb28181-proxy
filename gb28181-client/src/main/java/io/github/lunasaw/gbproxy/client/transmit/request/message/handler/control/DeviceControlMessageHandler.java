@@ -34,6 +34,11 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
     }
 
     @Override
+    public String getRootType() {
+        return Control;
+    }
+
+    @Override
     public void handForEvt(RequestEvent event) {
 
         DeviceSession deviceSession = getDeviceSession(event);

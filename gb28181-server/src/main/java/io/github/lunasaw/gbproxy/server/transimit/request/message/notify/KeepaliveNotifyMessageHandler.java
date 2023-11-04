@@ -38,6 +38,12 @@ public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract 
     }
 
     @Override
+    public String getRootType() {
+        return Notify;
+    }
+
+
+    @Override
     public void handForEvt(RequestEvent event) {
         DeviceSession deviceSession = getDeviceSession(event);
 
