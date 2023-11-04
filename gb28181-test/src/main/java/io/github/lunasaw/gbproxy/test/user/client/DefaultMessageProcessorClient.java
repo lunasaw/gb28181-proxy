@@ -64,7 +64,7 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public void broadcastNotify(DeviceBroadcastNotify broadcastNotify) {
-
+        log.info("broadcastNotify::broadcastNotify = {}", broadcastNotify);
     }
 
     @Override

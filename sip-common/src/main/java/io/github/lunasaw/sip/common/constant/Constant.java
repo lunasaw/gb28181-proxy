@@ -15,4 +15,8 @@ public class Constant {
     public static final String PASSWORD_HEADER = "AUTH_PASSWORD";
 
     public static final String GB2312 = "gb2312";
+
+    public static void main(String[] args) {
+        System.out.println(2 << 0);
+    }
 }

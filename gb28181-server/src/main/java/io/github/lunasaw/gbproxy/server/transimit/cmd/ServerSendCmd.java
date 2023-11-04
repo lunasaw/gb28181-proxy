@@ -12,8 +12,10 @@ import io.github.lunasaw.sip.common.entity.control.*;
 import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.sip.common.entity.query.*;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
+import io.github.lunasaw.sip.common.enums.PtzCmdEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.utils.PtzUtils;
 
 /**
  * @author luna
@@ -361,5 +363,69 @@ public class ServerSendCmd {
         dragZoomIn.setDragZoomIn(dragZoom);
 
         return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomIn);
+    }
+
+    /**
+     * 云台控制命令
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param ptzCmdEnum 命令
+     * @param speed      速度
+     * @return
+     */
+    public static String deviceControlPtzCmd(FromDevice fromDevice, ToDevice toDevice, PtzCmdEnum ptzCmdEnum, Integer speed) {
+        String ptzCmd = PtzUtils.getPtzCmd(ptzCmdEnum, speed);
+        return deviceControlPtzCmd(fromDevice, toDevice, ptzCmd);
+    }
+
+    /**
+     * 设备命令控制
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param ptzCmd     控制代码
+     * @return
+     */
+    public static String deviceControlPtzCmd(FromDevice fromDevice, ToDevice toDevice, String ptzCmd) {
+        DeviceControlPtz deviceControlPtz =
+                new DeviceControlPtz(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        deviceControlPtz.setPtzCmd(ptzCmd);
+        deviceControlPtz.setPtzInfo(new DeviceControlPtz.PtzInfo());
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPtz);
+    }
+
+    /**
+     * 设备重启
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public static String deviceControlTeleBoot(FromDevice fromDevice, ToDevice toDevice) {
+        DeviceControlTeleBoot deviceControlTeleBoot =
+                new DeviceControlTeleBoot(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlTeleBoot);
+    }
+
+    /**
+     * 录像控制
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param recordCmd  Record 开启录像， StopRecord 停止录像
+     * @return
+     */
+    public static String deviceControlTeleBoot(FromDevice fromDevice, ToDevice toDevice, String recordCmd) {
+        DeviceControlRecordCmd deviceControlRecordCmd =
+                new DeviceControlRecordCmd(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        deviceControlRecordCmd.setRecordCmd(recordCmd);
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlRecordCmd);
     }
 }

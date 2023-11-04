@@ -23,7 +23,7 @@ public class DeviceControlTeleBoot extends DeviceControlBase {
 
 
     @XmlElement(name = "TeleBoot")
-    private String teleBoot;
+    private String teleBoot = "Boot";
 
     public DeviceControlTeleBoot(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
