@@ -40,7 +40,7 @@ public class ClientSendCmd {
      */
     public static String deviceAlarmNotify(FromDevice fromDevice, ToDevice toDevice, DeviceAlarm deviceAlarm) {
         DeviceAlarmNotify deviceAlarmNotify =
-                new DeviceAlarmNotify(CmdTypeEnum.DEVICE_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceAlarmNotify(CmdTypeEnum.DEVICE_INFO.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
         deviceAlarmNotify.setAlarm(deviceAlarm);
 
@@ -57,7 +57,7 @@ public class ClientSendCmd {
      */
     public static String deviceKeepLiveNotify(FromDevice fromDevice, ToDevice toDevice, String status) {
         DeviceKeepLiveNotify deviceKeepLiveNotify =
-            new DeviceKeepLiveNotify(CmdTypeEnum.KEEPALIVE.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceKeepLiveNotify(CmdTypeEnum.KEEPALIVE.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
         deviceKeepLiveNotify.setStatus(status);
 
@@ -78,7 +78,7 @@ public class ClientSendCmd {
 
     public static String deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems, String sn) {
         DeviceResponse deviceResponse =
-                new DeviceResponse(CmdTypeEnum.CATALOG.getType(), sn, toDevice.getUserId());
+                new DeviceResponse(CmdTypeEnum.CATALOG.getType(), sn, fromDevice.getUserId());
 
         deviceResponse.setSumNum(deviceItems.size());
         deviceResponse.setDeviceItemList(deviceItems);
@@ -108,9 +108,9 @@ public class ClientSendCmd {
      */
     public static String deviceInfoResponse(FromDevice fromDevice, ToDevice toDevice, DeviceInfo deviceInfo) {
         Assert.notNull(deviceInfo, "deviceInfo is null");
+
         deviceInfo.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
         deviceInfo.setSn(RandomStrUtil.getValidationCode());
-        deviceInfo.setDeviceId(toDevice.getUserId());
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceInfo);
     }
 
@@ -125,10 +125,8 @@ public class ClientSendCmd {
     public static String deviceStatusResponse(FromDevice fromDevice, ToDevice toDevice, String online) {
 
         DeviceStatus deviceStatus =
-                new DeviceStatus(CmdTypeEnum.DEVICE_STATUS.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceStatus(CmdTypeEnum.DEVICE_STATUS.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
-        deviceStatus.setStatus("ok");
-        deviceStatus.setResult("ok");
         deviceStatus.setOnline(online);
 
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceStatus);
@@ -146,7 +144,7 @@ public class ClientSendCmd {
                                               SubscribeInfo subscribeInfo) {
         mobilePositionNotify.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
         mobilePositionNotify.setSn(RandomStrUtil.getValidationCode());
-        mobilePositionNotify.setDeviceId(toDevice.getUserId());
+        mobilePositionNotify.setDeviceId(fromDevice.getUserId());
         return SipSender.doNotifyRequest(fromDevice, toDevice, mobilePositionNotify, subscribeInfo);
     }
 
@@ -161,7 +159,7 @@ public class ClientSendCmd {
     public static String deviceChannelUpdateCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceUpdateItem> deviceItems,
                                                    SubscribeInfo subscribeInfo) {
         DeviceUpdateNotify deviceUpdateNotify =
-            new DeviceUpdateNotify(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceUpdateNotify(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
         deviceUpdateNotify.setSumNum(deviceItems.size());
         deviceUpdateNotify.setDeviceItemList(deviceItems);
@@ -180,7 +178,7 @@ public class ClientSendCmd {
     public static String deviceOtherUpdateCatlog(FromDevice fromDevice, ToDevice toDevice, List<DeviceOtherUpdateNotify.OtherItem> deviceItems,
                                                  SubscribeInfo subscribeInfo) {
         DeviceOtherUpdateNotify deviceUpdateNotify =
-                new DeviceOtherUpdateNotify(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceOtherUpdateNotify(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
         deviceUpdateNotify.setSumNum(deviceItems.size());
         deviceUpdateNotify.setDeviceItemList(deviceItems);
@@ -211,7 +209,7 @@ public class ClientSendCmd {
      */
     public static String deviceRecordResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceRecord.RecordItem> deviceRecordItems) {
         DeviceRecord deviceRecord =
-                new DeviceRecord(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceRecord(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
         deviceRecord.setSumNum(deviceRecordItems.size());
         deviceRecord.setRecordList(deviceRecordItems);
@@ -233,7 +231,7 @@ public class ClientSendCmd {
 
     public static String deviceConfigResponse(FromDevice fromDevice, ToDevice toDevice, DeviceConfigResponse.BasicParam basicParam) {
         DeviceConfigResponse configResponse =
-            new DeviceConfigResponse(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceConfigResponse(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
         configResponse.setBasicParam(basicParam);
         configResponse.setResult("ok");
@@ -251,7 +249,7 @@ public class ClientSendCmd {
      */
     public static String deviceMediaStatusNotify(FromDevice fromDevice, ToDevice toDevice, String notifyType) {
         MediaStatusNotify mediaStatusNotify =
-                new MediaStatusNotify(CmdTypeEnum.MEDIA_STATUS.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new MediaStatusNotify(CmdTypeEnum.MEDIA_STATUS.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
         mediaStatusNotify.setNotifyType(notifyType);
 

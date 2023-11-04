@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.test;
 import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
+import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -42,7 +43,7 @@ public class Gb28181TestClient {
     public void before() {
         // 本地端口监听
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint("0.0.0.0", fromDevice.getPort());
+        SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, fromDevice.getPort());
     }
 
     @Test

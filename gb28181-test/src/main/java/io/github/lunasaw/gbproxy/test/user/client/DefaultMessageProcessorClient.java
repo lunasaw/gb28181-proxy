@@ -48,7 +48,7 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public DeviceStatus getDeviceStatus(String userId) {
-        return (DeviceStatus)XmlUtils.parseFile("classpath:device/deviceInfo.xml", DeviceStatus.class);
+        return (DeviceStatus) XmlUtils.parseFile("classpath:device/deviceStatus.xml", DeviceStatus.class);
     }
 
     @Override

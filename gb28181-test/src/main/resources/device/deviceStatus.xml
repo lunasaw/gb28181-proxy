@@ -2,8 +2,8 @@
 <Response>
     <CmdType>DeviceStatus</CmdType>
     <SN>sn</SN>
-    <DeviceID>channelId</DeviceID>
+    <DeviceID>33010602011187000001</DeviceID>
     <Result>OK</Result>
-    <Online>online</Online>
+    <Online>ONLINE</Online>
     <Status>OK</Status>
 </Response>

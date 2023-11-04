@@ -3,7 +3,7 @@
     <CmdType>DeviceInfo</CmdType>
     <SN>${SN}</SN>
     <DeviceName>gb28181-client</DeviceName>
-    <DeviceID>${DEVICE_ID}</DeviceID>
+    <DeviceID>33010602011187000001</DeviceID>
     <Result>OK</Result>
     <!-- 设备生产商 -->
     <Manufacturer>海康威视</Manufacturer>
