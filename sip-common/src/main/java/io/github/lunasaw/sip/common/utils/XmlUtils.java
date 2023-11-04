@@ -67,4 +67,15 @@ public class XmlUtils {
         return cmdType.getText();
     }
 
+
+    @SneakyThrows
+    public static String getRootType(String xmlStr) {
+        SAXReader reader = new SAXReader();
+
+        Document document = reader.read(new StringReader(xmlStr));
+        // 获取根元素
+        Element root = document.getRootElement();
+
+        return root.getName();
+    }
 }

@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 
+import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
@@ -30,14 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract {
 
-    public static final String     CMD_TYPE = "Alarm";
-
-    private String                 cmdType  = CMD_TYPE;
-
-    private MessageProcessorClient messageProcessorClient;
+    public static final String CMD_TYPE = "Alarm";
 
     public AlarmQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
+    }
+
+    @Override
+    public String getRootType() {
+        return Query;
     }
 
     @Override
@@ -63,6 +65,6 @@ public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract
 
     @Override
     public String getCmdType() {
-        return cmdType;
+        return CMD_TYPE;
     }
 }

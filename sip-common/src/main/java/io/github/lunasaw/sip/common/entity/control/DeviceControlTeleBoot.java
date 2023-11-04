@@ -27,7 +27,7 @@ public class DeviceControlTeleBoot extends DeviceControlBase {
 
     public DeviceControlTeleBoot(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
-        this.setControlType("GuardCmd");
+        this.setControlType("TeleBoot");
     }
 
 }

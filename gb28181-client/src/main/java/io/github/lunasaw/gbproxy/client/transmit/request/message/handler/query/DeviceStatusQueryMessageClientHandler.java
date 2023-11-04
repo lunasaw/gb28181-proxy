@@ -30,9 +30,8 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
 
     public static final String     CMD_TYPE = "DeviceStatus";
 
+    private String root = Query;
     private String                 cmdType  = CMD_TYPE;
-
-    private MessageProcessorClient messageProcessorClient;
 
     public DeviceStatusQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);

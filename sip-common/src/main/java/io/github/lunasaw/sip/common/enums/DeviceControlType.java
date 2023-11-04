@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
 import io.github.lunasaw.sip.common.entity.control.*;
@@ -61,28 +62,31 @@ public enum DeviceControlType {
         this.clazz = clazz;
     }
 
-    // hash Map
-    public static DeviceControlType getType(String val) {
-        if (ObjectUtils.isEmpty(val)) {
+    static {
+        // MAP 初始化
+        for (DeviceControlType deviceControlType : DeviceControlType.values()) {
+            MAP.put(deviceControlType.getVal(), deviceControlType);
+        }
+    }
+
+    public static DeviceControlType getDeviceControlTypeFilter(String content) {
+        if (ObjectUtils.isEmpty(content)) {
             return null;
         }
-        for (DeviceControlType deviceControlType : DeviceControlType.values()) {
-            if (deviceControlType.getVal().equals(val)) {
-                return deviceControlType;
-            }
-        }
-        return null;
+        String key = MAP.keySet().stream().filter(content::contains).findFirst().orElse(StringUtils.EMPTY);
+
+        return getDeviceControlType(key);
     }
 
     @SneakyThrows
     public static DeviceControlType getDeviceControlType(String key) {
+        if (key == null) {
+            return null;
+        }
         if (MAP.containsKey(key)) {
             return MAP.get(key);
-        } else {
-            DeviceControlType type = getType(key);
-            MAP.put(key, type);
-            return type;
         }
+        return null;
     }
 
 }

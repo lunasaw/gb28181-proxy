@@ -7,6 +7,7 @@ import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
 import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -25,13 +26,18 @@ import lombok.Data;
  */
 @Data
 @Component
-public abstract class MessageClientHandlerAbstract implements MessageHandler {
+public abstract class MessageClientHandlerAbstract extends MessageHandlerAbstract {
 
     @Resource
     public MessageProcessorClient messageProcessorClient;
 
     public MessageClientHandlerAbstract(MessageProcessorClient messageProcessorClient) {
         this.messageProcessorClient = messageProcessorClient;
+    }
+
+    @Override
+    public String getRootType() {
+        return "Root";
     }
 
     public DeviceSession getDeviceSession(RequestEvent event) {
@@ -44,26 +50,5 @@ public abstract class MessageClientHandlerAbstract implements MessageHandler {
         return new DeviceSession(userId, sipId);
     }
 
-    public void responseAck(RequestEvent event) {
-        SIPRequest sipRequest = (SIPRequest)event.getRequest();
-        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
-    }
 
-    public void responseError(RequestEvent event) {
-        SIPRequest sipRequest = (SIPRequest)event.getRequest();
-        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "OK", receiveIp, sipRequest);
-    }
-
-    public <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
-        byte[] rawContent = sipRequest.getRawContent();
-        if (StringUtils.isBlank(charset)) {
-            charset = Constant.GB2312;
-        }
-        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
-        Object o = XmlUtils.parseObj(xmlStr, clazz);
-        return (T) o;
-    }
 }

@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.sip.common.entity.Device;
+import io.github.lunasaw.sip.common.transmit.event.request.SipMessageRequestProcessorAbstract;
 import org.springframework.stereotype.Component;
 
 import com.luna.common.text.StringTools;
@@ -30,13 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Slf4j
-public class ServerMessageRequestProcessor extends SipRequestProcessorAbstract {
+public class ServerMessageRequestProcessor extends SipMessageRequestProcessorAbstract {
 
     public static final String                      METHOD              = "MESSAGE";
     public static final Map<String, MessageHandler> MESSAGE_HANDLER_MAP = new ConcurrentHashMap<>();
 
     @Resource
-    private MessageProcessorServer                  messageProcessorClient;
+    private MessageProcessorServer messageProcessorServer;
     private String                                  method              = METHOD;
 
     public static void addHandler(MessageHandler messageHandler) {
@@ -51,28 +52,9 @@ public class ServerMessageRequestProcessor extends SipRequestProcessorAbstract {
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
-        String charset = Optional.of(fromDevice).map(Device::getCharset).orElse("gb2312");
+        FromDevice fromDevice = (FromDevice) messageProcessorServer.getFromDevice(userId);
 
-        // 解析xml
-        byte[] rawContent = request.getRawContent();
-        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
-        String cmdType = XmlUtils.getCmdType(xmlStr);
-
-        MessageHandler serverMessageHandler = MESSAGE_HANDLER_MAP.get(cmdType);
-
-        if (serverMessageHandler == null) {
-            return;
-        }
-
-        serverMessageHandler.responseAck(evt);
-
-        try {
-            serverMessageHandler.handForEvt(evt);
-        } catch (Exception e) {
-            log.error("process::evt = {} ", evt, e);
-            serverMessageHandler.responseError(evt);
-        }
+        doMessageHandForEvt(evt, fromDevice);
     }
 
 }

@@ -30,8 +30,6 @@ public class RecordInfoQueryMessageClientHandler extends MessageClientHandlerAbs
 
     private String                 cmdType  = CMD_TYPE;
 
-    private MessageProcessorClient messageProcessorClient;
-
     public RecordInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
     }

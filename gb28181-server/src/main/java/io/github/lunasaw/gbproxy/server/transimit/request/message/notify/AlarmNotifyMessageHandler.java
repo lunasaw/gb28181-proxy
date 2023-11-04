@@ -30,8 +30,14 @@ public class AlarmNotifyMessageHandler extends MessageServerHandlerAbstract {
 
     private String             cmdType  = CMD_TYPE;
 
+
     public AlarmNotifyMessageHandler(MessageProcessorServer messageProcessorServer) {
         super(messageProcessorServer);
+    }
+
+    @Override
+    public String getRootType() {
+        return Notify;
     }
 
     @Override
