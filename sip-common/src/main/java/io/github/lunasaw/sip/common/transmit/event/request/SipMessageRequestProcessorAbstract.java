@@ -1,5 +1,6 @@
 package io.github.lunasaw.sip.common.transmit.event.request;
 
+import com.google.common.collect.Maps;
 import com.luna.common.text.StringTools;
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.constant.Constant;
@@ -8,6 +9,8 @@ import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.assertj.core.util.Lists;
 
 import javax.sip.RequestEvent;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author luna
@@ -23,16 +27,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public abstract class SipMessageRequestProcessorAbstract extends SipRequestProcessorAbstract {
 
-    public static final Map<String, List<MessageHandler>> MESSAGE_HANDLER_MAP = new ConcurrentHashMap<>();
+    public static final Map<String, Map<String, MessageHandler>> MESSAGE_HANDLER_CMD_MAP = new ConcurrentHashMap<>();
 
     public static void addHandler(MessageHandler messageHandler) {
         if (messageHandler == null) {
             return;
         }
-        if (MESSAGE_HANDLER_MAP.containsKey(messageHandler.getRootType())) {
-            MESSAGE_HANDLER_MAP.get(messageHandler.getRootType()).add(messageHandler);
+        if (MESSAGE_HANDLER_CMD_MAP.containsKey(messageHandler.getRootType())) {
+            MESSAGE_HANDLER_CMD_MAP.get(messageHandler.getRootType()).put(messageHandler.getRootType(), messageHandler);
         } else {
-            MESSAGE_HANDLER_MAP.put(messageHandler.getRootType(), Lists.newArrayList(messageHandler));
+            ConcurrentMap<String, MessageHandler> newedConcurrentMap = Maps.newConcurrentMap();
+            newedConcurrentMap.put(messageHandler.getCmdType(), messageHandler);
+            MESSAGE_HANDLER_CMD_MAP.put(messageHandler.getRootType(), newedConcurrentMap);
         }
     }
 
@@ -48,23 +54,23 @@ public abstract class SipMessageRequestProcessorAbstract extends SipRequestProce
 
         String cmdType = XmlUtils.getCmdType(xmlStr);
         String rootType = XmlUtils.getRootType(xmlStr);
-        List<MessageHandler> messageHandlers = MESSAGE_HANDLER_MAP.get(rootType);
+        Map<String, MessageHandler> messageHandlerMap = MESSAGE_HANDLER_CMD_MAP.get(rootType);
 
-        for (MessageHandler messageHandler : messageHandlers) {
+        if (MapUtils.isEmpty(messageHandlerMap)) {
+            return;
+        }
 
-            if (messageHandler == null) {
-                return;
-            }
+        MessageHandler messageHandler = messageHandlerMap.get(cmdType);
+        if (messageHandler == null) {
+            return;
+        }
+        try {
             messageHandler.setXmlStr(xmlStr);
+            messageHandler.handForEvt(evt);
             messageHandler.responseAck(evt);
-            try {
-                if (messageHandler.getCmdType().equals(cmdType)) {
-                    messageHandler.handForEvt(evt);
-                }
-            } catch (Exception e) {
-                log.error("process::evt = {} ", evt, e);
-                messageHandler.responseError(evt);
-            }
+        } catch (Exception e) {
+            log.error("process::evt = {} ", evt, e);
+            messageHandler.responseError(evt);
         }
     }
 

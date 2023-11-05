@@ -31,6 +31,9 @@ public class RegisterInfo {
      */
     private String localIp;
 
+    /**
+     * nat转换后看到的IP
+     */
     private String remoteIp;
 
     /**

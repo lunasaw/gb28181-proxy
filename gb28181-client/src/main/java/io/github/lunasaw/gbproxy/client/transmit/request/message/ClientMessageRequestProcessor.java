@@ -1,28 +1,14 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
-import java.nio.charset.Charset;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.constant.Constant;
-import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.transmit.event.request.SipMessageRequestProcessorAbstract;
-import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Component;
-
-import com.luna.common.text.StringTools;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
-import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
-import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -52,10 +38,12 @@ public class ClientMessageRequestProcessor extends SipMessageRequestProcessorAbs
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
+
+        if (!userId.equals(fromDevice.getUserId())) {
+            return;
+        }
+
         doMessageHandForEvt(evt, fromDevice);
     }
-
-
-
 }

@@ -1,11 +1,11 @@
-package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
+package io.github.lunasaw.gbproxy.server.transimit.request.message.response;
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
+import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
+import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
@@ -22,45 +22,41 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class MobilePositionNotifyMessageHandler extends MessageServerHandlerAbstract {
+public class ResponseCatalogMessageServerHandler extends MessageServerHandlerAbstract {
 
-    public static final String CMD_TYPE = "MobilePosition";
+    public static final String CMD_TYPE = "Catalog";
 
     private String             cmdType  = CMD_TYPE;
 
-    public MobilePositionNotifyMessageHandler(MessageProcessorServer messageProcessorServer) {
+    public ResponseCatalogMessageServerHandler(MessageProcessorServer messageProcessorServer) {
         super(messageProcessorServer);
     }
 
     @Override
-    public String getRootType() {
-        return Notify;
-    }
-
-
-    @Override
     public void handForEvt(RequestEvent event) {
-
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
         String deviceId = deviceSession.getSipId();
 
-        // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice();
         ToDevice toDevice = (ToDevice)messageProcessorServer.getToDevice(deviceId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;
         }
 
-        MobilePositionNotify mobilePositionNotify = parseRequest(event, fromDevice.getCharset(), MobilePositionNotify.class);
+        DeviceResponse deviceResponse = parseXml(DeviceResponse.class);
 
-        messageProcessorServer.updateMobilePosition(mobilePositionNotify);
+        messageProcessorServer.updateDeviceResponse(userId, deviceResponse);
     }
 
     @Override
     public String getCmdType() {
         return cmdType;
+    }
+
+    @Override
+    public String getRootType() {
+        return Response;
     }
 }

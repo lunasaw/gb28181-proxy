@@ -47,7 +47,7 @@ public class DeviceInfoQueryMessageClientHandler extends MessageClientHandlerAbs
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
         ToDevice toDevice = (ToDevice) messageProcessorClient.getToDevice(sipId);
 
         DeviceQuery deviceQuery = parseRequest(event, fromDevice.getCharset(), DeviceQuery.class);

@@ -13,7 +13,6 @@ import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
@@ -77,7 +76,7 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
         String toUserId = SipUtils.getUserIdFromToHeader(response);
         String fromUserId = SipUtils.getUserIdFromFromHeader(response);
         CallIdHeader callIdHeader = response.getCallIdHeader();
-        FromDevice fromDevice = (FromDevice)inviteProcessorServer.getFromDevice(fromUserId);
+        FromDevice fromDevice = (FromDevice)inviteProcessorServer.getFromDevice();
 
         ToDevice toDevice = ToDevice.getInstance(toUserId, evt.getRemoteIpAddress(), evt.getRemotePort());
 

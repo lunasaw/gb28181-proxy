@@ -1,6 +1,5 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 
-import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
@@ -10,9 +9,6 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
-import io.github.lunasaw.sip.common.utils.XmlUtils;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
@@ -51,7 +47,7 @@ public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
         ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
         DeviceAlarmQuery deviceAlarmQuery = parseXml(DeviceAlarmQuery.class);

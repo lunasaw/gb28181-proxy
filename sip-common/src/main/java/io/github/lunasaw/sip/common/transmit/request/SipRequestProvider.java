@@ -10,6 +10,7 @@ import javax.sip.address.URI;
 import javax.sip.header.*;
 import javax.sip.message.Request;
 
+import com.luna.common.check.Assert;
 import org.assertj.core.util.Lists;
 import org.springframework.util.DigestUtils;
 
@@ -71,6 +72,8 @@ public class SipRequestProvider {
      * @return Request
      */
     public static Request createSipRequest(FromDevice fromDevice, ToDevice toDevice, SipMessage sipMessage) {
+        Assert.notNull(fromDevice, "发送设备不能为null");
+        Assert.notNull(toDevice, "发送设备不能为null");
 
         CallIdHeader callIdHeader = SipRequestUtils.createCallIdHeader(sipMessage.getCallId());
         // sipUri

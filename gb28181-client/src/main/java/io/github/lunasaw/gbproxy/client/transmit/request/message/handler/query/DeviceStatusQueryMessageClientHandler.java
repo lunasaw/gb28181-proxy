@@ -50,7 +50,7 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
         if (fromDevice == null) {
             return;
         }

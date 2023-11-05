@@ -12,6 +12,7 @@ public interface MessageHandler {
     String Control = "Control";
     String Notify = "Notify";
 
+    String Response = "Response";
 
     /**
      * 响应ack

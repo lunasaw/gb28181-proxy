@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.ToDevice;
 
 /**
  * @author luna
@@ -34,7 +32,7 @@ public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
     }
 
     @Override
-    public Device getFromDevice(String userId) {
+    public Device getFromDevice() {
         return fromDevice;
     }
 }

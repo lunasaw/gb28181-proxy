@@ -29,6 +29,7 @@ public class DeviceConfig {
 
     public static Map<String, Device> DEVICE_MAP = new ConcurrentHashMap<>();
 
+
     static {
         FromDevice clientFrom = FromDevice.getInstance("33010602011187000001", LOOP_IP, 8118);
         DEVICE_MAP.put("client_from", clientFrom);

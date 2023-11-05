@@ -65,12 +65,10 @@ public class DigestServerAuthenticationHelper {
      * @throws NoSuchAlgorithmException
      */
     static {
-        {
-            try {
-                messageDigest = MessageDigest.getInstance(DEFAULT_ALGORITHM);
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            messageDigest = MessageDigest.getInstance(DEFAULT_ALGORITHM);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 

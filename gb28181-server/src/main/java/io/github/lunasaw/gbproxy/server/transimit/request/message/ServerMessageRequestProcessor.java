@@ -1,25 +1,18 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
-import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.transmit.event.request.SipMessageRequestProcessorAbstract;
 import org.springframework.stereotype.Component;
-
-import com.luna.common.text.StringTools;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
-import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
-import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +42,7 @@ public class ServerMessageRequestProcessor extends SipMessageRequestProcessorAbs
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) messageProcessorServer.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice();
 
         doMessageHandForEvt(evt, fromDevice);
     }

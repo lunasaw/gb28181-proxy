@@ -62,10 +62,9 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             String userId = SipUtils.getUserIdFromFromHeader(request);
             String sipUserId = SipUtils.getUserIdFromToHeader(request);
 
-            ToDevice toDevice = (ToDevice) registerProcessorServer.getToDevice(userId);
-            FromDevice fromDevice = (FromDevice) registerProcessorServer.getFromDevice(sipUserId);
+            FromDevice fromDevice = (FromDevice)registerProcessorServer.getFromDevice();
 
-            if (fromDevice == null || toDevice == null) {
+            if (fromDevice == null) {
                 return;
             }
             // 设备接收到的IP地址，有可能是Nat之后的, 本地回复直接使用这个地址即可
@@ -91,11 +90,17 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             registerInfo.setRemotePort(remoteAddressInfo.getPort());
             registerInfo.setRemoteIp(remoteAddressInfo.getIp());
 
-            registerProcessorServer.updateRegisterInfo(userId, registerInfo);
-
             SipTransaction sipTransaction = SipUtils.getSipTransaction(request);
+            if (!registerFlag) {
+                log.info(title + "设备：{}, 设备注销: {}", userId, expires);
+                registerProcessorServer.deviceOffLine(userId, registerInfo, sipTransaction);
+                return;
+            }
+
+            registerProcessorServer.updateRegisterInfo(userId, registerInfo);
             String callId = SipUtils.getCallId(request);
             List<Header> okHeaderList = getRegisterOkHeaderList(request);
+
 
             if (transaction != null && callId.equals(transaction.getCallId())) {
                 log.info(title + "设备：{}, 注册续订: {}", userId, expires);

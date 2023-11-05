@@ -46,7 +46,7 @@ public class MediaStatusNotifyMessageHandler extends MessageServerHandlerAbstrac
         String deviceId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice();
         ToDevice toDevice = (ToDevice)messageProcessorServer.getToDevice(deviceId);
         if (toDevice == null) {
             // 未注册的设备不做处理

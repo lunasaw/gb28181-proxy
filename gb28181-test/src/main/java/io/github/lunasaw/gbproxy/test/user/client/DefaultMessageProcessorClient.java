@@ -36,7 +36,7 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
     }
 
     @Override
-    public Device getFromDevice(String userId) {
+    public Device getFromDevice() {
         return fromDevice;
     }
 

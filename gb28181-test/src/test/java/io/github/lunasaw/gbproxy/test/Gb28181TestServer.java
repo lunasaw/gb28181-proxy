@@ -2,7 +2,9 @@ package io.github.lunasaw.gbproxy.test;
 
 import javax.sip.message.Request;
 
+import com.luna.common.date.DateUtils;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
+import io.github.lunasaw.gbproxy.test.user.server.DefaultRegisterProcessorServer;
 import io.github.lunasaw.sip.common.entity.control.DragZoom;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.SneakyThrows;
@@ -26,6 +28,8 @@ import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 
+import java.util.Date;
+
 /**
  * @author luna
  * @date 2023/10/12
@@ -47,7 +51,7 @@ public class Gb28181TestServer {
     public void before() {
         // 本地端口监听
         log.info("before::服务端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint("0.0.0.0", fromDevice.getPort());
+        SipLayer.addListeningPoint("10.39.85.228", 8116);
 
     }
 
@@ -84,6 +88,20 @@ public class Gb28181TestServer {
 
         String s = ServerSendCmd.deviceControlDragIn((FromDevice) fromDevice, (ToDevice) toDevice, dragZoom);
         System.out.println(s);
+    }
+
+    @Test
+    public void record_test() {
+        ToDevice instance = ToDevice.getInstance("34020000001320000001", "172.19.14.30", 5060);
+
+        FromDevice fromDevice = FromDevice.getInstance("41010500002000000010", "10.39.85.228", 8116);
+
+        Date start = DateUtils.parseDateTime("2023-11-02 00:00:00");
+        Date end = DateUtils.parseDateTime("2023-11-02 23:59:00");
+
+        DefaultRegisterProcessorServer.deviceMap.put("34020000001320000001", instance);
+
+        String s = ServerSendCmd.deviceRecordInfoQuery(fromDevice, instance, start, end);
     }
 
     @SneakyThrows

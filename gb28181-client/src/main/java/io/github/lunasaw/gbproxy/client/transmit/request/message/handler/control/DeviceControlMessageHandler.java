@@ -2,14 +2,12 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.contro
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.entity.control.ControlBase;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.control.DeviceControlBase;
 import io.github.lunasaw.sip.common.enums.DeviceControlType;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,7 +43,7 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
         String userId = deviceSession.getUserId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
 
         String xmlStr = parseRequest(event, fromDevice.getCharset());
 

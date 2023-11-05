@@ -128,7 +128,8 @@ public class ServerSendCmd {
      */
     public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, String startTime, String endTime, String secrecy,
                                                String type) {
-        DeviceRecordQuery recordQuery = new DeviceRecordQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+        DeviceRecordQuery recordQuery =
+            new DeviceRecordQuery(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         recordQuery.setStartTime(startTime);
         recordQuery.setEndTime(endTime);
@@ -151,8 +152,8 @@ public class ServerSendCmd {
      */
     public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime, String secrecy, String type) {
 
-        String endTimeStr = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime);
         String startTimeStr = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startTime);
+        String endTimeStr = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime);
 
         return deviceRecordInfoQuery(fromDevice, toDevice, startTimeStr, endTimeStr, secrecy, type);
     }
