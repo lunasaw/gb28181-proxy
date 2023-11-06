@@ -46,14 +46,13 @@ public class MobilePositionNotifyMessageHandler extends MessageServerHandlerAbst
         String userId = deviceSession.getUserId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice();
         ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;
         }
 
-        MobilePositionNotify mobilePositionNotify = parseRequest(event, fromDevice.getCharset(), MobilePositionNotify.class);
+        MobilePositionNotify mobilePositionNotify = parseXml(MobilePositionNotify.class);
 
         messageProcessorServer.updateMobilePosition(mobilePositionNotify);
     }

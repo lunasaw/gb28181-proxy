@@ -44,15 +44,14 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
         // 设备查询
         FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
 
-        String xmlStr = parseRequest(event, fromDevice.getCharset());
 
-        DeviceControlType deviceControlType = DeviceControlType.getDeviceControlTypeFilter(xmlStr);
+        DeviceControlType deviceControlType = DeviceControlType.getDeviceControlTypeFilter(getXmlStr());
 
         if (deviceControlType == null) {
             return;
         }
 
-        Object o = parseRequest(event, fromDevice.getCharset(), deviceControlType.getClazz());
+        Object o = parseXml(deviceControlType.getClazz());
 
         messageProcessorClient.deviceControl(o);
     }
