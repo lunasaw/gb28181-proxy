@@ -9,29 +9,47 @@ import io.github.lunasaw.sip.common.enums.StreamModeEnum;
  */
 public class InviteEntity {
 
-    public static StringBuffer getInviteBody(StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer port, String ssrc) {
-        return getInviteBody(false, streamModeEnum, userId, sdpIp, port, ssrc, false, null);
+    public static void main(String[] args) {
+        StringBuffer inviteBody = getInvitePlayBody(StreamModeEnum.UDP, "41010500002000000001", "127.0.0.1", 5060, "1234567890");
+        System.out.println(inviteBody);
     }
 
-    public static StringBuffer getInviteBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer port, String ssrc) {
-        return getInviteBody(seniorSdp, streamModeEnum, userId, sdpIp, port, ssrc, false, null);
+    /**
+     * 组装subject
+     *
+     * @param userId 设备Id
+     * @param subId  通道Id
+     * @param ssrc   混淆码
+     * @return
+     */
+    public static String getSubject(String userId, String subId, String ssrc) {
+        return String.format("%s:%s,%s:%s", subId, ssrc, userId, 0);
     }
 
-    public static StringBuffer getInviteBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer port, String ssrc, Boolean subStream, String manufacturer) {
+    public static StringBuffer getInvitePlayBody(StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort, String ssrc) {
+        return getInvitePlayBody(false, streamModeEnum, userId, sdpIp, mediaPort, ssrc, false, null);
+    }
+
+    public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort, String ssrc) {
+        return getInvitePlayBody(seniorSdp, streamModeEnum, userId, sdpIp, mediaPort, ssrc, false, null);
+    }
+
+    public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort, String ssrc, Boolean subStream, String manufacturer) {
         StringBuffer content = new StringBuffer(200);
         content.append("v=0\r\n");
         content.append("o=").append(userId).append(" 0 0 IN IP4 ").append(sdpIp).append("\r\n");
+        // Session Name
         content.append("s=Play\r\n");
         content.append("c=IN IP4 ").append(sdpIp).append("\r\n");
         content.append("t=0 0\r\n");
 
         if (seniorSdp) {
             if (StreamModeEnum.TCP_PASSIVE.equals(streamModeEnum)) {
-                content.append("m=video ").append(port).append(" TCP/RTP/AVP 96 126 125 99 34 98 97\r\n");
+                content.append("m=video ").append(mediaPort).append(" TCP/RTP/AVP 96 126 125 99 34 98 97\r\n");
             } else if (StreamModeEnum.TCP_ACTIVE.equals(streamModeEnum)) {
-                content.append("m=video ").append(port).append(" TCP/RTP/AVP 96 126 125 99 34 98 97\r\n");
+                content.append("m=video ").append(mediaPort).append(" TCP/RTP/AVP 96 126 125 99 34 98 97\r\n");
             } else if (StreamModeEnum.UDP.equals(streamModeEnum)) {
-                content.append("m=video ").append(port).append(" RTP/AVP 96 126 125 99 34 98 97\r\n");
+                content.append("m=video ").append(mediaPort).append(" RTP/AVP 96 126 125 99 34 98 97\r\n");
             }
             content.append("a=recvonly\r\n");
             content.append("a=rtpmap:96 PS/90000\r\n");
@@ -51,11 +69,11 @@ public class InviteEntity {
             }
         } else {
             if (StreamModeEnum.TCP_PASSIVE.equals(streamModeEnum)) {
-                content.append("m=video " + port + " TCP/RTP/AVP 96 97 98 99\r\n");
+                content.append("m=video " + mediaPort + " TCP/RTP/AVP 96 97 98 99\r\n");
             } else if (StreamModeEnum.TCP_ACTIVE.equals(streamModeEnum)) {
-                content.append("m=video " + port + " TCP/RTP/AVP 96 97 98 99\r\n");
+                content.append("m=video " + mediaPort + " TCP/RTP/AVP 96 97 98 99\r\n");
             } else if (StreamModeEnum.UDP.equals(streamModeEnum)) {
-                content.append("m=video " + port + " RTP/AVP 96 97 98 99\r\n");
+                content.append("m=video " + mediaPort + " RTP/AVP 96 97 98 99\r\n");
             }
             content.append("a=recvonly\r\n");
             content.append("a=rtpmap:96 PS/90000\r\n");

@@ -44,14 +44,14 @@ public class SipSender {
         return doNotifyRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
     }
 
-    public static String doInviteRequest(FromDevice fromDevice, ToDevice toDevice, String contend) {
-        return doInviteRequest(fromDevice, toDevice, contend, null, null);
+    public static String doInviteRequest(FromDevice fromDevice, ToDevice toDevice, String contend, String subject) {
+        return doInviteRequest(fromDevice, toDevice, contend, subject, null, null);
     }
 
-    public static String doInviteRequest(FromDevice fromDevice, ToDevice toDevice, String contend, Event errorEvent,
+    public static String doInviteRequest(FromDevice fromDevice, ToDevice toDevice, String contend, String subject, Event errorEvent,
                                          Event okEvent) {
         String callId = SipRequestUtils.getNewCallId();
-        Request messageRequest = SipRequestProvider.createInviteRequest(fromDevice, toDevice, contend, callId);
+        Request messageRequest = SipRequestProvider.createInviteRequest(fromDevice, toDevice, contend, subject, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }

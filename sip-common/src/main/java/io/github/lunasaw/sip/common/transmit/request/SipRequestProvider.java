@@ -126,7 +126,7 @@ public class SipRequestProvider {
      * @param callId     callId
      * @return Request
      */
-    public static Request createInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+    public static Request createInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String subject, String callId) {
         SipMessage sipMessage = SipMessage.getInviteBody();
         sipMessage.setMethod(Request.INVITE);
         sipMessage.setContent(content);
@@ -134,11 +134,15 @@ public class SipRequestProvider {
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
         ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
-        SubjectHeader subjectHeader = SipRequestUtils.createSubjectHeader(toDevice.getSubject());
+        SubjectHeader subjectHeader = SipRequestUtils.createSubjectHeader(subject);
 
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader).addHeader(subjectHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage);
+    }
+
+    public Request createPlaybackInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String subject, String callId) {
+        return createInviteRequest(fromDevice, toDevice, content, subject, callId);
     }
 
     /**
@@ -347,9 +351,5 @@ public class SipRequestProvider {
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage, subscribeInfo);
-    }
-
-    public Request createPlaybackInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
-        return createInviteRequest(fromDevice, toDevice, content, callId);
     }
 }
