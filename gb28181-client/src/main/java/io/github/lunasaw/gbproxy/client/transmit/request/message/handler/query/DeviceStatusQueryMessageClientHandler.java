@@ -56,7 +56,7 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
         }
         ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
-        DeviceQuery deviceQuery = parseRequest(event, fromDevice.getCharset(), DeviceQuery.class);
+        DeviceQuery deviceQuery = parseXml(DeviceQuery.class);
 
         String sn = deviceQuery.getSn();
 

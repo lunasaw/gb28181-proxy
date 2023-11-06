@@ -35,6 +35,7 @@ public abstract class MessageServerHandlerAbstract extends MessageHandlerAbstrac
         // 客户端发送的userId
         String userId = SipUtils.getUserIdFromFromHeader(sipRequest);
         // 服务端接收的userId
+        // 服务端收到消息，fromHeader是服务端的userId
         String sipId = SipUtils.getUserIdFromToHeader(sipRequest);
 
         return new DeviceSession(userId, sipId);

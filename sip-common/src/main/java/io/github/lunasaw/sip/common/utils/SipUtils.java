@@ -3,12 +3,16 @@ package io.github.lunasaw.sip.common.utils;
 import javax.sdp.SdpFactory;
 import javax.sdp.SdpParseException;
 import javax.sdp.SessionDescription;
+import javax.sip.RequestEvent;
 import javax.sip.header.FromHeader;
 import javax.sip.header.HeaderAddress;
 import javax.sip.header.ToHeader;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import com.luna.common.text.StringTools;
+import io.github.lunasaw.sip.common.constant.Constant;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
 import gov.nist.javax.sip.address.AddressImpl;
@@ -18,6 +22,8 @@ import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
+
+import java.nio.charset.Charset;
 
 /**
  * @author luna
@@ -140,5 +146,25 @@ public class SipUtils {
             sdp = SdpFactory.getInstance().createSessionDescription(sdpBuffer.toString());
         }
         return SdpSessionDescription.getInstance(sdp);
+    }
+
+    public static <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
+        SIPRequest sipRequest = (SIPRequest) event.getRequest();
+        byte[] rawContent = sipRequest.getRawContent();
+        if (StringUtils.isBlank(charset)) {
+            charset = Constant.GB2312;
+        }
+        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
+        Object o = XmlUtils.parseObj(xmlStr, clazz);
+        return (T) o;
+    }
+
+    public static String parseRequest(RequestEvent event, String charset) {
+        SIPRequest sipRequest = (SIPRequest) event.getRequest();
+        byte[] rawContent = sipRequest.getRawContent();
+        if (StringUtils.isBlank(charset)) {
+            charset = Constant.GB2312;
+        }
+        return StringTools.toEncodedString(rawContent, Charset.forName(charset));
     }
 }

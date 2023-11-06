@@ -52,7 +52,7 @@ public class ConfigDownloadMessageHandler extends MessageClientHandlerAbstract {
         FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
         ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
-        DeviceConfigDownload deviceConfigDownload = parseRequest(event, fromDevice.getCharset(), DeviceConfigDownload.class);
+        DeviceConfigDownload deviceConfigDownload = parseXml(DeviceConfigDownload.class);
 
         DeviceConfigResponse deviceConfigResponse = messageProcessorClient.getDeviceConfigResponse(deviceConfigDownload);
         deviceConfigResponse.setSn(deviceConfigDownload.getSn());

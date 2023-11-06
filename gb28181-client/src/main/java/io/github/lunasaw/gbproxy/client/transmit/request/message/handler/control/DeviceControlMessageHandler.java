@@ -38,12 +38,6 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
     @Override
     public void handForEvt(RequestEvent event) {
 
-        DeviceSession deviceSession = getDeviceSession(event);
-        String userId = deviceSession.getUserId();
-
-        // 设备查询
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
-
 
         DeviceControlType deviceControlType = DeviceControlType.getDeviceControlTypeFilter(getXmlStr());
 

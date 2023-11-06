@@ -34,6 +34,7 @@ public abstract class MessageClientHandlerAbstract extends MessageHandlerAbstrac
 
         // 特别注意。这里的userId和sipId是反的，因为是客户端收到消息，所以这里的from是服务端，to是客户端
         String userId = SipUtils.getUserIdFromToHeader(sipRequest);
+        // 客户端收到消息 fromHeader是服务端，toHeader是客户端
         String sipId = SipUtils.getUserIdFromFromHeader(sipRequest);
 
         return new DeviceSession(userId, sipId);

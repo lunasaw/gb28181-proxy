@@ -52,8 +52,6 @@ public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract
 
         DeviceAlarmQuery deviceAlarmQuery = parseXml(DeviceAlarmQuery.class);
 
-        DeviceAlarmQuery deviceAlarmQuery2 = parseRequest(event, fromDevice.getCharset(), DeviceAlarmQuery.class);
-
         // 请求序列化编号，上游后续处理
         String sn = deviceAlarmQuery.getSn();
         DeviceAlarmNotify deviceAlarmNotify = messageProcessorClient.getDeviceAlarmNotify(deviceAlarmQuery);
