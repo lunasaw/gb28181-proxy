@@ -4,13 +4,12 @@ import javax.sdp.SdpFactory;
 import javax.sdp.SdpParseException;
 import javax.sdp.SessionDescription;
 import javax.sip.RequestEvent;
-import javax.sip.header.FromHeader;
-import javax.sip.header.HeaderAddress;
-import javax.sip.header.ToHeader;
+import javax.sip.header.*;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
 import com.luna.common.text.StringTools;
+import gov.nist.javax.sip.header.Subject;
 import io.github.lunasaw.sip.common.constant.Constant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
@@ -82,6 +81,19 @@ public class SipUtils {
     public static RemoteAddressInfo getRemoteAddressFromRequest(SIPRequest request) {
         return getRemoteAddressFromRequest(request, false);
     }
+
+    /**
+     * 从subject读取channelId
+     */
+    public static String getSubjectId(Request request) {
+        SubjectHeader subject = (SubjectHeader) request.getHeader(SubjectHeader.NAME);
+        if (subject == null) {
+            // 如果缺失subject
+            return null;
+        }
+        return subject.getSubject().split(":")[0];
+    }
+
 
     /**
      * 从请求中获取设备ip地址和端口号
