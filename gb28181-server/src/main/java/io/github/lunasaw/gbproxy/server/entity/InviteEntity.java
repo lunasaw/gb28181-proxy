@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.client.entity;
+package io.github.lunasaw.gbproxy.server.entity;
 
 import io.github.lunasaw.sip.common.enums.ManufacturerEnum;
 import io.github.lunasaw.sip.common.enums.StreamModeEnum;

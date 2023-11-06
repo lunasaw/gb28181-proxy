@@ -1,18 +1,5 @@
 package io.github.lunasaw.sip.common.transmit;
 
-import javax.sip.SipException;
-import javax.sip.header.CallIdHeader;
-import javax.sip.header.UserAgentHeader;
-import javax.sip.header.ViaHeader;
-import javax.sip.message.Message;
-import javax.sip.message.Request;
-import javax.sip.message.Response;
-
-import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
-import org.springframework.util.ObjectUtils;
-
-import com.luna.common.text.RandomStrUtil;
-
 import gov.nist.javax.sip.SipProviderImpl;
 import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -22,13 +9,22 @@ import io.github.lunasaw.sip.common.layer.SipLayer;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
+import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.sip.SipException;
+import javax.sip.header.CallIdHeader;
+import javax.sip.header.UserAgentHeader;
+import javax.sip.header.ViaHeader;
+import javax.sip.message.Message;
+import javax.sip.message.Request;
+import javax.sip.message.Response;
+
 /**
  * 发送SIP消息
- * 
+ *
  * @author lin
  */
 @Slf4j
@@ -48,9 +44,21 @@ public class SipSender {
         return doNotifyRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
     }
 
+    public static String doInviteRequest(FromDevice fromDevice, ToDevice toDevice, String contend) {
+        return doInviteRequest(fromDevice, toDevice, contend, null, null);
+    }
+
+    public static String doInviteRequest(FromDevice fromDevice, ToDevice toDevice, String contend, Event errorEvent,
+                                         Event okEvent) {
+        String callId = SipRequestUtils.getNewCallId();
+        Request messageRequest = SipRequestProvider.createInviteRequest(fromDevice, toDevice, contend, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
+        return callId;
+    }
+
     public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expire) {
         String callId = SipRequestUtils.getNewCallId();
-        Request messageRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, expire);
+        Request messageRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, expire, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
         return callId;
     }
@@ -110,7 +118,7 @@ public class SipSender {
     }
 
     public static void transmitRequest(String ip, Message message, Event errorEvent, Event okEvent) {
-        ViaHeader viaHeader = (ViaHeader)message.getHeader(ViaHeader.NAME);
+        ViaHeader viaHeader = (ViaHeader) message.getHeader(ViaHeader.NAME);
         String transport = "UDP";
         if (viaHeader == null) {
             log.warn("[消息头缺失]： ViaHeader， 使用默认的UDP方式处理数据");
@@ -121,7 +129,7 @@ public class SipSender {
             message.addHeader(SipRequestUtils.createUserAgentHeader(Constant.AGENT));
         }
 
-        CallIdHeader callIdHeader = (CallIdHeader)message.getHeader(CallIdHeader.NAME);
+        CallIdHeader callIdHeader = (CallIdHeader) message.getHeader(CallIdHeader.NAME);
         // 添加错误订阅
         if (errorEvent != null) {
             SipSubscribe.addErrorSubscribe(callIdHeader.getCallId(), (eventResult -> {
@@ -146,9 +154,9 @@ public class SipSender {
                     return;
                 }
                 if (message instanceof Request) {
-                    tcpSipProvider.sendRequest((Request)message);
+                    tcpSipProvider.sendRequest((Request) message);
                 } else if (message instanceof Response) {
-                    tcpSipProvider.sendResponse((Response)message);
+                    tcpSipProvider.sendResponse((Response) message);
                 }
 
             } else if (Constant.UDP.equalsIgnoreCase(transport)) {
@@ -158,9 +166,9 @@ public class SipSender {
                     return;
                 }
                 if (message instanceof Request) {
-                    sipProvider.sendRequest((Request)message);
+                    sipProvider.sendRequest((Request) message);
                 } else if (message instanceof Response) {
-                    sipProvider.sendResponse((Response)message);
+                    sipProvider.sendResponse((Response) message);
                 }
             }
         } catch (SipException e) {

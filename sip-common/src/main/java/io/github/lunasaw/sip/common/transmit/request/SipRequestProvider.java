@@ -1,19 +1,6 @@
 package io.github.lunasaw.sip.common.transmit.request;
 
-import java.text.ParseException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.sip.address.SipURI;
-import javax.sip.address.URI;
-import javax.sip.header.*;
-import javax.sip.message.Request;
-
 import com.luna.common.check.Assert;
-import org.assertj.core.util.Lists;
-import org.springframework.util.DigestUtils;
-
 import gov.nist.javax.sip.message.SIPRequest;
 import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -21,6 +8,17 @@ import io.github.lunasaw.sip.common.entity.SipMessage;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import org.assertj.core.util.Lists;
+import org.springframework.util.DigestUtils;
+
+import javax.sip.address.SipURI;
+import javax.sip.address.URI;
+import javax.sip.header.*;
+import javax.sip.message.Request;
+import java.text.ParseException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Sip命令request创造器
@@ -173,7 +171,7 @@ public class SipRequestProvider {
      * @param callId     callId
      * @return Request
      */
-    public static Request createRegisterRequest(FromDevice fromDevice, ToDevice toDevice, String callId, Integer expires) {
+    public static Request createRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expires, String callId) {
 
         SipMessage sipMessage = SipMessage.getRegisterBody();
         sipMessage.setMethod(Request.REGISTER);
@@ -197,7 +195,7 @@ public class SipRequestProvider {
     public static Request createRegisterRequestWithAuth(FromDevice fromDevice, ToDevice toDevice, String callId, Integer expires,
                                                         WWWAuthenticateHeader www) {
 
-        Request registerRequest = createRegisterRequest(fromDevice, toDevice, callId, expires);
+        Request registerRequest = createRegisterRequest(fromDevice, toDevice, expires, callId);
         URI requestURI = registerRequest.getRequestURI();
 
         String userId = toDevice.getUserId();
