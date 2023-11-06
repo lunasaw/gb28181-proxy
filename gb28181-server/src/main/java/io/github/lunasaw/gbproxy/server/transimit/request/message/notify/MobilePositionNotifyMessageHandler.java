@@ -34,7 +34,7 @@ public class MobilePositionNotifyMessageHandler extends MessageServerHandlerAbst
 
     @Override
     public String getRootType() {
-        return Notify;
+        return NOTIFY;
     }
 
 
@@ -44,11 +44,10 @@ public class MobilePositionNotifyMessageHandler extends MessageServerHandlerAbst
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
-        String deviceId = deviceSession.getSipId();
 
         // 设备查询
         FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice();
-        ToDevice toDevice = (ToDevice)messageProcessorServer.getToDevice(deviceId);
+        ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;

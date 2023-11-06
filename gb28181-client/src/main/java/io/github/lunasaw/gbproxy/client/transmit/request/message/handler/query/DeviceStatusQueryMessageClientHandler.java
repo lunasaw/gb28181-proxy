@@ -30,7 +30,7 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
 
     public static final String     CMD_TYPE = "DeviceStatus";
 
-    private String root = Query;
+    private String root = QUERY;
     private String                 cmdType  = CMD_TYPE;
 
     public DeviceStatusQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
@@ -39,7 +39,7 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
 
     @Override
     public String getRootType() {
-        return Query;
+        return QUERY;
     }
 
 

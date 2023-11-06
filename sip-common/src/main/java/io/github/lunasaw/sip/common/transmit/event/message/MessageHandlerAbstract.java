@@ -5,7 +5,6 @@ import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
-import io.github.lunasaw.sip.common.utils.SipUtils;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,7 +55,7 @@ public class MessageHandlerAbstract implements MessageHandler {
     public void responseError(RequestEvent event) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "OK", receiveIp, sipRequest);
+        ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "SERVER ERROR", receiveIp, sipRequest);
     }
 
     public <T> T parseXml(Class<T> clazz) {

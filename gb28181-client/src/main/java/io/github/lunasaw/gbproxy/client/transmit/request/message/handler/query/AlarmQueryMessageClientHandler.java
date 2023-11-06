@@ -36,7 +36,7 @@ public class AlarmQueryMessageClientHandler extends MessageClientHandlerAbstract
 
     @Override
     public String getRootType() {
-        return Query;
+        return QUERY;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ConfigDownloadMessageHandler extends MessageClientHandlerAbstract {
 
     @Override
     public String getRootType() {
-        return Query;
+        return QUERY;
     }
 
 

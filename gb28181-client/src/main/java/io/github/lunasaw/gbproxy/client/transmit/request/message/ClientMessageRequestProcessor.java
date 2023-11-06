@@ -43,6 +43,7 @@ public class ClientMessageRequestProcessor extends SipMessageRequestProcessorAbs
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }
+        // 如果是客户端收到的userId，一定是和自己的userId一致
 
         doMessageHandForEvt(evt, fromDevice);
     }

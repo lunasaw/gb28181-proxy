@@ -4,7 +4,6 @@ import javax.sip.RequestEvent;
 
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
 import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +25,6 @@ public class ResponseCatalogMessageServerHandler extends MessageServerHandlerAbs
 
     public static final String CMD_TYPE = "Catalog";
 
-    private String             cmdType  = CMD_TYPE;
-
     public ResponseCatalogMessageServerHandler(MessageProcessorServer messageProcessorServer) {
         super(messageProcessorServer);
     }
@@ -37,9 +34,7 @@ public class ResponseCatalogMessageServerHandler extends MessageServerHandlerAbs
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
-        String deviceId = deviceSession.getSipId();
-
-        ToDevice toDevice = (ToDevice)messageProcessorServer.getToDevice(deviceId);
+        ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;
@@ -52,11 +47,11 @@ public class ResponseCatalogMessageServerHandler extends MessageServerHandlerAbs
 
     @Override
     public String getCmdType() {
-        return cmdType;
+        return CMD_TYPE;
     }
 
     @Override
     public String getRootType() {
-        return Response;
+        return RESPONSE;
     }
 }

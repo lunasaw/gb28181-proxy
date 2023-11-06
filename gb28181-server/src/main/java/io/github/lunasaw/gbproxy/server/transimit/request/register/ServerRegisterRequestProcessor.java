@@ -63,8 +63,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             String sipUserId = SipUtils.getUserIdFromToHeader(request);
 
             FromDevice fromDevice = (FromDevice)registerProcessorServer.getFromDevice();
-
-            if (fromDevice == null) {
+            if (fromDevice == null || !sipUserId.equals(fromDevice.getUserId())) {
                 return;
             }
             // 设备接收到的IP地址，有可能是Nat之后的, 本地回复直接使用这个地址即可

@@ -34,7 +34,7 @@ public class MediaStatusNotifyMessageHandler extends MessageServerHandlerAbstrac
 
     @Override
     public String getRootType() {
-        return Notify;
+        return NOTIFY;
     }
 
 
@@ -43,17 +43,15 @@ public class MediaStatusNotifyMessageHandler extends MessageServerHandlerAbstrac
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
-        String deviceId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice();
-        ToDevice toDevice = (ToDevice)messageProcessorServer.getToDevice(deviceId);
+        ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;
         }
 
-        MediaStatusNotify mediaStatusNotify = parseRequest(event, fromDevice.getCharset(), MediaStatusNotify.class);
+        MediaStatusNotify mediaStatusNotify = parseXml(MediaStatusNotify.class);
 
         messageProcessorServer.updateMediaStatus(mediaStatusNotify);
     }

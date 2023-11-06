@@ -8,11 +8,10 @@ import javax.sip.RequestEvent;
 public interface MessageHandler {
 
 
-    String Query = "Query";
-    String Control = "Control";
-    String Notify = "Notify";
-
-    String Response = "Response";
+    String QUERY = "Query";
+    String CONTROL = "Control";
+    String NOTIFY = "Notify";
+    String RESPONSE = "Response";
 
     /**
      * 响应ack

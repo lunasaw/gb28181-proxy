@@ -3,12 +3,10 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
-import io.github.lunasaw.sip.common.utils.XmlUtils;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageServerHandlerAbstract;
-import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import lombok.Getter;
@@ -36,7 +34,7 @@ public class AlarmNotifyMessageHandler extends MessageServerHandlerAbstract {
 
     @Override
     public String getRootType() {
-        return Notify;
+        return NOTIFY;
     }
 
     @Override
@@ -44,10 +42,10 @@ public class AlarmNotifyMessageHandler extends MessageServerHandlerAbstract {
 
         DeviceSession deviceSession = getDeviceSession(event);
 
-        String deviceId = deviceSession.getSipId();
+        String userId = deviceSession.getUserId();
 
         // 设备查询
-        ToDevice toDevice = (ToDevice)messageProcessorServer.getToDevice(deviceId);
+        ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;

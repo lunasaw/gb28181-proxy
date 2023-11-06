@@ -25,7 +25,7 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
 
     public static final String CMD_TYPE = "Broadcast";
 
-    private String             cmdType  = CMD_TYPE;
+    private String cmdType = CMD_TYPE;
 
     public BroadcastNotifyMessageHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
@@ -33,7 +33,7 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
 
     @Override
     public String getRootType() {
-        return Notify;
+        return NOTIFY;
     }
 
     @Override
@@ -42,9 +42,9 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
         String userId = deviceSession.getUserId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
 
-        DeviceBroadcastNotify broadcastNotify = parseRequest(event, fromDevice.getCharset(), DeviceBroadcastNotify.class);
+        DeviceBroadcastNotify broadcastNotify = parseXml(DeviceBroadcastNotify.class);
 
         messageProcessorClient.broadcastNotify(broadcastNotify);
     }

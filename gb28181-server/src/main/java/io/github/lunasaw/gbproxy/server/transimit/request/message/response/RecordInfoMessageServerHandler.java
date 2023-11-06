@@ -2,14 +2,9 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.response;
 
 import javax.sip.RequestEvent;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
 import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
-import io.github.lunasaw.sip.common.utils.SipUtils;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
@@ -38,7 +33,7 @@ public class RecordInfoMessageServerHandler extends MessageServerHandlerAbstract
 
     @Override
     public String getRootType() {
-        return Response;
+        return RESPONSE;
     }
 
     @Override

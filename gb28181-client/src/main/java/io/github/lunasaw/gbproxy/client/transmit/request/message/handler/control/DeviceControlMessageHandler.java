@@ -1,9 +1,5 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control;
 
-import javax.sip.RequestEvent;
-
-import org.springframework.stereotype.Component;
-
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -12,6 +8,9 @@ import io.github.lunasaw.sip.common.enums.DeviceControlType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import javax.sip.RequestEvent;
 
 /**
  * @author luna
@@ -33,7 +32,7 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
 
     @Override
     public String getRootType() {
-        return Control;
+        return CONTROL;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
         String userId = deviceSession.getUserId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
 
         String xmlStr = parseRequest(event, fromDevice.getCharset());
 
