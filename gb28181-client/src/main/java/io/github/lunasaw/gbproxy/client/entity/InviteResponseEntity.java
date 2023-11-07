@@ -33,11 +33,11 @@ public class InviteResponseEntity {
     /**
      * 开始时间
      */
-    private String startTime;
+    private long startTime;
     /**
      * 结束时间
      */
-    private String endTime;
+    private long endTime;
     /**
      * ssrc
      */
@@ -50,15 +50,15 @@ public class InviteResponseEntity {
         System.out.println(content);
     }
 
-    public static StringBuffer getAckPlayBackBody(String userId, String mediaIp, int localPort, String startTime, String endTime, String ssrc) {
+    public static StringBuffer getAckPlayBackBody(String userId, String mediaIp, int localPort, long startTime, long endTime, String ssrc) {
         return getAckBody(InviteSessionNameEnum.PLAY_BACK, userId, mediaIp, localPort, startTime, endTime, ssrc);
     }
 
     public static StringBuffer getAckPlayBody(String userId, String mediaIp, int localPort, String ssrc) {
-        return getAckBody(InviteSessionNameEnum.PLAY, userId, mediaIp, localPort, null, null, ssrc);
+        return getAckBody(InviteSessionNameEnum.PLAY, userId, mediaIp, localPort, 0, 0, ssrc);
     }
 
-    public static StringBuffer getAckBody(InviteSessionNameEnum sessionName, String userId, String mediaIp, int localPort, String startTime, String endTime, String ssrc) {
+    public static StringBuffer getAckBody(InviteSessionNameEnum sessionName, String userId, String mediaIp, int localPort, long startTime, long endTime, String ssrc) {
         StringBuffer content = new StringBuffer(200);
         content.append("v=0\r\n");
         content.append("o=").append(userId).append(" 0 0 IN IP4 ").append(mediaIp).append("\r\n");

@@ -488,7 +488,7 @@ public class SipRequestUtils {
     }
 
     @SneakyThrows
-    public void setContent(Request request, ContentTypeHeader contentType, Object content) {
+    public static void setContent(Request request, ContentTypeHeader contentType, Object content) {
         request.setContent(content, contentType);
     }
 
