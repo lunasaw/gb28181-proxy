@@ -22,8 +22,9 @@ public class DeviceConfig {
 
     public static final String LOCAL_IP = SystemInfoUtil.getNoLoopbackIP();
 
-    public static final String LOOP_IP = "192.168.2.104";
+    public static final String LOOP_IP = "172.19.128.100";
 
+    public static final String LOOP_IP_LOCAL = "0.0.0.0";
 
     public static final String REMOTE_IP = "10.37.5.132";
 

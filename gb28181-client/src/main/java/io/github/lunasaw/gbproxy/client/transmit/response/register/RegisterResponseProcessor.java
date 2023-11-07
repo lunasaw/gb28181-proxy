@@ -72,8 +72,8 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
         // 成功响应
         SIPResponse response = (SIPResponse) evt.getResponse();
 
-        String toUserId = SipUtils.getUserIdFromFromHeader(response);
-        String fromUserId = SipUtils.getUserIdFromFromHeader(response);
+        String toUserId = SipUtils.getUserIdFromToHeader(response);
+
         CallIdHeader callIdHeader = response.getCallIdHeader();
         Integer expire = registerProcessorClient.getExpire(toUserId);
         FromDevice fromDevice = (FromDevice)registerProcessorClient.getFromDevice();

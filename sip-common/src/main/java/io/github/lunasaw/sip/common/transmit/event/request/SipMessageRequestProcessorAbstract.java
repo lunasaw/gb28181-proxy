@@ -34,7 +34,7 @@ public abstract class SipMessageRequestProcessorAbstract extends SipRequestProce
             return;
         }
         if (MESSAGE_HANDLER_CMD_MAP.containsKey(messageHandler.getRootType())) {
-            MESSAGE_HANDLER_CMD_MAP.get(messageHandler.getRootType()).put(messageHandler.getRootType(), messageHandler);
+            MESSAGE_HANDLER_CMD_MAP.get(messageHandler.getRootType()).put(messageHandler.getCmdType(), messageHandler);
         } else {
             ConcurrentMap<String, MessageHandler> newedConcurrentMap = Maps.newConcurrentMap();
             newedConcurrentMap.put(messageHandler.getCmdType(), messageHandler);

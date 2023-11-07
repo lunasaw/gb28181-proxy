@@ -1,37 +1,34 @@
 package io.github.lunasaw.gbproxy.test.user.client;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.invite.InviteClientProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
+import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * @author luna
- * @date 2023/10/17
+ * @date 2023/11/7
  */
+@Slf4j
 @Component
-public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
-
-    public static Map<String, Device> deviceMap = new ConcurrentHashMap<>();
-
+public class DefaultInviteClientProcessorClient implements InviteClientProcessorClient {
 
     @Autowired
     @Qualifier("clientFrom")
     private Device fromDevice;
 
+
     @Override
-    public Integer getExpire(String userId) {
-        return RegisterProcessorClient.super.getExpire(userId);
+    public void inviteSession(SdpSessionDescription sessionDescription) {
+        log.info("inviteSession::sessionDescription = {}", sessionDescription);
     }
 
     @Override
     public Device getToDevice(String userId) {
-        return deviceMap.get(userId);
+        return DefaultRegisterProcessorClient.deviceMap.get(userId);
     }
 
     @Override

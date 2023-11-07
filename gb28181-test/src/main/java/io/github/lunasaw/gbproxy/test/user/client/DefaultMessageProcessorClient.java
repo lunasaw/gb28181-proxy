@@ -32,7 +32,7 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public Device getToDevice(String userId) {
-        return toDevice;
+        return DefaultRegisterProcessorClient.deviceMap.get(userId);
     }
 
     @Override

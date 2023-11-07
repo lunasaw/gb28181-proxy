@@ -53,7 +53,7 @@ public class ApplicationTest {
     @Test
     public void register() {
         String callId = SipRequestUtils.getNewCallId();
-        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
+        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, 300, callId);
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override
             public void response(EventResult eventResult) {
@@ -68,7 +68,7 @@ public class ApplicationTest {
 
         String callId = SipRequestUtils.getNewCallId();
         // 构造请求 fromDevice：当前发送的设备 toDevice 接收消息的设备
-        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, callId, 300);
+        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, 300, callId);
         // 响应处理器
         RegisterResponseProcessor responseProcessor = new RegisterResponseProcessor();
         // 添加响应处理器

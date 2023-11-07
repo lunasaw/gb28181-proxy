@@ -4,6 +4,8 @@ import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
 import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
+import io.github.lunasaw.gbproxy.test.user.client.DefaultInviteClientProcessorClient;
+import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -49,7 +51,26 @@ public class Gb28181TestClient {
     @Test
     public void test_register_client() throws Exception {
         String callId = SipRequestUtils.getNewCallId();
-        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice)fromDevice, (ToDevice)toDevice, callId, 300);
+        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, 300, callId);
+
+        SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
+            @Override
+            public void response(EventResult eventResult) {
+                System.out.println(eventResult);
+            }
+        });
+    }
+
+    @Test
+    public void test_register_client_custom() throws Exception {
+        String callId = SipRequestUtils.getNewCallId();
+
+        ToDevice instance = ToDevice.getInstance("41010500002000000001", "10.37.2.198", 8116);
+        instance.setPassword("bajiuwulian1006");
+
+        DefaultRegisterProcessorClient.deviceMap.put("41010500002000000001", instance);
+
+        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, instance, 300, callId);
 
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override

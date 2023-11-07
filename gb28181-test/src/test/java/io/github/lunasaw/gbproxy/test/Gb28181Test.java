@@ -47,7 +47,7 @@ public class Gb28181Test {
     @Test
     public void btest() throws Exception {
         String callId = SipRequestUtils.getNewCallId();
-        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, callId, 300);
+        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, 300, callId);
 
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override
