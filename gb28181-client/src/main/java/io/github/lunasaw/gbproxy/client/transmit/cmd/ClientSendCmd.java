@@ -282,6 +282,10 @@ public class ClientSendCmd {
         return SipSender.doAckRequest(fromDevice, toDevice, callId);
     }
 
+    public static String deviceAck(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+        return SipSender.doAckRequest(fromDevice, toDevice, content, callId);
+    }
+
     /**
      * 设备注册
      *

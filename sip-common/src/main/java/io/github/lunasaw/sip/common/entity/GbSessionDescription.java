@@ -1,8 +1,7 @@
-package io.github.lunasaw.gbproxy.server.transimit.response.invite;
+package io.github.lunasaw.sip.common.entity;
 
 import javax.sdp.SessionDescription;
 
-import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import lombok.Data;
 
 /**

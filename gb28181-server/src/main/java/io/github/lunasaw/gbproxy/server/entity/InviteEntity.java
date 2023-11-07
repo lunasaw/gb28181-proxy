@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.server.entity;
 
+import io.github.lunasaw.sip.common.enums.InviteSessionNameEnum;
 import io.github.lunasaw.sip.common.enums.ManufacturerEnum;
 import io.github.lunasaw.sip.common.enums.StreamModeEnum;
 
@@ -39,7 +40,7 @@ public class InviteEntity {
         content.append("v=0\r\n");
         content.append("o=").append(userId).append(" 0 0 IN IP4 ").append(sdpIp).append("\r\n");
         // Session Name
-        content.append("s=Play\r\n");
+        content.append("s=").append(InviteSessionNameEnum.PLAY.getType()).append("\r\n");
         content.append("c=IN IP4 ").append(sdpIp).append("\r\n");
         content.append("t=0 0\r\n");
 
@@ -69,11 +70,11 @@ public class InviteEntity {
             }
         } else {
             if (StreamModeEnum.TCP_PASSIVE.equals(streamModeEnum)) {
-                content.append("m=video " + mediaPort + " TCP/RTP/AVP 96 97 98 99\r\n");
+                content.append("m=video ").append(mediaPort).append(" TCP/RTP/AVP 96 97 98 99\r\n");
             } else if (StreamModeEnum.TCP_ACTIVE.equals(streamModeEnum)) {
-                content.append("m=video " + mediaPort + " TCP/RTP/AVP 96 97 98 99\r\n");
+                content.append("m=video ").append(mediaPort).append(" TCP/RTP/AVP 96 97 98 99\r\n");
             } else if (StreamModeEnum.UDP.equals(streamModeEnum)) {
-                content.append("m=video " + mediaPort + " RTP/AVP 96 97 98 99\r\n");
+                content.append("m=video ").append(mediaPort).append(" RTP/AVP 96 97 98 99\r\n");
             }
             content.append("a=recvonly\r\n");
             content.append("a=rtpmap:96 PS/90000\r\n");

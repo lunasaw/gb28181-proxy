@@ -11,6 +11,7 @@ import javax.sip.message.Response;
 import com.luna.common.text.StringTools;
 import gov.nist.javax.sip.header.Subject;
 import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.entity.GbSessionDescription;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -133,7 +134,8 @@ public class SipUtils {
         return centerCodeStr + industryCodeStr + typeCodeStr + serialNumberStr;
     }
 
-    public static SdpSessionDescription parseSdp(String sdpStr) throws SdpParseException {
+
+    public static SdpSessionDescription parseSdp(String sdpStr) {
         // jainSip 不支持y= f=字段， 移除以解析。
         int ssrcIndex = sdpStr.indexOf("y=");
         int mediaDescriptionIndex = sdpStr.indexOf("f=");
@@ -142,22 +144,25 @@ public class SipUtils {
         String ssrc = null;
         String mediaDescription = null;
         if (mediaDescriptionIndex == 0 && ssrcIndex == 0) {
-            sdp = SdpFactory.getInstance().createSessionDescription(sdpStr);
+            sdp = SipRequestUtils.createSessionDescription(sdpStr);
         } else {
             String lines[] = sdpStr.split("\\r?\\n");
-            StringBuilder sdpBuffer = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             for (String line : lines) {
                 if (line.trim().startsWith("y=")) {
                     ssrc = line.substring(2);
                 } else if (line.trim().startsWith("f=")) {
                     mediaDescription = line.substring(2);
                 } else {
-                    sdpBuffer.append(line.trim()).append("\r\n");
+                    stringBuilder.append(line.trim()).append("\r\n");
                 }
             }
-            sdp = SdpFactory.getInstance().createSessionDescription(sdpBuffer.toString());
+            sdp = SipRequestUtils.createSessionDescription(stringBuilder.toString());
         }
-        return SdpSessionDescription.getInstance(sdp);
+        GbSessionDescription instance = (GbSessionDescription) GbSessionDescription.getInstance(sdp);
+        instance.setSsrc(ssrc);
+        instance.setMediaDescription(mediaDescription);
+        return instance;
     }
 
     public static <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {

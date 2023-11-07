@@ -6,8 +6,10 @@ import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.SipMessage;
 import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.util.DigestUtils;
 
@@ -320,9 +322,18 @@ public class SipRequestProvider {
      * @return Request
      */
     public static Request createAckRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
+        return createAckRequest(fromDevice, toDevice, null, callId);
+    }
+
+    public static Request createAckRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         SipMessage sipMessage = SipMessage.getAckBody();
         sipMessage.setMethod(Request.ACK);
         sipMessage.setCallId(callId);
+
+        if (StringUtils.isNotBlank(content)) {
+            sipMessage.setContent(content);
+            sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_SDP.getContentTypeHeader());
+        }
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
 
@@ -331,6 +342,7 @@ public class SipRequestProvider {
 
         return createSipRequest(fromDevice, toDevice, sipMessage);
     }
+
 
     /**
      * 创建Notify请求

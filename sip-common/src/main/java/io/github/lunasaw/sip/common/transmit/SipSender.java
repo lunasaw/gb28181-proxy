@@ -99,6 +99,12 @@ public class SipSender {
         return doAckRequest(fromDevice, toDevice, callId);
     }
 
+    public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+        Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, toDevice, content, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
+
     public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
         Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, toDevice, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);

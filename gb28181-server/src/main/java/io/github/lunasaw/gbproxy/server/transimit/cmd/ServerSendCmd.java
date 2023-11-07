@@ -22,10 +22,6 @@ import java.util.Optional;
  */
 public class ServerSendCmd {
 
-    public static String deviceInvite(FromDevice fromDevice, ToDevice toDevice, String content) {
-        return SipSender.doInviteRequest(fromDevice, toDevice, content);
-    }
-
     /**
      * 设备信息查询
      *
