@@ -18,7 +18,7 @@ import java.util.Vector;
 public interface InviteClientProcessorClient extends SipUserGenerate {
 
 
-    void inviteSession(SdpSessionDescription sessionDescription);
+    void inviteSession(String callId, SdpSessionDescription sessionDescription);
 
     @SneakyThrows
     default String getAckContent(String userId, GbSessionDescription sessionDescription) {
@@ -26,7 +26,7 @@ public interface InviteClientProcessorClient extends SipUserGenerate {
         SessionDescription baseSdb = sessionDescription.getBaseSdb();
         String address = baseSdb.getOrigin().getAddress();
         String sessionName = baseSdb.getSessionName().getValue();
-
+        sessionDescription.setAddress(address);
 
         Vector mediaDescriptions = baseSdb.getMediaDescriptions(true);
 
@@ -38,6 +38,7 @@ public interface InviteClientProcessorClient extends SipUserGenerate {
                 Vector mediaFormats = media.getMediaFormats(false);
                 if (mediaFormats.contains("98")) {
                     port = media.getMediaPort();
+                    sessionDescription.setPort(port);
                     break;
                 }
             }

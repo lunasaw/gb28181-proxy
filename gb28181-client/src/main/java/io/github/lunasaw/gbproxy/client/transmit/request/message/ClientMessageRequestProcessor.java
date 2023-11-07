@@ -1,17 +1,16 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
-import javax.annotation.Resource;
-import javax.sip.RequestEvent;
-
-import io.github.lunasaw.sip.common.transmit.event.request.SipMessageRequestProcessorAbstract;
-import org.springframework.stereotype.Component;
-
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.transmit.event.request.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import javax.sip.RequestEvent;
 
 /**
  * @author luna
@@ -26,8 +25,8 @@ public class ClientMessageRequestProcessor extends SipMessageRequestProcessorAbs
 
     @Resource
     private MessageProcessorClient messageProcessorClient;
-    private String method = METHOD;
 
+    private String method = METHOD;
 
 
     @Override
@@ -38,7 +37,7 @@ public class ClientMessageRequestProcessor extends SipMessageRequestProcessorAbs
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
 
         if (!userId.equals(fromDevice.getUserId())) {
             return;

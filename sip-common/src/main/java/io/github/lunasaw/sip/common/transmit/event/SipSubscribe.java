@@ -1,14 +1,17 @@
 package io.github.lunasaw.sip.common.transmit.event;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import javax.sip.RequestEvent;
+import javax.sip.ResponseEvent;
+import javax.sip.header.CallIdHeader;
+import javax.sip.message.Response;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author lin
@@ -17,11 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class SipSubscribe {
 
-    private static final Map<String, Event>   errorSubscribes     = new ConcurrentHashMap<>();
+    private static final Map<String, Event> errorSubscribes = new ConcurrentHashMap<>();
 
-    private static final Map<String, Event>   okSubscribes        = new ConcurrentHashMap<>();
+    private static final Map<String, Event> okSubscribes = new ConcurrentHashMap<>();
 
-    private static final Map<String, Instant> okTimeSubscribes    = new ConcurrentHashMap<>();
+    private static final Map<String, Instant> okTimeSubscribes = new ConcurrentHashMap<>();
 
     private static final Map<String, Instant> errorTimeSubscribes = new ConcurrentHashMap<>();
 
@@ -67,6 +70,26 @@ public class SipSubscribe {
         return okSubscribes.size();
     }
 
+    public static void publishOkEvent(ResponseEvent evt) {
+        Response response = evt.getResponse();
+        CallIdHeader callIdHeader = (CallIdHeader) response.getHeader(CallIdHeader.NAME);
+        String callId = callIdHeader.getCallId();
+        Event event = okSubscribes.get(callId);
+        if (event != null) {
+            removeOkSubscribe(callId);
+            event.response(new EventResult(evt));
+        }
+    }
+
+    public static void publishAckEvent(RequestEvent evt) {
+        String callId = evt.getDialog().getCallId().getCallId();
+        Event event = okSubscribes.get(callId);
+        if (event != null) {
+            removeOkSubscribe(callId);
+            event.response(new EventResult(evt));
+        }
+    }
+
     // @Scheduled(cron="*/5 * * * * ?") //每五秒执行一次
     // @Scheduled(fixedRate= 100 * 60 * 60 )
     @Scheduled(cron = "0 0/5 * * * ?") // 每5分钟执行一次
@@ -92,6 +115,4 @@ public class SipSubscribe {
         log.debug("errorTimeSubscribes.size:{}", errorTimeSubscribes.size());
         log.debug("errorSubscribes.size:{}", errorSubscribes.size());
     }
-
-
 }

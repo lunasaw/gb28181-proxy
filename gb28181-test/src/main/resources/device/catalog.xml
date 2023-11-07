@@ -11,7 +11,7 @@
             <!-- 设备/区域/系统名称(必选)-->
             <Name>Camera</Name>
             <!-- 当为设备时,设备厂商(必选)-->
-            <Manufacturer>海康</Manufacturer>
+            <Manufacturer>HIKVISION</Manufacturer>
             <!-- 当为设备时,设备型号(必选)-->
             <Model>Model</Model>
             <!-- 当为设备时,设备归属(必选)-->

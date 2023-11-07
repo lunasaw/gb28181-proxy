@@ -1,6 +1,9 @@
 package io.github.lunasaw.sip.common.transmit;
 
 import gov.nist.javax.sip.SipProviderImpl;
+import gov.nist.javax.sip.SipStackImpl;
+import gov.nist.javax.sip.message.SIPRequest;
+import gov.nist.javax.sip.stack.SIPServerTransaction;
 import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
@@ -11,16 +14,18 @@ import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.sip.SipException;
+import javax.sip.*;
 import javax.sip.header.CallIdHeader;
 import javax.sip.header.UserAgentHeader;
 import javax.sip.header.ViaHeader;
 import javax.sip.message.Message;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
+import java.util.Objects;
 
 /**
  * 发送SIP消息
@@ -181,5 +186,51 @@ public class SipSender {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 根据 RequestEvent 获取 ServerTransaction
+     *
+     * @param request
+     * @return
+     */
+    public static ServerTransaction getServerTransaction(Request request, String ip) {
+        // 判断TCP还是UDP
+        boolean isTcp = false;
+        ViaHeader viaHeader = (ViaHeader) request.getHeader(ViaHeader.NAME);
+        String transport = "UDP";
+        if (viaHeader == null) {
+            log.warn("[消息头缺失]： ViaHeader， 使用默认的UDP方式处理数据");
+        } else {
+            transport = viaHeader.getTransport();
+        }
+
+        if (Constant.TCP.equalsIgnoreCase(transport)) {
+            isTcp = true;
+        }
+
+        ServerTransaction serverTransaction = null;
+
+        try {
+            if (isTcp) {
+                SipProviderImpl sipProvider = Objects.requireNonNull(SipLayer.getTcpSipProvider(ip), "[发送信息失败] 未找到tcp://的监听信息");
+                SipStackImpl stack = (SipStackImpl) sipProvider.getSipStack();
+                serverTransaction = (SIPServerTransaction) stack.findTransaction((SIPRequest) request, true);
+                if (serverTransaction == null) {
+                    serverTransaction = sipProvider.getNewServerTransaction(request);
+                }
+            } else {
+                SipProviderImpl udpSipProvider = Objects.requireNonNull(SipLayer.getUdpSipProvider(ip), "[发送信息失败] 未找到udp://的监听信息");
+                SipStackImpl stack = (SipStackImpl) udpSipProvider.getSipStack();
+                serverTransaction = (SIPServerTransaction) stack.findTransaction((SIPRequest) request, true);
+                if (serverTransaction == null) {
+                    serverTransaction = udpSipProvider.getNewServerTransaction(request);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+        return serverTransaction;
+    }
+
 
 }

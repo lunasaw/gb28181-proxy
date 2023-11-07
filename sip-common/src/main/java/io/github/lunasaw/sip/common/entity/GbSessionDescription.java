@@ -16,6 +16,14 @@ public class GbSessionDescription extends SdpSessionDescription {
 
     private String mediaDescription;
 
+    /**
+     * 冗余处理
+     */
+    private String address;
+
+    private Integer port;
+
+
     public GbSessionDescription(SessionDescription sessionDescription) {
         super(sessionDescription);
     }

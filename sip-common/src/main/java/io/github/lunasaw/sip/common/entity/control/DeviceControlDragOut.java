@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <?xml version="1.0" encoding="gb2312"?>
+ * <?xml version="1.0" encoding="GB2312"?>
  * <Control>
  * <CmdType>DeviceControl</CmdType>
  * <SN>331004</SN>

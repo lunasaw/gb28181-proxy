@@ -11,7 +11,7 @@ import lombok.Setter;
 import org.assertj.core.util.Lists;
 
 /**
- * <?xml version="1.0" encoding="gb2312"?>
+ * <?xml version="1.0" encoding="GB2312"?>
  * <Response>
  * <CmdType>DeviceStatus</CmdType>
  * <SN>sn</SN>

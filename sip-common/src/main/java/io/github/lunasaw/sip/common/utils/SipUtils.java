@@ -159,10 +159,7 @@ public class SipUtils {
             }
             sdp = SipRequestUtils.createSessionDescription(stringBuilder.toString());
         }
-        GbSessionDescription instance = (GbSessionDescription) GbSessionDescription.getInstance(sdp);
-        instance.setSsrc(ssrc);
-        instance.setMediaDescription(mediaDescription);
-        return instance;
+        return GbSessionDescription.getInstance(sdp, ssrc, mediaDescription);
     }
 
     public static <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
