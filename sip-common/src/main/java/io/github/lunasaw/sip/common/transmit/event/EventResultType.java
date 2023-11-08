@@ -5,6 +5,8 @@ package io.github.lunasaw.sip.common.transmit.event;
  * @author luna
  */
 public enum EventResultType {
+    // ack
+    ack,
     // 超时
     timeout,
     // 回复

@@ -124,20 +124,13 @@ public class SipProcessorObserver implements SipListener {
         if (((status >= Response.OK) && (status < Response.MULTIPLE_CHOICES)) || status == Response.UNAUTHORIZED) {
             CSeqHeader cseqHeader = (CSeqHeader) responseEvent.getResponse().getHeader(CSeqHeader.NAME);
             String method = cseqHeader.getMethod();
-            SipResponseProcessor sipRequestProcessor = RESPONSE_PROCESSOR_MAP.get(method);
-            if (sipRequestProcessor != null) {
-                sipRequestProcessor.process(responseEvent);
+            SipResponseProcessor sipResponseProcessor = RESPONSE_PROCESSOR_MAP.get(method);
+            if (sipResponseProcessor != null) {
+                sipResponseProcessor.process(responseEvent);
             }
+
             if (status != Response.UNAUTHORIZED && responseEvent.getResponse() != null && SipSubscribe.getOkSubscribesSize() > 0) {
-                CallIdHeader callIdHeader = (CallIdHeader) responseEvent.getResponse().getHeader(CallIdHeader.NAME);
-                if (callIdHeader != null) {
-                    Event subscribe = SipSubscribe.getOkSubscribe(callIdHeader.getCallId());
-                    if (subscribe != null) {
-                        EventResult eventResult = new EventResult(responseEvent);
-                        SipSubscribe.removeOkSubscribe(callIdHeader.getCallId());
-                        subscribe.response(eventResult);
-                    }
-                }
+                SipSubscribe.publishOkEvent(responseEvent);
             }
         } else if ((status >= Response.TRYING) && (status < Response.OK)) {
             // 增加其它无需回复的响应，如101、180等

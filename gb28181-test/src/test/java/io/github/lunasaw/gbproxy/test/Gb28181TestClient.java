@@ -65,7 +65,7 @@ public class Gb28181TestClient {
     public void test_register_client_custom() throws Exception {
         String callId = SipRequestUtils.getNewCallId();
 
-        ToDevice instance = ToDevice.getInstance("41010500002000000001", "10.37.2.198", 8116);
+        ToDevice instance = ToDevice.getInstance("41010500002000000001", "10.37.4.43", 8116);
         instance.setPassword("bajiuwulian1006");
 
         DefaultRegisterProcessorClient.deviceMap.put("41010500002000000001", instance);
