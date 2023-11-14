@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultProperties {
 
-    public static Properties getProperties(String name, boolean sipLog) {
+    public static Properties getProperties(String name, String ip, boolean sipLog) {
         Properties properties = new Properties();
         properties.setProperty("javax.sip.STACK_NAME", name);
-        // properties.setProperty("javax.sip.IP_ADDRESS", ip);
+        properties.setProperty("javax.sip.IP_ADDRESS", ip);
         // 关闭自动会话
-        properties.setProperty("javax.sip.AUTOMATIC_DIALOG_SUPPORT", "off");
+//        properties.setProperty("javax.sip.AUTOMATIC_DIALOG_SUPPORT", "off");
         /**
          * 完整配置参考 gov.nist.javax.sip.SipStackImpl，需要下载源码
          * gov/nist/javax/sip/SipStackImpl.class

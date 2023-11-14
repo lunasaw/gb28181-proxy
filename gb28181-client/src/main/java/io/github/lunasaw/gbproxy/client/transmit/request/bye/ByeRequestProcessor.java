@@ -1,7 +1,9 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.bye;
 
+import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.invite.InviteProcessorClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +17,7 @@ import lombok.Setter;
  *
  * @author luna
  */
-@Component("clientRequestProcessor")
+@Component("clientByeRequestProcessor")
 @Getter
 @Setter
 @Slf4j
@@ -24,6 +26,11 @@ public class ByeRequestProcessor extends SipRequestProcessorAbstract {
     public static final String METHOD = "BYE";
 
     private String method = METHOD;
+
+
+    @Resource
+    private InviteProcessorClient inviteProcessorClient;
+
 
     /**
      * 收到Bye请求 处理

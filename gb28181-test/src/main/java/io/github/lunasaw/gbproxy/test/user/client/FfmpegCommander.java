@@ -43,7 +43,6 @@ public class FfmpegCommander {
                 } catch (Exception e) {
                     logger.error("ffmpeg推流异常!", e);
                 }
-                System.out.println(code);
             }).start();
             return command;
         } catch (Exception e) {
@@ -65,8 +64,6 @@ public class FfmpegCommander {
 
     public void closeAllStream() {
         logger.info("关闭所有推流");
-        processMap.entrySet().stream().forEach(entry -> {
-            entry.getValue().destroy();
-        });
+        processMap.forEach((key, value) -> value.destroy());
     }
 }

@@ -70,13 +70,14 @@ public class SipLayer implements CommandLineRunner {
 	public synchronized static void addListeningPoint(String monitorIp, int port, SipListener listener, Boolean enableLog) {
 		SipStackImpl sipStack;
 		try {
-			Properties properties = DefaultProperties.getProperties("GB28181_SIP", enableLog);
+			Properties properties = DefaultProperties.getProperties("GB28181_SIP", monitorIp, enableLog);
 			SipFactory sipFactory = SipFactory.getInstance();
 			sipFactory.setPathName("gov.nist");
 			sipStack = (SipStackImpl) sipFactory.createSipStack(properties);
 			sipStack.setMessageParserFactory(new StringMsgParserFactory());
 		} catch (PeerUnavailableException e) {
 			log.error("[SIP SERVER] SIP服务启动失败， 监听地址{}失败,请检查ip是否正确", monitorIp);
+			System.exit(0);
 			return;
 		}
 

@@ -208,9 +208,9 @@ public class SipSender {
             isTcp = true;
         }
 
-        ServerTransaction serverTransaction = null;
 
         try {
+            ServerTransaction serverTransaction = null;
             if (isTcp) {
                 SipProviderImpl sipProvider = Objects.requireNonNull(SipLayer.getTcpSipProvider(ip), "[发送信息失败] 未找到tcp://的监听信息");
                 SipStackImpl stack = (SipStackImpl) sipProvider.getSipStack();
@@ -226,10 +226,10 @@ public class SipSender {
                     serverTransaction = udpSipProvider.getNewServerTransaction(request);
                 }
             }
+            return serverTransaction;
         } catch (Exception e) {
             throw new RuntimeException();
         }
-        return serverTransaction;
     }
 
 
