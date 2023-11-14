@@ -30,24 +30,27 @@ public class RecordInfoQueryMessageClientHandler extends MessageClientHandlerAbs
 
     private String                 cmdType  = CMD_TYPE;
 
-    private MessageProcessorClient messageProcessorClient;
-
     public RecordInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
     }
 
     @Override
+    public String getRootType() {
+        return QUERY;
+    }
+
+
+    @Override
     public void handForEvt(RequestEvent event) {
 
         DeviceSession deviceSession = getDeviceSession(event);
-        String userId = deviceSession.getUserId();
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
         ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
-        DeviceRecordQuery deviceRecordQuery = parseRequest(event, fromDevice.getCharset(), DeviceRecordQuery.class);
+        DeviceRecordQuery deviceRecordQuery = parseXml(DeviceRecordQuery.class);
 
         String sn = deviceRecordQuery.getSn();
         DeviceRecord deviceRecord = messageProcessorClient.getDeviceRecord(deviceRecordQuery);

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <?xml version="1.0" encoding="gb2312"?>
+ * <?xml version="1.0" encoding="GB2312"?>
  * <Notify>
  * <CmdType>Alarm</CmdType>
  * <SN>744523</SN>

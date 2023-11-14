@@ -32,4 +32,12 @@ public interface RegisterProcessorServer extends SipUserGenerate {
      * @param sipTransaction
      */
     void updateSipTransaction(String userId, SipTransaction sipTransaction);
+
+    /**
+     * 更新事务信息 = 设备下线
+     *
+     * @param userId
+     * @param sipTransaction
+     */
+    void deviceOffLine(String userId, RegisterInfo registerInfo, SipTransaction sipTransaction);
 }

@@ -1,9 +1,6 @@
 package io.github.lunasaw.sip.common.transmit.event;
 
-import javax.sip.DialogTerminatedEvent;
-import javax.sip.ResponseEvent;
-import javax.sip.TimeoutEvent;
-import javax.sip.TransactionTerminatedEvent;
+import javax.sip.*;
 import javax.sip.header.CallIdHeader;
 import javax.sip.message.Response;
 
@@ -22,6 +19,7 @@ public class EventResult<T> {
     public EventResultType type;
     public String          msg;
     public String          callId;
+    public Dialog dialog;
     public T               event;
 
     public EventResult() {}
@@ -45,8 +43,10 @@ public class EventResult<T> {
             this.statusCode = -1024;
             if (timeoutEvent.isServerTransaction()) {
                 this.callId = ((SIPRequest)timeoutEvent.getServerTransaction().getRequest()).getCallIdHeader().getCallId();
+                this.dialog = timeoutEvent.getServerTransaction().getDialog();
             } else {
                 this.callId = ((SIPRequest)timeoutEvent.getClientTransaction().getRequest()).getCallIdHeader().getCallId();
+                this.dialog = timeoutEvent.getClientTransaction().getDialog();
             }
         } else if (event instanceof TransactionTerminatedEvent) {
             TransactionTerminatedEvent transactionTerminatedEvent = (TransactionTerminatedEvent)event;
@@ -55,8 +55,11 @@ public class EventResult<T> {
             this.statusCode = -1024;
             if (transactionTerminatedEvent.isServerTransaction()) {
                 this.callId = ((SIPRequest)transactionTerminatedEvent.getServerTransaction().getRequest()).getCallIdHeader().getCallId();
+                this.dialog = transactionTerminatedEvent.getServerTransaction().getDialog();
             } else {
-                this.callId = ((SIPRequest)transactionTerminatedEvent.getClientTransaction().getRequest()).getCallIdHeader().getCallId();
+                this.callId = ((SIPRequest) transactionTerminatedEvent.getClientTransaction().getRequest()).getCallIdHeader().getCallId();
+                this.dialog = transactionTerminatedEvent.getClientTransaction().getDialog();
+                this.dialog = transactionTerminatedEvent.getClientTransaction().getDialog();
             }
         } else if (event instanceof DialogTerminatedEvent) {
             DialogTerminatedEvent dialogTerminatedEvent = (DialogTerminatedEvent)event;
@@ -64,6 +67,14 @@ public class EventResult<T> {
             this.msg = "会话已结束";
             this.statusCode = -1024;
             this.callId = dialogTerminatedEvent.getDialog().getCallId().getCallId();
+            this.dialog = dialogTerminatedEvent.getDialog();
+
+        } else if (event instanceof RequestEvent) {
+            RequestEvent requestEvent = (RequestEvent) event;
+            this.type = EventResultType.ack;
+            this.msg = "ack event";
+            this.callId = requestEvent.getDialog().getCallId().getCallId();
+            this.dialog = requestEvent.getDialog();
         } else if (event instanceof DeviceNotFoundEvent) {
             this.type = EventResultType.deviceNotFoundEvent;
             this.msg = "设备未找到";

@@ -5,7 +5,6 @@ import javax.sip.RequestEvent;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
 import org.springframework.stereotype.Component;
 
@@ -34,22 +33,26 @@ public class MobilePositionNotifyMessageHandler extends MessageServerHandlerAbst
     }
 
     @Override
+    public String getRootType() {
+        return NOTIFY;
+    }
+
+
+    @Override
     public void handForEvt(RequestEvent event) {
 
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
-        String deviceId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice(userId);
-        ToDevice toDevice = (ToDevice)messageProcessorServer.getToDevice(deviceId);
+        ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;
         }
 
-        MobilePositionNotify mobilePositionNotify = parseRequest(event, fromDevice.getCharset(), MobilePositionNotify.class);
+        MobilePositionNotify mobilePositionNotify = parseXml(MobilePositionNotify.class);
 
         messageProcessorServer.updateMobilePosition(mobilePositionNotify);
     }

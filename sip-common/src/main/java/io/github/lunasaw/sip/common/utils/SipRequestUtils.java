@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.sdp.SdpFactory;
+import javax.sdp.SdpParseException;
+import javax.sdp.SessionDescription;
 import javax.sip.InvalidArgumentException;
 import javax.sip.PeerUnavailableException;
 import javax.sip.SipFactory;
@@ -44,11 +47,14 @@ public class SipRequestUtils {
 
     private static final AddressFactory ADDRESS_FACTORY;
 
+    private static final SdpFactory SDP_FACTORY;
+
     static {
         try {
             MESSAGE_FACTORY = SipFactory.getInstance().createMessageFactory();
             HEADER_FACTORY = SipFactory.getInstance().createHeaderFactory();
             ADDRESS_FACTORY = SipFactory.getInstance().createAddressFactory();
+            SDP_FACTORY = SdpFactory.getInstance();
         } catch (PeerUnavailableException e) {
             throw new RuntimeException(e);
         }
@@ -482,7 +488,15 @@ public class SipRequestUtils {
     }
 
     @SneakyThrows
-    public void setContent(Request request, ContentTypeHeader contentType, Object content) {
+    public static void setContent(Request request, ContentTypeHeader contentType, Object content) {
         request.setContent(content, contentType);
+    }
+
+    public static SessionDescription createSessionDescription(String sdp) {
+        try {
+            return SDP_FACTORY.createSessionDescription(sdp);
+        } catch (SdpParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

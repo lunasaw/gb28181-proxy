@@ -1,24 +1,21 @@
 package io.github.lunasaw.gbproxy.test.user.server;
 
+import com.alibaba.fastjson.JSON;
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
+import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
 import io.github.lunasaw.sip.common.entity.notify.MediaStatusNotify;
 import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
+import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
+import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
-import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
-import io.github.lunasaw.sip.common.entity.response.DeviceInfo;
-import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
-import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
-import io.github.lunasaw.sip.common.entity.response.DeviceStatus;
-import io.github.lunasaw.sip.common.utils.XmlUtils;
 
 /**
  * @author luna
@@ -37,11 +34,11 @@ public class DefaultMessageProcessorServer implements MessageProcessorServer {
 
     @Override
     public Device getToDevice(String userId) {
-        return toDevice;
+        return DefaultRegisterProcessorServer.deviceMap.get(userId);
     }
 
     @Override
-    public Device getFromDevice(String userId) {
+    public Device getFromDevice() {
         return fromDevice;
     }
 
@@ -51,8 +48,12 @@ public class DefaultMessageProcessorServer implements MessageProcessorServer {
     }
 
     @Override
-    public void updateRemoteAddress(RemoteAddressInfo remoteAddressInfo) {
+    public void updateRemoteAddress(String userId, RemoteAddressInfo remoteAddressInfo) {
         log.info("接收到设备的地址信息 updateRemoteAddress::remoteAddressInfo = {}", remoteAddressInfo);
+        ToDevice device = (ToDevice)DefaultRegisterProcessorServer.deviceMap.get(userId);
+        device.setIp(remoteAddressInfo.getIp());
+        device.setPort(remoteAddressInfo.getPort());
+        DefaultRegisterProcessorServer.deviceMap.put(userId, device);
     }
 
     @Override
@@ -68,5 +69,15 @@ public class DefaultMessageProcessorServer implements MessageProcessorServer {
     @Override
     public void updateMediaStatus(MediaStatusNotify mediaStatusNotify) {
         log.info("接收到设备的媒体状态信息 updateMediaStatus::mediaStatusNotify = {}", mediaStatusNotify);
+    }
+
+    @Override
+    public void updateDeviceRecord(String userId, DeviceRecord deviceRecord) {
+        log.info("接收到设备的录像信息 updateDeviceRecord::userId = {}, deviceRecord = {}", userId, JSON.toJSONString(deviceRecord));
+    }
+
+    @Override
+    public void updateDeviceResponse(String userId, DeviceResponse deviceResponse) {
+        log.info("接收到设备通道信息 updateDeviceResponse::userId = {}, deviceResponse = {}", userId, deviceResponse);
     }
 }

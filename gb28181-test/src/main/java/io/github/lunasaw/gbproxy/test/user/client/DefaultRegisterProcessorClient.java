@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.ToDevice;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author luna
@@ -16,12 +17,12 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 @Component
 public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
 
+    public static Map<String, Device> deviceMap = new ConcurrentHashMap<>();
+
+
     @Autowired
     @Qualifier("clientFrom")
     private Device fromDevice;
-    @Autowired
-    @Qualifier("clientTo")
-    private Device toDevice;
 
     @Override
     public Integer getExpire(String userId) {
@@ -30,11 +31,11 @@ public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
 
     @Override
     public Device getToDevice(String userId) {
-        return toDevice;
+        return deviceMap.get(userId);
     }
 
     @Override
-    public Device getFromDevice(String userId) {
+    public Device getFromDevice() {
         return fromDevice;
     }
 }

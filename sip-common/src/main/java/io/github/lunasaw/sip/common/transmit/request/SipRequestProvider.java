@@ -1,25 +1,26 @@
 package io.github.lunasaw.sip.common.transmit.request;
 
-import java.text.ParseException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.sip.address.SipURI;
-import javax.sip.address.URI;
-import javax.sip.header.*;
-import javax.sip.message.Request;
-
-import org.assertj.core.util.Lists;
-import org.springframework.util.DigestUtils;
-
+import com.luna.common.check.Assert;
 import gov.nist.javax.sip.message.SIPRequest;
 import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.SipMessage;
 import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
+import org.springframework.util.DigestUtils;
+
+import javax.sip.address.SipURI;
+import javax.sip.address.URI;
+import javax.sip.header.*;
+import javax.sip.message.Request;
+import java.text.ParseException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Sip命令request创造器
@@ -71,6 +72,8 @@ public class SipRequestProvider {
      * @return Request
      */
     public static Request createSipRequest(FromDevice fromDevice, ToDevice toDevice, SipMessage sipMessage) {
+        Assert.notNull(fromDevice, "发送设备不能为null");
+        Assert.notNull(toDevice, "发送设备不能为null");
 
         CallIdHeader callIdHeader = SipRequestUtils.createCallIdHeader(sipMessage.getCallId());
         // sipUri
@@ -125,7 +128,7 @@ public class SipRequestProvider {
      * @param callId     callId
      * @return Request
      */
-    public static Request createInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+    public static Request createInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String subject, String callId) {
         SipMessage sipMessage = SipMessage.getInviteBody();
         sipMessage.setMethod(Request.INVITE);
         sipMessage.setContent(content);
@@ -133,11 +136,15 @@ public class SipRequestProvider {
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
         ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
-        SubjectHeader subjectHeader = SipRequestUtils.createSubjectHeader(toDevice.getSubject());
+        SubjectHeader subjectHeader = SipRequestUtils.createSubjectHeader(subject);
 
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader).addHeader(subjectHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage);
+    }
+
+    public Request createPlaybackInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String subject, String callId) {
+        return createInviteRequest(fromDevice, toDevice, content, subject, callId);
     }
 
     /**
@@ -170,7 +177,7 @@ public class SipRequestProvider {
      * @param callId     callId
      * @return Request
      */
-    public static Request createRegisterRequest(FromDevice fromDevice, ToDevice toDevice, String callId, Integer expires) {
+    public static Request createRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expires, String callId) {
 
         SipMessage sipMessage = SipMessage.getRegisterBody();
         sipMessage.setMethod(Request.REGISTER);
@@ -194,7 +201,7 @@ public class SipRequestProvider {
     public static Request createRegisterRequestWithAuth(FromDevice fromDevice, ToDevice toDevice, String callId, Integer expires,
                                                         WWWAuthenticateHeader www) {
 
-        Request registerRequest = createRegisterRequest(fromDevice, toDevice, callId, expires);
+        Request registerRequest = createRegisterRequest(fromDevice, toDevice, expires, callId);
         URI requestURI = registerRequest.getRequestURI();
 
         String userId = toDevice.getUserId();
@@ -315,9 +322,18 @@ public class SipRequestProvider {
      * @return Request
      */
     public static Request createAckRequest(FromDevice fromDevice, ToDevice toDevice, String callId) {
+        return createAckRequest(fromDevice, toDevice, null, callId);
+    }
+
+    public static Request createAckRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         SipMessage sipMessage = SipMessage.getAckBody();
         sipMessage.setMethod(Request.ACK);
         sipMessage.setCallId(callId);
+
+        if (StringUtils.isNotBlank(content)) {
+            sipMessage.setContent(content);
+            sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_SDP.getContentTypeHeader());
+        }
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
 
@@ -326,6 +342,7 @@ public class SipRequestProvider {
 
         return createSipRequest(fromDevice, toDevice, sipMessage);
     }
+
 
     /**
      * 创建Notify请求
@@ -346,9 +363,5 @@ public class SipRequestProvider {
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage, subscribeInfo);
-    }
-
-    public Request createPlaybackInviteRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
-        return createInviteRequest(fromDevice, toDevice, content, callId);
     }
 }

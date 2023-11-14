@@ -1,19 +1,20 @@
 package io.github.lunasaw.gbproxy.server.transimit.cmd;
 
-import java.util.Date;
-import java.util.Optional;
-
 import com.luna.common.date.DateUtils;
 import com.luna.common.text.RandomStrUtil;
-
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.control.*;
 import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.sip.common.entity.query.*;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
+import io.github.lunasaw.sip.common.enums.PtzCmdEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.utils.PtzUtils;
+
+import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author luna
@@ -23,9 +24,9 @@ public class ServerSendCmd {
 
     /**
      * 设备信息查询
-     * 
+     *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return callId
      */
     public static String deviceInfo(FromDevice fromDevice, ToDevice toDevice) {
@@ -35,9 +36,9 @@ public class ServerSendCmd {
 
     /**
      * 设备预设位置查询
-     * 
+     *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return callId
      */
     public static String devicePresetQuery(FromDevice fromDevice, ToDevice toDevice) {
@@ -49,12 +50,12 @@ public class ServerSendCmd {
      * 查询移动设备位置数据
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return callId
      */
     public static String devicePresetQuery(FromDevice fromDevice, ToDevice toDevice, String interval) {
         DeviceMobileQuery deviceMobileQuery =
-            new DeviceMobileQuery(CmdTypeEnum.MOBILE_POSITION.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceMobileQuery(CmdTypeEnum.MOBILE_POSITION.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
         deviceMobileQuery.setInterval(interval);
 
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceMobileQuery);
@@ -64,13 +65,13 @@ public class ServerSendCmd {
      * 订阅移动设备位置数据
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return callId
      */
     public static String devicePresetSubscribe(FromDevice fromDevice, ToDevice toDevice, String interval, Integer expires, String eventType,
                                                String eventId) {
         DeviceMobileQuery deviceMobileQuery =
-            new DeviceMobileQuery(CmdTypeEnum.MOBILE_POSITION.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceMobileQuery(CmdTypeEnum.MOBILE_POSITION.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
         deviceMobileQuery.setInterval(interval);
 
         SubscribeInfo subscribeInfo = new SubscribeInfo();
@@ -83,9 +84,9 @@ public class ServerSendCmd {
 
     /**
      * 设备状态查询
-     * 
+     *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return callId
      */
     public static String deviceStatusQuery(FromDevice fromDevice, ToDevice toDevice) {
@@ -97,7 +98,7 @@ public class ServerSendCmd {
      * 设备通道列表查询
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return callId
      */
     public static String deviceCatalogQuery(FromDevice fromDevice, ToDevice toDevice) {
@@ -105,31 +106,64 @@ public class ServerSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery);
     }
 
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, String startTime, String endTime) {
+        return deviceRecordInfoQuery(fromDevice, toDevice, startTime, endTime, null, "all");
+    }
+
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, long startTime, long endTime) {
+        return deviceRecordInfoQuery(fromDevice, toDevice, new Date(startTime), new Date(endTime));
+    }
+
     /**
      * 查询录像列表
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
-     * @return callId
+     * @param toDevice   接收设备
+     * @param startTime  开始时间 ISO8601格式
+     * @param endTime    结束时间 ISO8601格式
+     * @param secrecy
+     * @param type       all（time 或 alarm 或 manual 或 all）
+     * @return
      */
-    public static String deviceCatalogQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime, String secrecy, String type) {
-        DeviceRecordQuery recordQuery = new DeviceRecordQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, String startTime, String endTime, String secrecy,
+                                               String type) {
+        DeviceRecordQuery recordQuery =
+                new DeviceRecordQuery(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
-        recordQuery.setStartTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startTime));
-        recordQuery.setEndTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime));
+        recordQuery.setStartTime(startTime);
+        recordQuery.setEndTime(endTime);
         recordQuery.setSecrecy(secrecy);
         recordQuery.setType(type);
 
         return SipSender.doMessageRequest(fromDevice, toDevice, recordQuery);
     }
 
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime) {
+        return deviceRecordInfoQuery(fromDevice, toDevice, startTime, endTime, null, "all");
+    }
+
+    /**
+     * 查询录像列表
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return callId
+     */
+    public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime, String secrecy, String type) {
+
+        String startTimeStr = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startTime);
+        String endTimeStr = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime);
+
+        return deviceRecordInfoQuery(fromDevice, toDevice, startTimeStr, endTimeStr, secrecy, type);
+    }
+
     /**
      * 会话订阅
-     * 
+     *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
-     * @param expires 过期时间
-     * @param eventType 事件类型
+     * @param toDevice   接收设备
+     * @param expires    过期时间
+     * @param eventType  事件类型
      * @return
      */
     public static String deviceCatalogSubscribe(FromDevice fromDevice, ToDevice toDevice,
@@ -147,20 +181,20 @@ public class ServerSendCmd {
     /**
      * 告警查询
      *
-     * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param fromDevice    发送设备
+     * @param toDevice      接收设备
      * @param startPriority 报警起始级别（可选）
-     * @param endPriority 报警终止级别（可选）
-     * @param alarmMethod 报警方式条件（可选）
-     * @param alarmType 报警类型
-     * @param startTime 报警发生起始时间（可选）
-     * @param endTime 报警发生终止时间（可选）
+     * @param endPriority   报警终止级别（可选）
+     * @param alarmMethod   报警方式条件（可选）
+     * @param alarmType     报警类型
+     * @param startTime     报警发生起始时间（可选）
+     * @param endTime       报警发生终止时间（可选）
      * @return callId
      */
     public static String deviceAlarmQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime, String startPriority,
-        String endPriority, String alarmMethod, String alarmType) {
+                                          String endPriority, String alarmMethod, String alarmType) {
         DeviceAlarmQuery deviceAlarmQuery =
-            new DeviceAlarmQuery(CmdTypeEnum.ALARM.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
+                new DeviceAlarmQuery(CmdTypeEnum.ALARM.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         deviceAlarmQuery.setStartTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startTime));
         deviceAlarmQuery.setEndTime(DateUtils.formatTime(DateUtils.ISO8601_PATTERN, endTime));
@@ -175,7 +209,7 @@ public class ServerSendCmd {
      * 回复ACK
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return
      */
     public static String deviceAck(FromDevice fromDevice, ToDevice toDevice) {
@@ -190,7 +224,7 @@ public class ServerSendCmd {
      * 发送BYE
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return
      */
     public static String deviceBye(FromDevice fromDevice, ToDevice toDevice) {
@@ -201,7 +235,7 @@ public class ServerSendCmd {
      * 设备广播
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return
      */
     public static String deviceBroadcast(FromDevice fromDevice, ToDevice toDevice) {
@@ -215,8 +249,8 @@ public class ServerSendCmd {
     /**
      * 报警布防/撤防命令
      *
-     * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param fromDevice  发送设备
+     * @param toDevice    接收设备
      * @param guardCmdStr "SetGuard"/"ResetGuard"
      * @return
      */
@@ -230,16 +264,16 @@ public class ServerSendCmd {
     /**
      * 报警复位命令
      *
-     * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param fromDevice  发送设备
+     * @param toDevice    接收设备
      * @param alarmMethod 方式
-     * @param alarmType 类型
+     * @param alarmType   类型
      * @return
      */
     public static String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, String alarmMethod, String alarmType) {
 
         DeviceControlAlarm deviceControlAlarm = new DeviceControlAlarm(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(),
-            fromDevice.getUserId());
+                fromDevice.getUserId());
 
         deviceControlAlarm.setAlarmCmd("ResetAlarm");
         deviceControlAlarm.setAlarmInfo(new DeviceControlAlarm.AlarmInfo(alarmMethod, alarmType));
@@ -257,10 +291,10 @@ public class ServerSendCmd {
     /**
      * 看守位控制命令
      *
-     * @param fromDevice 发送设备
-     * @param toDevice 接收设备
-     * @param enable 看守位使能：1 = 开启，0 = 关闭
-     * @param resetTime 自动归位时间间隔，开启看守位时使用，单位:秒(s)
+     * @param fromDevice  发送设备
+     * @param toDevice    接收设备
+     * @param enable      看守位使能：1 = 开启，0 = 关闭
+     * @param resetTime   自动归位时间间隔，开启看守位时使用，单位:秒(s)
      * @param presetIndex 调用预置位编号，开启看守位时使用，取值范围0~255
      * @return
      */
@@ -274,20 +308,20 @@ public class ServerSendCmd {
     /**
      * 设备配置命令：basicParam
      *
-     * @param fromDevice 发送设备
-     * @param toDevice 接收设备
-     * @param name 设备/通道名称（可选）
-     * @param expiration 注册过期时间（可选）
+     * @param fromDevice        发送设备
+     * @param toDevice          接收设备
+     * @param name              设备/通道名称（可选）
+     * @param expiration        注册过期时间（可选）
      * @param heartBeatInterval 心跳间隔时间（可选）
-     * @param heartBeatCount 心跳超时次数（可选）
+     * @param heartBeatCount    心跳超时次数（可选）
      * @return
      */
     public static String deviceConfig(FromDevice fromDevice, ToDevice toDevice, String name, String expiration,
-        String heartBeatInterval, String heartBeatCount) {
+                                      String heartBeatInterval, String heartBeatCount) {
 
         DeviceConfigControl deviceConfigControl =
-            new DeviceConfigControl(CmdTypeEnum.DEVICE_CONFIG.getType(), RandomStrUtil.getValidationCode(),
-                fromDevice.getUserId());
+                new DeviceConfigControl(CmdTypeEnum.DEVICE_CONFIG.getType(), RandomStrUtil.getValidationCode(),
+                        fromDevice.getUserId());
 
         deviceConfigControl.setBasicParam(new DeviceConfigControl.BasicParam(name, expiration, heartBeatInterval, heartBeatCount));
 
@@ -305,8 +339,8 @@ public class ServerSendCmd {
     public static String deviceConfigDownload(FromDevice fromDevice, ToDevice toDevice, String configType) {
 
         DeviceConfigDownload deviceConfig =
-            new DeviceConfigDownload(CmdTypeEnum.CONFIG_DOWNLOAD.getType(), RandomStrUtil.getValidationCode(),
-                fromDevice.getUserId());
+                new DeviceConfigDownload(CmdTypeEnum.CONFIG_DOWNLOAD.getType(), RandomStrUtil.getValidationCode(),
+                        fromDevice.getUserId());
 
         deviceConfig.setConfigType(configType);
 
@@ -317,7 +351,7 @@ public class ServerSendCmd {
      * 强制关键帧命令,设备收到此命令应立刻发送一个IDR帧
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
+     * @param toDevice   接收设备
      * @return
      */
     public static String deviceControlIdr(FromDevice fromDevice, ToDevice toDevice, String cmdStr) {
@@ -349,9 +383,8 @@ public class ServerSendCmd {
      * 伸缩控制
      *
      * @param fromDevice 发送设备
-     * @param toDevice 接收设备
-     * @param dragZoom 放大
-     * 
+     * @param toDevice   接收设备
+     * @param dragZoom   放大
      * @return
      */
     public static String deviceControlDragIn(FromDevice fromDevice, ToDevice toDevice, DragZoom dragZoom) {
@@ -361,5 +394,68 @@ public class ServerSendCmd {
         dragZoomIn.setDragZoomIn(dragZoom);
 
         return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomIn);
+    }
+
+    /**
+     * 云台控制命令
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param ptzCmdEnum 命令
+     * @param speed      速度
+     * @return
+     */
+    public static String deviceControlPtzCmd(FromDevice fromDevice, ToDevice toDevice, PtzCmdEnum ptzCmdEnum, Integer speed) {
+        String ptzCmd = PtzUtils.getPtzCmd(ptzCmdEnum, speed);
+        return deviceControlPtzCmd(fromDevice, toDevice, ptzCmd);
+    }
+
+    /**
+     * 设备命令控制
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param ptzCmd     控制代码
+     * @return
+     */
+    public static String deviceControlPtzCmd(FromDevice fromDevice, ToDevice toDevice, String ptzCmd) {
+        DeviceControlPtz deviceControlPtz =
+                new DeviceControlPtz(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        deviceControlPtz.setPtzCmd(ptzCmd);
+        deviceControlPtz.setPtzInfo(new DeviceControlPtz.PtzInfo());
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPtz);
+    }
+
+    /**
+     * 设备重启
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @return
+     */
+    public static String deviceControlTeleBoot(FromDevice fromDevice, ToDevice toDevice) {
+        DeviceControlTeleBoot deviceControlTeleBoot =
+                new DeviceControlTeleBoot(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlTeleBoot);
+    }
+
+    /**
+     * 录像控制
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param recordCmd  Record 开启录像， StopRecord 停止录像
+     * @return
+     */
+    public static String deviceControlTeleBoot(FromDevice fromDevice, ToDevice toDevice, String recordCmd) {
+        DeviceControlRecordCmd deviceControlRecordCmd =
+                new DeviceControlRecordCmd(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        deviceControlRecordCmd.setRecordCmd(recordCmd);
+
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlRecordCmd);
     }
 }

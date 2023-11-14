@@ -3,10 +3,8 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.notify
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
@@ -27,10 +25,15 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
 
     public static final String CMD_TYPE = "Broadcast";
 
-    private String             cmdType  = CMD_TYPE;
+    private String cmdType = CMD_TYPE;
 
     public BroadcastNotifyMessageHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);
+    }
+
+    @Override
+    public String getRootType() {
+        return NOTIFY;
     }
 
     @Override
@@ -39,9 +42,9 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
         String userId = deviceSession.getUserId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
 
-        DeviceBroadcastNotify broadcastNotify = parseRequest(event, fromDevice.getCharset(), DeviceBroadcastNotify.class);
+        DeviceBroadcastNotify broadcastNotify = parseXml(DeviceBroadcastNotify.class);
 
         messageProcessorClient.broadcastNotify(broadcastNotify);
     }

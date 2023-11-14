@@ -34,6 +34,12 @@ public class DeviceInfoQueryMessageClientHandler extends MessageClientHandlerAbs
     }
 
     @Override
+    public String getRootType() {
+        return QUERY;
+    }
+
+
+    @Override
     public void handForEvt(RequestEvent event) {
 
         DeviceSession deviceSession = getDeviceSession(event);
@@ -41,10 +47,10 @@ public class DeviceInfoQueryMessageClientHandler extends MessageClientHandlerAbs
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
         ToDevice toDevice = (ToDevice) messageProcessorClient.getToDevice(sipId);
 
-        DeviceQuery deviceQuery = parseRequest(event, fromDevice.getCharset(), DeviceQuery.class);
+        DeviceQuery deviceQuery = parseXml(DeviceQuery.class);
 
         String sn = deviceQuery.getSn();
         DeviceInfo deviceInfo = messageProcessorClient.getDeviceInfo(userId);

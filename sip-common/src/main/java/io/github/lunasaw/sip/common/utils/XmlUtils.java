@@ -14,7 +14,6 @@ import javax.xml.bind.Unmarshaller;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.dom4j.tree.DefaultDocument;
 import org.springframework.util.ResourceUtils;
 
 import com.google.common.base.Joiner;
@@ -68,4 +67,15 @@ public class XmlUtils {
         return cmdType.getText();
     }
 
+
+    @SneakyThrows
+    public static String getRootType(String xmlStr) {
+        SAXReader reader = new SAXReader();
+
+        Document document = reader.read(new StringReader(xmlStr));
+        // 获取根元素
+        Element root = document.getRootElement();
+
+        return root.getName();
+    }
 }

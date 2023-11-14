@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.client.transmit.response.register;
 
+import javax.annotation.Resource;
 import javax.sdp.SdpParseException;
 import javax.sip.ResponseEvent;
 import javax.sip.header.CallIdHeader;
@@ -39,6 +40,7 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
 
     public String method = METHOD;
 
+    @Resource
     private RegisterProcessorClient registerProcessorClient;
 
     /**
@@ -70,11 +72,11 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
         // 成功响应
         SIPResponse response = (SIPResponse) evt.getResponse();
 
-        String toUserId = SipUtils.getUserIdFromFromHeader(response);
-        String fromUserId = SipUtils.getUserIdFromFromHeader(response);
+        String toUserId = SipUtils.getUserIdFromToHeader(response);
+
         CallIdHeader callIdHeader = response.getCallIdHeader();
         Integer expire = registerProcessorClient.getExpire(toUserId);
-        FromDevice fromDevice = (FromDevice) registerProcessorClient.getFromDevice(fromUserId);
+        FromDevice fromDevice = (FromDevice)registerProcessorClient.getFromDevice();
         ToDevice toDevice = (ToDevice) registerProcessorClient.getToDevice(toUserId);
         if (fromDevice == null || toDevice == null) {
             return;

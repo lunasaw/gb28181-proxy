@@ -7,7 +7,6 @@ import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.entity.query.DeviceConfigDownload;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import io.github.lunasaw.sip.common.entity.response.DeviceConfigResponse;
 import org.springframework.stereotype.Component;
 
@@ -38,16 +37,22 @@ public class ConfigDownloadMessageHandler extends MessageClientHandlerAbstract {
     }
 
     @Override
+    public String getRootType() {
+        return QUERY;
+    }
+
+
+    @Override
     public void handForEvt(RequestEvent event) {
         DeviceSession deviceSession = getDeviceSession(event);
         String userId = deviceSession.getUserId();
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice(userId);
+        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
         ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
 
-        DeviceConfigDownload deviceConfigDownload = parseRequest(event, fromDevice.getCharset(), DeviceConfigDownload.class);
+        DeviceConfigDownload deviceConfigDownload = parseXml(DeviceConfigDownload.class);
 
         DeviceConfigResponse deviceConfigResponse = messageProcessorClient.getDeviceConfigResponse(deviceConfigDownload);
         deviceConfigResponse.setSn(deviceConfigDownload.getSn());

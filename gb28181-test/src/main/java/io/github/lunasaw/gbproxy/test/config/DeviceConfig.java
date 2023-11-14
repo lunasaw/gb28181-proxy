@@ -22,12 +22,14 @@ public class DeviceConfig {
 
     public static final String LOCAL_IP = SystemInfoUtil.getNoLoopbackIP();
 
-    public static final String LOOP_IP = "127.0.0.1";
+    public static final String LOOP_IP = "0.0.0.0";
 
+    public static final String LOOP_IP_LOCAL = "0.0.0.0";
 
     public static final String REMOTE_IP = "10.37.5.132";
 
     public static Map<String, Device> DEVICE_MAP = new ConcurrentHashMap<>();
+
 
     static {
         FromDevice clientFrom = FromDevice.getInstance("33010602011187000001", LOOP_IP, 8118);

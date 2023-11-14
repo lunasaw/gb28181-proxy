@@ -6,6 +6,13 @@ import javax.sip.RequestEvent;
  * 对message类型的请求单独抽象，根据cmdType进行处理
  */
 public interface MessageHandler {
+
+
+    String QUERY = "Query";
+    String CONTROL = "Control";
+    String NOTIFY = "Notify";
+    String RESPONSE = "Response";
+
     /**
      * 响应ack
      * 
@@ -28,9 +35,21 @@ public interface MessageHandler {
     void handForEvt(RequestEvent event);
 
     /**
+     * 处理标签
+     *
+     * @return
+     */
+    String getRootType();
+
+    /**
      * 处理消息类型
      *
      * @return
      */
     String getCmdType();
+
+    /**
+     * 当前接受到的原始消息
+     */
+    void setXmlStr(String xmlStr);
 }

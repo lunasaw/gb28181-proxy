@@ -5,6 +5,8 @@ import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
 import io.github.lunasaw.sip.common.entity.notify.MediaStatusNotify;
 import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
+import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
+import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 
 /**
@@ -21,9 +23,11 @@ public interface MessageProcessorServer extends SipUserGenerate {
 
     /**
      * 更新设备地址信息
+     *
+     * @param userId
      * @param remoteAddressInfo
      */
-    void updateRemoteAddress(RemoteAddressInfo remoteAddressInfo);
+    void updateRemoteAddress(String userId, RemoteAddressInfo remoteAddressInfo);
 
     /**
      * 更新报警信息
@@ -42,4 +46,20 @@ public interface MessageProcessorServer extends SipUserGenerate {
      * @param mediaStatusNotify
      */
     void updateMediaStatus(MediaStatusNotify mediaStatusNotify);
+
+    /**
+     * 更新设备录像
+     * 
+     * @param userId
+     * @param deviceRecord
+     */
+    void updateDeviceRecord(String userId, DeviceRecord deviceRecord);
+
+    /**
+     * 更新设备通道
+     * 
+     * @param userId
+     * @param deviceResponse
+     */
+    void updateDeviceResponse(String userId, DeviceResponse deviceResponse);
 }

@@ -32,11 +32,11 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public Device getToDevice(String userId) {
-        return toDevice;
+        return DefaultRegisterProcessorClient.deviceMap.get(userId);
     }
 
     @Override
-    public Device getFromDevice(String userId) {
+    public Device getFromDevice() {
         return fromDevice;
     }
 
@@ -48,7 +48,7 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public DeviceStatus getDeviceStatus(String userId) {
-        return (DeviceStatus)XmlUtils.parseFile("classpath:device/deviceInfo.xml", DeviceStatus.class);
+        return (DeviceStatus) XmlUtils.parseFile("classpath:device/deviceStatus.xml", DeviceStatus.class);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public void broadcastNotify(DeviceBroadcastNotify broadcastNotify) {
-
+        log.info("broadcastNotify::broadcastNotify = {}", broadcastNotify);
     }
 
     @Override

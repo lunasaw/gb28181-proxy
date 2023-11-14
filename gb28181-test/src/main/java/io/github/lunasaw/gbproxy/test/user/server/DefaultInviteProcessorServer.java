@@ -28,7 +28,7 @@ public class DefaultInviteProcessorServer implements InviteProcessorServer {
     }
 
     @Override
-    public Device getFromDevice(String userId) {
+    public Device getFromDevice() {
         return fromDevice;
     }
 }

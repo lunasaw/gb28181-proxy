@@ -27,7 +27,7 @@ public class DeviceControlRecordCmd extends DeviceControlBase {
 
     public DeviceControlRecordCmd(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
-        this.setControlType("GuardCmd");
+        this.setControlType("RecordCmd");
     }
 
 }

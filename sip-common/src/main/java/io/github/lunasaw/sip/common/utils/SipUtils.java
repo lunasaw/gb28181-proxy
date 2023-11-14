@@ -3,12 +3,16 @@ package io.github.lunasaw.sip.common.utils;
 import javax.sdp.SdpFactory;
 import javax.sdp.SdpParseException;
 import javax.sdp.SessionDescription;
-import javax.sip.header.FromHeader;
-import javax.sip.header.HeaderAddress;
-import javax.sip.header.ToHeader;
+import javax.sip.RequestEvent;
+import javax.sip.header.*;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import com.luna.common.text.StringTools;
+import gov.nist.javax.sip.header.Subject;
+import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.entity.GbSessionDescription;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
 import gov.nist.javax.sip.address.AddressImpl;
@@ -18,6 +22,8 @@ import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
+
+import java.nio.charset.Charset;
 
 /**
  * @author luna
@@ -78,6 +84,19 @@ public class SipUtils {
     }
 
     /**
+     * 从subject读取channelId
+     */
+    public static String getSubjectId(Request request) {
+        SubjectHeader subject = (SubjectHeader) request.getHeader(SubjectHeader.NAME);
+        if (subject == null) {
+            // 如果缺失subject
+            return null;
+        }
+        return subject.getSubject().split(":")[0];
+    }
+
+
+    /**
      * 从请求中获取设备ip地址和端口号
      *
      * @param request                       请求
@@ -115,7 +134,8 @@ public class SipUtils {
         return centerCodeStr + industryCodeStr + typeCodeStr + serialNumberStr;
     }
 
-    public static SdpSessionDescription parseSdp(String sdpStr) throws SdpParseException {
+
+    public static SdpSessionDescription parseSdp(String sdpStr) {
         // jainSip 不支持y= f=字段， 移除以解析。
         int ssrcIndex = sdpStr.indexOf("y=");
         int mediaDescriptionIndex = sdpStr.indexOf("f=");
@@ -124,21 +144,41 @@ public class SipUtils {
         String ssrc = null;
         String mediaDescription = null;
         if (mediaDescriptionIndex == 0 && ssrcIndex == 0) {
-            sdp = SdpFactory.getInstance().createSessionDescription(sdpStr);
+            sdp = SipRequestUtils.createSessionDescription(sdpStr);
         } else {
             String lines[] = sdpStr.split("\\r?\\n");
-            StringBuilder sdpBuffer = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             for (String line : lines) {
                 if (line.trim().startsWith("y=")) {
                     ssrc = line.substring(2);
                 } else if (line.trim().startsWith("f=")) {
                     mediaDescription = line.substring(2);
                 } else {
-                    sdpBuffer.append(line.trim()).append("\r\n");
+                    stringBuilder.append(line.trim()).append("\r\n");
                 }
             }
-            sdp = SdpFactory.getInstance().createSessionDescription(sdpBuffer.toString());
+            sdp = SipRequestUtils.createSessionDescription(stringBuilder.toString());
         }
-        return SdpSessionDescription.getInstance(sdp);
+        return GbSessionDescription.getInstance(sdp, ssrc, mediaDescription);
+    }
+
+    public static <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
+        SIPRequest sipRequest = (SIPRequest) event.getRequest();
+        byte[] rawContent = sipRequest.getRawContent();
+        if (StringUtils.isBlank(charset)) {
+            charset = Constant.GB2312;
+        }
+        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
+        Object o = XmlUtils.parseObj(xmlStr, clazz);
+        return (T) o;
+    }
+
+    public static String parseRequest(RequestEvent event, String charset) {
+        SIPRequest sipRequest = (SIPRequest) event.getRequest();
+        byte[] rawContent = sipRequest.getRawContent();
+        if (StringUtils.isBlank(charset)) {
+            charset = Constant.GB2312;
+        }
+        return StringTools.toEncodedString(rawContent, Charset.forName(charset));
     }
 }

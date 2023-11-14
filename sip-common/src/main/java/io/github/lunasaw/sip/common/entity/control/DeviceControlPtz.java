@@ -38,7 +38,7 @@ public class DeviceControlPtz extends DeviceControlBase {
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class PtzInfo {
         @XmlElement(name = "ControlPriority")
-        public String controlPriority;
+        public Integer controlPriority = 5;
 
     }
 

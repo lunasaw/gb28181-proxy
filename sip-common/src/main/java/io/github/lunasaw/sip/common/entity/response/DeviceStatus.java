@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <?xml version="1.0" encoding="gb2312"?>
+ * <?xml version="1.0" encoding="GB2312"?>
  * <Response>
  * <CmdType>DeviceStatus</CmdType>
  * <SN>sn</SN>
  * <DeviceID>channelId</DeviceID>
  * <Result>OK</Result>
- * <Online>statusStr</Online>
+ * <Online>ONLINE</Online>
  * <Status>OK</Status>
  * </Response>
  * 
@@ -34,19 +34,19 @@ public class DeviceStatus extends DeviceBase {
      * OK
      */
     @XmlElement(name = "Result")
-    private String    Result;
+    private String Result = "OK";
 
     /**
      * "ONLINE":"OFFLINE"
      */
     @XmlElement(name = "Online")
-    private String Online;
+    private String Online = "ONLINE";
 
     /**
      * OK
      */
     @XmlElement(name = "Status")
-    private String status;
+    private String status = "OK";
 
     public DeviceStatus(String cmdType, String sn, String deviceId) {
         super(cmdType, sn, deviceId);
