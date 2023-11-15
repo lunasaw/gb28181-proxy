@@ -14,11 +14,11 @@ import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
-import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.sip.*;
+import javax.sip.ServerTransaction;
+import javax.sip.SipException;
 import javax.sip.header.CallIdHeader;
 import javax.sip.header.UserAgentHeader;
 import javax.sip.header.ViaHeader;
@@ -187,6 +187,10 @@ public class SipSender {
         }
     }
 
+    public static ServerTransaction getServerTransaction(Request request) {
+        return getServerTransaction(request, SipLayer.getMonitorIp());
+    }
+
     /**
      * 根据 RequestEvent 获取 ServerTransaction
      *
@@ -194,6 +198,9 @@ public class SipSender {
      * @return
      */
     public static ServerTransaction getServerTransaction(Request request, String ip) {
+        if (ip == null) {
+            ip = SipLayer.getMonitorIp();
+        }
         // 判断TCP还是UDP
         boolean isTcp = false;
         ViaHeader viaHeader = (ViaHeader) request.getHeader(ViaHeader.NAME);

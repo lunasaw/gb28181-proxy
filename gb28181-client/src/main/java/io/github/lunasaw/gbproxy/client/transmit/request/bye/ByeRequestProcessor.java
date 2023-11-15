@@ -1,9 +1,11 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.bye;
 
 import javax.annotation.Resource;
+import javax.sip.Dialog;
 import javax.sip.RequestEvent;
+import javax.sip.message.Response;
 
-import io.github.lunasaw.gbproxy.client.transmit.request.invite.InviteProcessorClient;
+import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +31,7 @@ public class ByeRequestProcessor extends SipRequestProcessorAbstract {
 
 
     @Resource
-    private InviteProcessorClient inviteProcessorClient;
+    private ByeProcessorClient byeProcessorClient;
 
 
     /**
@@ -39,7 +41,11 @@ public class ByeRequestProcessor extends SipRequestProcessorAbstract {
      */
     @Override
     public void process(RequestEvent evt) {
-
+        ResponseCmd.doResponseCmd(Response.OK, evt);
+        Dialog dialog = evt.getDialog();
+        if (dialog != null) {
+            byeProcessorClient.closeStream(dialog.getCallId().getCallId());
+        }
     }
 
 }
