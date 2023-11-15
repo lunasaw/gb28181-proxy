@@ -19,11 +19,11 @@ import lombok.Setter;
  *
  * @author luna
  */
-@Component("clientByeRequestProcessor")
+@Component("byeRequestProcessorClient")
 @Getter
 @Setter
 @Slf4j
-public class ByeRequestProcessor extends SipRequestProcessorAbstract {
+public class ByeRequestProcessorClient extends SipRequestProcessorAbstract {
 
     public static final String METHOD = "BYE";
 

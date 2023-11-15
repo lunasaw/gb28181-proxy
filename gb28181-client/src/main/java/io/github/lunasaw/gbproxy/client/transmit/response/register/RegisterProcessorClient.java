@@ -17,4 +17,12 @@ public interface RegisterProcessorClient extends SipUserGenerate {
     default Integer getExpire(String userId) {
         return 300;
     }
+
+    /**
+     * 注册成功
+     *
+     * @param toUserId
+     */
+    void registerSuccess(String toUserId);
+
 }

@@ -15,7 +15,7 @@ import javax.sip.RequestEvent;
 @Component
 @Getter
 @Setter
-public class ByeRequestProcessor extends SipRequestProcessorAbstract {
+public class ByeRequestProcessorServer extends SipRequestProcessorAbstract {
 
     public static final String METHOD = "BYE";
 
