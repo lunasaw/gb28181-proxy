@@ -1,5 +1,14 @@
 package io.github.lunasaw.gbproxy.test;
 
+import javax.sip.message.Request;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
 import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
@@ -13,15 +22,6 @@ import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.event.annotation.AfterTestClass;
-
-import javax.sip.message.Request;
 
 /**
  * @author luna
@@ -59,7 +59,7 @@ public class Gb28181TestClient {
 
     }
 
-    //    @Test
+    @Test
     public void test_register_client() throws Exception {
         String callId = SipRequestUtils.getNewCallId();
         Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, 300, callId);
