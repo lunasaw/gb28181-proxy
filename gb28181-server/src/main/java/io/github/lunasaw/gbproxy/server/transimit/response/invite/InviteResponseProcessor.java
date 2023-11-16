@@ -6,6 +6,8 @@ import javax.sip.ResponseEvent;
 import javax.sip.header.CallIdHeader;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.transmit.ResponseCmd;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.ResponseEventExt;
@@ -34,6 +36,7 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
 
     private String method = METHOD;
 
+    @Autowired
     public InviteProcessorServer inviteProcessorServer;
 
     public InviteResponseProcessor(InviteProcessorServer inviteProcessorServer) {
@@ -52,7 +55,7 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
             SIPResponse response = (SIPResponse) evt.getResponse();
             int statusCode = response.getStatusCode();
             if (statusCode == Response.TRYING) {
-                responseTrying();
+                inviteProcessorServer.responseTrying();
             }
 
             if (statusCode == Response.OK) {
@@ -64,17 +67,11 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
         }
     }
 
-    public void responseTrying() {
-        // trying不会回复
-
-    }
-
     public void responseAck(ResponseEventExt evt) {
         // 成功响应
         SIPResponse response = (SIPResponse) evt.getResponse();
 
         String toUserId = SipUtils.getUserIdFromToHeader(response);
-        String fromUserId = SipUtils.getUserIdFromFromHeader(response);
         CallIdHeader callIdHeader = response.getCallIdHeader();
         FromDevice fromDevice = (FromDevice)inviteProcessorServer.getFromDevice();
 

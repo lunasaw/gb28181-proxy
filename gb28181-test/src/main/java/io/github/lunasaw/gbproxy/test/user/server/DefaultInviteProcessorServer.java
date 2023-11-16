@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.user.server;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import io.github.lunasaw.sip.common.entity.Device;
  * @date 2023/10/21
  */
 @Component
+@Slf4j
 public class DefaultInviteProcessorServer implements InviteProcessorServer {
 
     @Autowired
@@ -30,5 +32,10 @@ public class DefaultInviteProcessorServer implements InviteProcessorServer {
     @Override
     public Device getFromDevice() {
         return fromDevice;
+    }
+
+    @Override
+    public void responseTrying() {
+        log.info("responseTrying::");
     }
 }

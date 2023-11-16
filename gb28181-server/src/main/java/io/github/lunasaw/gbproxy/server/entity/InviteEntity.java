@@ -18,12 +18,12 @@ public class InviteEntity {
     /**
      * 组装subject
      *
+     * @param subId 通道Id
+     * @param ssrc 混淆码
      * @param userId 设备Id
-     * @param subId  通道Id
-     * @param ssrc   混淆码
      * @return
      */
-    public static String getSubject(String userId, String subId, String ssrc) {
+    public static String getSubject(String subId, String ssrc, String userId) {
         return String.format("%s:%s,%s:%s", subId, ssrc, userId, 0);
     }
 

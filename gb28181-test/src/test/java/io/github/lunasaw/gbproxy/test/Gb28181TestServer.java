@@ -104,6 +104,11 @@ public class Gb28181TestServer {
         String s = ServerSendCmd.deviceRecordInfoQuery(fromDevice, instance, start, end);
     }
 
+    @Test
+    public void test_invite_server() {
+
+    }
+
     @SneakyThrows
     @AfterEach
     public void after() {
