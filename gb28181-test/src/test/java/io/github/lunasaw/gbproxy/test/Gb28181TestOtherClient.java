@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
 import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
@@ -29,16 +28,16 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @SpringBootTest(classes = Gb28181ApplicationTest.class)
-public class Gb28181TestClient {
+public class Gb28181TestOtherClient {
 
-
+    private static final String MONITOR_IP = "172.24.48.27";
     @Autowired
     @Qualifier("clientFrom")
-    private Device fromDevice;
+    private Device              fromDevice;
 
     @Autowired
     @Qualifier("clientTo")
-    private Device toDevice;
+    private Device              toDevice;
 
     @AfterAll
     public static void after() {
@@ -51,16 +50,21 @@ public class Gb28181TestClient {
     public void before() {
         // 本地端口监听
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, fromDevice.getPort());
-
-        DefaultRegisterProcessorClient.deviceMap.put(toDevice.getUserId(), toDevice);
+        SipLayer.addListeningPoint(MONITOR_IP, fromDevice.getPort());
 
     }
 
     @Test
-    public void test_register_client() throws Exception {
+    public void test_register_client() {
         String callId = SipRequestUtils.getNewCallId();
-        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, 300, callId);
+
+        ToDevice instance = ToDevice.getInstance("41010500002000000001", "10.37.2.198", 8116);
+        instance.setPassword("bajiuwulian1006");
+
+        DefaultRegisterProcessorClient.deviceMap.put("41010500002000000001", instance);
+        fromDevice.setIp(MONITOR_IP);
+
+        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice)fromDevice, instance, 300, callId);
 
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override
@@ -70,29 +74,4 @@ public class Gb28181TestClient {
         });
     }
 
-    @Test
-    public void a_test_register_client_custom() throws Exception {
-        String callId = SipRequestUtils.getNewCallId();
-        DefaultRegisterProcessorClient.isRegister = true;
-        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, 300, callId);
-
-        SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
-            @Override
-            public void response(EventResult eventResult) {
-                System.out.println(eventResult);
-            }
-        });
-    }
-
-    @Test
-    public void b_test_un_register_client_custom() {
-        Device instance = DefaultRegisterProcessorClient.deviceMap.get("41010500002000000001");
-        DefaultRegisterProcessorClient.isRegister = false;
-        ClientSendCmd.deviceUnRegister((FromDevice) fromDevice, (ToDevice) instance);
-    }
-
-    @Test
-    public void test_keep_live() {
-        ClientSendCmd.deviceKeepLiveNotify((FromDevice) fromDevice, (ToDevice) toDevice, "ok");
-    }
 }

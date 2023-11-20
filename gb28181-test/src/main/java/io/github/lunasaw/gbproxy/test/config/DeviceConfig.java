@@ -2,6 +2,8 @@ package io.github.lunasaw.gbproxy.test.config;
 
 import com.luna.common.net.IPAddressUtil;
 import com.luna.common.os.SystemInfoUtil;
+import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
+import io.github.lunasaw.gbproxy.test.user.server.DefaultRegisterProcessorServer;
 import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +24,7 @@ public class DeviceConfig {
 
     public static final String LOCAL_IP = SystemInfoUtil.getNoLoopbackIP();
 
-    public static final String LOOP_IP = "0.0.0.0";
+    public static final String        LOOP_IP       = "127.0.0.1";
 
     public static final String LOOP_IP_LOCAL = "0.0.0.0";
 
@@ -47,6 +49,10 @@ public class DeviceConfig {
 
         ToDevice serverTo = ToDevice.getInstance("33010602011187000001", LOOP_IP, 8118);
         DEVICE_MAP.put("server_to", serverTo);
+
+        // 放入map 模拟数据库
+        DefaultRegisterProcessorClient.deviceMap.put("41010500002000000010", clientTo);
+        DefaultRegisterProcessorServer.deviceMap.put("33010602011187000001", serverTo);
     }
 
     @Bean

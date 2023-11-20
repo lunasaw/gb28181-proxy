@@ -17,13 +17,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FfmpegCommander {
 
     private static final String path = "/usr/local/bin/ffmpeg";
-    private static final String cmd = "-re -i {filePath} -vcodec h264 -acodec aac -f rtp_mpegts rtp://{ip}:{port}";
+    private static final String               cmd        =
+        "-re -i {filePath} -vcodec h264 -acodec aac -f rtsp -rtsp_transport tcp rtsp://{ip}:{port}/rtp/33010602011187000001_33010602011187000001?sign=41db35390ddad33f83944f44b8b75ded";
     private static final Map<String, Process> processMap = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(FfmpegCommander.class);
 
     public void pushStream(String callId, String filePath, String ip, int port) {
         String command = path + " " +
-                cmd.replace("{filePath}", filePath).replace("{ip}", ip).replace("{port}", port + "");
+            cmd.replace("{filePath}", filePath).replace("{ip}", ip).replace("{port}", 1554 + "");
         logger.info("callId={},\r\n推流命令={}", callId, command);
         Runtime runtime = Runtime.getRuntime();
         try {

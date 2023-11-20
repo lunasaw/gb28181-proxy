@@ -43,7 +43,7 @@ public class DefaultInviteProcessorClient implements InviteProcessorClient {
     @Override
     public void inviteSession(String callId, SdpSessionDescription sessionDescription) {
         GbSessionDescription gbSessionDescription = (GbSessionDescription) sessionDescription;
-        log.info("inviteSession::sessionDescription = {}", JSON.toJSONString(sessionDescription));
+        log.info("点播请求 inviteSession::sessionDescription = {}", JSON.toJSONString(sessionDescription));
 
         SipSubscribe.addOkSubscribe(callId, eventResult -> {
             ffmpegCommander.closeAllStream();

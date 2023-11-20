@@ -463,6 +463,20 @@ public class ServerSendCmd {
 
     /**
      * 设备实时流点播
+     *
+     * @param fromDevice
+     * @param toDevice
+     * @param sdpIp
+     * @param mediaPort
+     * @return
+     */
+    public static String deviceInvitePlay(FromDevice fromDevice, ToDevice toDevice, String sdpIp, Integer mediaPort) {
+        InviteRequest inviteRequest = new InviteRequest(toDevice.getUserId(), sdpIp, mediaPort);
+        return deviceInvitePlay(fromDevice, toDevice, inviteRequest);
+    }
+
+    /**
+     * 设备实时流点播
      * 
      * @param fromDevice
      * @param toDevice

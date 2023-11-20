@@ -4,6 +4,8 @@ import javax.sip.message.Request;
 
 import com.luna.common.date.DateUtils;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
+import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
+import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
 import io.github.lunasaw.gbproxy.test.user.server.DefaultRegisterProcessorServer;
 import io.github.lunasaw.sip.common.entity.control.DragZoom;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
@@ -51,8 +53,7 @@ public class Gb28181TestServer {
     public void before() {
         // 本地端口监听
         log.info("before::服务端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint("10.39.85.228", 8116);
-
+        SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, 8117);
     }
 
     @Test
@@ -105,8 +106,10 @@ public class Gb28181TestServer {
     }
 
     @Test
+    @SneakyThrows
     public void test_invite_server() {
-
+        String invitePlay = ServerSendCmd.deviceInvitePlay((FromDevice)fromDevice, (ToDevice)toDevice, "127.0.0.1", 1554);
+        System.out.println(invitePlay);
     }
 
     @SneakyThrows

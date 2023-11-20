@@ -21,7 +21,7 @@ public interface InviteProcessorClient extends SipUserGenerate {
     void inviteSession(String callId, SdpSessionDescription sessionDescription);
 
     @SneakyThrows
-    default String getAckContent(String userId, GbSessionDescription sessionDescription) {
+    default String getInviteResponse(String userId, GbSessionDescription sessionDescription) {
 
         SessionDescription baseSdb = sessionDescription.getBaseSdb();
         String address = baseSdb.getOrigin().getAddress();
