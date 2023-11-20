@@ -1,29 +1,31 @@
 package io.github.lunasaw.sip.common.utils;
 
-import javax.sdp.SdpFactory;
-import javax.sdp.SdpParseException;
+import java.nio.charset.Charset;
+
 import javax.sdp.SessionDescription;
 import javax.sip.RequestEvent;
-import javax.sip.header.*;
+import javax.sip.header.FromHeader;
+import javax.sip.header.HeaderAddress;
+import javax.sip.header.SubjectHeader;
+import javax.sip.header.ToHeader;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
-import com.luna.common.text.StringTools;
-import gov.nist.javax.sip.header.Subject;
-import io.github.lunasaw.sip.common.constant.Constant;
-import io.github.lunasaw.sip.common.entity.GbSessionDescription;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
+
+import com.luna.common.text.StringTools;
 
 import gov.nist.javax.sip.address.AddressImpl;
 import gov.nist.javax.sip.address.SipUri;
 import gov.nist.javax.sip.message.SIPRequest;
 import gov.nist.javax.sip.message.SIPResponse;
+import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.entity.GbSessionDescription;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
-
-import java.nio.charset.Charset;
 
 /**
  * @author luna
@@ -134,6 +136,14 @@ public class SipUtils {
         return centerCodeStr + industryCodeStr + typeCodeStr + serialNumberStr;
     }
 
+    public static String genSsrc(String userId) {
+        if (StringUtils.isEmpty(userId)) {
+            // 随机生成ssrc
+            return String.valueOf(RandomUtils.nextLong(100000, 500000));
+        }
+        String ssrcPrefix = userId.substring(3, 8);
+        return String.format("%s%04d", ssrcPrefix, RandomUtils.nextLong(1000, 9999));
+    }
 
     public static SdpSessionDescription parseSdp(String sdpStr) {
         // jainSip 不支持y= f=字段， 移除以解析。

@@ -1,8 +1,12 @@
 package io.github.lunasaw.gbproxy.server.transimit.cmd;
 
+import java.util.Date;
+import java.util.Optional;
+
 import com.luna.common.date.DateUtils;
 import com.luna.common.text.RandomStrUtil;
-import io.github.lunasaw.gbproxy.server.entity.InviteEntity;
+
+import io.github.lunasaw.gbproxy.server.entity.InviteRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.control.*;
@@ -10,13 +14,9 @@ import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.sip.common.entity.query.*;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.enums.PtzCmdEnum;
-import io.github.lunasaw.sip.common.enums.StreamModeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
 import io.github.lunasaw.sip.common.utils.PtzUtils;
-
-import java.util.Date;
-import java.util.Optional;
 
 /**
  * @author luna
@@ -461,15 +461,20 @@ public class ServerSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlRecordCmd);
     }
 
-    // public static String deviceInvitePlay(FromDevice fromDevice, ToDevice toDevice, String recordCmd) {
-    // DeviceControlRecordCmd deviceControlRecordCmd =
-    // new DeviceControlRecordCmd(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(),
-    // fromDevice.getUserId());
-    //
-    // deviceControlRecordCmd.setRecordCmd(recordCmd);
-    //
-    // InviteEntity.getInvitePlayBody(false, StreamModeEnum.TCP_PASSIVE)
-    //
-    // return SipSender.doInviteRequest(fromDevice, toDevice, deviceControlRecordCmd);
-    // }
+    /**
+     * 设备实时流点播
+     * 
+     * @param fromDevice
+     * @param toDevice
+     * @param inviteRequest
+     * @return
+     */
+    public static String deviceInvitePlay(FromDevice fromDevice, ToDevice toDevice, InviteRequest inviteRequest) {
+
+        String subject = inviteRequest.getSubject(fromDevice.getUserId());
+
+        String content = inviteRequest.getContent();
+
+        return SipSender.doInviteRequest(fromDevice, toDevice, content, subject);
+    }
 }
