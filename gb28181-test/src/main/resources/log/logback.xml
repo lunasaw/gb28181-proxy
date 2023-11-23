@@ -5,9 +5,9 @@
     <property name="LOG_HOME" value="logs"/>
 
     <substitutionProperty name="log.pattern"
-                          value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS,GMT+8}){faint} %clr(%5p) %clr(---){faint} %clr(%-1.30logger{0}){cyan} %clr(:){faint} [%X{traceId:--}] [%X{deviceId:--}] %m%n%wEx"/>
+                          value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS,GMT+8}){faint} %clr(%5p) %clr(---){faint} %clr(%-1.30logger{0}){cyan} %clr(:){faint} %X{traceId} %X{deviceId} %m%n%wEx"/>
 
-    <property name="pattern" value="%d %p [%t] %c{2} [%X{traceId:--}] [%X{deviceId:--}] %m%n"/>
+    <property name="pattern" value="%d %p [%t] %c{2} %X{traceId} %X{deviceId} %m%n"/>
 
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <conversionRule conversionWord="wex"

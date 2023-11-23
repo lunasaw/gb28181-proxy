@@ -1,7 +1,8 @@
-package io.github.lunasaw.gbproxy.test;
+package io.github.lunasaw.gbproxy.test.register;
 
 import javax.sip.message.Request;
 
+import io.github.lunasaw.gbproxy.test.Gb28181ApplicationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @SpringBootTest(classes = Gb28181ApplicationTest.class)
-public class Gb28181TestOtherClient {
+public class RegisterClientTest {
 
     private static final String MONITOR_IP = "172.24.48.27";
     @Autowired
