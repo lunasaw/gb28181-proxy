@@ -51,6 +51,8 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
      */
     @Override
     public void process(ResponseEvent evt) {
+        log.info("收到客户端INVITE响应process::");
+
         try {
             SIPResponse response = (SIPResponse) evt.getResponse();
             int statusCode = response.getStatusCode();

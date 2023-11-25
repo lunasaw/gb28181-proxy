@@ -43,6 +43,8 @@ public class InviteRequestProcessor extends SipRequestProcessorAbstract {
      */
     @Override
     public void process(RequestEvent evt) {
+        log.info("客户端收到INVITE process::");
+
         SIPRequest request = (SIPRequest) evt.getRequest();
 
         // 在客户端看来 收到请求的时候fromHeader还是服务端的 toHeader才是自己的，这里是要查询自己的信息
@@ -68,6 +70,6 @@ public class InviteRequestProcessor extends SipRequestProcessorAbstract {
 
         String receiveIp = request.getLocalAddress().getHostAddress();
         ContentTypeHeader contentTypeHeader = ContentTypeEnum.APPLICATION_SDP.getContentTypeHeader();
-        ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, content, contentTypeHeader, evt);
+        ResponseCmd.doResponseCmd(Response.OK, "OK", content, contentTypeHeader, evt);
     }
 }

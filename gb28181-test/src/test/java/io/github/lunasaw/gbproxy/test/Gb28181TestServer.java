@@ -53,7 +53,7 @@ public class Gb28181TestServer {
     public void before() {
         // 本地端口监听
         log.info("before::服务端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, 8117);
+        SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, 8117, false);
     }
 
     @Test

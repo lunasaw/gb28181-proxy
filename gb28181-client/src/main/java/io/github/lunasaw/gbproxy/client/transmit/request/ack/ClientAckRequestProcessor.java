@@ -8,6 +8,7 @@ import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAb
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,6 +22,7 @@ import javax.sip.RequestEvent;
 @Component
 @Getter
 @Setter
+@Slf4j
 public class ClientAckRequestProcessor extends SipRequestProcessorAbstract {
 
     private final String METHOD = "ACK";
@@ -37,6 +39,7 @@ public class ClientAckRequestProcessor extends SipRequestProcessorAbstract {
      */
     @Override
     public void process(RequestEvent evt) {
+        log.info("客户端收到ACK process::");
         SIPRequest request = (SIPRequest) evt.getRequest();
 
         // 在客户端看来 收到请求的时候fromHeader还是服务端的 toHeader才是自己的，这里是要查询自己的信息

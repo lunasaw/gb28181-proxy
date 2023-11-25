@@ -47,15 +47,11 @@ public class MessageHandlerAbstract implements MessageHandler {
     }
 
     public void responseAck(RequestEvent event) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
-        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
+        ResponseCmd.doResponseCmd(Response.OK, "OK", event);
     }
 
     public void responseError(RequestEvent event) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
-        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "SERVER ERROR", receiveIp, sipRequest);
+        ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "SERVER ERROR", event);
     }
 
     public <T> T parseXml(Class<T> clazz) {

@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest(classes = Gb28181ApplicationTest.class)
 public class RegisterClientTest {
 
-    private static final String MONITOR_IP = "172.24.48.27";
+    private static final String MONITOR_IP = "172.24.48.19";
     @Autowired
     @Qualifier("clientFrom")
     private Device              fromDevice;

@@ -63,6 +63,7 @@ public class SipLayer {
     }
 
     public static void addListeningPoint(String monitorIp, int port, Boolean enableLog) {
+        monitorIpList.add(monitorIp);
         addListeningPoint(monitorIp, port, new SipProcessorObserver(), enableLog);
     }
 
@@ -75,7 +76,7 @@ public class SipLayer {
             sipStack = (SipStackImpl) sipFactory.createSipStack(properties);
             sipStack.setMessageParserFactory(new StringMsgParserFactory());
         } catch (PeerUnavailableException e) {
-            log.error("[SIP SERVER] SIP服务启动失败， 监听地址{}失败,请检查ip是否正确", monitorIp);
+            log.error("[SIP SERVER] SIP服务启动失败， 监听地址{}失败,请检查ip是否正确", monitorIp, e);
             System.exit(0);
             return;
         }

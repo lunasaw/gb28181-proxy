@@ -1,0 +1,33 @@
+package io.github.lunasaw.gbproxy.client.transmit.response.ack;
+
+import javax.sip.ResponseEvent;
+import javax.sip.header.CallIdHeader;
+
+import org.springframework.stereotype.Component;
+
+import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * ACK请求响应器
+ *
+ * @author luna
+ */
+@Slf4j
+@Component
+public class AckResponseProcessor extends SipResponseProcessorAbstract {
+
+    private static final String METHOD = "MESSAGE";
+
+    /**
+     * 处理ACK响应
+     *
+     * @param evt
+     */
+    @Override
+    public void process(ResponseEvent evt) {
+        CallIdHeader callIdHeader = (CallIdHeader)evt.getResponse().getHeader(CallIdHeader.NAME);
+        // log.info("收到响应ACK process::evt = {} , callId = {}", evt.getResponse(), callIdHeader.getCallId());
+    }
+
+}

@@ -104,7 +104,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             if (transaction != null && callId.equals(transaction.getCallId())) {
                 log.info(title + "设备：{}, 注册续订: {}", userId, expires);
 
-                ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, request, okHeaderList);
+                ResponseCmd.doResponseCmd(Response.OK, "OK", evt, okHeaderList);
                 registerProcessorServer.updateSipTransaction(userId, sipTransaction);
                 return;
             }
@@ -125,7 +125,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
                         SipRequestUtils.createWWWAuthenticateHeader(DigestServerAuthenticationHelper.DEFAULT_SCHEME, fromDevice.getRealm(), nonce,
                                 DigestServerAuthenticationHelper.DEFAULT_ALGORITHM);
 
-                ResponseCmd.doResponseCmd(Response.UNAUTHORIZED, "Unauthorized", receiveIp, request, wwwAuthenticateHeader);
+                ResponseCmd.doResponseCmd(Response.UNAUTHORIZED, "Unauthorized", evt, wwwAuthenticateHeader);
                 return;
             }
 
@@ -136,12 +136,12 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             if (!passwordCorrect) {
                 // 注册失败
                 log.info(title + " 设备：{}, 密码/SIP服务器ID错误, 回复403: {}", userId, requestAddress);
-                ResponseCmd.doResponseCmd(Response.FORBIDDEN, "wrong password", receiveIp, request);
+                ResponseCmd.doResponseCmd(Response.FORBIDDEN, "wrong password", evt);
                 return;
             }
 
             // 携带授权头并且密码正确
-            ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, request, okHeaderList);
+            ResponseCmd.doResponseCmd(Response.OK, "OK", evt, okHeaderList);
             // 注册成功
             registerProcessorServer.updateSipTransaction(userId, sipTransaction);
         } catch (Exception e) {
