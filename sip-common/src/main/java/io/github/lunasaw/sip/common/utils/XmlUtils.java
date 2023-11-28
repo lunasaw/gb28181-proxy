@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -53,7 +54,7 @@ public class XmlUtils {
 
     @SneakyThrows
     public static <T> Object parseFile(String resource, Class<T> clazz) {
-        return parseFile(resource, clazz, Charset.forName("UTF-8"));
+        return parseFile(resource, clazz, StandardCharsets.UTF_8);
     }
 
     @SneakyThrows
