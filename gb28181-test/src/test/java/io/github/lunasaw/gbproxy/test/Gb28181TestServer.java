@@ -95,7 +95,7 @@ public class Gb28181TestServer {
     public void record_test() {
         ToDevice instance = ToDevice.getInstance("34020000001320000001", "172.19.14.30", 5060);
 
-        FromDevice fromDevice = FromDevice.getInstance("41010500002000000010", "10.39.85.228", 8116);
+        FromDevice fromDevice = FromDevice.getInstance("41010500002000000001", "10.39.85.228", 8116);
 
         Date start = DateUtils.parseDateTime("2023-11-02 00:00:00");
         Date end = DateUtils.parseDateTime("2023-11-02 23:59:00");

@@ -59,7 +59,8 @@ public class ResponseCmd {
     public static void doResponseCmd(int statusCode, String phrase, String content, ContentTypeHeader contentTypeHeader, RequestEvent event,
         List<Header> headers) {
         SIPRequest sipRequest = (SIPRequest)event.getRequest();
-        ServerTransaction serverTransaction = getServerTransaction(event, null);
+        String hostAddress = sipRequest.getLocalAddress().getHostAddress();
+        ServerTransaction serverTransaction = getServerTransaction(event, hostAddress);
         doResponseCmd(statusCode, phrase, content, contentTypeHeader, sipRequest, serverTransaction, headers);
     }
 
@@ -129,6 +130,9 @@ public class ResponseCmd {
     }
 
     public static void doResponseCmd(int statusCode, String phrase, String content, ContentTypeHeader contentTypeHeader, RequestEvent evt) {
-        doResponseCmd(statusCode, phrase, content, contentTypeHeader, evt, null);
+        SipURI sipURI = (SipURI) evt.getRequest().getRequestURI();
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(sipURI.getUser(), sipURI.getHost() + ":" + sipURI.getPort());
+
+        doResponseCmd(statusCode, phrase, content, contentTypeHeader, evt, Lists.newArrayList(contactHeader));
     }
 }

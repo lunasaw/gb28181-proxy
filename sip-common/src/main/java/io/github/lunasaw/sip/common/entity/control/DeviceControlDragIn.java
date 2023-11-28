@@ -58,7 +58,7 @@ public class DeviceControlDragIn extends DeviceControlBase {
                 "<Control>\n" +
                 "    <CmdType>DeviceControl</CmdType>\n" +
                 "    <SN>797466</SN>\n" +
-                "    <DeviceID>41010500002000000010</DeviceID>\n" +
+                "    <DeviceID>41010500002000000001</DeviceID>\n" +
                 "    <ControlType>DragZoomIn</ControlType>\n" +
                 "    <DragZoomIn>\n" +
                 "        <Length>1</Length>\n" +

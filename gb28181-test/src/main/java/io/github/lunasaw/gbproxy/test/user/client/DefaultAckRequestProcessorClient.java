@@ -1,6 +1,7 @@
 package io.github.lunasaw.gbproxy.test.user.client;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.ack.AckRequestProcessorClient;
+import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +22,7 @@ public class DefaultAckRequestProcessorClient implements AckRequestProcessorClie
 
     @Override
     public Device getToDevice(String userId) {
-        return DefaultRegisterProcessorClient.deviceMap.get(userId);
+        return DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(userId);
     }
 
     @Override

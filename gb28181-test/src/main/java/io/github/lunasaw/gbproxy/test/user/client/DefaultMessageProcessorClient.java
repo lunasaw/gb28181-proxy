@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.user.client;
 
+import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
@@ -32,7 +33,7 @@ public class DefaultMessageProcessorClient implements MessageProcessorClient {
 
     @Override
     public Device getToDevice(String userId) {
-        return DefaultRegisterProcessorClient.deviceMap.get(userId);
+        return DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(userId);
     }
 
     @Override

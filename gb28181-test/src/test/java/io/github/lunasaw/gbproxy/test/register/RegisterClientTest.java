@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.test.register;
 import javax.sip.message.Request;
 
 import io.github.lunasaw.gbproxy.test.Gb28181ApplicationTest;
+import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest(classes = Gb28181ApplicationTest.class)
 public class RegisterClientTest {
 
-    private static final String MONITOR_IP = "172.24.48.19";
     @Autowired
     @Qualifier("clientFrom")
     private Device              fromDevice;
@@ -50,7 +50,7 @@ public class RegisterClientTest {
     public void before() {
         // 本地端口监听
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint(MONITOR_IP, fromDevice.getPort());
+        SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, fromDevice.getPort());
 
     }
 
@@ -61,8 +61,8 @@ public class RegisterClientTest {
         ToDevice instance = ToDevice.getInstance("41010500002000000001", "10.37.2.198", 8116);
         instance.setPassword("bajiuwulian1006");
 
-        DefaultRegisterProcessorClient.deviceMap.put("41010500002000000001", instance);
-        fromDevice.setIp(MONITOR_IP);
+        DeviceConfig.DEVICE_CLIENT_VIEW_MAP.put("41010500002000000001", instance);
+        fromDevice.setIp(DeviceConfig.LOOP_IP);
 
         Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice)fromDevice, instance, 300, callId);
 

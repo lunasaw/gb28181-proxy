@@ -53,7 +53,7 @@ public class Gb28181TestClient {
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
         SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, fromDevice.getPort(), false);
 
-        DefaultRegisterProcessorClient.deviceMap.put(toDevice.getUserId(), toDevice);
+        DeviceConfig.DEVICE_CLIENT_VIEW_MAP.put(toDevice.getUserId(), toDevice);
 
     }
 
@@ -86,7 +86,7 @@ public class Gb28181TestClient {
 
     @Test
     public void b_test_un_register_client_custom() {
-        Device instance = DefaultRegisterProcessorClient.deviceMap.get("41010500002000000001");
+        Device instance = DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get("41010500002000000001");
         DefaultRegisterProcessorClient.isRegister = false;
         ClientSendCmd.deviceUnRegister((FromDevice) fromDevice, (ToDevice) instance);
     }

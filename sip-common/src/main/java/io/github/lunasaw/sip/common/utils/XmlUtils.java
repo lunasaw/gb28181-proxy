@@ -3,6 +3,7 @@ package io.github.lunasaw.sip.common.utils;
 import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -47,8 +48,13 @@ public class XmlUtils {
 
     @SneakyThrows
     public static <T> Object parseFile(String resource, Class<T> clazz) {
+        return parseFile(resource, clazz, Charset.forName("gb2312"));
+    }
+
+    @SneakyThrows
+    public static <T> Object parseFile(String resource, Class<T> clazz, Charset charset) {
         File file = ResourceUtils.getFile(resource);
-        List<String> strings = Files.readAllLines(Paths.get(file.getAbsolutePath()));
+        List<String> strings = Files.readAllLines(Paths.get(file.getAbsolutePath()), charset);
 
         String join = Joiner.on("\n").join(strings);
         return parseObj(join, clazz);
