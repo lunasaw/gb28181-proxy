@@ -9,13 +9,10 @@ import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.assertj.core.util.Lists;
 
 import javax.sip.RequestEvent;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,7 +42,7 @@ public abstract class SipMessageRequestProcessorAbstract extends SipRequestProce
     public void doMessageHandForEvt(RequestEvent evt, FromDevice fromDevice) {
         SIPRequest request = (SIPRequest) evt.getRequest();
 
-        String charset = Optional.of(fromDevice).map(Device::getCharset).orElse(Constant.GB2312);
+        String charset = Optional.of(fromDevice).map(Device::getCharset).orElse(Constant.UTF_8);
 
         // 解析xml
         byte[] rawContent = request.getRawContent();

@@ -26,7 +26,7 @@ public class XmlBean {
     /**
      * 字符集, 支持 UTF-8 与 GB2312
      */
-    private String charset = "GB2312";
+    private String charset = "UTF-8";
 
     @SneakyThrows
     @Override

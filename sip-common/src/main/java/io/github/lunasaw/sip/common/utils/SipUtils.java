@@ -176,7 +176,7 @@ public class SipUtils {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         byte[] rawContent = sipRequest.getRawContent();
         if (StringUtils.isBlank(charset)) {
-            charset = Constant.GB2312;
+            charset = Constant.UTF_8;
         }
         String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
         Object o = XmlUtils.parseObj(xmlStr, clazz);
@@ -187,7 +187,7 @@ public class SipUtils {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         byte[] rawContent = sipRequest.getRawContent();
         if (StringUtils.isBlank(charset)) {
-            charset = Constant.GB2312;
+            charset = Constant.UTF_8;
         }
         return StringTools.toEncodedString(rawContent, Charset.forName(charset));
     }

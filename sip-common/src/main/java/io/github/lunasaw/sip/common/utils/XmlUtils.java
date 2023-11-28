@@ -40,15 +40,20 @@ public class XmlUtils {
     }
 
     @SneakyThrows
-    public static <T> Object parseObj(String xmlStr, Class<T> clazz) {
+    public static <T> Object parseObj(String xmlStr, Class<T> clazz, String charset) {
         JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        return unmarshaller.unmarshal(new StringReader(xmlStr));
+        return unmarshaller.unmarshal(new StringReader(new String(xmlStr.getBytes(charset), charset)));
+    }
+
+    @SneakyThrows
+    public static <T> Object parseObj(String xmlStr, Class<T> clazz) {
+        return parseObj(xmlStr, clazz, "UTF-8");
     }
 
     @SneakyThrows
     public static <T> Object parseFile(String resource, Class<T> clazz) {
-        return parseFile(resource, clazz, Charset.forName("gb2312"));
+        return parseFile(resource, clazz, Charset.forName("UTF-8"));
     }
 
     @SneakyThrows

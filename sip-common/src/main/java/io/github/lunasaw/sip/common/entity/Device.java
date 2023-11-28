@@ -63,7 +63,7 @@ public abstract class Device {
 
     public String getCharset() {
         if (this.charset == null) {
-            return "GB2312";
+            return "UTF-8";
         }
         return charset;
     }
