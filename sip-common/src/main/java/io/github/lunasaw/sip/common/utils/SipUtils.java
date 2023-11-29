@@ -37,7 +37,6 @@ public class SipUtils {
         return getUserIdFromHeader(toHeader);
     }
 
-
     public static String getUserIdFromFromHeader(Response response) {
         FromHeader fromHeader = (FromHeader) response.getHeader(FromHeader.NAME);
         return getUserIdFromHeader(fromHeader);
@@ -51,6 +50,10 @@ public class SipUtils {
     public static String getUserIdFromFromHeader(Request request) {
         FromHeader fromHeader = (FromHeader)request.getHeader(FromHeader.NAME);
         return getUserIdFromHeader(fromHeader);
+    }
+
+    public static String getUser(Request request) {
+        return ((SipUri) request.getRequestURI()).getUser();
     }
 
     public static SipTransaction getSipTransaction(SIPResponse response) {
@@ -97,11 +100,10 @@ public class SipUtils {
         return subject.getSubject().split(":")[0];
     }
 
-
     /**
      * 从请求中获取设备ip地址和端口号
      *
-     * @param request                       请求
+     * @param request 请求
      * @param sipUseSourceIpAsRemoteAddress false 从via中获取地址， true 直接获取远程地址
      * @return 地址信息
      */
