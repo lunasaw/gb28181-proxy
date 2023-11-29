@@ -67,6 +67,6 @@ public class InviteRequestProcessor extends SipRequestProcessorAbstract {
         String content = inviteProcessorClient.getInviteResponse(userId, sessionDescription);
 
         ContentTypeHeader contentTypeHeader = ContentTypeEnum.APPLICATION_SDP.getContentTypeHeader();
-        ResponseCmd.doResponseCmdNoTransaction(Response.OK, "OK", content, contentTypeHeader, evt);
+        ResponseCmd.doResponseCmd(Response.OK, "OK", content, contentTypeHeader, evt);
     }
 }
