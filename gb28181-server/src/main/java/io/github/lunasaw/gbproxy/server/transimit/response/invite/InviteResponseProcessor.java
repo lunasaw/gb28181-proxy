@@ -2,10 +2,18 @@ package io.github.lunasaw.gbproxy.server.transimit.response.invite;
 
 import java.text.ParseException;
 
+import javax.sdp.SdpParseException;
+import javax.sdp.SessionDescription;
 import javax.sip.ResponseEvent;
+import javax.sip.SipFactory;
+import javax.sip.address.SipURI;
 import javax.sip.header.CallIdHeader;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
+import io.github.lunasaw.sip.common.transmit.ResponseCmd;
+import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.ResponseEventExt;
@@ -34,6 +42,7 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
 
     private String method = METHOD;
 
+    @Autowired
     public InviteProcessorServer inviteProcessorServer;
 
     public InviteResponseProcessor(InviteProcessorServer inviteProcessorServer) {
@@ -48,11 +57,13 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
      */
     @Override
     public void process(ResponseEvent evt) {
+        log.info("收到客户端INVITE响应process::");
+
         try {
             SIPResponse response = (SIPResponse) evt.getResponse();
             int statusCode = response.getStatusCode();
             if (statusCode == Response.TRYING) {
-                responseTrying();
+                inviteProcessorServer.responseTrying();
             }
 
             if (statusCode == Response.OK) {
@@ -64,24 +75,20 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
         }
     }
 
-    public void responseTrying() {
-        // trying不会回复
-
-    }
-
-    public void responseAck(ResponseEventExt evt) {
+    public void responseAck(ResponseEventExt evt) throws SdpParseException {
         // 成功响应
         SIPResponse response = (SIPResponse) evt.getResponse();
 
-        String toUserId = SipUtils.getUserIdFromToHeader(response);
-        String fromUserId = SipUtils.getUserIdFromFromHeader(response);
-        CallIdHeader callIdHeader = response.getCallIdHeader();
         FromDevice fromDevice = (FromDevice)inviteProcessorServer.getFromDevice();
 
-        ToDevice toDevice = ToDevice.getInstance(toUserId, evt.getRemoteIpAddress(), evt.getRemotePort());
+        String contentString = new String(response.getRawContent());
+        SdpSessionDescription gb28181Sdp = SipUtils.parseSdp(contentString);
+        SessionDescription sdp = gb28181Sdp.getBaseSdb();
+
+        SipURI requestUri = SipRequestUtils.createSipUri(sdp.getOrigin().getUsername(), evt.getRemoteIpAddress() + ":" + evt.getRemotePort());
 
         // 回复ack
-        ServerSendCmd.deviceAck(fromDevice, toDevice, callIdHeader.getCallId());
+        ServerSendCmd.deviceAck(fromDevice, requestUri, response);
     }
 
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <?xml version="1.0" encoding="GB2312"?>
+ * <?xml version="1.0" encoding="UTF-8"?>
  * <Notify>
  * <CmdType>MobilePosition</CmdType>
  * <SN>383451</SN>

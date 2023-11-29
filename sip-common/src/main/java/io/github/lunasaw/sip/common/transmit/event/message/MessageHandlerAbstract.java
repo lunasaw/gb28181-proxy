@@ -47,15 +47,11 @@ public class MessageHandlerAbstract implements MessageHandler {
     }
 
     public void responseAck(RequestEvent event) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
-        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, sipRequest);
+        ResponseCmd.doResponseCmd(Response.OK, "OK", event);
     }
 
     public void responseError(RequestEvent event) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
-        String receiveIp = sipRequest.getLocalAddress().getHostAddress();
-        ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "SERVER ERROR", receiveIp, sipRequest);
+        ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "SERVER ERROR", event);
     }
 
     public <T> T parseXml(Class<T> clazz) {
@@ -69,7 +65,7 @@ public class MessageHandlerAbstract implements MessageHandler {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         byte[] rawContent = sipRequest.getRawContent();
         if (StringUtils.isBlank(charset)) {
-            charset = Constant.GB2312;
+            charset = Constant.UTF_8;
         }
         String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
         Object o = XmlUtils.parseObj(xmlStr, clazz);
@@ -80,7 +76,7 @@ public class MessageHandlerAbstract implements MessageHandler {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
         byte[] rawContent = sipRequest.getRawContent();
         if (StringUtils.isBlank(charset)) {
-            charset = Constant.GB2312;
+            charset = Constant.UTF_8;
         }
         return StringTools.toEncodedString(rawContent, Charset.forName(charset));
     }

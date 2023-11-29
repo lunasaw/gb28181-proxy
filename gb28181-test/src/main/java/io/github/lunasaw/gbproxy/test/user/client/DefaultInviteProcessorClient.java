@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.test.user.client;
 
 import com.alibaba.fastjson2.JSON;
 import io.github.lunasaw.gbproxy.client.transmit.request.invite.InviteProcessorClient;
+import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.GbSessionDescription;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
@@ -43,7 +44,7 @@ public class DefaultInviteProcessorClient implements InviteProcessorClient {
     @Override
     public void inviteSession(String callId, SdpSessionDescription sessionDescription) {
         GbSessionDescription gbSessionDescription = (GbSessionDescription) sessionDescription;
-        log.info("inviteSession::sessionDescription = {}", JSON.toJSONString(sessionDescription));
+        log.info("点播请求 inviteSession::sessionDescription = {}", JSON.toJSONString(sessionDescription));
 
         SipSubscribe.addOkSubscribe(callId, eventResult -> {
             ffmpegCommander.closeAllStream();
@@ -53,7 +54,7 @@ public class DefaultInviteProcessorClient implements InviteProcessorClient {
 
     @Override
     public Device getToDevice(String userId) {
-        return DefaultRegisterProcessorClient.deviceMap.get(userId);
+        return DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(userId);
     }
 
     @Override

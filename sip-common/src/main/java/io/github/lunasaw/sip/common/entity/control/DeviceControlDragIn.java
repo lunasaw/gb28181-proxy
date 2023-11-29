@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <?xml version="1.0" encoding="GB2312"?>
+ * <?xml version="1.0" encoding="UTF-8"?>
  * <Control>
  * <CmdType>DeviceControl</CmdType>
  * <SN>331004</SN>
@@ -54,11 +54,11 @@ public class DeviceControlDragIn extends DeviceControlBase {
 
         System.out.println(deviceControlDrag);
 
-        String data = "<?xml version=\"1.0\" encoding=\"GB2312\" standalone=\"yes\"?>\n" +
+        String data = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
                 "<Control>\n" +
                 "    <CmdType>DeviceControl</CmdType>\n" +
                 "    <SN>797466</SN>\n" +
-                "    <DeviceID>41010500002000000010</DeviceID>\n" +
+                "    <DeviceID>41010500002000000001</DeviceID>\n" +
                 "    <ControlType>DragZoomIn</ControlType>\n" +
                 "    <DragZoomIn>\n" +
                 "        <Length>1</Length>\n" +

@@ -1,6 +1,7 @@
 package io.github.lunasw.gbproxy.client.test;
 
 import io.github.lunasaw.gbproxy.client.Gb28181Client;
+import lombok.SneakyThrows;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.QName;

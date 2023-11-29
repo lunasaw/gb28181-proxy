@@ -54,15 +54,19 @@ public class InviteRequestProcessor extends SipRequestProcessorAbstract {
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }
+        String toUserId = SipUtils.getUserIdFromFromHeader(request);
+        Device toDevice = inviteProcessorClient.getToDevice(toUserId);
+        if (toDevice == null) {
+            return;
+        }
 
         String callId = SipUtils.getCallId(request);
         // 解析Sdp
         GbSessionDescription sessionDescription = (GbSessionDescription) SipUtils.parseSdp(new String(request.getRawContent()));
         inviteProcessorClient.inviteSession(callId, sessionDescription);
-        String content = inviteProcessorClient.getAckContent(userId, sessionDescription);
+        String content = inviteProcessorClient.getInviteResponse(userId, sessionDescription);
 
-        String receiveIp = request.getLocalAddress().getHostAddress();
         ContentTypeHeader contentTypeHeader = ContentTypeEnum.APPLICATION_SDP.getContentTypeHeader();
-        ResponseCmd.doResponseCmd(Response.OK, "OK", receiveIp, content, contentTypeHeader, evt);
+        ResponseCmd.doResponseCmd(Response.OK, "OK", content, contentTypeHeader, evt);
     }
 }

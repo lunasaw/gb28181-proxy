@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.user.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,17 +12,19 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @Component
 public class FfmpegCommander {
 
     private static final String path = "/usr/local/bin/ffmpeg";
-    private static final String cmd = "-re -i {filePath} -vcodec h264 -acodec aac -f rtp_mpegts rtp://{ip}:{port}";
+    private static final String               cmd        =
+        "-re -i {filePath} -vcodec h264 -acodec aac -f rtsp -rtsp_transport tcp rtsp://{ip}:{port}/rtp/33010602011187000001_33010602011187000001?sign=41db35390ddad33f83944f44b8b75ded";
     private static final Map<String, Process> processMap = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(FfmpegCommander.class);
 
-    public String pushStream(String callId, String filePath, String ip, int port) {
+    public void pushStream(String callId, String filePath, String ip, int port) {
         String command = path + " " +
-                cmd.replace("{filePath}", filePath).replace("{ip}", ip).replace("{port}", port + "");
+            cmd.replace("{filePath}", filePath).replace("{ip}", ip).replace("{port}", 1554 + "");
         logger.info("callId={},\r\n推流命令={}", callId, command);
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -44,11 +47,9 @@ public class FfmpegCommander {
                     logger.error("ffmpeg推流异常!", e);
                 }
             }).start();
-            return command;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("pushStream::callId = {}, filePath = {}, ip = {}, port = {} ", callId, filePath, ip, port, e);
         }
-        return "";
     }
 
     public void closeStream(String callId) {

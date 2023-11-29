@@ -8,6 +8,7 @@ import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAb
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,6 +22,7 @@ import javax.sip.RequestEvent;
 @Component
 @Getter
 @Setter
+@Slf4j
 public class ClientAckRequestProcessor extends SipRequestProcessorAbstract {
 
     private final String METHOD = "ACK";

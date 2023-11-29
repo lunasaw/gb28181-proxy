@@ -52,6 +52,9 @@ public class CatalogQueryMessageClientHandler extends MessageClientHandlerAbstra
         // 设备查询
         FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
         ToDevice toDevice = (ToDevice) messageProcessorClient.getToDevice(sipId);
+        if (toDevice == null) {
+            return;
+        }
 
         DeviceQuery deviceQuery = parseXml(DeviceQuery.class);
 

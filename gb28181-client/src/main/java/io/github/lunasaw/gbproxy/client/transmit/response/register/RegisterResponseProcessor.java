@@ -64,7 +64,8 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
                 log.error("process responseUnAuthorized error::evt = {} ", evt, e);
             }
         } else if (response.getStatusCode() == Response.OK) {
-            responseOk(eventExt);
+            String toUserId = SipUtils.getUserIdFromToHeader(response);
+            registerProcessorClient.registerSuccess(toUserId);
         }
     }
 
@@ -88,14 +89,6 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
                 SipRequestProvider.createRegisterRequestWithAuth(fromDevice, toDevice, callIdHeader.getCallId(), expire, www);
 
         // 发送二次请求
-        SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequestWithAuth, this::success);
-    }
-
-    public void responseOk(ResponseEventExt evt) {
-        log.info("success::注册成功 evt = {}", evt);
-    }
-
-    public void success(EventResult eventResult) {
-        log.info("success::注册成功 eventResult = {}", eventResult);
+        SipSender.transmitRequest(fromDevice.getIp(), registerRequestWithAuth);
     }
 }

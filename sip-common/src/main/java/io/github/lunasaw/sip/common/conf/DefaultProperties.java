@@ -17,7 +17,7 @@ public class DefaultProperties {
         properties.setProperty("javax.sip.STACK_NAME", name);
         properties.setProperty("javax.sip.IP_ADDRESS", ip);
         // 关闭自动会话
-//        properties.setProperty("javax.sip.AUTOMATIC_DIALOG_SUPPORT", "off");
+        // properties.setProperty("javax.sip.AUTOMATIC_DIALOG_SUPPORT", "true");
         /**
          * 完整配置参考 gov.nist.javax.sip.SipStackImpl，需要下载源码
          * gov/nist/javax/sip/SipStackImpl.class

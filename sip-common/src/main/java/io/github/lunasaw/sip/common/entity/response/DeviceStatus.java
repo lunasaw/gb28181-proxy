@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <?xml version="1.0" encoding="GB2312"?>
+ * <?xml version="1.0" encoding="UTF-8"?>
  * <Response>
  * <CmdType>DeviceStatus</CmdType>
  * <SN>sn</SN>

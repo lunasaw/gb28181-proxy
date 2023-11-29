@@ -294,7 +294,18 @@ public class ClientSendCmd {
      * @param expires    注册时间 0注销
      * @return
      */
-    public String deviceRegister(FromDevice fromDevice, ToDevice toDevice, Integer expires) {
+    public static String deviceRegister(FromDevice fromDevice, ToDevice toDevice, Integer expires) {
         return SipSender.doRegisterRequest(fromDevice, toDevice, expires);
+    }
+
+    /**
+     * 设备注销
+     *
+     * @param fromDevice
+     * @param toDevice
+     * @return
+     */
+    public static String deviceUnRegister(FromDevice fromDevice, ToDevice toDevice) {
+        return SipSender.doRegisterRequest(fromDevice, toDevice, 0);
     }
 }

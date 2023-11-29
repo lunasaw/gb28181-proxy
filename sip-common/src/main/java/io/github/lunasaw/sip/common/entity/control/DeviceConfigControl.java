@@ -13,7 +13,7 @@ import lombok.Setter;
 
 /**
  *
- * <?xml version="1.0" encoding="GB2312"?>
+ * <?xml version="1.0" encoding="UTF-8"?>
  * <Control>
  * <CmdType>DeviceConfig</CmdType>
  * <SN>150959</SN>

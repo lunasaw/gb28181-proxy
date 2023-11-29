@@ -14,7 +14,7 @@ public class Constant {
 
     public static final String PASSWORD_HEADER = "AUTH_PASSWORD";
 
-    public static final String GB2312 = "GB2312";
+    public static final String UTF_8 = "UTF-8";
 
     public static void main(String[] args) {
         System.out.println(2 << 0);

@@ -18,12 +18,12 @@ public class InviteEntity {
     /**
      * 组装subject
      *
+     * @param subId 通道Id
+     * @param ssrc 混淆码
      * @param userId 设备Id
-     * @param subId  通道Id
-     * @param ssrc   混淆码
      * @return
      */
-    public static String getSubject(String userId, String subId, String ssrc) {
+    public static String getSubject(String subId, String ssrc, String userId) {
         return String.format("%s:%s,%s:%s", subId, ssrc, userId, 0);
     }
 
@@ -31,11 +31,29 @@ public class InviteEntity {
         return getInvitePlayBody(false, streamModeEnum, userId, sdpIp, mediaPort, ssrc, false, null);
     }
 
+    public static StringBuffer getInvitePlayBody(StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort, String ssrc,
+        Boolean subStream, ManufacturerEnum manufacturerEnum) {
+        return getInvitePlayBody(false, streamModeEnum, userId, sdpIp, mediaPort, ssrc, subStream, manufacturerEnum);
+    }
+
     public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort, String ssrc) {
         return getInvitePlayBody(seniorSdp, streamModeEnum, userId, sdpIp, mediaPort, ssrc, false, null);
     }
 
-    public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort, String ssrc, Boolean subStream, String manufacturer) {
+    /**
+     *
+     * @param seniorSdp [可选] 部分设备需要扩展SDP，需要打开此设置
+     * @param streamModeEnum [必填] 流传输模式
+     * @param userId [必填] 设备Id
+     * @param sdpIp [必填] 设备IP
+     * @param mediaPort [必填] 设备端口
+     * @param ssrc [必填] 混淆码
+     * @param subStream [可选] 是否子码流
+     * @param manufacturer [可选] 设备厂商
+     * @return
+     */
+    public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort,
+        String ssrc, Boolean subStream, ManufacturerEnum manufacturer) {
         StringBuffer content = new StringBuffer(200);
         content.append("v=0\r\n");
         content.append("o=").append(userId).append(" 0 0 IN IP4 ").append(sdpIp).append("\r\n");
@@ -102,8 +120,8 @@ public class InviteEntity {
         return content;
     }
 
-    public static StringBuffer addSubStream(StringBuffer content, Boolean subStream, String manufacturer) {
-        if (ManufacturerEnum.TP_LINK.getType().equals(manufacturer)) {
+    public static StringBuffer addSubStream(StringBuffer content, Boolean subStream, ManufacturerEnum manufacturer) {
+        if (ManufacturerEnum.TP_LINK.equals(manufacturer)) {
             if (subStream) {
                 content.append("a=streamMode:sub\r\n");
             } else {

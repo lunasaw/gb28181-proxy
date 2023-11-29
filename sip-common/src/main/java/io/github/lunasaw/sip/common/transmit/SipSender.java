@@ -3,6 +3,7 @@ package io.github.lunasaw.sip.common.transmit;
 import gov.nist.javax.sip.SipProviderImpl;
 import gov.nist.javax.sip.SipStackImpl;
 import gov.nist.javax.sip.message.SIPRequest;
+import gov.nist.javax.sip.message.SIPResponse;
 import gov.nist.javax.sip.stack.SIPServerTransaction;
 import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -14,11 +15,12 @@ import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
-import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.sip.*;
+import javax.sip.ServerTransaction;
+import javax.sip.SipException;
+import javax.sip.address.SipURI;
 import javax.sip.header.CallIdHeader;
 import javax.sip.header.UserAgentHeader;
 import javax.sip.header.ViaHeader;
@@ -116,6 +118,12 @@ public class SipSender {
         return callId;
     }
 
+    public static String doAckRequest(FromDevice fromDevice, SipURI sipURI, SIPResponse sipResponse) {
+        Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, sipURI, sipResponse);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return sipResponse.getCallIdHeader().getCallId();
+    }
+
     public static void transmitRequest(String ip, Message message) {
         transmitRequest(ip, message, null, null);
     }
@@ -187,6 +195,10 @@ public class SipSender {
         }
     }
 
+    public static ServerTransaction getServerTransaction(Request request) {
+        return getServerTransaction(request, SipLayer.getMonitorIp());
+    }
+
     /**
      * 根据 RequestEvent 获取 ServerTransaction
      *
@@ -194,6 +206,9 @@ public class SipSender {
      * @return
      */
     public static ServerTransaction getServerTransaction(Request request, String ip) {
+        if (ip == null) {
+            ip = SipLayer.getMonitorIp();
+        }
         // 判断TCP还是UDP
         boolean isTcp = false;
         ViaHeader viaHeader = (ViaHeader) request.getHeader(ViaHeader.NAME);
