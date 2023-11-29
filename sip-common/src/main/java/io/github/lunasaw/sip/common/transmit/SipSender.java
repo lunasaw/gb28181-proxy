@@ -3,6 +3,7 @@ package io.github.lunasaw.sip.common.transmit;
 import gov.nist.javax.sip.SipProviderImpl;
 import gov.nist.javax.sip.SipStackImpl;
 import gov.nist.javax.sip.message.SIPRequest;
+import gov.nist.javax.sip.message.SIPResponse;
 import gov.nist.javax.sip.stack.SIPServerTransaction;
 import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.sip.ServerTransaction;
 import javax.sip.SipException;
+import javax.sip.address.SipURI;
 import javax.sip.header.CallIdHeader;
 import javax.sip.header.UserAgentHeader;
 import javax.sip.header.ViaHeader;
@@ -114,6 +116,12 @@ public class SipSender {
         Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, toDevice, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
         return callId;
+    }
+
+    public static String doAckRequest(FromDevice fromDevice, SipURI sipURI, SIPResponse sipResponse) {
+        Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, sipURI, sipResponse);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return sipResponse.getCallIdHeader().getCallId();
     }
 
     public static void transmitRequest(String ip, Message message) {

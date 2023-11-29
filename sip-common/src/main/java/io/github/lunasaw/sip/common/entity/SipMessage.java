@@ -6,6 +6,7 @@ import javax.sip.header.ContentTypeHeader;
 import javax.sip.header.Header;
 import javax.sip.message.Request;
 
+import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.sequence.GenerateSequenceImpl;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
@@ -123,6 +124,15 @@ public class SipMessage {
         sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
         long sequence = GenerateSequenceImpl.getSequence();
         sipMessage.setSequence(sequence);
+
+        return sipMessage;
+    }
+
+    public static SipMessage getAckBody(SIPResponse sipResponse) {
+        SipMessage sipMessage = new SipMessage();
+        sipMessage.setMethod(Request.ACK);
+        sipMessage.setViaTag(SipRequestUtils.getNewViaTag());
+        sipMessage.setSequence(sipResponse.getCSeqHeader().getSeqNumber());
 
         return sipMessage;
     }

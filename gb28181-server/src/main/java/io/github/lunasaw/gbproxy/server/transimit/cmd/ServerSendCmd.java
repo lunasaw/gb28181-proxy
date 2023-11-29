@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.luna.common.date.DateUtils;
 import com.luna.common.text.RandomStrUtil;
 
+import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.gbproxy.server.entity.InviteRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
@@ -17,6 +18,8 @@ import io.github.lunasaw.sip.common.enums.PtzCmdEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
 import io.github.lunasaw.sip.common.utils.PtzUtils;
+
+import javax.sip.address.SipURI;
 
 /**
  * @author luna
@@ -220,6 +223,10 @@ public class ServerSendCmd {
 
     public static String deviceAck(FromDevice fromDevice, ToDevice toDevice, String callId) {
         return SipSender.doAckRequest(fromDevice, toDevice, callId);
+    }
+
+    public static String deviceAck(FromDevice fromDevice, SipURI sipURI, SIPResponse sipResponse) {
+        return SipSender.doAckRequest(fromDevice, sipURI, sipResponse);
     }
 
     /**

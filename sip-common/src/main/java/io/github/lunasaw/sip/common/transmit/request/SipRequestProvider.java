@@ -4,15 +4,19 @@ import com.luna.common.check.Assert;
 import gov.nist.javax.sip.message.SIPRequest;
 import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import io.github.lunasaw.sip.common.entity.SipMessage;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import io.github.lunasaw.sip.common.utils.SipUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.util.DigestUtils;
 
+import javax.sdp.SessionDescription;
+import javax.sip.SipFactory;
 import javax.sip.address.SipURI;
 import javax.sip.address.URI;
 import javax.sip.header.*;
@@ -93,6 +97,29 @@ public class SipRequestProvider {
         // request
         Request request = SipRequestUtils.createRequest(requestUri, sipMessage.getMethod(), callIdHeader, cSeqHeader, fromHeader,
                 toHeader, viaHeaders, maxForwards, sipMessage.getContentTypeHeader(), sipMessage.getContent());
+
+        SipRequestUtils.setRequestHeader(request, sipMessage.getHeaders());
+        return request;
+    }
+
+    public static Request createSipRequest(SipURI requestUri, SipMessage sipMessage, SIPResponse sipResponse) {
+        Assert.notNull(requestUri, "发送设备不能为null");
+        Assert.notNull(sipMessage, "发送设备不能为null");
+
+        // via
+        String hostAddress = sipResponse.getLocalAddress().getHostAddress();
+        int localPort = sipResponse.getLocalPort();
+        ViaHeader viaHeader =
+                SipRequestUtils.createViaHeader(hostAddress, localPort, sipResponse.getTopmostViaHeader().getTransport(), sipMessage.getViaTag());
+        List<ViaHeader> viaHeaders = Lists.newArrayList(viaHeader);
+
+        // Forwards
+        MaxForwardsHeader maxForwards = SipRequestUtils.createMaxForwardsHeader();
+        // ceq
+        CSeqHeader cSeqHeader = SipRequestUtils.createCSeqHeader(sipMessage.getSequence(), sipMessage.getMethod());
+        // request
+        Request request = SipRequestUtils.createRequest(requestUri, sipMessage.getMethod(), sipResponse.getCallIdHeader(), cSeqHeader, sipResponse.getFromHeader(),
+                sipResponse.getToHeader(), viaHeaders, maxForwards, sipMessage.getContentTypeHeader(), sipMessage.getContent());
 
         SipRequestUtils.setRequestHeader(request, sipMessage.getHeaders());
         return request;
@@ -341,6 +368,29 @@ public class SipRequestProvider {
         sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage);
+    }
+
+    public static Request createAckRequest(FromDevice fromDevice, SipURI sipURI, SIPResponse sipResponse) {
+        return createAckRequest(fromDevice, sipURI, null, sipResponse);
+    }
+
+
+    public static Request createAckRequest(FromDevice fromDevice, SipURI sipURI, String content, SIPResponse sipResponse) {
+        SipMessage sipMessage = SipMessage.getAckBody(sipResponse);
+        sipMessage.setMethod(Request.ACK);
+        sipMessage.setCallId(sipResponse.getCallId().getCallId());
+
+        if (StringUtils.isNotBlank(content)) {
+            sipMessage.setContent(content);
+            sipMessage.setContentTypeHeader(ContentTypeEnum.APPLICATION_SDP.getContentTypeHeader());
+        }
+
+        UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
+
+        ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
+        sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
+
+        return createSipRequest(sipURI, sipMessage, sipResponse);
     }
 
 
