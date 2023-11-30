@@ -80,11 +80,9 @@ public class InviteEntity {
         content.append("o=").append(userId).append(" 0 0 IN IP4 ").append(sdpIp).append("\r\n");
         // Session Name
         content.append("s=").append(inviteSessionNameEnum.getType()).append("\r\n");
+        content.append("u=").append(userId).append(":0\r\n");
         content.append("c=IN IP4 ").append(sdpIp).append("\r\n");
         if (InviteSessionNameEnum.PLAY_BACK.equals(inviteSessionNameEnum)) {
-
-
-            content.append("u=").append(userId).append(":0\r\n");
             content.append("t=").append(startTime).append(" ").append(endTime).append("\r\n");
         } else {
             content.append("t=0 0\r\n");
@@ -124,8 +122,8 @@ public class InviteEntity {
             }
             content.append("a=recvonly\r\n");
             content.append("a=rtpmap:96 PS/90000\r\n");
-            content.append("a=rtpmap:98 H264/90000\r\n");
             content.append("a=rtpmap:97 MPEG4/90000\r\n");
+            content.append("a=rtpmap:98 H264/90000\r\n");
             content.append("a=rtpmap:99 H265/90000\r\n");
             if (StreamModeEnum.TCP_PASSIVE.equals(streamModeEnum)) {
                 content.append("a=setup:passive\r\n");

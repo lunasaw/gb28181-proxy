@@ -9,8 +9,8 @@ public enum InviteSessionNameEnum {
     /**
      *
      */
-    PLAY("play", "点播"),
-    PLAY_BACK("playBack", "回放"),
+    PLAY("Play", "点播"),
+    PLAY_BACK("PlayBack", "回放"),
 
 
     ;

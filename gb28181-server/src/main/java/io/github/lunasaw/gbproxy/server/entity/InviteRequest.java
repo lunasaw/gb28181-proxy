@@ -51,7 +51,7 @@ public class InviteRequest {
 
     public InviteRequest(String userId, String sdpIp, Integer mediaPort, String startTime, String endTime) {
         this.seniorSdp = false;
-        this.streamModeEnum = StreamModeEnum.TCP_PASSIVE;
+        this.streamModeEnum = StreamModeEnum.UDP;
         this.userId = userId;
         this.sdpIp = sdpIp;
         this.mediaPort = mediaPort;

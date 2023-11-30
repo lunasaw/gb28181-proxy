@@ -133,9 +133,9 @@ public class Gb28181TestServer {
                 test_invite_play_back_server();
                 return;
             }
-            String invitePlay = ServerSendCmd.deviceInvitePlayBack((FromDevice) fromDevice, (ToDevice) device, "127.0.0.1", 10000, "2023-11-29 00:00:00");
+            String invitePlay = ServerSendCmd.deviceInvitePlayBack((FromDevice) fromDevice, (ToDevice) device, "172.19.128.100", 10000, "2023-11-29 00:00:00");
             System.out.println(invitePlay);
-        }, 40 * 1000);
+        }, 30 * 1000);
     }
 
     @Test
