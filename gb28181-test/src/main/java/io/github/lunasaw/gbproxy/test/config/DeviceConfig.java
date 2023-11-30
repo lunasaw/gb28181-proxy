@@ -37,12 +37,12 @@ public class DeviceConfig {
         DEVICE_MAP.put("client_from", clientFrom);
 
         ToDevice clientTo = ToDevice.getInstance("41010500002000000001", LOOP_IP, 8117);
-        clientTo.setPassword("luna");
+        clientTo.setPassword("bajiuwulian1006");
         clientTo.setRealm("4101050000");
         DEVICE_MAP.put("client_to", clientTo);
 
         FromDevice serverFrom = FromDevice.getInstance("41010500002000000001", LOOP_IP, 8117);
-        serverFrom.setPassword("luna");
+        serverFrom.setPassword("bajiuwulian1006");
         serverFrom.setRealm("4101050000");
         DEVICE_MAP.put("server_from", serverFrom);
 

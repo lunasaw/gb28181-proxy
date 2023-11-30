@@ -2,7 +2,7 @@
 <Response>
     <CmdType>DeviceInfo</CmdType>
     <SN>${SN}</SN>
-    <DeviceName>gb28181-client</DeviceName>
+    <DeviceName>IPC-CLIENT</DeviceName>
     <DeviceID>33010602011187000001</DeviceID>
     <Result>OK</Result>
     <!-- 设备生产商 -->

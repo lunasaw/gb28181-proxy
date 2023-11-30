@@ -8,6 +8,7 @@ import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
 import io.github.lunasaw.gbproxy.test.user.server.DefaultRegisterProcessorServer;
 import io.github.lunasaw.sip.common.entity.control.DragZoom;
+import io.github.lunasaw.sip.common.utils.DynamicTask;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,6 @@ import java.util.Date;
 @SpringBootTest(classes = Gb28181ApplicationTest.class)
 public class Gb28181TestServer {
 
-
     @Autowired
     @Qualifier("serverFrom")
     private Device fromDevice;
@@ -48,6 +48,9 @@ public class Gb28181TestServer {
     @Autowired
     @Qualifier("serverTo")
     private Device toDevice;
+
+    @Autowired
+    private DynamicTask dynamicTask;
 
     @BeforeEach
     public void before() {
@@ -93,17 +96,25 @@ public class Gb28181TestServer {
 
     @Test
     public void record_test() {
-        ToDevice instance = ToDevice.getInstance("34020000001320000001", "172.19.14.30", 5060);
-
-        FromDevice fromDevice = FromDevice.getInstance("41010500002000000001", DeviceConfig.LOOP_IP, 8117);
-
         Date start = DateUtils.parseDateTime("2023-11-29 00:00:00");
         Date end = DateUtils.parseDateTime("2023-11-29 23:59:00");
 
-        DeviceConfig.DEVICE_SERVER_VIEW_MAP.put("34020000001320000001", instance);
+        Device device = DeviceConfig.DEVICE_SERVER_VIEW_MAP.get("34020000001320000001");
+        if (device == null) {
+            startDelay(start, end);
+        }
 
-        String s = ServerSendCmd.deviceRecordInfoQuery(fromDevice, instance, start, end);
-        System.out.println(s);
+//        String s = ServerSendCmd.deviceRecordInfoQuery(fromDevice, instance, start, end);
+    }
+
+    private void startDelay(Date start, Date end) {
+        dynamicTask.startDelay("record_test", () -> {
+            Device toDevice = DeviceConfig.DEVICE_SERVER_VIEW_MAP.get("34020000001320000001");
+            if (toDevice == null) {
+                startDelay(start, end);
+            }
+            ServerSendCmd.deviceRecordInfoQuery((FromDevice) fromDevice, (ToDevice) toDevice, start, end);
+        }, 40 * 1000);
     }
 
     @Test
