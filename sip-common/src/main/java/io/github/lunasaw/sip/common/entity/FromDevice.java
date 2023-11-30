@@ -32,7 +32,7 @@ public class FromDevice extends Device {
         fromDevice.setIp(ip);
         fromDevice.setPort(port);
         fromDevice.setTransport(TransModeEnum.UDP.getType());
-        fromDevice.setStreamMode(StreamModeEnum.UDP.getType());
+        fromDevice.setStreamMode(StreamModeEnum.TCP_PASSIVE.getType());
         fromDevice.setFromTag(SipRequestUtils.getNewFromTag());
         fromDevice.setAgent(Constant.AGENT);
         return fromDevice;

@@ -29,7 +29,7 @@ public class ToDevice extends Device {
         toDevice.setIp(ip);
         toDevice.setPort(port);
         toDevice.setTransport(TransModeEnum.UDP.getType());
-        toDevice.setStreamMode(StreamModeEnum.UDP.getType());
+        toDevice.setStreamMode(StreamModeEnum.TCP_PASSIVE.getType());
         toDevice.setToTag(null);
         return toDevice;
     }

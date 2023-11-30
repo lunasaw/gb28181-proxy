@@ -112,6 +112,7 @@ public class Gb28181TestServer {
             Device toDevice = DeviceConfig.DEVICE_SERVER_VIEW_MAP.get("34020000001320000001");
             if (toDevice == null) {
                 startDelay(start, end);
+                return;
             }
             ServerSendCmd.deviceRecordInfoQuery((FromDevice) fromDevice, (ToDevice) toDevice, start, end);
         }, 40 * 1000);

@@ -80,6 +80,10 @@ public class SipUtils {
         return uri.getUser();
     }
 
+    public static String getCallId(RequestEvent requestEvent) {
+        return ((SIPRequest) requestEvent.getRequest()).getCallIdHeader().getCallId();
+    }
+
     public static String getCallId(SIPRequest request) {
         return request.getCallIdHeader().getCallId();
     }

@@ -144,7 +144,7 @@ public class ServerSendCmd {
     }
 
     public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime) {
-        return deviceRecordInfoQuery(fromDevice, toDevice, startTime, endTime, null, "all");
+        return deviceRecordInfoQuery(fromDevice, toDevice, startTime, endTime, "0", "all");
     }
 
     /**
