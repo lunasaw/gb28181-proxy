@@ -104,7 +104,6 @@ public class Gb28181TestServer {
             startDelay(start, end);
         }
 
-//        String s = ServerSendCmd.deviceRecordInfoQuery(fromDevice, instance, start, end);
     }
 
     private void startDelay(Date start, Date end) {
@@ -123,6 +122,20 @@ public class Gb28181TestServer {
     public void test_invite_server() {
         String invitePlay = ServerSendCmd.deviceInvitePlay((FromDevice)fromDevice, (ToDevice)toDevice, "127.0.0.1", 1554);
         System.out.println(invitePlay);
+    }
+
+    @Test
+    @SneakyThrows
+    public void test_invite_play_back_server() {
+        dynamicTask.startDelay("play_back_test", () -> {
+            Device device = DeviceConfig.DEVICE_SERVER_VIEW_MAP.get("34020000001320000001");
+            if (toDevice == null) {
+                test_invite_play_back_server();
+                return;
+            }
+            String invitePlay = ServerSendCmd.deviceInvitePlayBack((FromDevice) fromDevice, (ToDevice) device, "127.0.0.1", 10000, "2023-11-29 00:00:00");
+            System.out.println(invitePlay);
+        }, 40 * 1000);
     }
 
     @Test

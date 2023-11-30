@@ -82,6 +82,8 @@ public class InviteEntity {
         content.append("s=").append(inviteSessionNameEnum.getType()).append("\r\n");
         content.append("c=IN IP4 ").append(sdpIp).append("\r\n");
         if (InviteSessionNameEnum.PLAY_BACK.equals(inviteSessionNameEnum)) {
+
+
             content.append("u=").append(userId).append(":0\r\n");
             content.append("t=").append(startTime).append(" ").append(endTime).append("\r\n");
         } else {
@@ -136,7 +138,9 @@ public class InviteEntity {
 
         addSsrc(content, ssrc);
 
-        addSubStream(content, subStream, manufacturer);
+        if (InviteSessionNameEnum.PLAY.equals(inviteSessionNameEnum)) {
+            addSubStream(content, subStream, manufacturer);
+        }
 
         return content;
     }
