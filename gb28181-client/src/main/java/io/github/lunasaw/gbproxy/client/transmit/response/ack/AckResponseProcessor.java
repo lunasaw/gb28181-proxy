@@ -6,6 +6,7 @@ import javax.sip.header.CallIdHeader;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -15,9 +16,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
+@Data
 public class AckResponseProcessor extends SipResponseProcessorAbstract {
 
-    private static final String METHOD = "MESSAGE";
+    private static final String METHOD = "ACK";
+
+    private String method = METHOD;
 
     /**
      * 处理ACK响应
