@@ -484,7 +484,7 @@ public class ServerSendCmd {
 
     /**
      * 设备实时流点播
-     * 
+     *
      * @param fromDevice
      * @param toDevice
      * @param inviteRequest
@@ -495,6 +495,48 @@ public class ServerSendCmd {
         String subject = inviteRequest.getSubject(fromDevice.getUserId());
 
         String content = inviteRequest.getContent();
+
+        return SipSender.doInviteRequest(fromDevice, toDevice, content, subject);
+    }
+
+    public static String deviceInvitePlayBack(FromDevice fromDevice, ToDevice toDevice, String sdpIp, Integer mediaPort, String startTime) {
+
+        Date startDate = DateUtils.parseDate(startTime);
+        String formattedStartTime = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, startDate);
+        String formattedEndTime = DateUtils.formatTime(DateUtils.ISO8601_PATTERN, DateUtils.getNight(startDate));
+        InviteRequest inviteRequest = new InviteRequest(toDevice.getUserId(), sdpIp, mediaPort, formattedStartTime, formattedEndTime);
+        return deviceInvitePlayBack(fromDevice, toDevice, inviteRequest);
+    }
+
+
+    /**
+     * 设备回放流点播
+     *
+     * @param fromDevice
+     * @param toDevice
+     * @param sdpIp
+     * @param mediaPort
+     * @return
+     */
+    public static String deviceInvitePlayBack(FromDevice fromDevice, ToDevice toDevice, String sdpIp, Integer mediaPort, String startTime, String endTime) {
+        InviteRequest inviteRequest = new InviteRequest(toDevice.getUserId(), sdpIp, mediaPort, startTime, endTime);
+        return deviceInvitePlayBack(fromDevice, toDevice, inviteRequest);
+    }
+
+
+    /**
+     * 设备回放流点播
+     *
+     * @param fromDevice
+     * @param toDevice
+     * @param inviteRequest
+     * @return
+     */
+    public static String deviceInvitePlayBack(FromDevice fromDevice, ToDevice toDevice, InviteRequest inviteRequest) {
+
+        String subject = inviteRequest.getSubject(fromDevice.getUserId());
+
+        String content = inviteRequest.getBackContent();
 
         return SipSender.doInviteRequest(fromDevice, toDevice, content, subject);
     }

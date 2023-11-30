@@ -36,8 +36,28 @@ public class InviteEntity {
         return getInvitePlayBody(false, streamModeEnum, userId, sdpIp, mediaPort, ssrc, subStream, manufacturerEnum);
     }
 
-    public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort, String ssrc) {
+    public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort,
+                                                 String ssrc) {
         return getInvitePlayBody(seniorSdp, streamModeEnum, userId, sdpIp, mediaPort, ssrc, false, null);
+    }
+
+    public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort,
+                                                 String ssrc, Boolean subStream, ManufacturerEnum manufacturer) {
+
+        return getInvitePlayBody(InviteSessionNameEnum.PLAY, seniorSdp, streamModeEnum, userId, sdpIp, mediaPort, ssrc, subStream, manufacturer, null,
+                null);
+    }
+
+    public static StringBuffer getInvitePlayBackBody(StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort, String ssrc,
+                                                     String startTime, String endTime) {
+        return getInvitePlayBodyBack(false, streamModeEnum, userId, sdpIp, mediaPort, ssrc, false, null, startTime, endTime);
+    }
+
+    public static StringBuffer getInvitePlayBodyBack(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort,
+                                                     String ssrc, Boolean subStream, ManufacturerEnum manufacturer, String startTime, String endTime) {
+
+        return getInvitePlayBody(InviteSessionNameEnum.PLAY_BACK, seniorSdp, streamModeEnum, userId, sdpIp, mediaPort, ssrc, subStream, manufacturer,
+                startTime, endTime);
     }
 
     /**
@@ -52,15 +72,21 @@ public class InviteEntity {
      * @param manufacturer [可选] 设备厂商
      * @return
      */
-    public static StringBuffer getInvitePlayBody(Boolean seniorSdp, StreamModeEnum streamModeEnum, String userId, String sdpIp, Integer mediaPort,
-        String ssrc, Boolean subStream, ManufacturerEnum manufacturer) {
+    public static StringBuffer getInvitePlayBody(InviteSessionNameEnum inviteSessionNameEnum, Boolean seniorSdp, StreamModeEnum streamModeEnum,
+                                                 String userId, String sdpIp, Integer mediaPort,
+                                                 String ssrc, Boolean subStream, ManufacturerEnum manufacturer, String startTime, String endTime) {
         StringBuffer content = new StringBuffer(200);
         content.append("v=0\r\n");
         content.append("o=").append(userId).append(" 0 0 IN IP4 ").append(sdpIp).append("\r\n");
         // Session Name
-        content.append("s=").append(InviteSessionNameEnum.PLAY.getType()).append("\r\n");
+        content.append("s=").append(inviteSessionNameEnum.getType()).append("\r\n");
         content.append("c=IN IP4 ").append(sdpIp).append("\r\n");
-        content.append("t=0 0\r\n");
+        if (InviteSessionNameEnum.PLAY_BACK.equals(inviteSessionNameEnum)) {
+            content.append("u=").append(userId).append(":0\r\n");
+            content.append("t=").append(startTime).append(" ").append(endTime).append("\r\n");
+        } else {
+            content.append("t=0 0\r\n");
+        }
 
         if (seniorSdp) {
             if (StreamModeEnum.TCP_PASSIVE.equals(streamModeEnum)) {
@@ -116,7 +142,7 @@ public class InviteEntity {
     }
 
     public static StringBuffer addSsrc(StringBuffer content, String ssrc) {
-        content.append("y=").append(ssrc).append("\r\n");//ssrc
+        content.append("y=").append(ssrc).append("\r\n");// ssrc
         return content;
     }
 

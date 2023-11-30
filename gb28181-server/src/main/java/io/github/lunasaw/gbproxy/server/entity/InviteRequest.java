@@ -27,6 +27,10 @@ public class InviteRequest {
     private Boolean        subStream;
     private ManufacturerEnum manufacturer;
 
+    private String startTime;
+
+    private String endTime;
+
     public InviteRequest(String userId, String sdpIp, Integer mediaPort) {
         this.seniorSdp = false;
         this.streamModeEnum = StreamModeEnum.TCP_PASSIVE;
@@ -45,8 +49,23 @@ public class InviteRequest {
         this.ssrc = ssrc;
     }
 
+    public InviteRequest(String userId, String sdpIp, Integer mediaPort, String startTime, String endTime) {
+        this.seniorSdp = false;
+        this.streamModeEnum = StreamModeEnum.TCP_PASSIVE;
+        this.userId = userId;
+        this.sdpIp = sdpIp;
+        this.mediaPort = mediaPort;
+        this.ssrc = SipUtils.genSsrc(userId);
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public String getContent() {
         return InviteEntity.getInvitePlayBody(streamModeEnum, userId, sdpIp, mediaPort, ssrc).toString();
+    }
+
+    public String getBackContent() {
+        return InviteEntity.getInvitePlayBackBody(streamModeEnum, userId, sdpIp, mediaPort, ssrc, startTime, endTime).toString();
     }
 
     public String getContentWithSub() {
