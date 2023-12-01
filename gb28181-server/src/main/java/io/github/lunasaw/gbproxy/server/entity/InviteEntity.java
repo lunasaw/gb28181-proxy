@@ -168,8 +168,8 @@ public class InviteEntity {
 
     // ======================== 以下是回放控制 ========================
 
-    public static String playNow() {
-        return playNow(null);
+    public static String playPause() {
+        return playPause(null);
     }
 
     /**
@@ -177,7 +177,7 @@ public class InviteEntity {
      *
      * @param cseq
      */
-    public static String playNow(String cseq) {
+    public static String playPause(String cseq) {
         if (StringUtils.isBlank(cseq)) {
             cseq = String.valueOf(getInfoCseq());
         }
@@ -189,8 +189,8 @@ public class InviteEntity {
         return content.toString();
     }
 
-    public static String playResume() {
-        return playResume(null);
+    public static String playNow() {
+        return playNow(null);
     }
 
     /**
@@ -199,7 +199,7 @@ public class InviteEntity {
      * @param cseq
      * @return
      */
-    public static String playResume(String cseq) {
+    public static String playNow(String cseq) {
         if (StringUtils.isBlank(cseq)) {
             cseq = String.valueOf(getInfoCseq());
         }
@@ -211,7 +211,7 @@ public class InviteEntity {
         return content.toString();
     }
 
-    public String playRange(long seekTime) {
+    public static String playRange(long seekTime) {
         return playRange(null, seekTime);
     }
 
@@ -222,7 +222,7 @@ public class InviteEntity {
      * @param seekTime
      * @return
      */
-    public String playRange(String cseq, long seekTime) {
+    public static String playRange(String cseq, long seekTime) {
         if (StringUtils.isBlank(cseq)) {
             cseq = String.valueOf(getInfoCseq());
         }
@@ -234,7 +234,7 @@ public class InviteEntity {
         return content.toString();
     }
 
-    public String playSpeed(Double speed) {
+    public static String playSpeed(Double speed) {
         return playSpeed(null, speed);
     }
 
@@ -245,7 +245,7 @@ public class InviteEntity {
      * @param speed
      * @return
      */
-    public String playSpeed(String cseq, Double speed) {
+    public static String playSpeed(String cseq, Double speed) {
         if (StringUtils.isBlank(cseq)) {
             cseq = String.valueOf(getInfoCseq());
         }

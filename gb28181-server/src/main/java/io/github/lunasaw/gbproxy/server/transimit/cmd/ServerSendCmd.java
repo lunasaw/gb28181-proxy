@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.sip.address.SipURI;
 
+import io.github.lunasaw.gbproxy.server.entity.InviteEntity;
+import io.github.lunasaw.gbproxy.server.enums.PlayActionEnums;
 import org.springframework.util.Assert;
 
 import com.luna.common.date.DateUtils;
@@ -553,5 +555,19 @@ public class ServerSendCmd {
         String content = inviteRequest.getBackContent();
 
         return SipSender.doInviteRequest(fromDevice, toDevice, content, subject);
+    }
+
+    /**
+     * 设备回放流点播控制
+     *
+     * @param fromDevice
+     * @param toDevice
+     * @param playActionEnums 操作类型
+     * @return
+     */
+    public static String deviceInvitePlayBackControl(FromDevice fromDevice, ToDevice toDevice, PlayActionEnums playActionEnums) {
+        String controlBody = playActionEnums.getControlBody();
+        Assert.notNull(controlBody, "不支持的操作类型");
+        return SipSender.doInfoRequest(fromDevice, toDevice, controlBody);
     }
 }

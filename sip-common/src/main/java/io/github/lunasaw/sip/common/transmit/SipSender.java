@@ -55,6 +55,11 @@ public class SipSender {
         return doInviteRequest(fromDevice, toDevice, contend, subject, null, null);
     }
 
+    public static String doInfoRequest(FromDevice fromDevice, ToDevice toDevice, String contend) {
+        String callId = SipRequestUtils.getNewCallId();
+        return doInfoRequest(fromDevice, toDevice, contend, callId, null, null);
+    }
+
     public static String doInviteRequest(FromDevice fromDevice, ToDevice toDevice, String contend, String subject, Event errorEvent,
                                          Event okEvent) {
         String callId = SipRequestUtils.getNewCallId();
@@ -109,6 +114,16 @@ public class SipSender {
     public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, toDevice, content, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
+
+    public static String doInfoRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
+        return doInfoRequest(fromDevice, toDevice, content, callId, null, null);
+    }
+
+    public static String doInfoRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId, Event errorEvent, Event okEvent) {
+        Request messageRequest = SipRequestProvider.createInfoRequest(fromDevice, toDevice, content, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }
 
