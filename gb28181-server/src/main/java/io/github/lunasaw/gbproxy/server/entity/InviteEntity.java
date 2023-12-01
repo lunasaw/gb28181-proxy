@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.server.entity;
 import io.github.lunasaw.sip.common.enums.InviteSessionNameEnum;
 import io.github.lunasaw.sip.common.enums.ManufacturerEnum;
 import io.github.lunasaw.sip.common.enums.StreamModeEnum;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author luna
@@ -163,5 +164,100 @@ public class InviteEntity {
             }
         }
         return content;
+    }
+
+    // ======================== 以下是回放控制 ========================
+
+    public static String playNow() {
+        return playNow(null);
+    }
+
+    /**
+     * 回放暂停
+     *
+     * @param cseq
+     */
+    public static String playNow(String cseq) {
+        if (StringUtils.isBlank(cseq)) {
+            cseq = String.valueOf(getInfoCseq());
+        }
+        StringBuilder content = new StringBuilder(200);
+        content.append("PAUSE RTSP/1.0\r\n");
+        content.append("CSeq: ").append(cseq).append("\r\n");
+        content.append("PauseTime: now\r\n");
+
+        return content.toString();
+    }
+
+    public static String playResume() {
+        return playResume(null);
+    }
+
+    /**
+     * 回放恢复
+     *
+     * @param cseq
+     * @return
+     */
+    public static String playResume(String cseq) {
+        if (StringUtils.isBlank(cseq)) {
+            cseq = String.valueOf(getInfoCseq());
+        }
+        StringBuffer content = new StringBuffer(200);
+        content.append("PLAY RTSP/1.0\r\n");
+        content.append("CSeq: ").append(cseq).append("\r\n");
+        content.append("Range: npt=now-\r\n");
+
+        return content.toString();
+    }
+
+    public String playRange(long seekTime) {
+        return playRange(null, seekTime);
+    }
+
+    /**
+     * 回放定位
+     *
+     * @param cseq
+     * @param seekTime
+     * @return
+     */
+    public String playRange(String cseq, long seekTime) {
+        if (StringUtils.isBlank(cseq)) {
+            cseq = String.valueOf(getInfoCseq());
+        }
+        StringBuffer content = new StringBuffer(200);
+        content.append("PLAY RTSP/1.0\r\n");
+        content.append("CSeq: ").append(cseq).append("\r\n");
+        content.append("Range: npt=").append(Math.abs(seekTime)).append("-\r\n");
+
+        return content.toString();
+    }
+
+    public String playSpeed(Double speed) {
+        return playSpeed(null, speed);
+    }
+
+    /**
+     * 回放倍速
+     *
+     * @param cseq
+     * @param speed
+     * @return
+     */
+    public String playSpeed(String cseq, Double speed) {
+        if (StringUtils.isBlank(cseq)) {
+            cseq = String.valueOf(getInfoCseq());
+        }
+        StringBuffer content = new StringBuffer(200);
+        content.append("PLAY RTSP/1.0\r\n");
+        content.append("CSeq: ").append(cseq).append("\r\n");
+        content.append("Scale: ").append(String.format("%.6f", speed)).append("\r\n");
+
+        return content.toString();
+    }
+
+    private static int getInfoCseq() {
+        return (int) ((Math.random() * 9 + 1) * Math.pow(10, 8));
     }
 }
