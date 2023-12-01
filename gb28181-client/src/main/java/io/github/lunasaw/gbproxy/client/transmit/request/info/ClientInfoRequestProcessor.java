@@ -1,15 +1,18 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.info;
 
+import javax.sip.RequestEvent;
+import javax.sip.message.Response;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.sip.RequestEvent;
 
 /**
  * @author luna
@@ -19,7 +22,6 @@ import javax.sip.RequestEvent;
 @Getter
 @Setter
 public class ClientInfoRequestProcessor extends SipRequestProcessorAbstract {
-
 
     public static final String METHOD = "INFO";
 
@@ -46,7 +48,12 @@ public class ClientInfoRequestProcessor extends SipRequestProcessorAbstract {
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }
-
+        try {
+            infoProcessorClient.receiveInfo(userId, new String(request.getRawContent()));
+            ResponseCmd.doResponseCmd(Response.OK, evt);
+        } catch (Exception e) {
+            ResponseCmd.doResponseCmd(Response.BAD_GATEWAY, e.getMessage(), evt);
+        }
     }
 
 }

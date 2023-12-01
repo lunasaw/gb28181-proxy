@@ -8,6 +8,6 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  */
 public interface InfoProcessorClient extends SipUserGenerate {
 
-    void receiveInfo(String content);
+    void receiveInfo(String userId, String content);
 
 }
