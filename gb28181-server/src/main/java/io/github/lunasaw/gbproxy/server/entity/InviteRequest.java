@@ -12,8 +12,17 @@ import lombok.Data;
 @Data
 public class InviteRequest {
 
+    /**
+     * 是否高级sdp
+     */
     private Boolean        seniorSdp;
+    /**
+     * 流媒体传输模式
+     */
     private StreamModeEnum streamModeEnum;
+    /**
+     * 用户ID
+     */
     private String         userId;
     /**
      * 收流IP
@@ -23,9 +32,26 @@ public class InviteRequest {
      * 收流端口
      */
     private Integer        mediaPort;
+    /**
+     * ssrc
+     */
     private String         ssrc;
+    /**
+     * 是否订阅子码流
+     */
     private Boolean        subStream;
+    /**
+     * 厂商
+     */
     private ManufacturerEnum manufacturer;
+    /**
+     * 回放开始时间
+     */
+    private String startTime;
+    /**
+     * 回放结束时间
+     */
+    private String endTime;
 
     public InviteRequest(String userId, String sdpIp, Integer mediaPort) {
         this.seniorSdp = false;
@@ -45,8 +71,23 @@ public class InviteRequest {
         this.ssrc = ssrc;
     }
 
+    public InviteRequest(String userId, String sdpIp, Integer mediaPort, String startTime, String endTime) {
+        this.seniorSdp = false;
+        this.streamModeEnum = StreamModeEnum.UDP;
+        this.userId = userId;
+        this.sdpIp = sdpIp;
+        this.mediaPort = mediaPort;
+        this.ssrc = SipUtils.genSsrc(userId);
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public String getContent() {
         return InviteEntity.getInvitePlayBody(streamModeEnum, userId, sdpIp, mediaPort, ssrc).toString();
+    }
+
+    public String getBackContent() {
+        return InviteEntity.getInvitePlayBackBody(streamModeEnum, userId, sdpIp, mediaPort, ssrc, startTime, endTime).toString();
     }
 
     public String getContentWithSub() {

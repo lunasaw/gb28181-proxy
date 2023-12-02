@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @date 2023/11/7
  */
 @Component
-public class DefaultAckRequestProcessorClient implements AckRequestProcessorClient {
+public class DefaultAckProcessorClient implements AckRequestProcessorClient {
 
 
     @Autowired

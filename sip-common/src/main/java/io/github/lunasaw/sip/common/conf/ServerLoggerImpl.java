@@ -1,11 +1,8 @@
 package io.github.lunasaw.sip.common.conf;
 
-import java.util.Date;
 import java.util.Properties;
 
 import javax.sip.SipStack;
-
-import com.luna.common.date.DateUtils;
 
 import gov.nist.core.CommonLogger;
 import gov.nist.core.ServerLogger;
@@ -30,10 +27,8 @@ public class ServerLoggerImpl implements ServerLogger {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(sender ? from + "发送：目标--->" + to : from + " 接收：来自--->" + to)
+        stringBuilder.append(sender ? from + "发送：目标--->" + to : to + " 接收：来自--->" + from)
             .append("\r\n")
-            .append(DateUtils.formatDateTime(new Date(time)))
-                .append("\r\n")
                 .append(message);
         this.stackLogger.logInfo(stringBuilder.toString());
 

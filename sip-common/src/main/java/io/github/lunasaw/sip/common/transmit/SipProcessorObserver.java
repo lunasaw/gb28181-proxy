@@ -51,7 +51,7 @@ public class SipProcessorObserver implements SipListener {
     /**
      * 添加 request订阅
      *
-     * @param method    方法名
+     * @param method 方法名
      * @param processor 处理程序
      */
     public synchronized static void addRequestProcessor(String method, SipRequestProcessor processor) {
@@ -68,7 +68,7 @@ public class SipProcessorObserver implements SipListener {
     /**
      * 添加 response订阅
      *
-     * @param method    方法名
+     * @param method 方法名
      * @param processor 处理程序
      */
     public synchronized static void addResponseProcessor(String method, SipResponseProcessor processor) {
@@ -135,7 +135,7 @@ public class SipProcessorObserver implements SipListener {
         } else if ((status >= Response.TRYING) && (status < Response.OK)) {
             // 增加其它无需回复的响应，如101、180等
         } else {
-            log.warn("接收到失败的response响应！status：" + status + ",message:" + response.getReasonPhrase());
+            log.warn("接收到失败的response响应！status：" + status + ",message:" + response.getReasonPhrase() + " response = {}", responseEvent.getResponse());
             if (responseEvent.getResponse() != null && SipSubscribe.getErrorSubscribesSize() > 0) {
                 CallIdHeader callIdHeader = (CallIdHeader) responseEvent.getResponse().getHeader(CallIdHeader.NAME);
                 if (callIdHeader != null) {

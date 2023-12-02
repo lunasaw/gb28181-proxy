@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-@ComponentScan
+@ComponentScan("io.github.lunasaw.sip.common")
 @Configuration
 public class SipProxyAutoConfig implements InitializingBean, ApplicationContextAware {
 

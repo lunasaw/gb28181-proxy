@@ -66,7 +66,7 @@ public abstract class SipMessageRequestProcessorAbstract extends SipRequestProce
             messageHandler.handForEvt(evt);
             messageHandler.responseAck(evt);
         } catch (Exception e) {
-            log.error("process::evt = {} ", evt, e);
+            log.error("process::evt = {}, e = {}", evt, e.getMessage());
             messageHandler.responseError(evt);
         }
     }

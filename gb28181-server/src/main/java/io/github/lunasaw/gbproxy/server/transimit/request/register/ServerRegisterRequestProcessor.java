@@ -19,8 +19,11 @@ import com.luna.common.date.DateUtils;
 
 import gov.nist.javax.sip.header.SIPDateHeader;
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.GbSipDate;
+import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
+import io.github.lunasaw.sip.common.entity.SipTransaction;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
-import io.github.lunasaw.sip.common.entity.*;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -60,7 +63,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             boolean registerFlag = expires > 0;
 
             String userId = SipUtils.getUserIdFromFromHeader(request);
-            String sipUserId = SipUtils.getUserIdFromToHeader(request);
+            String sipUserId = SipUtils.getUser(request);
 
             FromDevice fromDevice = (FromDevice)registerProcessorServer.getFromDevice();
             if (fromDevice == null || !sipUserId.equals(fromDevice.getUserId())) {
@@ -76,7 +79,6 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             log.info(title + "设备：{}, 开始处理: {}", userId, requestAddress);
 
             SipTransaction transaction = registerProcessorServer.getTransaction(userId);
-
 
             RegisterInfo registerInfo = new RegisterInfo();
             registerInfo.setExpire(expires);
@@ -99,7 +101,6 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             registerProcessorServer.updateRegisterInfo(userId, registerInfo);
             String callId = SipUtils.getCallId(request);
             List<Header> okHeaderList = getRegisterOkHeaderList(request);
-
 
             if (transaction != null && callId.equals(transaction.getCallId())) {
                 log.info(title + "设备：{}, 注册续订: {}", userId, expires);

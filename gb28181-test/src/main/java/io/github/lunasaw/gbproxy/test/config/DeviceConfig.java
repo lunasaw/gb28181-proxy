@@ -20,7 +20,7 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 @Configuration
 public class DeviceConfig {
 
-    public static final String LOOP_IP = "172.19.128.100";
+    public static final String        LOOP_IP                = "10.143.118.70";
 
     public static final String LOOP_IP_LOCAL = "0.0.0.0";
 
@@ -37,12 +37,12 @@ public class DeviceConfig {
         DEVICE_MAP.put("client_from", clientFrom);
 
         ToDevice clientTo = ToDevice.getInstance("41010500002000000001", LOOP_IP, 8117);
-        clientTo.setPassword("luna");
+        clientTo.setPassword("bajiuwulian1006");
         clientTo.setRealm("4101050000");
         DEVICE_MAP.put("client_to", clientTo);
 
         FromDevice serverFrom = FromDevice.getInstance("41010500002000000001", LOOP_IP, 8117);
-        serverFrom.setPassword("luna");
+        serverFrom.setPassword("bajiuwulian1006");
         serverFrom.setRealm("4101050000");
         DEVICE_MAP.put("server_from", serverFrom);
 

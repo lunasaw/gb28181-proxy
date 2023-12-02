@@ -39,7 +39,9 @@ public class DefaultRegisterProcessorServer implements RegisterProcessorServer {
     @Override
     public void updateRegisterInfo(String userId, RegisterInfo registerInfo) {
 
-        ToDevice instance = ToDevice.getInstance(userId, registerInfo.getLocalIp(), registerInfo.getRemotePort());
+        ToDevice instance = ToDevice.getInstance(userId, registerInfo.getRemoteIp(), registerInfo.getRemotePort());
+        instance.setTransport(registerInfo.getTransport());
+        instance.setLocalIp(registerInfo.getLocalIp());
 
         DeviceConfig.DEVICE_SERVER_VIEW_MAP.put(userId, instance);
 
