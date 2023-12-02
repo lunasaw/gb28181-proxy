@@ -18,7 +18,8 @@ public class FfmpegCommander {
 
     private static final String path = "/usr/local/bin/ffmpeg";
     private static final String               cmd        =
-        "-re -i {filePath} -vcodec h264 -acodec aac -f rtsp -rtsp_transport tcp rtsp://{ip}:{port}/rtp/33010602011187000001_33010602011187000001?sign=41db35390ddad33f83944f44b8b75ded";
+        "-re -stream_loop -1 -i {filePath} -vcodec h264 -acodec aac -f rtsp -rtsp_transport tcp rtsp://{ip}:{port}/rtsp/live?sign=41db35390ddad33f83944f44b8b75ded";
+
     private static final Map<String, Process> processMap = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(FfmpegCommander.class);
 

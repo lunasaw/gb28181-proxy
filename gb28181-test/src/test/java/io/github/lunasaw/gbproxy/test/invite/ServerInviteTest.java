@@ -49,7 +49,7 @@ public class ServerInviteTest {
                 return;
             }
             String invitePlay = ServerSendCmd.deviceInvitePlay((FromDevice)fromDevice, (ToDevice)device, "127.0.0.1", 1554);
-        }, 30 * 1000);
+        }, 10 * 1000);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class ServerInviteTest {
                 return;
             }
             String invitePlay =
-                ServerSendCmd.deviceInvitePlayBack((FromDevice)fromDevice, (ToDevice)device, "172.19.128.100", 10000, "2023-11-29 00:00:00");
+                ServerSendCmd.deviceInvitePlayBack((FromDevice)fromDevice, (ToDevice)device, "127.0.0.1", 10000, "2023-11-29 00:00:00");
             System.out.println(invitePlay);
         }, 30 * 1000);
     }
