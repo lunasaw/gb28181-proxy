@@ -23,6 +23,11 @@ public class ToDevice extends Device {
      */
     private String subject;
 
+    /**
+     * 本地ip
+     */
+    private String localIp;
+
     public static ToDevice getInstance(String userId, String ip, int port) {
         ToDevice toDevice = new ToDevice();
         toDevice.setUserId(userId);

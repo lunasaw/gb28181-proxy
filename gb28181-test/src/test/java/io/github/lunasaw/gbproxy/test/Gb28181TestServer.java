@@ -129,7 +129,7 @@ public class Gb28181TestServer {
     public void test_invite_play_back_server() {
         dynamicTask.startDelay("play_back_test", () -> {
             Device device = DeviceConfig.DEVICE_SERVER_VIEW_MAP.get("34020000001320000001");
-            if (toDevice == null) {
+            if (device == null) {
                 test_invite_play_back_server();
                 return;
             }

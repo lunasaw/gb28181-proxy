@@ -20,7 +20,7 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 @Configuration
 public class DeviceConfig {
 
-    public static final String LOOP_IP = "172.19.128.100";
+    public static final String        LOOP_IP                = "10.143.118.70";
 
     public static final String LOOP_IP_LOCAL = "0.0.0.0";
 

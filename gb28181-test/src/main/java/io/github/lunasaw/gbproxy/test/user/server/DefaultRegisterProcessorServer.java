@@ -41,6 +41,7 @@ public class DefaultRegisterProcessorServer implements RegisterProcessorServer {
 
         ToDevice instance = ToDevice.getInstance(userId, registerInfo.getRemoteIp(), registerInfo.getRemotePort());
         instance.setTransport(registerInfo.getTransport());
+        instance.setLocalIp(registerInfo.getLocalIp());
 
         DeviceConfig.DEVICE_SERVER_VIEW_MAP.put(userId, instance);
 
