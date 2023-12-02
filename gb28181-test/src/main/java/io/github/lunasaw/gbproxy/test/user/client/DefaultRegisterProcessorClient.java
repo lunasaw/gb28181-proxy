@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -20,11 +21,15 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
  * @author luna
  * @date 2023/10/17
  */
+@Slf4j
 @Component
 public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
 
     public static Boolean isRegister = true;
-    ScheduledExecutorService taskExecutor = Executors.newScheduledThreadPool(1);
+    /**
+     * 心跳定时任务线程池
+     */
+    private static final ScheduledExecutorService taskExecutor = Executors.newScheduledThreadPool(1);
     @Autowired
     @Qualifier("clientFrom")
     private Device fromDevice;
@@ -42,8 +47,13 @@ public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
                     if (!isRegister) {
                         return;
                     }
-                    ClientSendCmd.deviceKeepLiveNotify((FromDevice) fromDevice, (ToDevice) DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(toUserId), "OK");
-                }, 60, 90, TimeUnit.SECONDS);
+                ClientSendCmd.deviceKeepLiveNotify((FromDevice)fromDevice, (ToDevice)DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(toUserId), "OK",
+                    eventResult -> {
+                        // 注册
+                        log.error("心跳失败 发起注册 registerSuccess::toUserId = {} ", toUserId);
+                        ClientSendCmd.deviceRegister((FromDevice)fromDevice, (ToDevice)DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(toUserId), 300);
+                    });
+            }, 30, 60, TimeUnit.SECONDS);
 
         if (!isRegister) {
             // 注销

@@ -13,6 +13,7 @@ import io.github.lunasaw.sip.common.entity.response.*;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.transmit.event.Event;
 
 /**
  * @author luna
@@ -56,12 +57,20 @@ public class ClientSendCmd {
      * @return
      */
     public static String deviceKeepLiveNotify(FromDevice fromDevice, ToDevice toDevice, String status) {
+        return deviceKeepLiveNotify(fromDevice, toDevice, status, null, null);
+    }
+
+    public static String deviceKeepLiveNotify(FromDevice fromDevice, ToDevice toDevice, String status, Event errorEvent) {
+        return deviceKeepLiveNotify(fromDevice, toDevice, status, errorEvent, null);
+    }
+
+    public static String deviceKeepLiveNotify(FromDevice fromDevice, ToDevice toDevice, String status, Event errorEvent, Event okEvent) {
         DeviceKeepLiveNotify deviceKeepLiveNotify =
-                new DeviceKeepLiveNotify(CmdTypeEnum.KEEPALIVE.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+            new DeviceKeepLiveNotify(CmdTypeEnum.KEEPALIVE.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
         deviceKeepLiveNotify.setStatus(status);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceKeepLiveNotify);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceKeepLiveNotify, errorEvent, okEvent);
     }
 
     /**

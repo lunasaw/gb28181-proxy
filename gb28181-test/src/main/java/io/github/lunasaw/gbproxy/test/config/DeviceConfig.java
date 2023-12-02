@@ -48,11 +48,6 @@ public class DeviceConfig {
 
         ToDevice serverTo = ToDevice.getInstance("33010602011187000001", LOOP_IP, 8118);
         DEVICE_MAP.put("server_to", serverTo);
-
-
-        DEVICE_CLIENT_VIEW_MAP.put("41010500002000000001", clientTo);
-
-        DEVICE_SERVER_VIEW_MAP.put("33010602011187000001", serverTo);
     }
 
     @Bean

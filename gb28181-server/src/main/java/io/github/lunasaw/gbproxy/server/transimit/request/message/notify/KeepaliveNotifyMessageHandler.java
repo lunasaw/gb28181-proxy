@@ -1,6 +1,7 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
 
 import javax.sip.RequestEvent;
+import javax.sip.message.Response;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
@@ -8,6 +9,7 @@ import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
+import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +49,9 @@ public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract 
         // 设备查询
         ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
         if (toDevice == null) {
-            // 未注册的设备不做处理
+            // 未注册的设备回复失败
+            log.warn("device not register, userId: {}", userId);
+            ResponseCmd.doResponseCmd(Response.NOT_FOUND, event);
             return;
         }
         DeviceKeepLiveNotify deviceKeepLiveNotify = parseXml(DeviceKeepLiveNotify.class);
