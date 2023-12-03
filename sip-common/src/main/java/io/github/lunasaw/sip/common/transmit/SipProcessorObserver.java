@@ -115,7 +115,7 @@ public class SipProcessorObserver implements SipListener {
      * @param responseEvent responseEvent事件
      */
     @Override
-    @Async("taskExecutor")
+    @Async("sipTaskExecutor")
     public void processResponse(ResponseEvent responseEvent) {
         Response response = responseEvent.getResponse();
         int status = response.getStatusCode();

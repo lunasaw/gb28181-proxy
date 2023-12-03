@@ -42,7 +42,7 @@ public class ThreadPoolTaskConfig {
     /**
      * 缓冲队列大小
      */
-    private static final int queueCapacity = 10000;
+    private static final int    queueCapacity    = 100;
     /**
      * 线程池名前缀
      */
