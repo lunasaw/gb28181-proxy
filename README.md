@@ -44,7 +44,7 @@
 - [ ] 基于流媒体搭建完整的视频监控级联平台 [zlm-spring-boot-starter](https://github.com/lunasaw/zlm-spring-boot-starter) 进行中
 - [ ] 基于客户端搭建本地NVR平台管理
 - [ ] wike教程
-- [ ] 
+- [ ] 其他。。。
 
 # 如何使用
 
