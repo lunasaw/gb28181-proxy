@@ -21,6 +21,7 @@ io.github.lunasaw.gbproxy.client.transmit.response.register
 io.github.lunasaw.gbproxy.server
 io.github.lunasaw.gbproxy.server.config
 io.github.lunasaw.gbproxy.server.entity
+io.github.lunasaw.gbproxy.server.enums
 io.github.lunasaw.gbproxy.server.transimit.cmd
 io.github.lunasaw.gbproxy.server.transimit.request
 io.github.lunasaw.gbproxy.server.transimit.request.bye
