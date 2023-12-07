@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.test.config;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.luna.common.os.SystemInfoUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import io.github.lunasaw.gbproxy.test.user.server.DefaultRegisterProcessorServer
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
+import oshi.SystemInfo;
 
 /**
  * @author luna
@@ -20,7 +22,7 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 @Configuration
 public class DeviceConfig {
 
-    public static final String        LOOP_IP                = "10.143.118.70";
+    public static final String LOOP_IP = SystemInfoUtil.getIpv4();
 
     public static final String LOOP_IP_LOCAL = "0.0.0.0";
 
