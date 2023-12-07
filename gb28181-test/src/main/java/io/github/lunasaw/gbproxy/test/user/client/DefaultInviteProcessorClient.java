@@ -6,13 +6,17 @@ import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.GbSessionDescription;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
+import io.github.lunasaw.sip.common.enums.InviteSessionNameEnum;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
+import javax.sdp.SessionDescription;
+import javax.sdp.SessionName;
 import java.io.FileNotFoundException;
 
 /**
@@ -28,8 +32,8 @@ public class DefaultInviteProcessorClient implements InviteProcessorClient {
 
     static {
         try {
-            VIDEO_FILE = ResourceUtils.getFile("classpath:device/videofile.h264").getAbsolutePath();
-            RECORD_VIDEO_FILE = ResourceUtils.getFile("classpath:device/record.h264").getAbsolutePath();
+            VIDEO_FILE = ResourceUtils.getFile("classpath:file/invite.mp4").getAbsolutePath();
+            RECORD_VIDEO_FILE = ResourceUtils.getFile("classpath:file/record.mp4").getAbsolutePath();
         } catch (FileNotFoundException e) {
 
         }
@@ -42,14 +46,28 @@ public class DefaultInviteProcessorClient implements InviteProcessorClient {
     private FfmpegCommander ffmpegCommander;
 
     @Override
+    @SneakyThrows
     public void inviteSession(String callId, SdpSessionDescription sessionDescription) {
         GbSessionDescription gbSessionDescription = (GbSessionDescription) sessionDescription;
-        log.info("点播请求 inviteSession::sessionDescription = {}", JSON.toJSONString(sessionDescription));
+        SessionDescription descriptionBaseSdb = gbSessionDescription.getBaseSdb();
+        SessionName sessionName = descriptionBaseSdb.getSessionName();
 
-        SipSubscribe.addOkSubscribe(callId, eventResult -> {
-            ffmpegCommander.closeAllStream();
-            ffmpegCommander.pushStream(eventResult.callId, VIDEO_FILE, gbSessionDescription.getAddress(), gbSessionDescription.getPort());
-        });
+        if (InviteSessionNameEnum.PLAY.getType().equals(sessionName.getValue())) {
+            log.info("点播请求 inviteSession::sessionDescription = {}", JSON.toJSONString(sessionDescription));
+
+            SipSubscribe.addOkSubscribe(callId, eventResult -> {
+                ffmpegCommander.closeAllStream();
+                ffmpegCommander.pushStream(eventResult.callId, VIDEO_FILE, gbSessionDescription.getAddress(), gbSessionDescription.getPort());
+            });
+        } else if (InviteSessionNameEnum.PLAY_BACK.getType().equals(sessionName.getValue())) {
+
+            log.info("回放请求 inviteSession::sessionDescription = {}", JSON.toJSONString(sessionDescription));
+
+            SipSubscribe.addOkSubscribe(callId, eventResult -> {
+                ffmpegCommander.closeAllStream();
+                ffmpegCommander.pushStream(eventResult.callId, RECORD_VIDEO_FILE, gbSessionDescription.getAddress(), gbSessionDescription.getPort());
+            });
+        }
     }
 
     @Override
