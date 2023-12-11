@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Getter
 @Setter
-@Component("serverRegisterRequestProcessor")
+@Component
 @Slf4j
 public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract {
 
@@ -63,10 +63,9 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             boolean registerFlag = expires > 0;
 
             String userId = SipUtils.getUserIdFromFromHeader(request);
-            String sipUserId = SipUtils.getUser(request);
 
             FromDevice fromDevice = (FromDevice)registerProcessorServer.getFromDevice();
-            if (fromDevice == null || !sipUserId.equals(fromDevice.getUserId())) {
+            if (fromDevice == null) {
                 return;
             }
             // 设备接收到的IP地址，有可能是Nat之后的, 本地回复直接使用这个地址即可
