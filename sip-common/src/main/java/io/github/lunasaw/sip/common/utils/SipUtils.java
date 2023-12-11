@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 
 import javax.sdp.SessionDescription;
 import javax.sip.RequestEvent;
+import javax.sip.ResponseEvent;
 import javax.sip.header.FromHeader;
 import javax.sip.header.HeaderAddress;
 import javax.sip.header.SubjectHeader;
@@ -180,13 +181,7 @@ public class SipUtils {
 
     public static <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
         SIPRequest sipRequest = (SIPRequest) event.getRequest();
-        byte[] rawContent = sipRequest.getRawContent();
-        if (StringUtils.isBlank(charset)) {
-            charset = Constant.UTF_8;
-        }
-        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
-        Object o = XmlUtils.parseObj(xmlStr, clazz);
-        return (T) o;
+        return getObj(charset, clazz, sipRequest.getRawContent());
     }
 
     public static String parseRequest(RequestEvent event, String charset) {
@@ -196,5 +191,23 @@ public class SipUtils {
             charset = Constant.UTF_8;
         }
         return StringTools.toEncodedString(rawContent, Charset.forName(charset));
+    }
+
+    public static <T> T getObj(String charset, Class<T> clazz, byte[] rawContent) {
+        if (StringUtils.isBlank(charset)) {
+            charset = Constant.UTF_8;
+        }
+        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
+        Object o = XmlUtils.parseObj(xmlStr, clazz);
+        return (T)o;
+    }
+
+    public static <T> T parseResponse(ResponseEvent evt, Class<T> tClass) {
+        return parseResponse(evt, null, tClass);
+    }
+
+    public static <T> T parseResponse(ResponseEvent evt, String charset, Class<T> clazz) {
+        Response response = evt.getResponse();
+        return getObj(charset, clazz, response.getRawContent());
     }
 }

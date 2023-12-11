@@ -5,13 +5,10 @@ import java.text.ParseException;
 import javax.sdp.SdpParseException;
 import javax.sdp.SessionDescription;
 import javax.sip.ResponseEvent;
-import javax.sip.SipFactory;
 import javax.sip.address.SipURI;
-import javax.sip.header.CallIdHeader;
 import javax.sip.message.Response;
 
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
-import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +17,6 @@ import gov.nist.javax.sip.ResponseEventExt;
 import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
@@ -43,10 +39,10 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
     private String method = METHOD;
 
     @Autowired
-    public InviteProcessorServer inviteProcessorServer;
+    public InviteResponseProcessorServer inviteResponseProcessorServer;
 
-    public InviteResponseProcessor(InviteProcessorServer inviteProcessorServer) {
-        this.inviteProcessorServer = inviteProcessorServer;
+    public InviteResponseProcessor(InviteResponseProcessorServer inviteResponseProcessorServer) {
+        this.inviteResponseProcessorServer = inviteResponseProcessorServer;
     }
 
     /**
@@ -61,7 +57,7 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
             SIPResponse response = (SIPResponse) evt.getResponse();
             int statusCode = response.getStatusCode();
             if (statusCode == Response.TRYING) {
-                inviteProcessorServer.responseTrying();
+                inviteResponseProcessorServer.responseTrying();
             }
 
             if (statusCode == Response.OK) {
@@ -77,7 +73,7 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
         // 成功响应
         SIPResponse response = (SIPResponse) evt.getResponse();
 
-        FromDevice fromDevice = (FromDevice)inviteProcessorServer.getFromDevice();
+        FromDevice fromDevice = (FromDevice)inviteResponseProcessorServer.getFromDevice();
 
         String contentString = new String(response.getRawContent());
         SdpSessionDescription gb28181Sdp = SipUtils.parseSdp(contentString);

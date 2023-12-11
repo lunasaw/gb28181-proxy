@@ -1,4 +1,4 @@
-package io.github.lunasaw.gbproxy.server.transimit.request.info;
+package io.github.lunasaw.gbproxy.server.transimit.request.notify;
 
 import javax.sip.RequestEvent;
 
@@ -9,21 +9,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * SIP命令类型： 收到info请求
+ * SIP命令类型： 收到Notify请求
  *
  * @author luna
  */
 @Component
 @Getter
 @Setter
-public class ServerInfoRequestProcessor extends SipRequestProcessorAbstract {
+public class ServerNotifyRequestProcessor extends SipRequestProcessorAbstract {
 
-    public static final String METHOD = "INFO";
+    public static final String METHOD = "NOTIFY";
 
-    private String method = METHOD;
+    private String             method = METHOD;
 
     /**
-     * 收到Info请求 处理
+     * 收到Notify请求 处理
      *
      * @param evt
      */

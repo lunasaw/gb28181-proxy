@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.server.transimit.response.invite.InviteProcessorServer;
+import io.github.lunasaw.gbproxy.server.transimit.response.invite.InviteResponseProcessorServer;
 import io.github.lunasaw.sip.common.entity.Device;
 
 /**
@@ -14,7 +14,7 @@ import io.github.lunasaw.sip.common.entity.Device;
  */
 @Component
 @Slf4j
-public class DefaultInviteProcessorServer implements InviteProcessorServer {
+public class DefaultInviteResponseProcessorServer implements InviteResponseProcessorServer {
 
     @Autowired
     @Qualifier("serverFrom")

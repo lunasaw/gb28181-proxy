@@ -27,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ServerMessageRequestProcessor extends SipMessageRequestProcessorAbstract {
 
     public static final String                      METHOD              = "MESSAGE";
-    public static final Map<String, MessageHandler> MESSAGE_HANDLER_MAP = new ConcurrentHashMap<>();
 
     @Resource
     private MessageProcessorServer messageProcessorServer;
