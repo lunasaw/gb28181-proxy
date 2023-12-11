@@ -9,7 +9,7 @@ import io.github.lunasaw.gbproxy.server.transimit.response.invite.InviteResponse
 import io.github.lunasaw.sip.common.entity.Device;
 
 /**
- * @author weidian
+ * @author luna
  * @date 2023/10/21
  */
 @Component

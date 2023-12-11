@@ -10,7 +10,7 @@ import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 
 /**
- * @author weidian
+ * @author luna
  * @date 2023/10/21
  */
 public interface MessageProcessorServer extends SipUserGenerate {
