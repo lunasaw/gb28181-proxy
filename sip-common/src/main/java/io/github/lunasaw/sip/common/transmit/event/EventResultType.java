@@ -1,5 +1,7 @@
 package io.github.lunasaw.sip.common.transmit.event;
 
+import javax.sip.IOExceptionEvent;
+
 /**
  * 事件类型
  * @author luna
@@ -18,5 +20,5 @@ public enum EventResultType {
     // 设备未找到
     deviceNotFoundEvent,
     // 设备未找到
-    cmdSendFailEvent
+    cmdSendFailEvent,
 }
