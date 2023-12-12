@@ -66,9 +66,7 @@ public class SubscribeServerTest {
                 return;
             }
             String invitePlay =
-                ServerSendCmd.deviceCatalogSubscribe((FromDevice)fromDevice, (ToDevice)device, 30, CmdTypeEnum.CATALOG.getType(),
-                    RandomStrUtil.getUUID());
-            System.out.println(invitePlay);
+                ServerSendCmd.deviceCatalogSubscribe((FromDevice)fromDevice, (ToDevice)device, 30, CmdTypeEnum.CATALOG.getType());
         }, 30 * 1000);
     }
 

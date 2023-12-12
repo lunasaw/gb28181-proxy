@@ -1,6 +1,14 @@
 package io.github.lunasaw.sip.common.transmit.event.message;
 
+import java.nio.charset.Charset;
+
+import javax.sip.RequestEvent;
+import javax.sip.message.Response;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.luna.common.text.StringTools;
+
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
@@ -8,11 +16,6 @@ import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.sip.RequestEvent;
-import javax.sip.message.Response;
-import java.nio.charset.Charset;
 
 @Getter
 @Setter
@@ -52,6 +55,10 @@ public class MessageHandlerAbstract implements MessageHandler {
 
     public void responseError(RequestEvent event) {
         ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "SERVER ERROR", event);
+    }
+
+    public void responseError(RequestEvent event, Integer code, String error) {
+        ResponseCmd.doResponseCmd(code, error, event);
     }
 
     public <T> T parseXml(Class<T> clazz) {

@@ -88,23 +88,22 @@ public class SipProcessorObserver implements SipListener {
      * @param requestEvent RequestEvent事件
      */
     @Override
+    @Async("sipTaskExecutor")
     public void processRequest(RequestEvent requestEvent) {
-        AsyncEngineUtils.execute(() -> {
-            String method = requestEvent.getRequest().getMethod();
-            List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
-            if (CollectionUtils.isEmpty(sipRequestProcessors)) {
-                log.warn("暂不支持方法 {} 的请求", method);
-                // TODO 回复错误玛
-                return;
+        String method = requestEvent.getRequest().getMethod();
+        List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
+        if (CollectionUtils.isEmpty(sipRequestProcessors)) {
+            log.warn("暂不支持方法 {} 的请求", method);
+            // TODO 回复错误玛
+            return;
+        }
+        try {
+            for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
+                sipRequestProcessor.process(requestEvent);
             }
-            try {
-                for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
-                    sipRequestProcessor.process(requestEvent);
-                }
-            } catch (Exception e) {
-                log.error("processRequest::requestEvent = {} ", requestEvent, e);
-            }
-        });
+        } catch (Exception e) {
+            log.error("processRequest::requestEvent = {} ", requestEvent, e);
+        }
     }
 
     /**
@@ -113,7 +112,7 @@ public class SipProcessorObserver implements SipListener {
      * @param responseEvent responseEvent事件
      */
     @Override
-    @Async("sipTaskExecutor")
+    // @Async("sipTaskExecutor")
     public void processResponse(ResponseEvent responseEvent) {
         Response response = responseEvent.getResponse();
         int status = response.getStatusCode();

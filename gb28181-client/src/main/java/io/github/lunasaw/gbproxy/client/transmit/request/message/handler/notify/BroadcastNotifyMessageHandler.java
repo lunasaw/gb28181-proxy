@@ -43,6 +43,9 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
 
         // 设备查询
         FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
+        if (fromDevice == null || !fromDevice.getUserId().equals(userId)) {
+            throw new RuntimeException("查询设备失败");
+        }
 
         DeviceBroadcastNotify broadcastNotify = parseXml(DeviceBroadcastNotify.class);
 

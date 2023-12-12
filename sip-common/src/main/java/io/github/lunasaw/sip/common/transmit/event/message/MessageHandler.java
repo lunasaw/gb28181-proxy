@@ -30,6 +30,15 @@ public interface MessageHandler extends RequestHandler {
     void responseError(RequestEvent event);
 
     /**
+     * 自定义错误回复
+     * 
+     * @param event
+     * @param code
+     * @param error
+     */
+    void responseError(RequestEvent event, Integer code, String error);
+
+    /**
      * 处理消息
      *
      * @param event
@@ -54,4 +63,13 @@ public interface MessageHandler extends RequestHandler {
      * 当前接受到的原始消息
      */
     void setXmlStr(String xmlStr);
+
+    /**
+     * 是否需要响应ack
+     *
+     * @return
+     */
+    default boolean needResponseAck() {
+        return true;
+    };
 }

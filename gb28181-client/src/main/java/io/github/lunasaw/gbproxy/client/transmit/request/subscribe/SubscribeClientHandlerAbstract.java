@@ -19,7 +19,7 @@ import lombok.Data;
 public abstract class SubscribeClientHandlerAbstract extends MessageHandlerAbstract {
 
     @Autowired
-    private SubscribeProcessorClient subscribeProcessorClient;
+    public SubscribeProcessorClient subscribeProcessorClient;
 
     public SubscribeClientHandlerAbstract(SubscribeProcessorClient subscribeProcessorClient) {
         this.subscribeProcessorClient = subscribeProcessorClient;

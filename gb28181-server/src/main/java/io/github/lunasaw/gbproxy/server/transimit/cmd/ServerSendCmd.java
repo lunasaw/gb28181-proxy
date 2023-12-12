@@ -169,7 +169,7 @@ public class ServerSendCmd {
 
     public static String deviceCatalogSubscribe(FromDevice fromDevice, ToDevice toDevice,
         Integer expires, String eventType) {
-        return deviceCatalogSubscribe(fromDevice, toDevice, expires, eventType, RandomStrUtil.getUUID());
+        return deviceCatalogSubscribe(fromDevice, toDevice, expires, eventType, RandomStrUtil.generateNonceStr());
     }
     /**
      * 会话订阅
@@ -185,9 +185,7 @@ public class ServerSendCmd {
         DeviceQuery recordQuery = new DeviceQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         SubscribeInfo subscribeInfo = new SubscribeInfo();
-        if (StringUtils.isEmpty(eventId)) {
-            subscribeInfo.setEventId(RandomStrUtil.getUUID());
-        }
+        subscribeInfo.setEventId(eventId);
         subscribeInfo.setEventType(eventType);
         subscribeInfo.setExpires(expires);
 

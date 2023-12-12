@@ -1,24 +1,26 @@
 package io.github.lunasaw.sip.common.transmit.event.message;
 
-import com.google.common.collect.Maps;
-import com.luna.common.text.StringTools;
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.sip.common.constant.Constant;
-import io.github.lunasaw.sip.common.entity.Device;
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
-import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
-import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
-import io.github.lunasaw.sip.common.utils.XmlUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
-
-import javax.sip.RequestEvent;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import javax.sip.RequestEvent;
+import javax.sip.message.Response;
+
+import org.apache.commons.collections4.MapUtils;
+
+import com.google.common.collect.Maps;
+import com.luna.common.text.StringTools;
+
+import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.entity.Device;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
+import io.github.lunasaw.sip.common.utils.XmlUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author luna
@@ -66,10 +68,12 @@ public abstract class SipMessageRequestProcessorAbstract extends SipRequestProce
         try {
             messageHandler.setXmlStr(xmlStr);
             messageHandler.handForEvt(evt);
-            messageHandler.responseAck(evt);
+            if (messageHandler.needResponseAck()) {
+                messageHandler.responseAck(evt);
+            }
         } catch (Exception e) {
             log.error("process::evt = {}, e", evt, e);
-            messageHandler.responseError(evt);
+            messageHandler.responseError(evt, Response.SERVER_INTERNAL_ERROR, e.getMessage());
         }
     }
 
