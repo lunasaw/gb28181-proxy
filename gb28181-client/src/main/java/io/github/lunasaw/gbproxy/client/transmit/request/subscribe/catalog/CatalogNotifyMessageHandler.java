@@ -2,21 +2,18 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe.catalog;
 
 import javax.sip.RequestEvent;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
-import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeClientHandlerAbstract;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.subscribe.SubscribeHolder;
-import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeProcessorClient;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.response.DeviceSubscribe;
+import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
+import io.github.lunasaw.sip.common.subscribe.SubscribeHolder;
+import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
-import io.github.lunasaw.sip.common.transmit.event.subscribe.SubscribeHandlerAbstract;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class CatalogNotifyMessageHandler extends SubscribeClientHandlerAbstract {
 
-    public static final String       CMD_TYPE = CmdTypeEnum.CATALOG.getType();
-
+    public static final String CMD_TYPE = CmdTypeEnum.CATALOG.getType();
 
     @Autowired
-    private SubscribeHolder          subscribeHolder;
+    private SubscribeHolder    subscribeHolder;
 
     public CatalogNotifyMessageHandler(SubscribeProcessorClient subscribeProcessorClient) {
         super(subscribeProcessorClient);

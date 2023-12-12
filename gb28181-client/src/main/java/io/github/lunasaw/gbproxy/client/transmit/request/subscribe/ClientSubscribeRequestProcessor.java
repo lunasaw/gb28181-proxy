@@ -2,14 +2,12 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe;
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.transmit.event.subscribe.SipSubscribeRequestProcessorAbstract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
-import io.github.lunasaw.sip.common.transmit.event.subscribe.SubscribeHandlerAbstract;
+import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Slf4j
-public class ClientSubscribeRequestProcessor extends SipSubscribeRequestProcessorAbstract {
+public class ClientSubscribeRequestProcessor extends SipMessageRequestProcessorAbstract {
 
     public static final String       METHOD = "SUBSCRIBE";
 
@@ -52,7 +50,7 @@ public class ClientSubscribeRequestProcessor extends SipSubscribeRequestProcesso
             return;
         }
 
-        doSubscribeHandForEvt(evt, fromDevice);
+        doMessageHandForEvt(evt, fromDevice);
     }
 
 

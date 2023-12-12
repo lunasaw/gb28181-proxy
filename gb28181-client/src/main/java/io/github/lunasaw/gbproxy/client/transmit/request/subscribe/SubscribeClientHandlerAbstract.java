@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.transmit.event.subscribe.SubscribeHandlerAbstract;
+import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
 
@@ -17,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @Component
-public abstract class SubscribeClientHandlerAbstract extends SubscribeHandlerAbstract {
+public abstract class SubscribeClientHandlerAbstract extends MessageHandlerAbstract {
 
     @Autowired
     private SubscribeProcessorClient subscribeProcessorClient;

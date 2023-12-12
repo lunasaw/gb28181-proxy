@@ -1,23 +1,17 @@
-package io.github.lunasaw.sip.common.transmit.event.message;
-
-import io.github.lunasaw.sip.common.transmit.event.handler.RequestHandler;
+package io.github.lunasaw.sip.common.transmit.event.handler;
 
 import javax.sip.RequestEvent;
 
 /**
- * 对message类型的请求单独抽象，根据cmdType进行处理
+ * @author weidian
+ * @version 1.0
+ * @date 2023/12/12
+ * @description:
  */
-public interface MessageHandler extends RequestHandler {
-
-
-    String QUERY = "Query";
-    String CONTROL = "Control";
-    String NOTIFY = "Notify";
-    String RESPONSE = "Response";
-
+public interface RequestHandler {
     /**
      * 响应ack
-     * 
+     *
      * @param event 请求事件
      */
     void responseAck(RequestEvent event);
