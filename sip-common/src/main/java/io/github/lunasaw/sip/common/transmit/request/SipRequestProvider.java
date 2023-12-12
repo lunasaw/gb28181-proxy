@@ -303,6 +303,7 @@ public class SipRequestProvider {
      * @return Request
      */
     public static Request createSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, SubscribeInfo subscribeInfo, String callId) {
+        Assert.notNull(subscribeInfo, "subscribeInfo is null");
         SipMessage sipMessage = SipMessage.getSubscribeBody();
         sipMessage.setMethod(Request.SUBSCRIBE);
         sipMessage.setContent(content);
@@ -310,8 +311,9 @@ public class SipRequestProvider {
 
         UserAgentHeader userAgentHeader = SipRequestUtils.createUserAgentHeader(fromDevice.getAgent());
         ContactHeader contactHeader = SipRequestUtils.createContactHeader(fromDevice.getUserId(), fromDevice.getHostAddress());
+        EventHeader eventHeader = SipRequestUtils.createEventHeader(subscribeInfo.getEventType(), subscribeInfo.getEventId());
 
-        sipMessage.addHeader(userAgentHeader).addHeader(contactHeader);
+        sipMessage.addHeader(userAgentHeader).addHeader(contactHeader).addHeader(eventHeader);
 
         return createSipRequest(fromDevice, toDevice, sipMessage, subscribeInfo);
     }
