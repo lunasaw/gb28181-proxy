@@ -1,17 +1,13 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.transmit.event.request.SipMessageRequestProcessorAbstract;
+import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;

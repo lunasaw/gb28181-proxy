@@ -6,6 +6,7 @@ import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import com.luna.common.text.StringTools;
 
@@ -13,13 +14,15 @@ import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
-import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
+@Slf4j
+@Component
 public class SubscribeHandlerAbstract implements SubscribeHandler {
 
     private String xmlStr;

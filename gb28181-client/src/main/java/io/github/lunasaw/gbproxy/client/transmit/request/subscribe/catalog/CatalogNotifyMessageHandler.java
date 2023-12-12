@@ -3,6 +3,8 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe.catalog;
 import javax.sip.RequestEvent;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeClientHandlerAbstract;
 import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
 import io.github.lunasaw.sip.common.subscribe.SubscribeHolder;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
@@ -29,15 +31,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class CatalogNotifyMessageHandler extends SubscribeHandlerAbstract {
+public class CatalogNotifyMessageHandler extends SubscribeClientHandlerAbstract {
 
     public static final String       CMD_TYPE = CmdTypeEnum.CATALOG.getType();
 
-    @Autowired
-    private SubscribeProcessorClient subscribeProcessorClient;
 
     @Autowired
     private SubscribeHolder          subscribeHolder;
+
+    public CatalogNotifyMessageHandler(SubscribeProcessorClient subscribeProcessorClient) {
+        super(subscribeProcessorClient);
+    }
 
     @Override
     public String getRootType() {
@@ -55,6 +59,7 @@ public class CatalogNotifyMessageHandler extends SubscribeHandlerAbstract {
 
         DeviceQuery deviceQuery = parseXml(DeviceQuery.class);
 
+        // 放入本地Map 回复成功
     }
 
     @Override
