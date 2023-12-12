@@ -1,11 +1,13 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.subscribe.catalog;
 
 import javax.sip.RequestEvent;
+import javax.sip.header.ContentTypeHeader;
 import javax.sip.header.ExpiresHeader;
 import javax.sip.message.Response;
 
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.response.DeviceSubscribe;
+import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +67,9 @@ public class CatalogQueryMessageHandler extends SubscribeClientHandlerAbstract {
 
         DeviceSubscribe deviceSubscribe = subscribeProcessorClient.getDeviceSubscribe(deviceQuery);
         ExpiresHeader expiresHeader = SipRequestUtils.createExpiresHeader(subscribeInfo.getExpires());
-        ResponseCmd.doResponseCmd(Response.OK, deviceSubscribe.toString(), event, expiresHeader);
+
+        ContentTypeHeader contentTypeHeader = ContentTypeEnum.APPLICATION_XML.getContentTypeHeader();
+        ResponseCmd.doResponseCmd(Response.OK, deviceSubscribe.toString(), contentTypeHeader, event, expiresHeader);
     }
 
     @Override

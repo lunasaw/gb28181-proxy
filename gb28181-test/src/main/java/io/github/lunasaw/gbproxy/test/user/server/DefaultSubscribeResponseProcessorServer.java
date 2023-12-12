@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.user.server;
 
+import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +27,7 @@ public class DefaultSubscribeResponseProcessorServer implements SubscribeRespons
 
     @Override
     public void subscribeResult(DeviceSubscribe deviceSubscribe) {
-        log.error("收到订阅消息响应 subscribeResult::deviceSubscribe = {} ", deviceSubscribe);
+        log.error("收到订阅消息响应 subscribeResult::deviceSubscribe = {} ", JSON.toJSONString(deviceSubscribe));
     }
 
     @Override

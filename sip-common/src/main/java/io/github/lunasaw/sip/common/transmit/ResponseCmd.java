@@ -55,6 +55,9 @@ public class ResponseCmd {
         doResponseCmd(statusCode, phrase, null, null, event, headers);
     }
 
+    public static void doResponseCmd(int statusCode, String content, ContentTypeHeader contentTypeHeader, RequestEvent event, Header... headers) {
+        doResponseCmd(statusCode, null, content, contentTypeHeader, event, Arrays.asList(headers));
+    }
 
     public static void doResponseCmd(int statusCode, String phrase, String content, ContentTypeHeader contentTypeHeader, RequestEvent event,
         List<Header> headers) {
