@@ -28,20 +28,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class CatalogNotifyMessageHandler extends SubscribeClientHandlerAbstract {
+public class CatalogQueryMessageHandler extends SubscribeClientHandlerAbstract {
 
     public static final String CMD_TYPE = CmdTypeEnum.CATALOG.getType();
 
     @Autowired
     private SubscribeHolder    subscribeHolder;
 
-    public CatalogNotifyMessageHandler(SubscribeProcessorClient subscribeProcessorClient) {
+    public CatalogQueryMessageHandler(SubscribeProcessorClient subscribeProcessorClient) {
         super(subscribeProcessorClient);
     }
 
     @Override
     public String getRootType() {
-        return MessageHandler.NOTIFY;
+        return MessageHandler.QUERY;
     }
 
     @Override
@@ -62,4 +62,5 @@ public class CatalogNotifyMessageHandler extends SubscribeClientHandlerAbstract 
     public String getCmdType() {
         return CMD_TYPE;
     }
+
 }

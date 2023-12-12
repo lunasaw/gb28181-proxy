@@ -7,6 +7,7 @@ import javax.sip.address.SipURI;
 
 import io.github.lunasaw.gbproxy.server.entity.InviteEntity;
 import io.github.lunasaw.gbproxy.server.enums.PlayActionEnums;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import com.luna.common.date.DateUtils;
@@ -166,6 +167,10 @@ public class ServerSendCmd {
         return deviceRecordInfoQuery(fromDevice, toDevice, startTimeStr, endTimeStr, secrecy, type);
     }
 
+    public static String deviceCatalogSubscribe(FromDevice fromDevice, ToDevice toDevice,
+        Integer expires, String eventType) {
+        return deviceCatalogSubscribe(fromDevice, toDevice, expires, eventType, RandomStrUtil.getUUID());
+    }
     /**
      * 会话订阅
      *
@@ -180,7 +185,9 @@ public class ServerSendCmd {
         DeviceQuery recordQuery = new DeviceQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
 
         SubscribeInfo subscribeInfo = new SubscribeInfo();
-        subscribeInfo.setEventId(eventId);
+        if (StringUtils.isEmpty(eventId)) {
+            subscribeInfo.setEventId(RandomStrUtil.getUUID());
+        }
         subscribeInfo.setEventType(eventType);
         subscribeInfo.setExpires(expires);
 

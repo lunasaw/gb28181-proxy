@@ -2,6 +2,8 @@ package io.github.lunasaw.gbproxy.test.subscribe;
 
 import java.util.Date;
 
+import com.luna.common.text.RandomStrUtil;
+import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +66,8 @@ public class SubscribeServerTest {
                 return;
             }
             String invitePlay =
-                ServerSendCmd.deviceCatalogSubscribe((FromDevice)fromDevice, (ToDevice)device, 30, "", "2023-11-29 00:00:00");
+                ServerSendCmd.deviceCatalogSubscribe((FromDevice)fromDevice, (ToDevice)device, 30, CmdTypeEnum.CATALOG.getType(),
+                    RandomStrUtil.getUUID());
             System.out.println(invitePlay);
         }, 30 * 1000);
     }
