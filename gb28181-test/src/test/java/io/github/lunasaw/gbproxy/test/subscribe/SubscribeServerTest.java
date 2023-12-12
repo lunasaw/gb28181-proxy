@@ -59,7 +59,7 @@ public class SubscribeServerTest {
 
     @Test
     public void test_subscribe() {
-        dynamicTask.startCron("test_subscribe", () -> {
+        dynamicTask.startDelay("test_subscribe", () -> {
             Device device = DeviceConfig.DEVICE_SERVER_VIEW_MAP.get("33010602011187000001");
             if (device == null) {
                 test_subscribe();
@@ -67,6 +67,7 @@ public class SubscribeServerTest {
             }
             String invitePlay =
                 ServerSendCmd.deviceCatalogSubscribe((FromDevice)fromDevice, (ToDevice)device, 30, CmdTypeEnum.CATALOG.getType());
+            log.info("test_subscribe:: callId = {}", invitePlay);
         }, 30 * 1000);
     }
 

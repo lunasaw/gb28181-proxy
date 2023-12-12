@@ -27,7 +27,7 @@ public class DefaultSubscribeResponseProcessorServer implements SubscribeRespons
 
     @Override
     public void subscribeResult(DeviceSubscribe deviceSubscribe) {
-        log.error("收到订阅消息响应 subscribeResult::deviceSubscribe = {} ", JSON.toJSONString(deviceSubscribe));
+        log.info("收到订阅消息响应 subscribeResult::deviceSubscribe = {} ", JSON.toJSONString(deviceSubscribe));
     }
 
     @Override

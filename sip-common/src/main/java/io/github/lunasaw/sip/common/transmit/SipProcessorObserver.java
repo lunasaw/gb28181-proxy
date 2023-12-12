@@ -12,10 +12,8 @@ import javax.sip.message.Request;
 import javax.sip.message.Response;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.scheduling.annotation.Async;
 
 import com.alibaba.fastjson.JSON;
-import com.luna.common.thread.AsyncEngineUtils;
 
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
@@ -88,7 +86,6 @@ public class SipProcessorObserver implements SipListener {
      * @param requestEvent RequestEvent事件
      */
     @Override
-    @Async("sipTaskExecutor")
     public void processRequest(RequestEvent requestEvent) {
         String method = requestEvent.getRequest().getMethod();
         List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
@@ -112,7 +109,6 @@ public class SipProcessorObserver implements SipListener {
      * @param responseEvent responseEvent事件
      */
     @Override
-    // @Async("sipTaskExecutor")
     public void processResponse(ResponseEvent responseEvent) {
         Response response = responseEvent.getResponse();
         int status = response.getStatusCode();
