@@ -17,7 +17,7 @@ import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeClie
 import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeProcessorClient;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import lombok.Getter;

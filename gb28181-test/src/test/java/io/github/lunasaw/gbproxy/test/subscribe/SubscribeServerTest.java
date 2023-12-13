@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.test.subscribe;
 
-import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

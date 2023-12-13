@@ -1,4 +1,4 @@
-package io.github.lunasaw.sip.common.enums;
+package io.github.lunasaw.gb28181.common.entity.enums;
 
 import java.util.HashMap;
 import java.util.Map;

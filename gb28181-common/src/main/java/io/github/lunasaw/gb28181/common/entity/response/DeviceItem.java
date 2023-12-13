@@ -2,13 +2,13 @@ package io.github.lunasaw.gb28181.common.entity.response;
 
 import javax.xml.bind.annotation.*;
 
+import io.github.lunasaw.gb28181.common.entity.enums.DeviceGbType;
 import org.apache.commons.lang3.StringUtils;
 
 import com.luna.common.check.Assert;
 import com.luna.common.date.DateUtils;
 import com.luna.common.os.SystemInfoUtil;
 
-import io.github.lunasaw.sip.common.enums.DeviceGbType;
 import lombok.Getter;
 import lombok.Setter;
 

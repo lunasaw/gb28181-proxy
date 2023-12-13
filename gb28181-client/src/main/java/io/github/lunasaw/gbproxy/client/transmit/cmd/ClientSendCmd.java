@@ -10,7 +10,7 @@ import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.gb28181.common.entity.notify.*;
 import io.github.lunasaw.gb28181.common.entity.response.*;
-import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
 import io.github.lunasaw.sip.common.transmit.event.Event;

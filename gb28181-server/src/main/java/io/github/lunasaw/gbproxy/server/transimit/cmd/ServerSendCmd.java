@@ -18,11 +18,11 @@ import io.github.lunasaw.gbproxy.server.entity.InviteRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
-import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
-import io.github.lunasaw.sip.common.enums.PtzCmdEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
+import io.github.lunasaw.gb28181.common.entity.utils.PtzCmdEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
-import io.github.lunasaw.sip.common.utils.PtzUtils;
+import io.github.lunasaw.gb28181.common.entity.utils.PtzUtils;
 
 /**
  * @author luna

@@ -1,6 +1,5 @@
-package io.github.lunasaw.sip.common.utils;
+package io.github.lunasaw.gb28181.common.entity.utils;
 
-import io.github.lunasaw.sip.common.enums.PtzCmdEnum;
 
 public class PtzUtils {
 

@@ -9,7 +9,7 @@ import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceQuery;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;
-import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeHolder;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 
