@@ -21,11 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class ResponseCatalogMessageServerHandler extends MessageServerHandlerAbstract {
+public class ResponseCatalogMessageHandler extends MessageServerHandlerAbstract {
 
     public static final String CMD_TYPE = "Catalog";
 
-    public ResponseCatalogMessageServerHandler(MessageProcessorServer messageProcessorServer) {
+    public ResponseCatalogMessageHandler(MessageProcessorServer messageProcessorServer) {
         super(messageProcessorServer);
     }
 
@@ -34,7 +34,7 @@ public class ResponseCatalogMessageServerHandler extends MessageServerHandlerAbs
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
-        ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
+        ToDevice toDevice = (ToDevice)messageProcessorServer.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;

@@ -21,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class RecordInfoMessageServerHandler extends MessageServerHandlerAbstract {
+public class RecordInfoMessageHandler extends MessageServerHandlerAbstract {
 
     public static final String CMD_TYPE = "RecordInfo";
 
     private String             cmdType  = CMD_TYPE;
 
-    public RecordInfoMessageServerHandler(MessageProcessorServer messageProcessorServer) {
+    public RecordInfoMessageHandler(MessageProcessorServer messageProcessorServer) {
         super(messageProcessorServer);
     }
 
