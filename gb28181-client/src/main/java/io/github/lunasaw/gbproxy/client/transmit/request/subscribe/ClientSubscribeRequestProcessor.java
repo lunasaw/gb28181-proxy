@@ -1,8 +1,9 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.subscribe;
 
+import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
@@ -28,8 +29,12 @@ public class ClientSubscribeRequestProcessor extends SipMessageRequestProcessorA
 
     private String                   method = METHOD;
 
-    @Autowired
+    @Resource
     private SubscribeProcessorClient subscribeProcessorClient;
+
+    public ClientSubscribeRequestProcessor(@Lazy SubscribeProcessorClient subscribeProcessorClient) {
+        this.subscribeProcessorClient = subscribeProcessorClient;
+    }
 
     /**
      * 收到SUBSCRIBE请求 处理
