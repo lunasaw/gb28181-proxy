@@ -1,30 +1,29 @@
 package io.github.lunasaw.sip.common.transmit.request;
 
+import java.text.ParseException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.sip.address.SipURI;
+import javax.sip.address.URI;
+import javax.sip.header.*;
+import javax.sip.message.Request;
+
+import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
+import org.springframework.util.DigestUtils;
+
 import com.luna.common.check.Assert;
+
 import gov.nist.javax.sip.message.SIPRequest;
 import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import io.github.lunasaw.sip.common.entity.SipMessage;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
-import io.github.lunasaw.sip.common.utils.SipUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Lists;
-import org.springframework.util.DigestUtils;
-
-import javax.sdp.SessionDescription;
-import javax.sip.SipFactory;
-import javax.sip.address.SipURI;
-import javax.sip.address.URI;
-import javax.sip.header.*;
-import javax.sip.message.Request;
-import java.text.ParseException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Sip命令request创造器

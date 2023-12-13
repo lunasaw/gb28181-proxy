@@ -9,17 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
 import io.github.lunasaw.gbproxy.test.Gb28181ApplicationTest;
 import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
-import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.layer.SipLayer;
 import io.github.lunasaw.sip.common.transmit.SipSender;
-import io.github.lunasaw.sip.common.transmit.event.Event;
-import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.extern.slf4j.Slf4j;

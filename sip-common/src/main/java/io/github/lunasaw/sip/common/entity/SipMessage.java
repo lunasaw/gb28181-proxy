@@ -6,13 +6,13 @@ import javax.sip.header.ContentTypeHeader;
 import javax.sip.header.Header;
 import javax.sip.message.Request;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.assertj.core.util.Lists;
+
 import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.sequence.GenerateSequenceImpl;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
-import org.apache.commons.collections4.CollectionUtils;
-import org.assertj.core.util.Lists;
-
 import lombok.Data;
 
 /**

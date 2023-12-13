@@ -1,7 +1,7 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
 import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.sip.common.entity.base.DeviceSession;
+import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;

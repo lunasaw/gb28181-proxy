@@ -1,11 +1,11 @@
 package io.github.lunasaw.gbproxy.test.user.client;
 
+import io.github.lunasaw.gb28181.common.entity.response.*;
 import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
-import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
-import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
-import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
-import io.github.lunasaw.sip.common.entity.query.DeviceConfigDownload;
-import io.github.lunasaw.sip.common.entity.response.*;
+import io.github.lunasaw.gb28181.common.entity.notify.DeviceAlarmNotify;
+import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
+import io.github.lunasaw.gb28181.common.entity.query.DeviceAlarmQuery;
+import io.github.lunasaw.gb28181.common.entity.query.DeviceConfigDownload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.Device;
-import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
+import io.github.lunasaw.gb28181.common.entity.query.DeviceRecordQuery;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 
 /**

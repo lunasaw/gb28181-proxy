@@ -27,6 +27,11 @@
             <groupId>io.github.lunasaw</groupId>
             <artifactId>sip-common</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.lunasaw</groupId>
+            <artifactId>gb28181-common</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

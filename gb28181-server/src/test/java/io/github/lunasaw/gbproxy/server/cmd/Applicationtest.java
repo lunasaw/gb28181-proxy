@@ -1,6 +1,5 @@
 package io.github.lunasaw.gbproxy.server.cmd;
 
-import com.luna.common.os.SystemInfoUtil;
 import io.github.lunasaw.gbproxy.server.Gb28181Server;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
 import io.github.lunasaw.sip.common.entity.FromDevice;

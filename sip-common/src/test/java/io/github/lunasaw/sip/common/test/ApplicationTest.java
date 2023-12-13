@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.luna.common.os.SystemInfoUtil;
-import com.luna.common.text.RandomStrUtil;
 
 import lombok.SneakyThrows;
 

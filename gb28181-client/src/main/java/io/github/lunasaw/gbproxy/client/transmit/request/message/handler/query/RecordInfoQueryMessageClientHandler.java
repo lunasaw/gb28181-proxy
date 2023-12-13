@@ -6,9 +6,9 @@ import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
-import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
+import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.gb28181.common.entity.query.DeviceRecordQuery;
+import io.github.lunasaw.gb28181.common.entity.response.DeviceRecord;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;

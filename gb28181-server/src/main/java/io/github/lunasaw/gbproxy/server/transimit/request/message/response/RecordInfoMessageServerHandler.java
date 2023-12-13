@@ -3,9 +3,8 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.response;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
-import io.github.lunasaw.sip.common.utils.SipUtils;
+import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.gb28181.common.entity.response.DeviceRecord;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;

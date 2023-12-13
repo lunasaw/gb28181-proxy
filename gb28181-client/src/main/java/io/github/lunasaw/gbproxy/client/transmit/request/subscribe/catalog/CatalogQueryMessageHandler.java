@@ -6,20 +6,18 @@ import javax.sip.header.ExpiresHeader;
 import javax.sip.message.Response;
 
 import io.github.lunasaw.sip.common.entity.Device;
-import io.github.lunasaw.sip.common.entity.response.DeviceSubscribe;
+import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;
 import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeProcessorClient;
-import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
+import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.gb28181.common.entity.query.DeviceQuery;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
-import io.github.lunasaw.sip.common.subscribe.SubscribeHolder;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import lombok.Getter;

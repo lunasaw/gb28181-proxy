@@ -2,8 +2,6 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.contro
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.enums.DeviceControlType;
 import lombok.Getter;
 import lombok.Setter;

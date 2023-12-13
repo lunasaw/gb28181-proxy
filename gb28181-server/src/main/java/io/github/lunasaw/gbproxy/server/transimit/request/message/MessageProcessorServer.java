@@ -1,12 +1,12 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
-import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
-import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
-import io.github.lunasaw.sip.common.entity.notify.MediaStatusNotify;
-import io.github.lunasaw.sip.common.entity.notify.MobilePositionNotify;
-import io.github.lunasaw.sip.common.entity.response.DeviceRecord;
-import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
+import io.github.lunasaw.gb28181.common.entity.notify.DeviceAlarmNotify;
+import io.github.lunasaw.gb28181.common.entity.notify.DeviceKeepLiveNotify;
+import io.github.lunasaw.gb28181.common.entity.notify.MediaStatusNotify;
+import io.github.lunasaw.gb28181.common.entity.notify.MobilePositionNotify;
+import io.github.lunasaw.gb28181.common.entity.response.DeviceRecord;
+import io.github.lunasaw.gb28181.common.entity.response.DeviceResponse;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 
 /**

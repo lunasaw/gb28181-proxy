@@ -1,16 +1,15 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
+import io.github.lunasaw.gb28181.common.entity.response.*;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.notify.BroadcastNotifyMessageHandler;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.CatalogQueryMessageClientHandler;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.DeviceInfoQueryMessageClientHandler;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query.DeviceStatusQueryMessageClientHandler;
-import io.github.lunasaw.sip.common.entity.control.DeviceControlBase;
-import io.github.lunasaw.sip.common.entity.notify.DeviceAlarmNotify;
-import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
-import io.github.lunasaw.sip.common.entity.query.DeviceAlarmQuery;
-import io.github.lunasaw.sip.common.entity.query.DeviceConfigDownload;
-import io.github.lunasaw.sip.common.entity.query.DeviceRecordQuery;
-import io.github.lunasaw.sip.common.entity.response.*;
+import io.github.lunasaw.gb28181.common.entity.notify.DeviceAlarmNotify;
+import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
+import io.github.lunasaw.gb28181.common.entity.query.DeviceAlarmQuery;
+import io.github.lunasaw.gb28181.common.entity.query.DeviceConfigDownload;
+import io.github.lunasaw.gb28181.common.entity.query.DeviceRecordQuery;
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 
 /**

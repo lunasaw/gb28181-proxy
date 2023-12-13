@@ -13,6 +13,7 @@
         <module>gb28181-client</module>
         <module>gb28181-server</module>
         <module>gb28181-test</module>
+        <module>gb28181-common</module>
     </modules>
     <name>sip-proxy</name>
     <description>轻量级SIP框架封装</description>
@@ -83,6 +84,11 @@
                 <version>${sip-proxy-common.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.github.lunasaw</groupId>
+                <artifactId>gb28181-common</artifactId>
+                <version>${sip-proxy-common.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -5,11 +5,11 @@ import java.util.List;
 import com.luna.common.check.Assert;
 import com.luna.common.text.RandomStrUtil;
 
-import io.github.lunasaw.sip.common.entity.DeviceAlarm;
+import io.github.lunasaw.gb28181.common.entity.DeviceAlarm;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.entity.notify.*;
-import io.github.lunasaw.sip.common.entity.response.*;
+import io.github.lunasaw.gb28181.common.entity.notify.*;
+import io.github.lunasaw.gb28181.common.entity.response.*;
 import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
@@ -29,7 +29,7 @@ public class ClientSendCmd {
      * @return
      */
     public static String deviceAlarmNotify(FromDevice fromDevice, ToDevice toDevice, DeviceAlarmNotify deviceAlarmNotify) {
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceAlarmNotify);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceAlarmNotify.toString());
     }
 
     /**
@@ -45,7 +45,7 @@ public class ClientSendCmd {
 
         deviceAlarmNotify.setAlarm(deviceAlarm);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceAlarmNotify);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceAlarmNotify.toString());
     }
 
     /**
@@ -70,7 +70,7 @@ public class ClientSendCmd {
 
         deviceKeepLiveNotify.setStatus(status);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceKeepLiveNotify, errorEvent, okEvent);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceKeepLiveNotify.toString(), errorEvent, okEvent);
     }
 
     /**
@@ -82,7 +82,7 @@ public class ClientSendCmd {
      * @return
      */
     public static String deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, DeviceResponse deviceResponse) {
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceResponse);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceResponse.toString());
     }
 
     public static String deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems, String sn) {
@@ -120,7 +120,7 @@ public class ClientSendCmd {
 
         deviceInfo.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
         deviceInfo.setSn(RandomStrUtil.getValidationCode());
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceInfo);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceInfo.toString());
     }
 
     /**
@@ -138,7 +138,7 @@ public class ClientSendCmd {
 
         deviceStatus.setOnline(online);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceStatus);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceStatus.toString());
     }
 
     /**
@@ -154,7 +154,7 @@ public class ClientSendCmd {
         mobilePositionNotify.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
         mobilePositionNotify.setSn(RandomStrUtil.getValidationCode());
         mobilePositionNotify.setDeviceId(fromDevice.getUserId());
-        return SipSender.doNotifyRequest(fromDevice, toDevice, mobilePositionNotify, subscribeInfo);
+        return SipSender.doNotifyRequest(fromDevice, toDevice, mobilePositionNotify.toString(), subscribeInfo);
     }
 
     /**
@@ -173,7 +173,7 @@ public class ClientSendCmd {
         deviceUpdateNotify.setSumNum(deviceItems.size());
         deviceUpdateNotify.setDeviceItemList(deviceItems);
 
-        return SipSender.doNotifyRequest(fromDevice, toDevice, deviceUpdateNotify, subscribeInfo);
+        return SipSender.doNotifyRequest(fromDevice, toDevice, deviceUpdateNotify.toString(), subscribeInfo);
     }
 
     /**
@@ -192,7 +192,7 @@ public class ClientSendCmd {
         deviceUpdateNotify.setSumNum(deviceItems.size());
         deviceUpdateNotify.setDeviceItemList(deviceItems);
 
-        return SipSender.doNotifyRequest(fromDevice, toDevice, deviceUpdateNotify, subscribeInfo);
+        return SipSender.doNotifyRequest(fromDevice, toDevice, deviceUpdateNotify.toString(), subscribeInfo);
     }
 
     /**
@@ -205,7 +205,7 @@ public class ClientSendCmd {
      */
     public static String deviceRecordResponse(FromDevice fromDevice, ToDevice toDevice, DeviceRecord deviceRecord) {
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceRecord);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceRecord.toString());
     }
 
     /**
@@ -235,7 +235,7 @@ public class ClientSendCmd {
      * @return
      */
     public static String deviceConfigResponse(FromDevice fromDevice, ToDevice toDevice, DeviceConfigResponse deviceConfigResponse) {
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfigResponse);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfigResponse.toString());
     }
 
     public static String deviceConfigResponse(FromDevice fromDevice, ToDevice toDevice, DeviceConfigResponse.BasicParam basicParam) {
@@ -262,7 +262,7 @@ public class ClientSendCmd {
 
         mediaStatusNotify.setNotifyType(notifyType);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, mediaStatusNotify);
+        return SipSender.doMessageRequest(fromDevice, toDevice, mediaStatusNotify.toString());
     }
 
     /**

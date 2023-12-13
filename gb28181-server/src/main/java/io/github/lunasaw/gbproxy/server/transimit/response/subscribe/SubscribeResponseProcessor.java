@@ -4,9 +4,7 @@ import javax.sip.ResponseEvent;
 import javax.sip.message.Response;
 
 import gov.nist.javax.sip.message.SIPResponse;
-import io.github.lunasaw.sip.common.entity.query.DeviceQuery;
-import io.github.lunasaw.sip.common.entity.response.DeviceResponse;
-import io.github.lunasaw.sip.common.entity.response.DeviceSubscribe;
+import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +45,6 @@ public class SubscribeResponseProcessor extends SipResponseProcessorAbstract {
     public void process(ResponseEvent evt) {
         SIPResponse response = (SIPResponse)evt.getResponse();
         if (response.getStatusCode() != Response.OK) {
-            log.error("process::evt = {} ", evt);
             return;
         }
         DeviceSubscribe deviceSubscribe = SipUtils.parseResponse(evt, DeviceSubscribe.class);
