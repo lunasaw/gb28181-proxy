@@ -69,12 +69,12 @@ public class StackLoggerImpl implements StackLogger {
 
     @Override
     public void logDebug(String message) {
-        log(LocationAwareLogger.INFO_INT, message);
+        // log(LocationAwareLogger.INFO_INT, message);
     }
 
     @Override
     public void logDebug(String message, Exception ex) {
-        log(LocationAwareLogger.INFO_INT, message, ex);
+        // log(LocationAwareLogger.INFO_INT, message, ex);
     }
 
     @Override

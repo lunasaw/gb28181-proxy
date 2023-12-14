@@ -68,13 +68,6 @@ public class SipSender {
         return callId;
     }
 
-    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expire) {
-        String callId = SipRequestUtils.getNewCallId();
-        Request messageRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, expire, callId);
-        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
-        return callId;
-    }
-
     public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String contend, SubscribeInfo subscribeInfo, Event errorEvent,
                                             Event okEvent) {
         String callId = SipRequestUtils.getNewCallId();
@@ -114,6 +107,21 @@ public class SipSender {
     public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, toDevice, content, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
+
+    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expires) {
+        return doRegisterRequest(fromDevice, toDevice, expires, SipRequestUtils.getNewCallId(), null, null);
+    }
+
+    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expires, Event event) {
+        return doRegisterRequest(fromDevice, toDevice, expires, SipRequestUtils.getNewCallId(), event, null);
+    }
+
+    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expires, String callId, Event errorEvent,
+        Event okEvent) {
+        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, expires, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), registerRequest, errorEvent, okEvent);
         return callId;
     }
 

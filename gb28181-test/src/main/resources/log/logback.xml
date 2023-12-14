@@ -33,7 +33,7 @@
 
     <!-- 按照每天生成日志文件 DEBUG以上级别的日志,仅用于测试环境,正式环境为info级别以上的日志-->
     <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/info.log</file>
+        <file>${LOG_HOME}/sip-proxy.log</file>
         <!-- 文件路径 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--历史日志文件输出的文件名 -->
@@ -58,7 +58,7 @@
 
     <!-- 生成 error格式日志开始 -->
     <appender name="ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/error.log</file>
+        <file>${LOG_HOME}/sip-proxy-error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--历史日志文件输出的文件名 -->
             <fileNamePattern>${LOG_HOME}/sip-proxy-error.log.%d{yyyy-MM-dd}.%i</fileNamePattern>

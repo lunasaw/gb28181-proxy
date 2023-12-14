@@ -10,8 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 获取sip默认配置
- *
- * @author lin
+ * 完整配置参考 gov.nist.javax.sip.SipStackImpl，需要下载源码
+ * gov/nist/javax/sip/SipStackImpl.class
+ * sip消息的解析在 gov.nist.javax.sip.stack.UDPMessageChannel的processIncomingDataPacket 方法
+ * 
+ * @author luna
  */
 @Slf4j
 public class DefaultProperties {
@@ -26,7 +29,7 @@ public class DefaultProperties {
          * sip_server_log.log 和 sip_debug_log.log ERROR, INFO, WARNING, OFF, DEBUG, TRACE
          */
         try {
-            File configFile = ResourceUtils.getFile("classpath:config.properties").getAbsoluteFile();
+            File configFile = ResourceUtils.getFile("classpath:sip/config.properties").getAbsoluteFile();
             properties.load(Files.newInputStream(configFile.toPath()));
         } catch (Exception e) {
             throw new RuntimeException(e);

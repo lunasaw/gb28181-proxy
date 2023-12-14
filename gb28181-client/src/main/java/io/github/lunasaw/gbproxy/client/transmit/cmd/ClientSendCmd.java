@@ -307,6 +307,10 @@ public class ClientSendCmd {
         return SipSender.doRegisterRequest(fromDevice, toDevice, expires);
     }
 
+    public static String deviceRegister(FromDevice fromDevice, ToDevice toDevice, Integer expires, Event event) {
+        return SipSender.doRegisterRequest(fromDevice, toDevice, expires, event);
+    }
+
     /**
      * 设备注销
      *

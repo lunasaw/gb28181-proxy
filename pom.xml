@@ -22,7 +22,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <spring-boot.version>2.7.10</spring-boot.version>
+        <spring-boot.version>2.7.18</spring-boot.version>
         <luna-common.version>2.5.2</luna-common.version>
         <github.username>lunasaw</github.username>
         <app.profiles>${project.name}</app.profiles>

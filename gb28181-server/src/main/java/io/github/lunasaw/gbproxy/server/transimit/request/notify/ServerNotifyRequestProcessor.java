@@ -1,21 +1,14 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.notify;
 
-import java.nio.charset.Charset;
-import java.util.Optional;
-
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
 import org.springframework.stereotype.Component;
 
-import com.luna.common.text.StringTools;
-
 import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.sip.common.constant.Constant;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
-import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.Getter;
 import lombok.Setter;
 
