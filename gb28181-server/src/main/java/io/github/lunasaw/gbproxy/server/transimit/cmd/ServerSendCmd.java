@@ -5,7 +5,8 @@ import java.util.Optional;
 
 import javax.sip.address.SipURI;
 
-import io.github.lunasaw.gbproxy.server.entity.InviteEntity;
+import io.github.lunasaw.gb28181.common.entity.control.*;
+import io.github.lunasaw.gb28181.common.entity.query.*;
 import io.github.lunasaw.gbproxy.server.enums.PlayActionEnums;
 import org.springframework.util.Assert;
 
@@ -16,14 +17,12 @@ import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.gbproxy.server.entity.InviteRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.entity.control.*;
-import io.github.lunasaw.sip.common.entity.notify.DeviceBroadcastNotify;
-import io.github.lunasaw.sip.common.entity.query.*;
-import io.github.lunasaw.sip.common.enums.CmdTypeEnum;
-import io.github.lunasaw.sip.common.enums.PtzCmdEnum;
+import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
+import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
+import io.github.lunasaw.gb28181.common.entity.utils.PtzCmdEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
-import io.github.lunasaw.sip.common.utils.PtzUtils;
+import io.github.lunasaw.gb28181.common.entity.utils.PtzUtils;
 
 /**
  * @author luna
@@ -40,7 +39,7 @@ public class ServerSendCmd {
      */
     public static String deviceInfo(FromDevice fromDevice, ToDevice toDevice) {
         DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.DEVICE_INFO.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery.toString());
     }
 
     /**
@@ -52,7 +51,7 @@ public class ServerSendCmd {
      */
     public static String devicePresetQuery(FromDevice fromDevice, ToDevice toDevice) {
         DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.PRESET_QUERY.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery.toString());
     }
 
     /**
@@ -67,7 +66,7 @@ public class ServerSendCmd {
                 new DeviceMobileQuery(CmdTypeEnum.MOBILE_POSITION.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
         deviceMobileQuery.setInterval(interval);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceMobileQuery);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceMobileQuery.toString());
     }
 
     /**
@@ -88,7 +87,7 @@ public class ServerSendCmd {
         subscribeInfo.setEventType(eventType);
         subscribeInfo.setExpires(expires);
 
-        return SipSender.doSubscribeRequest(fromDevice, toDevice, deviceMobileQuery, subscribeInfo);
+        return SipSender.doSubscribeRequest(fromDevice, toDevice, deviceMobileQuery.toString(), subscribeInfo);
     }
 
     /**
@@ -100,7 +99,7 @@ public class ServerSendCmd {
      */
     public static String deviceStatusQuery(FromDevice fromDevice, ToDevice toDevice) {
         DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.DEVICE_STATUS.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery.toString());
     }
 
     /**
@@ -112,7 +111,7 @@ public class ServerSendCmd {
      */
     public static String deviceCatalogQuery(FromDevice fromDevice, ToDevice toDevice) {
         DeviceQuery deviceQuery = new DeviceQuery(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), toDevice.getUserId());
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceQuery.toString());
     }
 
     public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, String startTime, String endTime) {
@@ -144,7 +143,7 @@ public class ServerSendCmd {
         recordQuery.setSecrecy(secrecy);
         recordQuery.setType(type);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, recordQuery);
+        return SipSender.doMessageRequest(fromDevice, toDevice, recordQuery.toString());
     }
 
     public static String deviceRecordInfoQuery(FromDevice fromDevice, ToDevice toDevice, Date startTime, Date endTime) {
@@ -166,6 +165,10 @@ public class ServerSendCmd {
         return deviceRecordInfoQuery(fromDevice, toDevice, startTimeStr, endTimeStr, secrecy, type);
     }
 
+    public static String deviceCatalogSubscribe(FromDevice fromDevice, ToDevice toDevice,
+        Integer expires, String eventType) {
+        return deviceCatalogSubscribe(fromDevice, toDevice, expires, eventType, RandomStrUtil.generateNonceStr());
+    }
     /**
      * 会话订阅
      *
@@ -184,7 +187,7 @@ public class ServerSendCmd {
         subscribeInfo.setEventType(eventType);
         subscribeInfo.setExpires(expires);
 
-        return SipSender.doSubscribeRequest(fromDevice, toDevice, recordQuery, subscribeInfo);
+        return SipSender.doSubscribeRequest(fromDevice, toDevice, recordQuery.toString(), subscribeInfo);
     }
 
     /**
@@ -211,7 +214,7 @@ public class ServerSendCmd {
         deviceAlarmQuery.setEndAlarmPriority(endPriority);
         deviceAlarmQuery.setAlarmType(alarmType);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceAlarmQuery);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceAlarmQuery.toString());
     }
 
     /**
@@ -256,7 +259,7 @@ public class ServerSendCmd {
                 new DeviceBroadcastNotify(CmdTypeEnum.BROADCAST.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId(),
                         toDevice.getUserId());
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceBroadcastNotify);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceBroadcastNotify.toString());
     }
 
     /**
@@ -271,7 +274,7 @@ public class ServerSendCmd {
         DeviceControlGuard deviceControl =
                 new DeviceControlGuard(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
         deviceControl.setGuardCmd(guardCmdStr);
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControl);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControl.toString());
     }
 
     /**
@@ -291,14 +294,14 @@ public class ServerSendCmd {
         deviceControlAlarm.setAlarmCmd("ResetAlarm");
         deviceControlAlarm.setAlarmInfo(new DeviceControlAlarm.AlarmInfo(alarmMethod, alarmType));
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlAlarm);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlAlarm.toString());
     }
 
     public static String deviceControlAlarm(FromDevice fromDevice, ToDevice toDevice, DeviceControlPosition.HomePosition homePosition) {
         DeviceControlPosition deviceControlPosition =
                 new DeviceControlPosition(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPosition);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPosition.toString());
     }
 
     /**
@@ -338,7 +341,7 @@ public class ServerSendCmd {
 
         deviceConfigControl.setBasicParam(new DeviceConfigControl.BasicParam(name, expiration, heartBeatInterval, heartBeatCount));
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfigControl);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfigControl.toString());
     }
 
     /**
@@ -357,7 +360,7 @@ public class ServerSendCmd {
 
         deviceConfig.setConfigType(configType);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfig);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceConfig.toString());
     }
 
     /**
@@ -372,7 +375,7 @@ public class ServerSendCmd {
                 new DeviceControlIFame(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
         String cmd = Optional.ofNullable(cmdStr).orElse("Send");
         deviceControlIFame.setIFameCmd(cmd);
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlIFame);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlIFame.toString());
     }
 
     /**
@@ -389,7 +392,7 @@ public class ServerSendCmd {
 
         dragZoomOut.setDragZoomOut(dragZoom);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomOut);
+        return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomOut.toString());
     }
 
     /**
@@ -406,7 +409,7 @@ public class ServerSendCmd {
 
         dragZoomIn.setDragZoomIn(dragZoom);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomIn);
+        return SipSender.doMessageRequest(fromDevice, toDevice, dragZoomIn.toString());
     }
 
     /**
@@ -438,7 +441,7 @@ public class ServerSendCmd {
         deviceControlPtz.setPtzCmd(ptzCmd);
         deviceControlPtz.setPtzInfo(new DeviceControlPtz.PtzInfo());
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPtz);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlPtz.toString());
     }
 
     /**
@@ -452,7 +455,7 @@ public class ServerSendCmd {
         DeviceControlTeleBoot deviceControlTeleBoot =
                 new DeviceControlTeleBoot(CmdTypeEnum.DEVICE_CONTROL.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlTeleBoot);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlTeleBoot.toString());
     }
 
     /**
@@ -469,7 +472,7 @@ public class ServerSendCmd {
 
         deviceControlRecordCmd.setRecordCmd(recordCmd);
 
-        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlRecordCmd);
+        return SipSender.doMessageRequest(fromDevice, toDevice, deviceControlRecordCmd.toString());
     }
 
     /**

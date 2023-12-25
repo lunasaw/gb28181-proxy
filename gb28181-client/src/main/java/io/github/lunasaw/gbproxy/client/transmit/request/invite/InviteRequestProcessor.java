@@ -5,14 +5,16 @@ import javax.sip.RequestEvent;
 import javax.sip.header.ContentTypeHeader;
 import javax.sip.message.Response;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.sip.common.entity.*;
-import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
-import io.github.lunasaw.sip.common.transmit.ResponseCmd;
-import io.github.lunasaw.sip.common.utils.SipUtils;
 import org.springframework.stereotype.Component;
 
+import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.sip.common.entity.GbSessionDescription;
+import io.github.lunasaw.sip.common.entity.Device;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
+import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
+import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

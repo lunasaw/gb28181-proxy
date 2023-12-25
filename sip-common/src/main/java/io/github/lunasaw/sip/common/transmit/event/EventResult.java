@@ -34,8 +34,8 @@ public class EventResult<T> {
                 this.msg = response.getReasonPhrase();
                 this.statusCode = response.getStatusCode();
             }
+            assert response != null;
             this.callId = ((CallIdHeader)response.getHeader(CallIdHeader.NAME)).getCallId();
-
         } else if (event instanceof TimeoutEvent) {
             TimeoutEvent timeoutEvent = (TimeoutEvent)event;
             this.type = EventResultType.timeout;

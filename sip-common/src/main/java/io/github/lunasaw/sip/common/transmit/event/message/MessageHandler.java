@@ -1,11 +1,13 @@
 package io.github.lunasaw.sip.common.transmit.event.message;
 
+import io.github.lunasaw.sip.common.transmit.event.handler.RequestHandler;
+
 import javax.sip.RequestEvent;
 
 /**
  * 对message类型的请求单独抽象，根据cmdType进行处理
  */
-public interface MessageHandler {
+public interface MessageHandler extends RequestHandler {
 
 
     String QUERY = "Query";
@@ -26,6 +28,15 @@ public interface MessageHandler {
      * @param event 请求事件
      */
     void responseError(RequestEvent event);
+
+    /**
+     * 自定义错误回复
+     * 
+     * @param event
+     * @param code
+     * @param error
+     */
+    void responseError(RequestEvent event, Integer code, String error);
 
     /**
      * 处理消息
@@ -52,4 +63,13 @@ public interface MessageHandler {
      * 当前接受到的原始消息
      */
     void setXmlStr(String xmlStr);
+
+    /**
+     * 是否需要响应ack
+     *
+     * @return
+     */
+    default boolean needResponseAck() {
+        return true;
+    };
 }

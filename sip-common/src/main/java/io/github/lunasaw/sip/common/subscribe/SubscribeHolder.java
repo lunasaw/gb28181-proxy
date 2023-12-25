@@ -35,10 +35,10 @@ public class SubscribeHolder {
         return catalogMap.get(platformId);
     }
 
-    public void removeCatalogSubscribe(String platformId) {
+    public void removeCatalogSubscribe(String sipId) {
 
-        catalogMap.remove(platformId);
-        String taskOverdueKey = taskOverduePrefix + "catalog_" + platformId;
+        catalogMap.remove(sipId);
+        String taskOverdueKey = taskOverduePrefix + "catalog_" + sipId;
         Runnable runnable = dynamicTask.get(taskOverdueKey);
         if (runnable instanceof SubscribeTask) {
             SubscribeTask subscribeTask = (SubscribeTask) runnable;

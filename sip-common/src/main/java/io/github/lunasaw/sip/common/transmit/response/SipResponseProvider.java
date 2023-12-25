@@ -7,7 +7,6 @@ import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.assertj.core.util.Lists;
 
 import javax.sip.header.*;
-import javax.sip.message.Request;
 import javax.sip.message.Response;
 import java.util.List;
 

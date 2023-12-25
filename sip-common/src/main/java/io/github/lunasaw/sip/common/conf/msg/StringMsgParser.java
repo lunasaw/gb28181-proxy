@@ -1,6 +1,7 @@
 package io.github.lunasaw.sip.common.conf.msg;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 
 import gov.nist.core.CommonLogger;
@@ -82,11 +83,7 @@ public class StringMsgParser implements MessageParser {
             int lineLength = i - lineStart;
 
             // Make it a String.
-            try {
-                currentLine = new String(msgBuffer, lineStart, lineLength, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                throw new ParseException("Bad message encoding!", 0);
-            }
+            currentLine = new String(msgBuffer, lineStart, lineLength, StandardCharsets.UTF_8);
 
             currentLine = trimEndOfLine(currentLine);
 

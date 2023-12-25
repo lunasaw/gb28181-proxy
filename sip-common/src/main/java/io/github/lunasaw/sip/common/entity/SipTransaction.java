@@ -1,7 +1,5 @@
 package io.github.lunasaw.sip.common.entity;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import gov.nist.javax.sip.message.SIPResponse;
 import lombok.Data;
 
 /**

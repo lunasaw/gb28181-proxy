@@ -6,7 +6,7 @@ import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.GbSessionDescription;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
-import io.github.lunasaw.sip.common.enums.InviteSessionNameEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.InviteSessionNameEnum;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

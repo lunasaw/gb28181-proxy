@@ -12,12 +12,10 @@ import javax.sip.message.Request;
 import javax.sip.message.Response;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.scheduling.annotation.Async;
 
-import com.luna.common.thread.AsyncEngineUtils;
+import com.alibaba.fastjson.JSON;
 
 import io.github.lunasaw.sip.common.transmit.event.Event;
-import io.github.lunasaw.sip.common.transmit.event.EventPublisher;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessor;
@@ -45,8 +43,6 @@ public class SipProcessorObserver implements SipListener {
      * 处理超时事件
      */
     private static final Map<String, ITimeoutProcessor> TIMEOUT_PROCESSOR_MAP = new ConcurrentHashMap<>();
-
-    private static final List<EventPublisher> eventPublishers = new ArrayList<>();
 
     /**
      * 添加 request订阅
@@ -91,22 +87,20 @@ public class SipProcessorObserver implements SipListener {
      */
     @Override
     public void processRequest(RequestEvent requestEvent) {
-        AsyncEngineUtils.execute(() -> {
-            String method = requestEvent.getRequest().getMethod();
-            List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
-            if (CollectionUtils.isEmpty(sipRequestProcessors)) {
-                log.warn("暂不支持方法 {} 的请求", method);
-                // TODO 回复错误玛
-                return;
+        String method = requestEvent.getRequest().getMethod();
+        List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
+        if (CollectionUtils.isEmpty(sipRequestProcessors)) {
+            log.warn("暂不支持方法 {} 的请求", method);
+            // TODO 回复错误玛
+            return;
+        }
+        try {
+            for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
+                sipRequestProcessor.process(requestEvent);
             }
-            try {
-                for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
-                    sipRequestProcessor.process(requestEvent);
-                }
-            } catch (Exception e) {
-                log.error("processRequest::requestEvent = {} ", requestEvent, e);
-            }
-        });
+        } catch (Exception e) {
+            log.error("processRequest::requestEvent = {} ", requestEvent, e);
+        }
     }
 
     /**
@@ -115,7 +109,6 @@ public class SipProcessorObserver implements SipListener {
      * @param responseEvent responseEvent事件
      */
     @Override
-    @Async("sipTaskExecutor")
     public void processResponse(ResponseEvent responseEvent) {
         Response response = responseEvent.getResponse();
         int status = response.getStatusCode();
@@ -161,71 +154,63 @@ public class SipProcessorObserver implements SipListener {
      */
     @Override
     public void processTimeout(TimeoutEvent timeoutEvent) {
-        log.info("[消息发送超时]");
         ClientTransaction clientTransaction = timeoutEvent.getClientTransaction();
 
-        if (clientTransaction != null) {
-            log.info("[发送错误订阅] clientTransaction != null");
-            Request request = clientTransaction.getRequest();
-            if (request != null) {
-                log.info("[发送错误订阅] request != null");
-                CallIdHeader callIdHeader = (CallIdHeader) request.getHeader(CallIdHeader.NAME);
-                if (callIdHeader != null) {
-                    log.info("[发送错误订阅]");
-                    Event subscribe = SipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
-                    EventResult eventResult = new EventResult(timeoutEvent);
-                    if (subscribe != null) {
-                        subscribe.response(eventResult);
-                    }
-                    SipSubscribe.removeOkSubscribe(callIdHeader.getCallId());
-                    SipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
-                }
-            }
+        if (clientTransaction == null) {
+            return;
         }
 
-        if (CollectionUtils.isNotEmpty(eventPublishers)) {
-            for (EventPublisher eventPublisher : eventPublishers) {
-                eventPublisher.requestTimeOut(timeoutEvent);
+        Request request = clientTransaction.getRequest();
+        if (request == null) {
+            return;
+        }
+
+        CallIdHeader callIdHeader = (CallIdHeader)request.getHeader(CallIdHeader.NAME);
+        if (callIdHeader != null) {
+            Event subscribe = SipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
+            EventResult eventResult = new EventResult(timeoutEvent);
+            if (subscribe != null) {
+                subscribe.response(eventResult);
             }
+            SipSubscribe.removeOkSubscribe(callIdHeader.getCallId());
+            SipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
         }
     }
 
     @Override
     public void processIOException(IOExceptionEvent exceptionEvent) {
-        System.out.println("processIOException");
+        log.error("processIOException::exceptionEvent = {} ", JSON.toJSONString(exceptionEvent));
     }
 
+    /**
+     * 事物结束
+     *
+     * @param timeoutEvent -- an event that indicates that the
+     * transaction has transitioned into the terminated state.
+     */
     @Override
-    public void processTransactionTerminated(TransactionTerminatedEvent transactionTerminatedEvent) {
-        // if (transactionTerminatedEvent.isServerTransaction()) {
-        // ServerTransaction serverTransaction = transactionTerminatedEvent.getServerTransaction();
-        // serverTransaction.get
-        // }
+    public void processTransactionTerminated(TransactionTerminatedEvent timeoutEvent) {
+        EventResult eventResult = new EventResult(timeoutEvent);
 
-        // Transaction transaction = null;
-        // System.out.println("processTransactionTerminated");
-        // if (transactionTerminatedEvent.isServerTransaction()) {
-        // transaction = transactionTerminatedEvent.getServerTransaction();
-        // }else {
-        // transaction = transactionTerminatedEvent.getClientTransaction();
-        // }
-        //
-        // System.out.println(transaction.getBranchId());
-        // System.out.println(transaction.getState());
-        // System.out.println(transaction.getRequest().getMethod());
-        // CallIdHeader header = (CallIdHeader)transaction.getRequest().getHeader(CallIdHeader.NAME);
-        // SipSubscribe.EventResult<TransactionTerminatedEvent> terminatedEventEventResult = new
-        // SipSubscribe.EventResult<>(transactionTerminatedEvent);
-
-        // SipSubscribe.getErrorSubscribe(header.getCallId()).response(terminatedEventEventResult);
+        Event timeOutSubscribe = SipSubscribe.getErrorSubscribe(eventResult.getCallId());
+        if (timeOutSubscribe != null) {
+            timeOutSubscribe.response(eventResult);
+        }
     }
 
+    /**
+     * 会话结束
+     *
+     * @param dialogTerminatedEvent -- an event that indicates that the
+     * dialog has transitioned into the terminated state.
+     */
     @Override
     public void processDialogTerminated(DialogTerminatedEvent dialogTerminatedEvent) {
-        CallIdHeader callId = dialogTerminatedEvent.getDialog().getCallId();
-    }
+        EventResult eventResult = new EventResult(dialogTerminatedEvent);
 
-    public void addPusher(EventPublisher eventPublisher) {
-        eventPublishers.add(eventPublisher);
+        Event timeOutSubscribe = SipSubscribe.getErrorSubscribe(eventResult.getCallId());
+        if (timeOutSubscribe != null) {
+            timeOutSubscribe.response(eventResult);
+        }
     }
 }

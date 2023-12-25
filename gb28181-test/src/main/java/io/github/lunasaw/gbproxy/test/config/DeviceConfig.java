@@ -3,17 +3,15 @@ package io.github.lunasaw.gbproxy.test.config;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.luna.common.os.SystemInfoUtil;
+import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.github.lunasaw.gbproxy.test.user.client.DefaultRegisterProcessorClient;
-import io.github.lunasaw.gbproxy.test.user.server.DefaultRegisterProcessorServer;
-import io.github.lunasaw.sip.common.entity.Device;
+import com.luna.common.os.SystemInfoUtil;
+
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import oshi.SystemInfo;
 
 /**
  * @author luna

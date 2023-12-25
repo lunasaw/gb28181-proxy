@@ -23,7 +23,7 @@ public class ServerInfoRequestProcessor extends SipRequestProcessorAbstract {
     private String method = METHOD;
 
     /**
-     * 收到Bye请求 处理
+     * 收到Info请求 处理
      *
      * @param evt
      */

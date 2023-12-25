@@ -1,22 +1,6 @@
 package io.github.lunasaw.sip.common.transmit;
 
-import gov.nist.javax.sip.SipProviderImpl;
-import gov.nist.javax.sip.SipStackImpl;
-import gov.nist.javax.sip.message.SIPRequest;
-import gov.nist.javax.sip.message.SIPResponse;
-import gov.nist.javax.sip.stack.SIPServerTransaction;
-import io.github.lunasaw.sip.common.constant.Constant;
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.entity.xml.XmlBean;
-import io.github.lunasaw.sip.common.layer.SipLayer;
-import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
-import io.github.lunasaw.sip.common.transmit.event.Event;
-import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
-import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
-import io.github.lunasaw.sip.common.utils.SipRequestUtils;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Objects;
 
 import javax.sip.ServerTransaction;
 import javax.sip.SipException;
@@ -27,7 +11,23 @@ import javax.sip.header.ViaHeader;
 import javax.sip.message.Message;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
-import java.util.Objects;
+
+import gov.nist.javax.sip.SipProviderImpl;
+import gov.nist.javax.sip.SipStackImpl;
+import gov.nist.javax.sip.message.SIPRequest;
+import gov.nist.javax.sip.message.SIPResponse;
+import gov.nist.javax.sip.stack.SIPServerTransaction;
+import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.layer.SipLayer;
+import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
+import io.github.lunasaw.sip.common.transmit.event.Event;
+import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
+import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
+import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 发送SIP消息
@@ -38,17 +38,17 @@ import java.util.Objects;
 @Data
 public class SipSender {
 
-    public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo) {
+    public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String content, SubscribeInfo subscribeInfo) {
 
-        return doSubscribeRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
+        return doSubscribeRequest(fromDevice, toDevice, content, subscribeInfo, null, null);
     }
 
-    public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean) {
-        return doMessageRequest(fromDevice, toDevice, xmlBean, null, null);
+    public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, String contend) {
+        return doMessageRequest(fromDevice, toDevice, contend, null, null);
     }
 
-    public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo) {
-        return doNotifyRequest(fromDevice, toDevice, xmlBean, subscribeInfo, null, null);
+    public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, String content, SubscribeInfo subscribeInfo) {
+        return doNotifyRequest(fromDevice, toDevice, content, subscribeInfo, null, null);
     }
 
     public static String doInviteRequest(FromDevice fromDevice, ToDevice toDevice, String contend, String subject) {
@@ -68,33 +68,26 @@ public class SipSender {
         return callId;
     }
 
-    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expire) {
-        String callId = SipRequestUtils.getNewCallId();
-        Request messageRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, expire, callId);
-        SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
-        return callId;
-    }
-
-    public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo, Event errorEvent,
+    public static String doSubscribeRequest(FromDevice fromDevice, ToDevice toDevice, String contend, SubscribeInfo subscribeInfo, Event errorEvent,
                                             Event okEvent) {
         String callId = SipRequestUtils.getNewCallId();
 
-        Request messageRequest = SipRequestProvider.createSubscribeRequest(fromDevice, toDevice, xmlBean.toString(), subscribeInfo, callId);
+        Request messageRequest = SipRequestProvider.createSubscribeRequest(fromDevice, toDevice, contend, subscribeInfo, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }
 
-    public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, SubscribeInfo subscribeInfo, Event errorEvent,
+    public static String doNotifyRequest(FromDevice fromDevice, ToDevice toDevice, String contend, SubscribeInfo subscribeInfo, Event errorEvent,
                                          Event okEvent) {
         String callId = SipRequestUtils.getNewCallId();
-        Request messageRequest = SipRequestProvider.createNotifyRequest(fromDevice, toDevice, xmlBean.toString(), subscribeInfo, callId);
+        Request messageRequest = SipRequestProvider.createNotifyRequest(fromDevice, toDevice, contend, subscribeInfo, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }
 
-    public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, XmlBean xmlBean, Event errorEvent, Event okEvent) {
+    public static String doMessageRequest(FromDevice fromDevice, ToDevice toDevice, String contend, Event errorEvent, Event okEvent) {
         String callId = SipRequestUtils.getNewCallId();
-        Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, xmlBean.toString(), callId);
+        Request messageRequest = SipRequestProvider.createMessageRequest(fromDevice, toDevice, contend, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest, errorEvent, okEvent);
         return callId;
     }
@@ -114,6 +107,21 @@ public class SipSender {
     public static String doAckRequest(FromDevice fromDevice, ToDevice toDevice, String content, String callId) {
         Request messageRequest = SipRequestProvider.createAckRequest(fromDevice, toDevice, content, callId);
         SipSender.transmitRequest(fromDevice.getIp(), messageRequest);
+        return callId;
+    }
+
+    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expires) {
+        return doRegisterRequest(fromDevice, toDevice, expires, SipRequestUtils.getNewCallId(), null, null);
+    }
+
+    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expires, Event event) {
+        return doRegisterRequest(fromDevice, toDevice, expires, SipRequestUtils.getNewCallId(), event, null);
+    }
+
+    public static String doRegisterRequest(FromDevice fromDevice, ToDevice toDevice, Integer expires, String callId, Event errorEvent,
+        Event okEvent) {
+        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, toDevice, expires, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), registerRequest, errorEvent, okEvent);
         return callId;
     }
 

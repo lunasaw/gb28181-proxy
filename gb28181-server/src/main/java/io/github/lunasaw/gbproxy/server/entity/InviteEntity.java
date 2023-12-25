@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.server.entity;
 
-import io.github.lunasaw.sip.common.enums.InviteSessionNameEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.InviteSessionNameEnum;
 import io.github.lunasaw.sip.common.enums.ManufacturerEnum;
 import io.github.lunasaw.sip.common.enums.StreamModeEnum;
 import org.apache.commons.lang3.StringUtils;

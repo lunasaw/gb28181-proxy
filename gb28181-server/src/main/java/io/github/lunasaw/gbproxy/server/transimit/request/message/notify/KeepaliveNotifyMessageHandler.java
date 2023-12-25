@@ -4,11 +4,10 @@ import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
 import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.entity.notify.DeviceKeepLiveNotify;
+import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.gb28181.common.entity.notify.DeviceKeepLiveNotify;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import org.springframework.stereotype.Component;

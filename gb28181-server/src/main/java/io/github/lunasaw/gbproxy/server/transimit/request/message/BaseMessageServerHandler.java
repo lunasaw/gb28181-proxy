@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 复制类 无实际使用
+ * 
  * @author luna
  * @date 2023/10/19
  */

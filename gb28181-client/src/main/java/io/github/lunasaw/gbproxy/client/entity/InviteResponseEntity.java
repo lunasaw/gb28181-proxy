@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.client.entity;
 
-import io.github.lunasaw.sip.common.enums.InviteSessionNameEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.InviteSessionNameEnum;
 import lombok.Getter;
 import lombok.Setter;
 

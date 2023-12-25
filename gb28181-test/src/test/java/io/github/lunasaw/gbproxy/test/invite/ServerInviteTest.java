@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.invite;
 
+import io.github.lunasaw.sip.common.entity.Device;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
 import io.github.lunasaw.gbproxy.test.Gb28181ApplicationTest;
 import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
-import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.layer.SipLayer;
