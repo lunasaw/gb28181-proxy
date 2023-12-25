@@ -34,11 +34,11 @@ public class ServerMessageRequestProcessor extends SipMessageRequestProcessorAbs
         SIPRequest request = (SIPRequest)evt.getRequest();
 
         // 在服务端看来 收到请求的时候fromHeader还是客户端的 toHeader才是自己的，这里是要查询自己的信息
-        String userId = SipUtils.getUserIdFromToHeader(request);
+        String sip = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
         FromDevice fromDevice = (FromDevice)messageProcessorServer.getFromDevice();
-        if (!userId.equals(fromDevice.getUserId())) {
+        if (!sip.equals(fromDevice.getUserId())) {
             return;
         }
 
