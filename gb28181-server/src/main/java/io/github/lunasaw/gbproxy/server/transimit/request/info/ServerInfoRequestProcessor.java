@@ -49,7 +49,7 @@ public class ServerInfoRequestProcessor extends SipRequestProcessorAbstract {
 
         String userId = SipUtils.getUserIdFromFromHeader(request);
 
-        //TODO 解析请求
+        infoProcessorServer.dealInfo(userId, new String(evt.getRequest().getRawContent()));
     }
 
 }

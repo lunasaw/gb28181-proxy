@@ -7,4 +7,6 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  * @date 2023/12/25
  */
 public interface InfoProcessorServer extends SipUserGenerate {
+
+    void dealInfo(String userId, String content);
 }
