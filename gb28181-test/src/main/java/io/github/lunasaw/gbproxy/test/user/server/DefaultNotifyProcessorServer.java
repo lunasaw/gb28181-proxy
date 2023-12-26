@@ -21,9 +21,6 @@ public class DefaultNotifyProcessorServer implements NotifyProcessorServer {
     @Qualifier("serverFrom")
     private Device fromDevice;
 
-    @Autowired
-    @Qualifier("serverTo")
-    private Device toDevice;
 
     @Override
     public Device getToDevice(String userId) {

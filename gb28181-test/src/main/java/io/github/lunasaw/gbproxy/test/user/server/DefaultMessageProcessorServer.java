@@ -30,9 +30,6 @@ public class DefaultMessageProcessorServer implements MessageProcessorServer {
     @Autowired
     @Qualifier("serverFrom")
     private Device fromDevice;
-    @Autowired
-    @Qualifier("serverTo")
-    private Device toDevice;
 
     @Override
     public Device getToDevice(String userId) {
