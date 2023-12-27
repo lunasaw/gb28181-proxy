@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
- * @author weidian
+ * @author luna
  * @description: bean获取工厂，获取spring中的已初始化的bean
  */
 @Component

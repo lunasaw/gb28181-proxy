@@ -10,7 +10,7 @@ import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.stereotype.Component;
 
 /**
- * @author weidian
+ * @author luna
  * @version 1.0
  * @date 2023/12/14
  * @description:

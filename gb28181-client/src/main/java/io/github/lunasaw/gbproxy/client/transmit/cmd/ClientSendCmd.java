@@ -1,6 +1,7 @@
 package io.github.lunasaw.gbproxy.client.transmit.cmd;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.google.common.collect.Lists;
 import com.luna.common.check.Assert;
@@ -228,9 +229,10 @@ public class ClientSendCmd {
      * @param deviceRecordItems 录像文件
      * @return
      */
-    public static void deviceRecordResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceRecord.RecordItem> deviceRecordItems) {
+    public static void deviceRecordResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceRecord.RecordItem> deviceRecordItems, String sn) {
+        sn = Optional.ofNullable(sn).orElse(RandomStrUtil.getValidationCode());
         DeviceRecord deviceRecord =
-                new DeviceRecord(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+            new DeviceRecord(CmdTypeEnum.RECORD_INFO.getType(), sn, fromDevice.getUserId());
 
         List<List<DeviceRecord.RecordItem>> partition = Lists.partition(deviceRecordItems, 20);
         for (List<DeviceRecord.RecordItem> recordItems : partition) {

@@ -6,6 +6,8 @@ import org.springframework.util.Assert;
 
 /**
  * 国标点播操作类型
+ * 
+ * @author luna
  */
 @Getter
 public enum PlayActionEnums {

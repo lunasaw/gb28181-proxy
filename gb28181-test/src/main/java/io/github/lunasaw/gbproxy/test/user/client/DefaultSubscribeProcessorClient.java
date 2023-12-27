@@ -14,7 +14,7 @@ import io.github.lunasaw.sip.common.subscribe.SubscribeHolder;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 
 /**
- * @author weidian
+ * @author luna
  * @version 1.0
  * @date 2023/12/11
  * @description:
