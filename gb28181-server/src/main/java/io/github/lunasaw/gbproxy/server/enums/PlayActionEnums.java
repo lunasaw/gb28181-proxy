@@ -36,8 +36,10 @@ public enum PlayActionEnums {
         if (PLAY_RESUME.equals(this)) {
             return InviteEntity.playPause();
         } else if (PLAY_RANGE.equals(this)) {
+            Assert.notNull(data, "回放Seek时间不能为空");
             return InviteEntity.playRange((Long) data);
         } else if (PLAY_SPEED.equals(this)) {
+            Assert.notNull(data, "倍速回放倍数不能为空");
             return InviteEntity.playSpeed((Double) data);
         } else if (PLAY_NOW.equals(this)) {
             return InviteEntity.playNow();
