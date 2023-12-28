@@ -21,6 +21,7 @@ import io.github.lunasaw.gbproxy.server.entity.InviteRequest;
 import io.github.lunasaw.gbproxy.server.enums.PlayActionEnums;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.enums.StreamModeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
 
@@ -486,7 +487,7 @@ public class ServerSendCmd {
      * @return
      */
     public static String deviceInvitePlay(FromDevice fromDevice, ToDevice toDevice, String sdpIp, Integer mediaPort) {
-        InviteRequest inviteRequest = new InviteRequest(toDevice.getUserId(), sdpIp, mediaPort);
+        InviteRequest inviteRequest = new InviteRequest(toDevice.getUserId(), StreamModeEnum.valueOf(toDevice.getStreamMode()), sdpIp, mediaPort);
         return deviceInvitePlay(fromDevice, toDevice, inviteRequest);
     }
 
@@ -525,8 +526,12 @@ public class ServerSendCmd {
         Assert.notNull(startDate, "startDate is null");
         Assert.notNull(endDate, "endDate is null");
 
-        InviteRequest inviteRequest = new InviteRequest(toDevice.getUserId(), sdpIp, mediaPort, String.valueOf(startDate.getTime() / 1000),
-            String.valueOf(endDate.getTime() / 1000));
+        String startTime = DateUtils.formatDateTime(startDate);
+        String endTime = DateUtils.formatDateTime(endDate);
+
+        InviteRequest inviteRequest =
+            new InviteRequest(toDevice.getUserId(), StreamModeEnum.valueOf(toDevice.getStreamMode()), sdpIp, mediaPort, startTime,
+                endTime);
         return deviceInvitePlayBack(fromDevice, toDevice, inviteRequest);
     }
 
@@ -541,7 +546,8 @@ public class ServerSendCmd {
      */
     public static String deviceInvitePlayBack(FromDevice fromDevice, ToDevice toDevice, String sdpIp, Integer mediaPort, String startTime,
         String endTime) {
-        InviteRequest inviteRequest = new InviteRequest(toDevice.getUserId(), sdpIp, mediaPort, startTime, endTime);
+        StreamModeEnum streamModeEnum = StreamModeEnum.valueOf(toDevice.getStreamMode());
+        InviteRequest inviteRequest = new InviteRequest(toDevice.getUserId(), streamModeEnum, sdpIp, mediaPort, startTime, endTime);
         return deviceInvitePlayBack(fromDevice, toDevice, inviteRequest);
     }
 

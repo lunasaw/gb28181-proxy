@@ -15,31 +15,31 @@ public class InviteRequest {
     /**
      * 是否高级sdp
      */
-    private Boolean        seniorSdp;
+    private Boolean          seniorSdp;
     /**
      * 流媒体传输模式
      */
-    private StreamModeEnum streamModeEnum;
+    private StreamModeEnum   streamModeEnum;
     /**
      * 用户ID
      */
-    private String         userId;
+    private String           userId;
     /**
      * 收流IP
      */
-    private String         sdpIp;
+    private String           sdpIp;
     /**
      * 收流端口
      */
-    private Integer        mediaPort;
+    private Integer          mediaPort;
     /**
      * ssrc
      */
-    private String         ssrc;
+    private String           ssrc;
     /**
      * 是否订阅子码流
      */
-    private Boolean        subStream;
+    private Boolean          subStream;
     /**
      * 厂商
      */
@@ -47,15 +47,15 @@ public class InviteRequest {
     /**
      * 回放开始时间
      */
-    private String startTime;
+    private String           startTime;
     /**
      * 回放结束时间
      */
-    private String endTime;
+    private String           endTime;
 
-    public InviteRequest(String userId, String sdpIp, Integer mediaPort) {
+    public InviteRequest(String userId, StreamModeEnum streamModeEnum, String sdpIp, Integer mediaPort) {
         this.seniorSdp = false;
-        this.streamModeEnum = StreamModeEnum.TCP_PASSIVE;
+        this.streamModeEnum = streamModeEnum;
         this.userId = userId;
         this.sdpIp = sdpIp;
         this.mediaPort = mediaPort;
@@ -71,9 +71,9 @@ public class InviteRequest {
         this.ssrc = ssrc;
     }
 
-    public InviteRequest(String userId, String sdpIp, Integer mediaPort, String startTime, String endTime) {
+    public InviteRequest(String userId, StreamModeEnum streamModeEnum, String sdpIp, Integer mediaPort, String startTime, String endTime) {
         this.seniorSdp = false;
-        this.streamModeEnum = StreamModeEnum.UDP;
+        this.streamModeEnum = streamModeEnum;
         this.userId = userId;
         this.sdpIp = sdpIp;
         this.mediaPort = mediaPort;
@@ -83,7 +83,10 @@ public class InviteRequest {
     }
 
     public String getContent() {
-        return InviteEntity.getInvitePlayBody(streamModeEnum, userId, sdpIp, mediaPort, ssrc).toString();
+        if (seniorSdp == null || !seniorSdp) {
+            return InviteEntity.getInvitePlayBody(streamModeEnum, userId, sdpIp, mediaPort, ssrc).toString();
+        }
+        return getContentWithSdp();
     }
 
     public String getBackContent() {
@@ -94,7 +97,7 @@ public class InviteRequest {
         return InviteEntity.getInvitePlayBody(streamModeEnum, userId, sdpIp, mediaPort, ssrc, subStream, manufacturer).toString();
     }
 
-    public String getContentWithSdp(Boolean seniorSdp) {
+    public String getContentWithSdp() {
         return InviteEntity.getInvitePlayBody(seniorSdp, streamModeEnum, userId, sdpIp, mediaPort, ssrc).toString();
     }
 
