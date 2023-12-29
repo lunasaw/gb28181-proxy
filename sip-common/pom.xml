@@ -39,6 +39,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+            <version>${skywalking.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

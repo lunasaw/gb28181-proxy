@@ -22,6 +22,7 @@ import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessor;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessor;
 import io.github.lunasaw.sip.common.transmit.event.timeout.ITimeoutProcessor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -92,6 +93,7 @@ public class SipProcessorObserver implements SipListener {
      * @param requestEvent RequestEvent事件
      */
     @Override
+    @Trace(operationName = "processRequest")
     public void processRequest(RequestEvent requestEvent) {
         sipProcessorInject.before(requestEvent);
 
@@ -119,6 +121,7 @@ public class SipProcessorObserver implements SipListener {
      * @param responseEvent responseEvent事件
      */
     @Override
+    @Trace(operationName = "responseEvent")
     public void processResponse(ResponseEvent responseEvent) {
         sipProcessorInject.before(responseEvent);
 
