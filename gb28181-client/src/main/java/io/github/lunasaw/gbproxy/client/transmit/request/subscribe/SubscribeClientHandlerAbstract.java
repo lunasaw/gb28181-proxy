@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
@@ -19,10 +20,14 @@ import lombok.Data;
 public abstract class SubscribeClientHandlerAbstract extends MessageHandlerAbstract {
 
     @Autowired
-    public SubscribeProcessorClient subscribeProcessorClient;
+    protected SubscribeProcessorClient subscribeProcessorClient;
 
-    public SubscribeClientHandlerAbstract(SubscribeProcessorClient subscribeProcessorClient) {
+    @Autowired
+    protected SipUserGenerateClient    sipUserGenerate;
+
+    public SubscribeClientHandlerAbstract(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerateClient sipUserGenerate) {
         this.subscribeProcessorClient = subscribeProcessorClient;
+        this.sipUserGenerate = sipUserGenerate;
     }
 
     @Override

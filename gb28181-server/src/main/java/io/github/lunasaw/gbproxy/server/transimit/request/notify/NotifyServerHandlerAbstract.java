@@ -3,10 +3,12 @@ package io.github.lunasaw.gbproxy.server.transimit.request.notify;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
@@ -19,10 +21,19 @@ import lombok.Data;
 public abstract class NotifyServerHandlerAbstract extends MessageHandlerAbstract {
 
     @Resource
-    public NotifyProcessorServer notifyProcessorServer;
+    public NotifyProcessorServer    notifyProcessorServer;
 
-    public NotifyServerHandlerAbstract(NotifyProcessorServer notifyProcessorServer) {
+    @Resource
+    protected SipUserGenerateServer sipUserGenerate;
+
+    @Autowired
+    public void setNotifyProcessorServer(NotifyProcessorServer notifyProcessorServer) {
         this.notifyProcessorServer = notifyProcessorServer;
+    }
+
+    @Autowired
+    public void setSipUserGenerate(SipUserGenerateServer sipUserGenerate) {
+        this.sipUserGenerate = sipUserGenerate;
     }
 
     @Override

@@ -1,7 +1,9 @@
 package io.github.lunasaw.gbproxy.client.transmit.cmd;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.google.common.collect.Lists;
 import com.luna.common.check.Assert;
 import com.luna.common.text.RandomStrUtil;
 
@@ -85,14 +87,18 @@ public class ClientSendCmd {
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceResponse.toString());
     }
 
-    public static String deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems, String sn) {
+    public static void deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems, String sn) {
         DeviceResponse deviceResponse =
                 new DeviceResponse(CmdTypeEnum.CATALOG.getType(), sn, fromDevice.getUserId());
 
-        deviceResponse.setSumNum(deviceItems.size());
-        deviceResponse.setDeviceItemList(deviceItems);
+        List<List<DeviceItem>> partition = Lists.partition(deviceItems, 20);
 
-        return deviceChannelCatalogResponse(fromDevice, toDevice, deviceResponse);
+        for (List<DeviceItem> items : partition) {
+            deviceResponse.setSumNum(deviceItems.size());
+            deviceResponse.setDeviceItemList(items);
+
+            deviceChannelCatalogResponse(fromDevice, toDevice, deviceResponse);
+        }
     }
 
     /**
@@ -104,7 +110,14 @@ public class ClientSendCmd {
      * @return
      */
     public static String deviceChannelCatalogResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems) {
-        return deviceChannelCatalogResponse(fromDevice, toDevice, deviceItems, RandomStrUtil.getValidationCode());
+
+        DeviceResponse deviceResponse =
+            new DeviceResponse(CmdTypeEnum.CATALOG.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+
+        deviceResponse.setSumNum(deviceItems.size());
+        deviceResponse.setDeviceItemList(deviceItems);
+
+        return deviceChannelCatalogResponse(fromDevice, toDevice, deviceResponse);
     }
 
     /**
@@ -216,14 +229,18 @@ public class ClientSendCmd {
      * @param deviceRecordItems 录像文件
      * @return
      */
-    public static String deviceRecordResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceRecord.RecordItem> deviceRecordItems) {
+    public static void deviceRecordResponse(FromDevice fromDevice, ToDevice toDevice, List<DeviceRecord.RecordItem> deviceRecordItems, String sn) {
+        sn = Optional.ofNullable(sn).orElse(RandomStrUtil.getValidationCode());
         DeviceRecord deviceRecord =
-                new DeviceRecord(CmdTypeEnum.RECORD_INFO.getType(), RandomStrUtil.getValidationCode(), fromDevice.getUserId());
+            new DeviceRecord(CmdTypeEnum.RECORD_INFO.getType(), sn, fromDevice.getUserId());
 
-        deviceRecord.setSumNum(deviceRecordItems.size());
-        deviceRecord.setRecordList(deviceRecordItems);
+        List<List<DeviceRecord.RecordItem>> partition = Lists.partition(deviceRecordItems, 20);
+        for (List<DeviceRecord.RecordItem> recordItems : partition) {
+            deviceRecord.setSumNum(deviceRecordItems.size());
+            deviceRecord.setRecordList(recordItems);
 
-        return deviceRecordResponse(fromDevice, toDevice, deviceRecord);
+            deviceRecordResponse(fromDevice, toDevice, deviceRecord);
+        }
     }
 
     /**

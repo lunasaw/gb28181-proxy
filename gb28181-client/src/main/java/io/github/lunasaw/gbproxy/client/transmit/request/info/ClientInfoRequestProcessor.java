@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
@@ -23,12 +24,15 @@ import lombok.Setter;
 @Setter
 public class ClientInfoRequestProcessor extends SipRequestProcessorAbstract {
 
-    public static final String METHOD = "INFO";
+    public static final String    METHOD = "INFO";
 
-    private String method = METHOD;
+    private String                method = METHOD;
 
     @Autowired
-    private InfoProcessorClient infoProcessorClient;
+    private InfoProcessorClient   infoProcessorClient;
+
+    @Autowired
+    private SipUserGenerateClient sipUserGenerate;
 
     /**
      * 收到Info请求 处理
@@ -37,15 +41,11 @@ public class ClientInfoRequestProcessor extends SipRequestProcessorAbstract {
      */
     @Override
     public void process(RequestEvent evt) {
-        SIPRequest request = (SIPRequest) evt.getRequest();
-
+        SIPRequest request = (SIPRequest)evt.getRequest();
         // 在客户端看来 收到请求的时候fromHeader还是服务端的 toHeader才是自己的，这里是要查询自己的信息
         String userId = SipUtils.getUserIdFromToHeader(request);
 
-        // 获取设备
-        FromDevice fromDevice = (FromDevice) infoProcessorClient.getFromDevice();
-
-        if (!userId.equals(fromDevice.getUserId())) {
+        if (!sipUserGenerate.checkDevice(evt)) {
             return;
         }
         try {

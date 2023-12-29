@@ -14,7 +14,7 @@ import io.github.lunasaw.sip.common.subscribe.SubscribeHolder;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 
 /**
- * @author weidian
+ * @author luna
  * @version 1.0
  * @date 2023/12/11
  * @description:
@@ -29,15 +29,6 @@ public class DefaultSubscribeProcessorClient implements SubscribeProcessorClient
     @Autowired
     private SubscribeHolder subscribeHolder;
 
-    @Override
-    public Device getToDevice(String userId) {
-        return DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(userId);
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return fromDevice;
-    }
 
     @Override
     public void putSubscribe(String userId, SubscribeInfo subscribeInfo) {

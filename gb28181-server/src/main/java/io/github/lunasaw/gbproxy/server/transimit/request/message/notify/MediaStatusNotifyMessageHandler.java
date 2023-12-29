@@ -2,6 +2,8 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
+
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
@@ -27,9 +29,10 @@ public class MediaStatusNotifyMessageHandler extends MessageServerHandlerAbstrac
 
     private String             cmdType  = CMD_TYPE;
 
-    public MediaStatusNotifyMessageHandler(MessageProcessorServer messageProcessorServer) {
-        super(messageProcessorServer);
+    public MediaStatusNotifyMessageHandler(MessageProcessorServer messageProcessorServer, SipUserGenerateServer sipUserGenerate) {
+        super(messageProcessorServer, sipUserGenerate);
     }
+
 
     @Override
     public String getRootType() {
@@ -44,7 +47,7 @@ public class MediaStatusNotifyMessageHandler extends MessageServerHandlerAbstrac
         String userId = deviceSession.getUserId();
 
         // 设备查询
-        ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;

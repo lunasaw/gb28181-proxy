@@ -6,6 +6,7 @@ import javax.sip.RequestEvent;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -22,12 +23,15 @@ import lombok.Setter;
 @Setter
 public class ServerNotifyRequestProcessor extends SipMessageRequestProcessorAbstract {
 
-    public static final String METHOD = "NOTIFY";
+    public static final String    METHOD = "NOTIFY";
 
-    private String             method = METHOD;
+    private String                method = METHOD;
 
     @Resource
-    public NotifyProcessorServer notifyProcessorServer;
+    private NotifyProcessorServer notifyProcessorServer;
+
+    @Resource
+    private SipUserGenerateServer sipUserGenerate;
 
     /**
      * 收到Notify请求 处理
@@ -42,7 +46,7 @@ public class ServerNotifyRequestProcessor extends SipMessageRequestProcessorAbst
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice)notifyProcessorServer.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }

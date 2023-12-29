@@ -1,13 +1,16 @@
 package io.github.lunasaw.sip.common.service;
 
+import javax.sip.RequestEvent;
+
+import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.Device;
-import org.springframework.stereotype.Component;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.utils.SipUtils;
 
 /**
  * @author luna
  * @date 2023/10/17
  */
-@Component
 public interface SipUserGenerate {
 
     /**
@@ -24,4 +27,25 @@ public interface SipUserGenerate {
      * @return FromDevice
      */
     Device getFromDevice();
+
+    /**
+     * 设备检查
+     * 
+     * @param evt
+     * @return
+     */
+    default boolean checkDevice(RequestEvent evt) {
+        SIPRequest request = (SIPRequest)evt.getRequest();
+
+        // 在接收端看来 收到请求的时候fromHeader还是服务端的 toHeader才是自己的，这里是要查询自己的信息
+        String userId = SipUtils.getUserIdFromToHeader(request);
+
+        // 获取设备
+        FromDevice fromDevice = (FromDevice)getFromDevice();
+
+        if (fromDevice == null) {
+            return false;
+        }
+        return userId.equals(fromDevice.getUserId());
+    }
 }

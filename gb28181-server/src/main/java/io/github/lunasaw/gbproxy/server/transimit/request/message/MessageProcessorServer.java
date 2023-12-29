@@ -7,13 +7,13 @@ import io.github.lunasaw.gb28181.common.entity.notify.MediaStatusNotify;
 import io.github.lunasaw.gb28181.common.entity.notify.MobilePositionNotify;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceRecord;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceResponse;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 
 /**
  * @author luna
  * @date 2023/10/21
  */
-public interface MessageProcessorServer extends SipUserGenerate {
+public interface MessageProcessorServer {
 
     /**
      * 更新设备心跳信息

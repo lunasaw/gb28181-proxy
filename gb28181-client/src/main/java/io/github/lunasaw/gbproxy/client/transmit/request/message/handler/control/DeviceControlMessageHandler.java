@@ -1,14 +1,18 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control;
 
+import javax.sip.RequestEvent;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
-import io.github.lunasaw.gb28181.common.entity.enums.DeviceControlType;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control.emums.DeviceControlType;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
+import io.github.lunasaw.sip.common.utils.SpringBeanFactory;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import javax.sip.RequestEvent;
 
 /**
  * @author luna
@@ -22,10 +26,13 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
 
     public static final String CMD_TYPE = "DeviceControl";
 
-    private String cmdType = CMD_TYPE;
+    private String             cmdType  = CMD_TYPE;
 
-    public DeviceControlMessageHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    @Autowired
+    private SpringBeanFactory  springBeanFactory;
+
+    public DeviceControlMessageHandler(MessageProcessorClient messageProcessorClient, SipUserGenerateClient sipUserGenerateClient) {
+        super(messageProcessorClient, sipUserGenerateClient);
     }
 
     @Override
@@ -36,16 +43,20 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
     @Override
     public void handForEvt(RequestEvent event) {
 
-
-        DeviceControlType deviceControlType = DeviceControlType.getDeviceControlTypeFilter(getXmlStr());
-
+        String xmlStr = getXmlStr();
+        DeviceControlType deviceControlType = DeviceControlType.getDeviceControlTypeFilter(xmlStr);
         if (deviceControlType == null) {
             return;
         }
-
         Object o = parseXml(deviceControlType.getClazz());
 
-        messageProcessorClient.deviceControl(o);
+        DeviceControlCmd bean = SpringBeanFactory.getBean(deviceControlType.getBeanName());
+
+        if (bean == null) {
+            log.info("handForEvt::event = {}", xmlStr);
+            return;
+        }
+        bean.doCmd(o);
     }
 
     @Override

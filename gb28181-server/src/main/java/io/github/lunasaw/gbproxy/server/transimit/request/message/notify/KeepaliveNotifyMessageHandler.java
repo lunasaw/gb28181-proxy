@@ -4,10 +4,12 @@ import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceKeepLiveNotify;
+
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import org.springframework.stereotype.Component;
@@ -30,9 +32,10 @@ public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract 
 
     public static final String CMD_TYPE = "Keepalive";
 
-    public KeepaliveNotifyMessageHandler(MessageProcessorServer messageProcessorServer) {
-        super(messageProcessorServer);
+    public KeepaliveNotifyMessageHandler(MessageProcessorServer messageProcessorServer, SipUserGenerateServer sipUserGenerate) {
+        super(messageProcessorServer, sipUserGenerate);
     }
+
 
     @Override
     public String getRootType() {
@@ -46,7 +49,7 @@ public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract 
 
         String userId = deviceSession.getUserId();
         // 设备查询
-        ToDevice toDevice = (ToDevice) messageProcessorServer.getToDevice(userId);
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备回复失败
             log.warn("device not register, userId: {}", userId);

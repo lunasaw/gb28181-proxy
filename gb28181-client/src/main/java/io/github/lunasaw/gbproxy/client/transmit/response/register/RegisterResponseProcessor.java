@@ -9,9 +9,12 @@ import javax.sip.message.Request;
 import javax.sip.message.Response;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.ResponseEventExt;
 import gov.nist.javax.sip.message.SIPResponse;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.transmit.SipSender;
@@ -21,7 +24,6 @@ import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 /**
  * description 发起后 Register 的响应处理器
@@ -35,12 +37,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
 
-    public static final String METHOD = "REGISTER";
+    public static final String      METHOD = "REGISTER";
 
-    public String method = METHOD;
+    public String                   method = METHOD;
 
     @Resource
     private RegisterProcessorClient registerProcessorClient;
+
+    @Autowired
+    private SipUserGenerateClient   sipUserGenerate;
 
     /**
      * 处理Register响应
@@ -55,7 +60,7 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
             return;
         }
 
-        ResponseEventExt eventExt = (ResponseEventExt) evt;
+        ResponseEventExt eventExt = (ResponseEventExt)evt;
         if (response.getStatusCode() == Response.UNAUTHORIZED) {
             try {
                 responseUnAuthorized(eventExt);
@@ -70,22 +75,21 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
 
     public void responseUnAuthorized(ResponseEventExt evt) throws SdpParseException {
         // 成功响应
-        SIPResponse response = (SIPResponse) evt.getResponse();
+        SIPResponse response = (SIPResponse)evt.getResponse();
 
         String toUserId = SipUtils.getUserIdFromToHeader(response);
 
         CallIdHeader callIdHeader = response.getCallIdHeader();
         Integer expire = registerProcessorClient.getExpire(toUserId);
-        FromDevice fromDevice = (FromDevice)registerProcessorClient.getFromDevice();
-        ToDevice toDevice = (ToDevice) registerProcessorClient.getToDevice(toUserId);
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(toUserId);
         if (fromDevice == null || toDevice == null) {
             return;
         }
 
-
-        WWWAuthenticateHeader www = (WWWAuthenticateHeader) response.getHeader(WWWAuthenticateHeader.NAME);
+        WWWAuthenticateHeader www = (WWWAuthenticateHeader)response.getHeader(WWWAuthenticateHeader.NAME);
         Request registerRequestWithAuth =
-                SipRequestProvider.createRegisterRequestWithAuth(fromDevice, toDevice, callIdHeader.getCallId(), expire, www);
+            SipRequestProvider.createRegisterRequestWithAuth(fromDevice, toDevice, callIdHeader.getCallId(), expire, www);
 
         // 发送二次请求
         SipSender.transmitRequest(fromDevice.getIp(), registerRequestWithAuth);

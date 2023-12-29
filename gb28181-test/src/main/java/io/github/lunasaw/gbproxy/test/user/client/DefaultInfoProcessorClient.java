@@ -21,17 +21,6 @@ public class DefaultInfoProcessorClient implements InfoProcessorClient {
     @Qualifier("clientFrom")
     private Device fromDevice;
 
-
-    @Override
-    public Device getToDevice(String userId) {
-        return DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(userId);
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return fromDevice;
-    }
-
     @Override
     public void receiveInfo(String userId, String content) {
         log.info("receiveInfo userId = {} ::content = {}", userId, content);

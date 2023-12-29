@@ -6,7 +6,7 @@ import io.github.lunasaw.gbproxy.client.entity.InviteResponseEntity;
 import io.github.lunasaw.sip.common.entity.GbSessionDescription;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import io.github.lunasaw.gb28181.common.entity.enums.InviteSessionNameEnum;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 import lombok.SneakyThrows;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -15,7 +15,10 @@ import javax.sdp.MediaDescription;
 import javax.sdp.SessionDescription;
 import java.util.Vector;
 
-public interface InviteProcessorClient extends SipUserGenerate {
+/**
+ * @author weidian
+ */
+public interface InviteProcessorClient {
 
 
     void inviteSession(String callId, SdpSessionDescription sessionDescription);

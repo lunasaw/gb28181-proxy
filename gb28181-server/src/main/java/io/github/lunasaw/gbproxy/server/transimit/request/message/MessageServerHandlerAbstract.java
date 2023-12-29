@@ -2,9 +2,12 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
+
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -18,10 +21,15 @@ import javax.sip.RequestEvent;
 public abstract class MessageServerHandlerAbstract extends MessageHandlerAbstract {
 
     @Resource
+    @Lazy
     public MessageProcessorServer messageProcessorServer;
 
-    public MessageServerHandlerAbstract(MessageProcessorServer messageProcessorServer) {
+    @Resource
+    protected SipUserGenerateServer sipUserGenerate;
+
+    public MessageServerHandlerAbstract(MessageProcessorServer messageProcessorServer, SipUserGenerateServer sipUserGenerate) {
         this.messageProcessorServer = messageProcessorServer;
+        this.sipUserGenerate = sipUserGenerate;
     }
 
     @Override

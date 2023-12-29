@@ -3,10 +3,10 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -32,8 +32,12 @@ public class ClientSubscribeRequestProcessor extends SipMessageRequestProcessorA
     @Resource
     private SubscribeProcessorClient subscribeProcessorClient;
 
-    public ClientSubscribeRequestProcessor(@Lazy SubscribeProcessorClient subscribeProcessorClient) {
+    @Resource
+    private SipUserGenerateClient    sipUserGenerateClient;
+
+    public ClientSubscribeRequestProcessor(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerateClient sipUserGenerateClient) {
         this.subscribeProcessorClient = subscribeProcessorClient;
+        this.sipUserGenerateClient = sipUserGenerateClient;
     }
 
     /**
@@ -44,19 +48,12 @@ public class ClientSubscribeRequestProcessor extends SipMessageRequestProcessorA
     @Override
     public void process(RequestEvent evt) {
 
-        SIPRequest request = (SIPRequest)evt.getRequest();
-
-        // 在服务端看来 收到请求的时候fromHeader还是客户端的 toHeader才是自己的，这里是要查询自己的信息
-        String userId = SipUtils.getUserIdFromToHeader(request);
-
-        // 获取设备
-        FromDevice fromDevice = (FromDevice)subscribeProcessorClient.getFromDevice();
-        if (!userId.equals(fromDevice.getUserId())) {
+        if (!sipUserGenerateClient.checkDevice(evt)) {
+            // 如果是客户端收到的userId，一定是和自己的userId一致
             return;
         }
 
-        doMessageHandForEvt(evt, fromDevice);
+        doMessageHandForEvt(evt, (FromDevice)sipUserGenerateClient.getFromDevice());
     }
-
 
 }

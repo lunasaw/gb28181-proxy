@@ -20,13 +20,4 @@ public class DefaultByeProcessorClient implements ByeProcessorClient {
         ffmpegCommander.closeStream(callId);
     }
 
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
-    }
 }

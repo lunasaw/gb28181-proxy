@@ -10,13 +10,13 @@ import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceAlarmQuery;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceConfigDownload;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceRecordQuery;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 
 /**
  * @author luna
  * @date 2023/10/18
  */
-public interface MessageProcessorClient extends SipUserGenerate {
+public interface MessageProcessorClient {
 
     /**
      * 获取设备录像信息

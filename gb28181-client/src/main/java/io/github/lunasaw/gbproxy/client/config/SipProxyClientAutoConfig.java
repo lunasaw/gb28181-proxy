@@ -2,10 +2,28 @@ package io.github.lunasaw.gbproxy.client.config;
 
 import java.util.Map;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.ack.AckRequestProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.ack.CustomAckRequestProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.bye.ByeProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.bye.CustomByeProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.info.CustomInfoProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.info.InfoProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.invite.CustomInviteProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.invite.InviteProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.CustomMessageProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.CustomSubscribeProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.response.register.CustomRegisterProcessorClient;
+import io.github.lunasaw.gbproxy.client.transmit.response.register.RegisterProcessorClient;
+import io.github.lunasaw.gbproxy.client.user.CustomSipUserGenerateClient;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
@@ -40,4 +58,53 @@ public class SipProxyClientAutoConfig implements InitializingBean, ApplicationCo
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MessageProcessorClient messageProcessorClient() {
+        return new CustomMessageProcessorClient();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SipUserGenerateClient sipUserGenerateClient() {
+        return new CustomSipUserGenerateClient();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ByeProcessorClient byeProcessorClient() {
+        return new CustomByeProcessorClient();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public InfoProcessorClient infoProcessorClient() {
+        return new CustomInfoProcessorClient();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SubscribeProcessorClient inviteResponseProcessorClient() {
+        return new CustomSubscribeProcessorClient();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AckRequestProcessorClient ackRequestProcessorClient() {
+        return new CustomAckRequestProcessorClient();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public InviteProcessorClient inviteProcessorClient() {
+        return new CustomInviteProcessorClient();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RegisterProcessorClient registerProcessorClient() {
+        return new CustomRegisterProcessorClient();
+    }
+
 }

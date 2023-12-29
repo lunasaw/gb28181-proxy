@@ -5,6 +5,9 @@ import org.springframework.context.ApplicationEvent;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author luna
+ */
 @Getter
 @Setter
 public class CatalogEvent extends ApplicationEvent {
