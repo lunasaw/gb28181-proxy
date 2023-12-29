@@ -9,7 +9,7 @@ import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control
  * @date 2023/12/26
  */
 @Component("dragZoomInControl")
-public abstract class dragZoomInControl implements DeviceControlCmd {
+public class dragZoomInControl implements DeviceControlCmd {
     @Override
     public void doCmd(Object o) {
 

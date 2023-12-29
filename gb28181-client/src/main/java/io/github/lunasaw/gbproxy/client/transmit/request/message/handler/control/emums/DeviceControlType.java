@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.contro
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -13,7 +14,6 @@ import lombok.SneakyThrows;
 /**
  * @author luna
  */
-
 @Getter
 public enum DeviceControlType {
 
@@ -53,7 +53,7 @@ public enum DeviceControlType {
     /**
      * 看守位
      */
-    HOME_POSITION("HomePosition", "看守位", DeviceControlPosition.class, "homePositionControl");
+    HOME_POSITION("HomePosition", "看守位", DeviceControlPosition.class, "HomePositionControl");
 
     private static final Map<String, DeviceControlType> MAP = new ConcurrentHashMap<>();
 
@@ -67,7 +67,8 @@ public enum DeviceControlType {
     private final String   val;
     private final String   desc;
     private final Class<?> clazz;
-    private final String   beanName;
+    @Setter
+    private String         beanName;
 
     DeviceControlType(String val, String desc, Class<?> clazz, String beanName) {
         this.val = val;

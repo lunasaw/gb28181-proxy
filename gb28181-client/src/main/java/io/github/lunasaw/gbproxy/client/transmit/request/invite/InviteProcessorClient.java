@@ -15,6 +15,9 @@ import javax.sdp.MediaDescription;
 import javax.sdp.SessionDescription;
 import java.util.Vector;
 
+/**
+ * @author weidian
+ */
 public interface InviteProcessorClient extends SipUserGenerate {
 
 

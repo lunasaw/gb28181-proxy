@@ -9,7 +9,7 @@ import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control
  * @date 2023/12/26
  */
 @Component("alarmCmdControl")
-public abstract class AlarmCmdControl implements DeviceControlCmd {
+public class AlarmCmdControl implements DeviceControlCmd {
     @Override
     public void doCmd(Object o) {
 

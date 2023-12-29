@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * @date 2023/12/26
  */
 @Component("telnetBootControl")
-public abstract class TelnetBootControl implements DeviceControlCmd {
+public class TelnetBootControl implements DeviceControlCmd {
     @Override
     public void doCmd(Object o) {
 

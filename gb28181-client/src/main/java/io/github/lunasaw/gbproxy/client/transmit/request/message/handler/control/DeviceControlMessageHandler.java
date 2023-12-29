@@ -1,8 +1,8 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control;
 
-import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
@@ -27,11 +27,8 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
 
     private String             cmdType  = CMD_TYPE;
 
-    @Resource
+    @Autowired
     private SpringBeanFactory  springBeanFactory;
-
-    @Resource
-    private DeviceControlCmd   deviceControlCmd;
 
     public DeviceControlMessageHandler(MessageProcessorClient messageProcessorClient) {
         super(messageProcessorClient);

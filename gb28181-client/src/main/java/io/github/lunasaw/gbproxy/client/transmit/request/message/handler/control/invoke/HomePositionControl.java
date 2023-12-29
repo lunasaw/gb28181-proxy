@@ -8,8 +8,8 @@ import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control
  * @author luna
  * @date 2023/12/26
  */
-@Component("dragZoomOutControl")
-public abstract class homePositionControl implements DeviceControlCmd {
+@Component("homePositionControl")
+public class HomePositionControl implements DeviceControlCmd {
     @Override
     public void doCmd(Object o) {
 

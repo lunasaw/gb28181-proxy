@@ -10,7 +10,7 @@ import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control
  * @date 2023/12/26
  */
 @Component("ptzCmdControl")
-public abstract class PtzCmdControl implements DeviceControlCmd {
+public class PtzCmdControl implements DeviceControlCmd {
     @Override
     public void doCmd(Object o) {
         DeviceControlPtz deviceControlPtz = (DeviceControlPtz)o;

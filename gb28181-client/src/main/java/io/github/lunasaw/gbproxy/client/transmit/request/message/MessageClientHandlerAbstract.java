@@ -5,6 +5,7 @@ import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import javax.sip.RequestEvent;
  */
 @Data
 @Component
+@ConditionalOnBean(MessageProcessorClient.class)
 public abstract class MessageClientHandlerAbstract extends MessageHandlerAbstract {
 
     @Resource
