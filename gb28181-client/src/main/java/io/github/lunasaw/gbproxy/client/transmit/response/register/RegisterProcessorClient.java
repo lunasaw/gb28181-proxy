@@ -15,7 +15,7 @@ public interface RegisterProcessorClient {
      * @return second time
      */
     default Integer getExpire(String userId) {
-        return 300;
+        return 3600;
     }
 
     /**

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @author luna
  * @date 2023/12/26
  */
-// @Component
+@Component
 public class DefaultInfoProcessorServer implements InfoProcessorServer {
     @Autowired
     @Qualifier("serverFrom")

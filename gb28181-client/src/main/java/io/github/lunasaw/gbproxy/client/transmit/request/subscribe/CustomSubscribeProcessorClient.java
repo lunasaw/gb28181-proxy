@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
  * @author luna
  * @date 2023/12/29
  */
-@Component
-@ConditionalOnMissingBean(SubscribeProcessorClient.class)
 public class CustomSubscribeProcessorClient implements SubscribeProcessorClient {
     @Override
     public void putSubscribe(String userId, SubscribeInfo subscribeInfo) {

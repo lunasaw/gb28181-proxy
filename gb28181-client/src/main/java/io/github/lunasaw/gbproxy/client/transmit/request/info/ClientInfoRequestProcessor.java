@@ -42,14 +42,10 @@ public class ClientInfoRequestProcessor extends SipRequestProcessorAbstract {
     @Override
     public void process(RequestEvent evt) {
         SIPRequest request = (SIPRequest)evt.getRequest();
-
         // 在客户端看来 收到请求的时候fromHeader还是服务端的 toHeader才是自己的，这里是要查询自己的信息
         String userId = SipUtils.getUserIdFromToHeader(request);
 
-        // 获取设备
-        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
-
-        if (!userId.equals(fromDevice.getUserId())) {
+        if (!sipUserGenerate.checkDevice(evt)) {
             return;
         }
         try {

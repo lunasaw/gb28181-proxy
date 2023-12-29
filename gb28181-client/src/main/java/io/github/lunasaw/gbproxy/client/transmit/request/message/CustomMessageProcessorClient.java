@@ -1,8 +1,5 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Component;
-
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceAlarmQuery;
@@ -14,8 +11,6 @@ import io.github.lunasaw.gb28181.common.entity.response.*;
  * @author luna
  * @date 2023/12/29
  */
-@Component
-@ConditionalOnMissingBean(MessageProcessorClient.class)
 public class CustomMessageProcessorClient implements MessageProcessorClient {
     @Override
     public DeviceRecord getDeviceRecord(DeviceRecordQuery deviceRecordQuery) {
