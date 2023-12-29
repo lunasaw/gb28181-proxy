@@ -20,13 +20,13 @@
         - [x] 设备注册
         - [ ] 目录订阅
         - [x] 设备认证
-        - [x] 设备控制
-        - [x] 云台控制(PTZ)
+        - [x] 设备控制(PTZ)
+        - [x] 云台控制
         - [x] 安放告警
         - [x] 设备查询
         - [x] 实时点播
-        - [x] 视频回放点播
-        - [x] 视频回放控制
+          - [x] 视频回放点播
+          - [x] 视频回放控制
         - [ ] 设备移动订阅
     - [x] Client
         - [x] 设备注册
@@ -41,8 +41,7 @@
         - [x] 实时回放控制响应
         - [x] 视频回放点播
 - [ ] 基于gb28181-proxy 实现平台级操作。搭建信令服务平台
-- [ ] 基于流媒体搭建完整的视频监控级联平台  [voglander](https://github.com/lunasaw/voglander) 进行中 
-- [ ] 基于ZLM的start框架 [zlm-spring-boot-starter](https://github.com/lunasaw/zlm-spring-boot-starter) 进行中
+- [ ] 基于流媒体搭建完整的视频监控级联平台 [zlm-spring-boot-starter](https://github.com/lunasaw/zlm-spring-boot-starter) 进行中
 - [ ] 基于客户端搭建本地NVR平台管理
 - [ ] wike教程
 - [ ] 其他。。。
@@ -67,9 +66,9 @@
 ```xml
 
 <dependency>
-    <groupId>io.github.lunasaw</groupId>
-    <artifactId>sip-common</artifactId>
-    <version>${last.version}</version>
+<groupId>io.github.lunasaw</groupId>
+<artifactId>sip-common</artifactId>
+<version>${last.version}</version>
 </dependency>
 ```
 
@@ -77,9 +76,9 @@
 
 ```xml
 <dependency>
-    <groupId>io.github.lunasaw</groupId>
-    <artifactId>gb28181-client</artifactId>
-    <version>${last.version}</version>
+<groupId>io.github.lunasaw</groupId>
+<artifactId>gb28181-client</artifactId>
+<version>${last.version}</version>
 </dependency>
 ```
 
@@ -87,9 +86,9 @@
 
 ```xml
 <dependency>
-    <groupId>io.github.lunasaw</groupId>
-    <artifactId>gb28181-server</artifactId>
-    <version>${last.version}</version>
+<groupId>io.github.lunasaw</groupId>
+<artifactId>gb28181-server</artifactId>
+<version>${last.version}</version>
 </dependency>
 ```
 
