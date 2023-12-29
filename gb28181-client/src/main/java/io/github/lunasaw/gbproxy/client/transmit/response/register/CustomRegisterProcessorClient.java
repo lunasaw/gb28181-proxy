@@ -33,7 +33,7 @@ public class CustomRegisterProcessorClient implements RegisterProcessorClient {
 
     @Override
     public Integer getExpire(String userId) {
-        return isRegister ? 300 : 0;
+        return isRegister ? 3600 : 0;
     }
 
     @Override

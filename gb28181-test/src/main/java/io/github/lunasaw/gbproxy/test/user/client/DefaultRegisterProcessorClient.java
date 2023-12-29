@@ -47,12 +47,16 @@ public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
                     if (!isRegister) {
                         return;
                     }
-                ClientSendCmd.deviceKeepLiveNotify((FromDevice)fromDevice, (ToDevice)DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(toUserId), "OK",
-                    eventResult -> {
-                        // 注册
-                        log.error("心跳失败 发起注册 registerSuccess::toUserId = {} ", toUserId);
-                        ClientSendCmd.deviceRegister((FromDevice)fromDevice, (ToDevice)DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(toUserId), 300);
-                    });
+                try {
+                    ClientSendCmd.deviceKeepLiveNotify((FromDevice)fromDevice, (ToDevice)DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(toUserId), "OK",
+                        eventResult -> {
+                            // 注册
+                            log.error("心跳失败 发起注册 registerSuccess::toUserId = {} ", toUserId);
+                            ClientSendCmd.deviceRegister((FromDevice)fromDevice, (ToDevice)DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(toUserId), 300);
+                        });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }, 30, 60, TimeUnit.SECONDS);
 
         if (!isRegister) {
