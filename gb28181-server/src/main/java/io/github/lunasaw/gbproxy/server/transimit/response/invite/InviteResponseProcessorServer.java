@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.server.transimit.response.invite;
 
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 
 /**
  * @author luna

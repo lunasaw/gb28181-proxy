@@ -7,7 +7,7 @@ import io.github.lunasaw.gb28181.common.entity.notify.MediaStatusNotify;
 import io.github.lunasaw.gb28181.common.entity.notify.MobilePositionNotify;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceRecord;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceResponse;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 
 /**
  * @author luna

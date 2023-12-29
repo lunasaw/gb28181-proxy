@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.info;
 
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 
 /**
  * @author luna

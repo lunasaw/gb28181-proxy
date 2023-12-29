@@ -2,7 +2,6 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
 import javax.sip.RequestEvent;
 
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Lazy;
@@ -10,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * @author luna
@@ -27,11 +26,11 @@ public abstract class MessageClientHandlerAbstract extends MessageHandlerAbstrac
     public MessageProcessorClient messageProcessorClient;
 
     @Autowired
-    public SipUserGenerate        sipUserGenerate;
+    public SipUserGenerateClient  sipUserGenerate;
 
-    public MessageClientHandlerAbstract(@Lazy MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+    public MessageClientHandlerAbstract(@Lazy MessageProcessorClient messageProcessorClient, SipUserGenerateClient sipUserGenerateClient) {
         this.messageProcessorClient = messageProcessorClient;
-        this.sipUserGenerate = sipUserGenerate;
+        this.sipUserGenerate = sipUserGenerateClient;
     }
 
     @Override

@@ -2,12 +2,12 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe;
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
@@ -23,9 +23,9 @@ public abstract class SubscribeClientHandlerAbstract extends MessageHandlerAbstr
     protected SubscribeProcessorClient subscribeProcessorClient;
 
     @Autowired
-    protected SipUserGenerate          sipUserGenerate;
+    protected SipUserGenerateClient    sipUserGenerate;
 
-    public SubscribeClientHandlerAbstract(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerate sipUserGenerate) {
+    public SubscribeClientHandlerAbstract(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerateClient sipUserGenerate) {
         this.subscribeProcessorClient = subscribeProcessorClient;
         this.sipUserGenerate = sipUserGenerate;
     }

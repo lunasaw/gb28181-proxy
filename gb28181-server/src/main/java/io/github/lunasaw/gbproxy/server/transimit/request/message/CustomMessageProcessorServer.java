@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
  * @author luna
  * @date 2023/12/29
  */
-@Component
-@ConditionalOnMissingBean(MessageProcessorServer.class)
 public class CustomMessageProcessorServer implements MessageProcessorServer {
     @Override
     public void keepLiveDevice(DeviceKeepLiveNotify deviceKeepLiveNotify) {

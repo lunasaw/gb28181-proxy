@@ -1,9 +1,9 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.invite;
 
-import io.github.lunasaw.sip.common.entity.Device;
-import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
+
+import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
 
 /**
  * @author luna

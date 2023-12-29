@@ -3,10 +3,10 @@ package io.github.lunasaw.gbproxy.server.transimit.request.notify;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -23,15 +23,15 @@ import lombok.Setter;
 @Setter
 public class ServerNotifyRequestProcessor extends SipMessageRequestProcessorAbstract {
 
-    public static final String METHOD = "NOTIFY";
+    public static final String    METHOD = "NOTIFY";
 
-    private String             method = METHOD;
+    private String                method = METHOD;
 
     @Resource
     private NotifyProcessorServer notifyProcessorServer;
 
     @Resource
-    private SipUserGenerate       sipUserGenerate;
+    private SipUserGenerateServer sipUserGenerate;
 
     /**
      * 收到Notify请求 处理

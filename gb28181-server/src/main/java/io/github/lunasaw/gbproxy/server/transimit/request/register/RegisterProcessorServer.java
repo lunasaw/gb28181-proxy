@@ -1,7 +1,7 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.register;
 
 import io.github.lunasaw.sip.common.entity.SipTransaction;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 
 /**
  * @author luna

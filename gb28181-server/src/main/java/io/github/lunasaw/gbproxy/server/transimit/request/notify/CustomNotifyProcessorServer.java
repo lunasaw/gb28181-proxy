@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
  * @author luna
  * @date 2023/12/29
  */
-@Component
-@ConditionalOnMissingBean(NotifyProcessorServer.class)
 public class CustomNotifyProcessorServer implements NotifyProcessorServer {
     @Override
     public void deviceNotifyUpdate(String userId, DeviceOtherUpdateNotify deviceOtherUpdateNotify) {

@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
@@ -12,7 +13,7 @@ import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHa
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,10 @@ public class RecordInfoQueryMessageClientHandler extends MessageClientHandlerAbs
 
     private String             cmdType  = CMD_TYPE;
 
-    public RecordInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
-        super(messageProcessorClient, sipUserGenerate);
+    public RecordInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerateClient sipUserGenerateClient) {
+        super(messageProcessorClient, sipUserGenerateClient);
     }
+
 
     @Override
     public String getRootType() {

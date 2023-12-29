@@ -3,7 +3,8 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -32,9 +33,10 @@ public class DeviceInfoQueryMessageClientHandler extends MessageClientHandlerAbs
 
     private String cmdType = CMD_TYPE;
 
-    public DeviceInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
-        super(messageProcessorClient, sipUserGenerate);
+    public DeviceInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerateClient sipUserGenerateClient) {
+        super(messageProcessorClient, sipUserGenerateClient);
     }
+
 
     @Override
     public String getRootType() {

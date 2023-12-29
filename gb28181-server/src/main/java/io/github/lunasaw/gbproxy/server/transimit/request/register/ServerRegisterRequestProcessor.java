@@ -10,7 +10,6 @@ import javax.sip.header.*;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Component;
@@ -20,6 +19,7 @@ import com.luna.common.date.DateUtils;
 
 import gov.nist.javax.sip.header.SIPDateHeader;
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.GbSipDate;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
@@ -43,15 +43,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract {
 
-    public final String METHOD = "REGISTER";
+    public final String             METHOD = "REGISTER";
 
-    private String method = METHOD;
+    private String                  method = METHOD;
 
     @Resource
     private RegisterProcessorServer registerProcessorServer;
 
     @Resource
-    private SipUserGenerate         sipUserGenerate;
+    private SipUserGenerateServer   sipUserGenerate;
 
     /**
      * 收到注册请求 处理
@@ -61,7 +61,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
     @Override
     public void process(RequestEvent evt) {
         try {
-            SIPRequest request = (SIPRequest) evt.getRequest();
+            SIPRequest request = (SIPRequest)evt.getRequest();
             // 注册/注销
             int expires = request.getExpires().getExpires();
             boolean registerFlag = expires > 0;
@@ -87,7 +87,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             registerInfo.setExpire(expires);
             registerInfo.setRegisterTime(DateUtils.getCurrentDate());
             // 判断TCP还是UDP
-            ViaHeader reqViaHeader = (ViaHeader) request.getHeader(ViaHeader.NAME);
+            ViaHeader reqViaHeader = (ViaHeader)request.getHeader(ViaHeader.NAME);
             String transport = reqViaHeader.getTransport();
             registerInfo.setTransport("TCP".equalsIgnoreCase(transport) ? "TCP" : "UDP");
             registerInfo.setLocalIp(receiveIp);
@@ -118,7 +118,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
                 password = fromDevice.getPassword();
             }
 
-            AuthorizationHeader authHead = (AuthorizationHeader) request.getHeader(AuthorizationHeader.NAME);
+            AuthorizationHeader authHead = (AuthorizationHeader)request.getHeader(AuthorizationHeader.NAME);
             if (authHead == null && StringUtils.isNotBlank(password)) {
 
                 // 认证密码不是空, 但是请求头中没有AuthorizationHeader
@@ -126,8 +126,8 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
 
                 String nonce = DigestServerAuthenticationHelper.generateNonce();
                 WWWAuthenticateHeader wwwAuthenticateHeader =
-                        SipRequestUtils.createWWWAuthenticateHeader(DigestServerAuthenticationHelper.DEFAULT_SCHEME, fromDevice.getRealm(), nonce,
-                                DigestServerAuthenticationHelper.DEFAULT_ALGORITHM);
+                    SipRequestUtils.createWWWAuthenticateHeader(DigestServerAuthenticationHelper.DEFAULT_SCHEME, fromDevice.getRealm(), nonce,
+                        DigestServerAuthenticationHelper.DEFAULT_ALGORITHM);
 
                 ResponseCmd.doResponseCmd(Response.UNAUTHORIZED, "Unauthorized", evt, wwwAuthenticateHeader);
                 return;
@@ -135,7 +135,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
 
             // 校验密码是否正确
             boolean passwordCorrect = ObjectUtils.isEmpty(password) ||
-                    DigestServerAuthenticationHelper.doAuthenticatePlainTextPassword(request, password);
+                DigestServerAuthenticationHelper.doAuthenticatePlainTextPassword(request, password);
 
             if (!passwordCorrect) {
                 // 注册失败

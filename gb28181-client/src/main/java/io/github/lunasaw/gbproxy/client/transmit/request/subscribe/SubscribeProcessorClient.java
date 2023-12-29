@@ -2,7 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe;
 
 import io.github.lunasaw.gb28181.common.entity.query.DeviceQuery;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 
 /**

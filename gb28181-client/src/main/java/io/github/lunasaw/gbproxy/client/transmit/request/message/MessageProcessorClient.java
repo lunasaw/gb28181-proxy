@@ -10,7 +10,7 @@ import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceAlarmQuery;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceConfigDownload;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceRecordQuery;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 
 /**
  * @author luna

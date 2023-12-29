@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 import gov.nist.javax.sip.ResponseEventExt;
 import gov.nist.javax.sip.message.SIPResponse;
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.SdpSessionDescription;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -43,7 +43,7 @@ public class InviteResponseProcessor extends SipResponseProcessorAbstract {
     private InviteResponseProcessorServer inviteResponseProcessorServer;
 
     @Autowired
-    private SipUserGenerate               sipUserGenerate;
+    private SipUserGenerateServer         sipUserGenerate;
 
     /**
      * 处理invite响应

@@ -1,16 +1,11 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.register;
 
-import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Component;
 
 /**
  * @author luna
  * @date 2023/12/29
  */
-@Component
-@ConditionalOnMissingBean(RegisterProcessorServer.class)
 public class CustomRegisterProcessorServer implements RegisterProcessorServer {
     @Override
     public SipTransaction getTransaction(String userId) {

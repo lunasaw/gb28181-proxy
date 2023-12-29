@@ -2,7 +2,8 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
+
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
@@ -28,7 +29,7 @@ public class MediaStatusNotifyMessageHandler extends MessageServerHandlerAbstrac
 
     private String             cmdType  = CMD_TYPE;
 
-    public MediaStatusNotifyMessageHandler(MessageProcessorServer messageProcessorServer, SipUserGenerate sipUserGenerate) {
+    public MediaStatusNotifyMessageHandler(MessageProcessorServer messageProcessorServer, SipUserGenerateServer sipUserGenerate) {
         super(messageProcessorServer, sipUserGenerate);
     }
 

@@ -6,8 +6,8 @@ import javax.sip.RequestEvent;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
@@ -29,7 +29,7 @@ public class ServerMessageRequestProcessor extends SipMessageRequestProcessorAbs
     private MessageProcessorServer messageProcessorServer;
 
     @Resource
-    private SipUserGenerate        sipUserGenerate;
+    private SipUserGenerateServer  sipUserGenerate;
     private String                 method = METHOD;
 
     @Override

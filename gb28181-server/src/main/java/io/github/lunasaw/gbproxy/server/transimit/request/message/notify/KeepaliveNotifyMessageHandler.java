@@ -4,11 +4,12 @@ import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceKeepLiveNotify;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
+
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract 
 
     public static final String CMD_TYPE = "Keepalive";
 
-    public KeepaliveNotifyMessageHandler(MessageProcessorServer messageProcessorServer, SipUserGenerate sipUserGenerate) {
+    public KeepaliveNotifyMessageHandler(MessageProcessorServer messageProcessorServer, SipUserGenerateServer sipUserGenerate) {
         super(messageProcessorServer, sipUserGenerate);
     }
 

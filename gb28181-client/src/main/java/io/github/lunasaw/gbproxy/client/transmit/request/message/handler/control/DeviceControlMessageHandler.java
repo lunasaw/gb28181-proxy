@@ -2,13 +2,13 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.contro
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.handler.control.emums.DeviceControlType;
+import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.utils.SpringBeanFactory;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,10 +31,9 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
     @Autowired
     private SpringBeanFactory  springBeanFactory;
 
-    public DeviceControlMessageHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
-        super(messageProcessorClient, sipUserGenerate);
+    public DeviceControlMessageHandler(MessageProcessorClient messageProcessorClient, SipUserGenerateClient sipUserGenerateClient) {
+        super(messageProcessorClient, sipUserGenerateClient);
     }
-
 
     @Override
     public String getRootType() {
