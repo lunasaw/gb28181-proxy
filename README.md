@@ -5,30 +5,32 @@
 
 [www.isluna.ml](http://lunasaw.github.io)
 
-基于sip实现gb28181的通信框架，区分client和server。以便于快速构建发起SIP请求和处理响应。项目不仅限于gb28181协议。也可以利用封装的SIP方法处理其他协议。
+基于sip实现gb28181的通信框架，区分client和server。以便于快速构建发起SIP请求和处理响应。支持级联，告警，订阅等标准协议信令服务。项目不仅限于gb28181协议。也可以利用封装的SIP方法处理其他协议。
 
 ## 实现功能
 
 - [x] SIP 通用请求构建
-- [ ] spring-boot starter自动配置
+- [x] spring-boot starter自动配置
     - [x] 端口监听
         - [x] UDP 监听
         - [x] TCP 监听
-    - [x] 基于javax的xml转化，写对象的方式写xml
+  - [x] 基于javax的xml转化，写bean的方式写xml
 - [x] GB28181
     - [x] Server
         - [x] 设备注册
+      - [ ] 目录订阅
         - [x] 设备认证
-        - [x] 设备控制(PTZ)
-        - [x] 云台控制
+      - [x] 设备控制
+      - [x] 云台控制(PTZ)
         - [x] 安放告警
         - [x] 设备查询
       - [x] 实时点播
-          - [x] 视频回放点播
-          - [x] 视频回放控制
+      - [x] 视频回放点播
+      - [x] 视频回放控制
         - [ ] 设备移动订阅
     - [x] Client
         - [x] 设备注册
+      - [ ] 目录更新上报
         - [x] 设备控制响应
         - [x] 告警上报
         - [x] 事件推送
@@ -38,6 +40,12 @@
       - [x] 实时点播响应
       - [x] 实时回放控制响应
       - [x] 视频回放点播
+- [ ] 基于gb28181-proxy 实现平台级操作。搭建信令服务平台
+- [ ] 基于流媒体搭建完整的视频监控级联平台  [voglander](https://github.com/lunasaw/voglander) 进行中
+- [ ] 基于ZLM的start框架 [zlm-spring-boot-starter](https://github.com/lunasaw/zlm-spring-boot-starter) 进行中
+- [ ] 基于客户端搭建本地NVR平台管理
+- [ ] wike教程
+- [ ] 其他。。。
 
 # 如何使用
 
@@ -59,19 +67,19 @@
 ```xml
 
 <dependency>
-<groupId>io.github.lunasaw</groupId>
-<artifactId>sip-common</artifactId>
-<version>${last.version}</version>
+    <groupId>io.github.lunasaw</groupId>
+    <artifactId>sip-common</artifactId>
+    <version>${last.version}</version>
 </dependency>
 ```
 
-> gb28181设备模拟client
+> gb28181设备client
 
 ```xml
 <dependency>
-<groupId>io.github.lunasaw</groupId>
-<artifactId>gb28181-client</artifactId>
-<version>${last.version}</version>
+    <groupId>io.github.lunasaw</groupId>
+    <artifactId>gb28181-client</artifactId>
+    <version>${last.version}</version>
 </dependency>
 ```
 
@@ -79,9 +87,9 @@
 
 ```xml
 <dependency>
-<groupId>io.github.lunasaw</groupId>
-<artifactId>gb28181-server</artifactId>
-<version>${last.version}</version>
+    <groupId>io.github.lunasaw</groupId>
+    <artifactId>gb28181-server</artifactId>
+    <version>${last.version}</version>
 </dependency>
 ```
 
