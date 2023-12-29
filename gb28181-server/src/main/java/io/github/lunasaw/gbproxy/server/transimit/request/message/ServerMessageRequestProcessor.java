@@ -34,18 +34,11 @@ public class ServerMessageRequestProcessor extends SipMessageRequestProcessorAbs
 
     @Override
     public void process(RequestEvent evt) {
-        SIPRequest request = (SIPRequest)evt.getRequest();
-
-        // 在服务端看来 收到请求的时候fromHeader还是客户端的 toHeader才是自己的，这里是要查询自己的信息
-        String sip = SipUtils.getUserIdFromToHeader(request);
-
-        // 获取设备
-        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
-        if (!sip.equals(fromDevice.getUserId())) {
+        if (!sipUserGenerate.checkDevice(evt)) {
+            // 如果是客户端收到的userId，一定是和自己的userId一致
             return;
         }
-
-        doMessageHandForEvt(evt, fromDevice);
+        doMessageHandForEvt(evt, (FromDevice) sipUserGenerate.getFromDevice());
     }
 
 }

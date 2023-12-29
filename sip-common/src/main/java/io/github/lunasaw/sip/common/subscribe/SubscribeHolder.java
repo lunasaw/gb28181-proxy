@@ -52,7 +52,7 @@ public class SubscribeHolder {
         mobilePositionMap.put(userId, subscribeInfo);
         String key = prefixKey + userId;
         // 添加任务处理GPS定时推送
-        dynamicTask.startCron(key, task, subscribeInfo.getGpsInterval() * 1000);
+        dynamicTask.startCron(key, task, subscribeInfo.getGpsInterval() * 1000L);
         String taskOverdueKey = taskOverduePrefix + prefixKey + userId;
         // 添加任务处理订阅过期
         dynamicTask.startDelay(taskOverdueKey, () -> {
