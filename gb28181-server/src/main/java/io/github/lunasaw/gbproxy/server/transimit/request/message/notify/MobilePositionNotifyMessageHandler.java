@@ -4,7 +4,7 @@ import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.notify.MobilePositionNotify;
 
 import org.springframework.stereotype.Component;

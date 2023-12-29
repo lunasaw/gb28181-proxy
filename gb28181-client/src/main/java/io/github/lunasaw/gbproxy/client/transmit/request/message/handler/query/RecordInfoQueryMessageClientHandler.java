@@ -5,7 +5,7 @@ import javax.sip.RequestEvent;
 import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceRecordQuery;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceRecord;
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeProcessorClient;
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceQuery;
 import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;

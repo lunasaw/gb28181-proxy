@@ -3,15 +3,18 @@ package io.github.lunasaw.sip.common.conf;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import io.github.lunasaw.sip.common.transmit.event.message.MessageHandler;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import io.github.lunasaw.sip.common.transmit.CustomSipProcessorInject;
+import io.github.lunasaw.sip.common.transmit.SipProcessorInject;
 import io.github.lunasaw.sip.common.transmit.SipProcessorObserver;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessor;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
@@ -31,13 +34,13 @@ public class SipProxyAutoConfig implements InitializingBean, ApplicationContextA
 
     private static final String METHOD = "method";
 
-    private ApplicationContext applicationContext;
+    private ApplicationContext  applicationContext;
 
     @Override
     public void afterPropertiesSet() {
         // 获取所有的SipResponseProcessorAbstract bean
         Map<String, SipResponseProcessor> responseProcessorAbstractMap =
-                applicationContext.getBeansOfType(SipResponseProcessor.class);
+            applicationContext.getBeansOfType(SipResponseProcessor.class);
 
         responseProcessorAbstractMap.forEach((k, v) -> {
             try {
@@ -71,5 +74,11 @@ public class SipProxyAutoConfig implements InitializingBean, ApplicationContextA
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SipProcessorInject sipProcessorInject() {
+        return new CustomSipProcessorInject();
     }
 }

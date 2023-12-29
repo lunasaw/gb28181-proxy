@@ -5,6 +5,7 @@ import javax.sip.message.Request;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import io.github.lunasaw.gbproxy.client.Gb28181Client;
@@ -31,10 +32,12 @@ public class ApplicationTest {
     static String localIp = "172.19.128.100";
     FromDevice fromDevice;
     ToDevice toDevice;
+    @Autowired
+    SipLayer sipLayer;
 
     @BeforeEach
     public void before() {
-        SipLayer.addListeningPoint(localIp, 8117);
+        sipLayer.addListeningPoint(localIp, 8117);
         fromDevice = FromDevice.getInstance("33010602011187000001", localIp, 8117);
         toDevice = ToDevice.getInstance("41010500002000000001", localIp, 8118);
         toDevice.setPassword("luna");

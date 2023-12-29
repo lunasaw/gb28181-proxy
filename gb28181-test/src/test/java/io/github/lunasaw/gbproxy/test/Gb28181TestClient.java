@@ -40,6 +40,9 @@ public class Gb28181TestClient {
     @Qualifier("clientTo")
     private Device toDevice;
 
+    @Autowired
+    private SipLayer sipLayer;
+
     @AfterAll
     public static void after() {
         while (true) {
@@ -51,7 +54,7 @@ public class Gb28181TestClient {
     public void before() {
         // 本地端口监听
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, fromDevice.getPort(), true);
+        sipLayer.addListeningPoint("192.168.2.101", fromDevice.getPort(), true);
 
         DeviceConfig.DEVICE_CLIENT_VIEW_MAP.put(toDevice.getUserId(), toDevice);
 

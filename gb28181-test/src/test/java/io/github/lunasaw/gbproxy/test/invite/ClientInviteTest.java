@@ -38,6 +38,9 @@ public class ClientInviteTest {
     @Qualifier("clientTo")
     private Device toDevice;
 
+    @Autowired
+    private SipLayer sipLayer;
+
     @AfterAll
     public static void after() {
         while (true) {
@@ -49,7 +52,7 @@ public class ClientInviteTest {
     public void before() {
         // 本地端口监听
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        SipLayer.addListeningPoint(DeviceConfig.LOOP_IP, fromDevice.getPort());
+        sipLayer.addListeningPoint(DeviceConfig.LOOP_IP, fromDevice.getPort());
         // 模拟平台添加
         DeviceConfig.DEVICE_CLIENT_VIEW_MAP.put(toDevice.getUserId(), toDevice);
     }

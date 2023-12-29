@@ -22,6 +22,8 @@ import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessor;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessor;
 import io.github.lunasaw.sip.common.transmit.event.timeout.ITimeoutProcessor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * SIP信令处理类观察者
@@ -29,7 +31,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author luna
  */
 @Slf4j
+@Component
 public class SipProcessorObserver implements SipListener {
+
+    @Autowired
+    private SipProcessorInject sipProcessorInject;
 
     /**
      * 对SIP事件进行处理
@@ -87,6 +93,8 @@ public class SipProcessorObserver implements SipListener {
      */
     @Override
     public void processRequest(RequestEvent requestEvent) {
+        sipProcessorInject.before(requestEvent);
+
         String method = requestEvent.getRequest().getMethod();
         List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
         if (CollectionUtils.isEmpty(sipRequestProcessors)) {
@@ -101,6 +109,8 @@ public class SipProcessorObserver implements SipListener {
         } catch (Exception e) {
             log.error("processRequest::requestEvent = {} ", requestEvent, e);
         }
+
+        sipProcessorInject.after();
     }
 
     /**
@@ -110,6 +120,8 @@ public class SipProcessorObserver implements SipListener {
      */
     @Override
     public void processResponse(ResponseEvent responseEvent) {
+        sipProcessorInject.before(responseEvent);
+
         Response response = responseEvent.getResponse();
         int status = response.getStatusCode();
 
@@ -145,6 +157,7 @@ public class SipProcessorObserver implements SipListener {
             }
         }
 
+        sipProcessorInject.after();
     }
 
     /**

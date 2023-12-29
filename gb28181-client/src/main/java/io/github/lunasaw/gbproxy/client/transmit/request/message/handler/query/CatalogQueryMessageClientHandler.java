@@ -13,7 +13,7 @@ import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHa
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceQuery;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

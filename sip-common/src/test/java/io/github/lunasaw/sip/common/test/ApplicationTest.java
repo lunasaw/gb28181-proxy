@@ -7,6 +7,7 @@ import io.github.lunasaw.sip.common.layer.SipLayer;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.luna.common.os.SystemInfoUtil;
@@ -20,10 +21,12 @@ import lombok.SneakyThrows;
 @SpringBootTest(classes = SipCommonApplication.class)
 public class ApplicationTest {
 
+    @Autowired
+    private SipLayer sipLayer;
 
     @BeforeEach
     public void before() {
-        SipLayer.addListeningPoint(SystemInfoUtil.getIP(), 8117);
+        sipLayer.addListeningPoint(SystemInfoUtil.getIP(), 8117);
     }
 
     @SneakyThrows
