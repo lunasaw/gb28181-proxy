@@ -5,6 +5,7 @@ import javax.sip.RequestEvent;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
@@ -27,9 +28,10 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
 
     private String cmdType = CMD_TYPE;
 
-    public BroadcastNotifyMessageHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    public BroadcastNotifyMessageHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(messageProcessorClient, sipUserGenerate);
     }
+
 
     @Override
     public String getRootType() {
@@ -42,7 +44,7 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
         String userId = deviceSession.getUserId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
         if (fromDevice == null || !fromDevice.getUserId().equals(userId)) {
             throw new RuntimeException("查询设备失败");
         }

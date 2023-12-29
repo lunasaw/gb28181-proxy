@@ -10,6 +10,7 @@ import javax.sip.header.*;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,9 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
     @Resource
     private RegisterProcessorServer registerProcessorServer;
 
+    @Resource
+    private SipUserGenerate         sipUserGenerate;
+
     /**
      * 收到注册请求 处理
      *
@@ -64,7 +68,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
 
             String userId = SipUtils.getUserIdFromFromHeader(request);
 
-            FromDevice fromDevice = (FromDevice)registerProcessorServer.getFromDevice();
+            FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
             if (fromDevice == null) {
                 return;
             }

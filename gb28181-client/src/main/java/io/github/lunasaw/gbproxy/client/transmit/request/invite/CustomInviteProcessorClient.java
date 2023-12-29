@@ -16,14 +16,4 @@ public class CustomInviteProcessorClient implements InviteProcessorClient {
     public void inviteSession(String callId, SdpSessionDescription sessionDescription) {
 
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
-    }
 }

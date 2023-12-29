@@ -1,30 +1,37 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
-import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
-import io.github.lunasaw.sip.common.utils.SipUtils;
-import lombok.Data;
+import javax.sip.RequestEvent;
+
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.sip.RequestEvent;
+import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
+import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
+import io.github.lunasaw.sip.common.utils.SipUtils;
+import lombok.Data;
 
 /**
  * @author luna
  */
-@Data
+@Getter
 @Component
 @ConditionalOnBean(MessageProcessorClient.class)
 public abstract class MessageClientHandlerAbstract extends MessageHandlerAbstract {
 
-    @Resource
+    @Autowired
     public MessageProcessorClient messageProcessorClient;
 
-    public MessageClientHandlerAbstract(@Lazy MessageProcessorClient messageProcessorClient) {
+    @Autowired
+    public SipUserGenerate        sipUserGenerate;
+
+    public MessageClientHandlerAbstract(@Lazy MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
         this.messageProcessorClient = messageProcessorClient;
+        this.sipUserGenerate = sipUserGenerate;
     }
 
     @Override
@@ -33,7 +40,7 @@ public abstract class MessageClientHandlerAbstract extends MessageHandlerAbstrac
     }
 
     public DeviceSession getDeviceSession(RequestEvent event) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
+        SIPRequest sipRequest = (SIPRequest)event.getRequest();
 
         // 特别注意。这里的userId和sipId是反的，因为是客户端收到消息，所以这里的from是服务端，to是客户端
         String userId = SipUtils.getUserIdFromToHeader(sipRequest);
@@ -42,6 +49,5 @@ public abstract class MessageClientHandlerAbstract extends MessageHandlerAbstrac
 
         return new DeviceSession(userId, sipId);
     }
-
 
 }

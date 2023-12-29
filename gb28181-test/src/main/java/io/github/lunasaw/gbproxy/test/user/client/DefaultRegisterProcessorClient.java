@@ -60,14 +60,4 @@ public class DefaultRegisterProcessorClient implements RegisterProcessorClient {
             future.cancel(false);
         }
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return DeviceConfig.DEVICE_CLIENT_VIEW_MAP.get(userId);
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return fromDevice;
-    }
 }

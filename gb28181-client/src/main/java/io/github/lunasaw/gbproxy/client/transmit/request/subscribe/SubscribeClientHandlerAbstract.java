@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe;
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +20,14 @@ import lombok.Data;
 public abstract class SubscribeClientHandlerAbstract extends MessageHandlerAbstract {
 
     @Autowired
-    public SubscribeProcessorClient subscribeProcessorClient;
+    protected SubscribeProcessorClient subscribeProcessorClient;
 
-    public SubscribeClientHandlerAbstract(SubscribeProcessorClient subscribeProcessorClient) {
+    @Autowired
+    protected SipUserGenerate          sipUserGenerate;
+
+    public SubscribeClientHandlerAbstract(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerate sipUserGenerate) {
         this.subscribeProcessorClient = subscribeProcessorClient;
+        this.sipUserGenerate = sipUserGenerate;
     }
 
     @Override

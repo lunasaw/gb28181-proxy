@@ -8,6 +8,7 @@ import javax.sip.message.Response;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;
 import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.springframework.stereotype.Component;
@@ -38,9 +39,10 @@ public class CatalogQueryMessageHandler extends SubscribeClientHandlerAbstract {
 
     public static final String CMD_TYPE = CmdTypeEnum.CATALOG.getType();
 
-    public CatalogQueryMessageHandler(SubscribeProcessorClient subscribeProcessorClient) {
-        super(subscribeProcessorClient);
+    public CatalogQueryMessageHandler(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(subscribeProcessorClient, sipUserGenerate);
     }
+
 
     @Override
     public String getRootType() {
@@ -55,7 +57,7 @@ public class CatalogQueryMessageHandler extends SubscribeClientHandlerAbstract {
         String userId = deviceSession.getUserId();
         SIPRequest request = (SIPRequest)event.getRequest();
         SubscribeInfo subscribeInfo = new SubscribeInfo(request, sipId);
-        Device fromDevice = subscribeProcessorClient.getFromDevice();
+        Device fromDevice = sipUserGenerate.getFromDevice();
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }

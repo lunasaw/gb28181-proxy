@@ -31,14 +31,4 @@ public class CustomRegisterProcessorServer implements RegisterProcessorServer {
     public void deviceOffLine(String userId, RegisterInfo registerInfo, SipTransaction sipTransaction) {
 
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
-    }
 }

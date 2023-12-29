@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
  * @author luna
  * @date 2023/10/17
  */
-@Component
 public interface SipUserGenerate {
 
     /**

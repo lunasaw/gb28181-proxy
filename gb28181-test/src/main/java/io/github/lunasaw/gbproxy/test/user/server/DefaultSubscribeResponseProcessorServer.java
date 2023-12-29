@@ -30,14 +30,4 @@ public class DefaultSubscribeResponseProcessorServer implements SubscribeRespons
     public void subscribeResult(DeviceSubscribe deviceSubscribe) {
         log.info("收到订阅消息响应 subscribeResult::deviceSubscribe = {} ", JSON.toJSONString(deviceSubscribe));
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return DeviceConfig.DEVICE_SERVER_VIEW_MAP.get(userId);
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return fromDevice;
-    }
 }

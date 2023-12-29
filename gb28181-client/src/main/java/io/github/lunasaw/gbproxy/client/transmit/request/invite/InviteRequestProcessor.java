@@ -5,6 +5,7 @@ import javax.sip.RequestEvent;
 import javax.sip.header.ContentTypeHeader;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
@@ -38,6 +39,9 @@ public class InviteRequestProcessor extends SipRequestProcessorAbstract {
     @Resource
     private InviteProcessorClient inviteProcessorClient;
 
+    @Resource
+    private SipUserGenerate       sipUserGenerate;
+
     /**
      * 收到Invite请求 处理
      *
@@ -51,13 +55,13 @@ public class InviteRequestProcessor extends SipRequestProcessorAbstract {
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) inviteProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
 
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }
         String toUserId = SipUtils.getUserIdFromFromHeader(request);
-        Device toDevice = inviteProcessorClient.getToDevice(toUserId);
+        Device toDevice = sipUserGenerate.getToDevice(toUserId);
         if (toDevice == null) {
             return;
         }

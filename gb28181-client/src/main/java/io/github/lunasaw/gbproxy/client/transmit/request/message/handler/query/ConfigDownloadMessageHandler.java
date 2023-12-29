@@ -8,6 +8,7 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceConfigDownload;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceConfigResponse;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
@@ -32,9 +33,10 @@ public class ConfigDownloadMessageHandler extends MessageClientHandlerAbstract {
 
     private String             cmdType  = CMD_TYPE;
 
-    public ConfigDownloadMessageHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    public ConfigDownloadMessageHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(messageProcessorClient, sipUserGenerate);
     }
+
 
     @Override
     public String getRootType() {
@@ -49,8 +51,8 @@ public class ConfigDownloadMessageHandler extends MessageClientHandlerAbstract {
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
-        ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(sipId);
 
         DeviceConfigDownload deviceConfigDownload = parseXml(DeviceConfigDownload.class);
 

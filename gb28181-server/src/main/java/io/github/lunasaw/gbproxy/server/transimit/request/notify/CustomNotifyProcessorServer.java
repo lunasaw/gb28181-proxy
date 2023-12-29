@@ -16,14 +16,4 @@ public class CustomNotifyProcessorServer implements NotifyProcessorServer {
     public void deviceNotifyUpdate(String userId, DeviceOtherUpdateNotify deviceOtherUpdateNotify) {
 
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
-    }
 }

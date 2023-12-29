@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gb28181.common.entity.response.DeviceResponse;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
@@ -32,9 +33,10 @@ public class CatalogQueryMessageClientHandler extends MessageClientHandlerAbstra
 
     private String cmdType = CMD_TYPE;
 
-    public CatalogQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    public CatalogQueryMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(messageProcessorClient, sipUserGenerate);
     }
+
 
     @Override
     public String getRootType() {
@@ -50,8 +52,8 @@ public class CatalogQueryMessageClientHandler extends MessageClientHandlerAbstra
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
-        ToDevice toDevice = (ToDevice) messageProcessorClient.getToDevice(sipId);
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(sipId);
         if (toDevice == null) {
             return;
         }

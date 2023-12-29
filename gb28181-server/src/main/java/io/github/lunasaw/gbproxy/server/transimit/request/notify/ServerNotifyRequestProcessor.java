@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.server.transimit.request.notify;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
@@ -27,7 +28,10 @@ public class ServerNotifyRequestProcessor extends SipMessageRequestProcessorAbst
     private String             method = METHOD;
 
     @Resource
-    public NotifyProcessorServer notifyProcessorServer;
+    private NotifyProcessorServer notifyProcessorServer;
+
+    @Resource
+    private SipUserGenerate       sipUserGenerate;
 
     /**
      * 收到Notify请求 处理
@@ -42,7 +46,7 @@ public class ServerNotifyRequestProcessor extends SipMessageRequestProcessorAbst
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice)notifyProcessorServer.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }

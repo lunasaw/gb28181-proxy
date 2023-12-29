@@ -23,16 +23,6 @@ public class DefaultNotifyProcessorServer implements NotifyProcessorServer {
 
 
     @Override
-    public Device getToDevice(String userId) {
-        return DeviceConfig.DEVICE_SERVER_VIEW_MAP.get(userId);
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return fromDevice;
-    }
-
-    @Override
     public void deviceNotifyUpdate(String userId, DeviceOtherUpdateNotify deviceOtherUpdateNotify) {
 
     }

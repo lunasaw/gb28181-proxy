@@ -32,16 +32,6 @@ public class DefaultMessageProcessorServer implements MessageProcessorServer {
     private Device fromDevice;
 
     @Override
-    public Device getToDevice(String userId) {
-        return DeviceConfig.DEVICE_SERVER_VIEW_MAP.get(userId);
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return fromDevice;
-    }
-
-    @Override
     public void keepLiveDevice(DeviceKeepLiveNotify deviceKeepLiveNotify) {
         log.info("接收到设备的心跳 keepLiveDevice::deviceKeepLiveNotify = {}", JSON.toJSONString(deviceKeepLiveNotify));
     }

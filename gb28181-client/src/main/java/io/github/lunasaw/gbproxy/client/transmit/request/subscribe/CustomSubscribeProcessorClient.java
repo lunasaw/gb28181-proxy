@@ -24,13 +24,4 @@ public class CustomSubscribeProcessorClient implements SubscribeProcessorClient 
         return null;
     }
 
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
-    }
 }

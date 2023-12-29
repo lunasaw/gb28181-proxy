@@ -7,7 +7,7 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  * @author luna
  * @date 2023/10/21
  */
-public interface SubscribeResponseProcessorServer extends SipUserGenerate {
+public interface SubscribeResponseProcessorServer {
     void subscribeResult(DeviceSubscribe deviceSubscribe);
 
 }

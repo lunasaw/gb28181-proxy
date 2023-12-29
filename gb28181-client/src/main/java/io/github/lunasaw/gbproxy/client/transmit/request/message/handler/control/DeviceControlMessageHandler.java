@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.contro
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,9 +31,10 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
     @Autowired
     private SpringBeanFactory  springBeanFactory;
 
-    public DeviceControlMessageHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    public DeviceControlMessageHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(messageProcessorClient, sipUserGenerate);
     }
+
 
     @Override
     public String getRootType() {

@@ -2,16 +2,17 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
-import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
-import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.sip.common.entity.ToDevice;
+import org.springframework.stereotype.Component;
+
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceRecordQuery;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceRecord;
-import org.springframework.stereotype.Component;
-
+import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageProcessorClient;
+import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.entity.ToDevice;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -26,19 +27,18 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class RecordInfoQueryMessageClientHandler extends MessageClientHandlerAbstract {
 
-    public static final String     CMD_TYPE = "RecordInfo";
+    public static final String CMD_TYPE = "RecordInfo";
 
-    private String                 cmdType  = CMD_TYPE;
+    private String             cmdType  = CMD_TYPE;
 
-    public RecordInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    public RecordInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(messageProcessorClient, sipUserGenerate);
     }
 
     @Override
     public String getRootType() {
         return QUERY;
     }
-
 
     @Override
     public void handForEvt(RequestEvent event) {
@@ -47,8 +47,8 @@ public class RecordInfoQueryMessageClientHandler extends MessageClientHandlerAbs
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
-        ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(sipId);
 
         DeviceRecordQuery deviceRecordQuery = parseXml(DeviceRecordQuery.class);
 

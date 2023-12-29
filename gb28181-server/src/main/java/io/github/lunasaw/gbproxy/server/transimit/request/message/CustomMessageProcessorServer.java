@@ -52,14 +52,4 @@ public class CustomMessageProcessorServer implements MessageProcessorServer {
     public void updateDeviceResponse(String userId, DeviceResponse deviceResponse) {
 
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
-    }
 }

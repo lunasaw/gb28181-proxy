@@ -9,7 +9,6 @@ import io.github.lunasaw.gb28181.common.entity.query.DeviceAlarmQuery;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceConfigDownload;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceRecordQuery;
 import io.github.lunasaw.gb28181.common.entity.response.*;
-import io.github.lunasaw.sip.common.entity.Device;
 
 /**
  * @author luna
@@ -56,15 +55,5 @@ public class CustomMessageProcessorClient implements MessageProcessorClient {
     @Override
     public <T> void deviceControl(T deviceControlBase) {
 
-    }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
     }
 }

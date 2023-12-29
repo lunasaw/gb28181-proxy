@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.info;
 import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,9 @@ public class ClientInfoRequestProcessor extends SipRequestProcessorAbstract {
     @Autowired
     private InfoProcessorClient infoProcessorClient;
 
+    @Autowired
+    private SipUserGenerate     sipUserGenerate;
+
     /**
      * 收到Info请求 处理
      *
@@ -43,7 +47,7 @@ public class ClientInfoRequestProcessor extends SipRequestProcessorAbstract {
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) infoProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
 
         if (!userId.equals(fromDevice.getUserId())) {
             return;

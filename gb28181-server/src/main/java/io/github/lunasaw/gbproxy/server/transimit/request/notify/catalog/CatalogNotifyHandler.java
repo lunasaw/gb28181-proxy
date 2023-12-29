@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.server.transimit.request.notify.catalog;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.server.transimit.request.notify.NotifyProcessorServer;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
@@ -26,16 +27,17 @@ public class CatalogNotifyHandler extends NotifyServerHandlerAbstract {
 
     public static final String CMD_TYPE = "Catalog";
 
-    public CatalogNotifyHandler(NotifyProcessorServer notifyProcessorServer) {
-        super(notifyProcessorServer);
+    public CatalogNotifyHandler(NotifyProcessorServer notifyProcessorServer, SipUserGenerate sipUserGenerate) {
+        super(notifyProcessorServer, sipUserGenerate);
     }
+
 
     @Override
     public void handForEvt(RequestEvent event) {
         DeviceSession deviceSession = getDeviceSession(event);
 
         String userId = deviceSession.getUserId();
-        ToDevice toDevice = (ToDevice)notifyProcessorServer.getToDevice(userId);
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(userId);
         if (toDevice == null) {
             // 未注册的设备不做处理
             return;

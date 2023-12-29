@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.ack;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -18,6 +19,8 @@ import javax.sip.RequestEvent;
 
 /**
  * SIP命令类型： ACK请求
+ * 
+ * @author weidian
  */
 @Component
 @Getter
@@ -32,6 +35,9 @@ public class ClientAckRequestProcessor extends SipRequestProcessorAbstract {
     @Resource
     private AckRequestProcessorClient ackRequestProcessorClient;
 
+    @Resource
+    private SipUserGenerate           sipUserGenerate;
+
     /**
      * 处理  ACK请求
      *
@@ -45,13 +51,15 @@ public class ClientAckRequestProcessor extends SipRequestProcessorAbstract {
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) ackRequestProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
 
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }
         Dialog dialog = evt.getDialog();
-        if (dialog == null) return;
+        if (dialog == null) {
+            return;
+        }
         if (dialog.getState() == DialogState.CONFIRMED) {
             SipSubscribe.publishAckEvent(evt);
         }

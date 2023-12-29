@@ -3,11 +3,11 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
@@ -32,8 +32,12 @@ public class ClientSubscribeRequestProcessor extends SipMessageRequestProcessorA
     @Resource
     private SubscribeProcessorClient subscribeProcessorClient;
 
-    public ClientSubscribeRequestProcessor(@Lazy SubscribeProcessorClient subscribeProcessorClient) {
+    @Resource
+    private SipUserGenerate          sipUserGenerate;
+
+    public ClientSubscribeRequestProcessor(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerate sipUserGenerate) {
         this.subscribeProcessorClient = subscribeProcessorClient;
+        this.sipUserGenerate = sipUserGenerate;
     }
 
     /**
@@ -50,13 +54,12 @@ public class ClientSubscribeRequestProcessor extends SipMessageRequestProcessorA
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice)subscribeProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
         if (!userId.equals(fromDevice.getUserId())) {
             return;
         }
 
         doMessageHandForEvt(evt, fromDevice);
     }
-
 
 }

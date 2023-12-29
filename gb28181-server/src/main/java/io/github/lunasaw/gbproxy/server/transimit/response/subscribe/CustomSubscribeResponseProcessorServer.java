@@ -4,7 +4,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;
-import io.github.lunasaw.sip.common.entity.Device;
 
 /**
  * @author luna
@@ -16,15 +15,5 @@ public class CustomSubscribeResponseProcessorServer implements SubscribeResponse
     @Override
     public void subscribeResult(DeviceSubscribe deviceSubscribe) {
 
-    }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
     }
 }

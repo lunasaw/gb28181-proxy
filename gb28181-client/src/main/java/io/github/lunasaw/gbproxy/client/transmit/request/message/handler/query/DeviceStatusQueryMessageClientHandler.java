@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
@@ -33,9 +34,10 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
     private String root = QUERY;
     private String                 cmdType  = CMD_TYPE;
 
-    public DeviceStatusQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    public DeviceStatusQueryMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(messageProcessorClient, sipUserGenerate);
     }
+
 
     @Override
     public String getRootType() {
@@ -50,11 +52,11 @@ public class DeviceStatusQueryMessageClientHandler extends MessageClientHandlerA
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
         if (fromDevice == null) {
             return;
         }
-        ToDevice toDevice = (ToDevice)messageProcessorClient.getToDevice(sipId);
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(sipId);
 
         DeviceQuery deviceQuery = parseXml(DeviceQuery.class);
 

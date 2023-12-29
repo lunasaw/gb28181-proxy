@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -24,10 +25,10 @@ public class BaseMessageClientHandler extends MessageClientHandlerAbstract {
 
     private String cmdType = CMD_TYPE;
 
-
-    public BaseMessageClientHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    public BaseMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(messageProcessorClient, sipUserGenerate);
     }
+
 
     @Override
     public void handForEvt(RequestEvent event) {

@@ -6,7 +6,7 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  * @author luna
  * @date 2023/10/21
  */
-public interface InviteResponseProcessorServer extends SipUserGenerate {
+public interface InviteResponseProcessorServer {
     void responseTrying();
 
 }

@@ -13,7 +13,7 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  * @author luna
  * @date 2023/10/21
  */
-public interface MessageProcessorServer extends SipUserGenerate {
+public interface MessageProcessorServer {
 
     /**
      * 更新设备心跳信息

@@ -15,23 +15,7 @@ import io.github.lunasaw.sip.common.entity.Device;
 @Slf4j
 public class DefaultInviteResponseProcessorServer implements InviteResponseProcessorServer {
 
-    @Autowired
-    @Qualifier("serverFrom")
-    private Device fromDevice;
 
-    @Autowired
-    @Qualifier("serverTo")
-    private Device toDevice;
-
-    @Override
-    public Device getToDevice(String userId) {
-        return toDevice;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return fromDevice;
-    }
 
     @Override
     public void responseTrying() {

@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.server.transimit.request.bye;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
@@ -29,6 +30,9 @@ public class ByeRequestProcessorServer extends SipRequestProcessorAbstract {
     @Resource
     private ByeProcessorServer byeProcessorServer;
 
+    @Resource
+    private SipUserGenerate    sipUserGenerate;
+
     /**
      * 收到Bye请求 处理
      *
@@ -42,7 +46,7 @@ public class ByeRequestProcessorServer extends SipRequestProcessorAbstract {
         String sip = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) byeProcessorServer.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
         if (!sip.equals(fromDevice.getUserId())) {
             return;
         }

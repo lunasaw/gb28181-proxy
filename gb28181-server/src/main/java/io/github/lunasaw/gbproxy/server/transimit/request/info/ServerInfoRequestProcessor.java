@@ -5,6 +5,7 @@ import javax.sip.RequestEvent;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,9 @@ public class ServerInfoRequestProcessor extends SipRequestProcessorAbstract {
     @Resource
     private InfoProcessorServer infoProcessorServer;
 
+    @Resource
+    private SipUserGenerate     sipUserGenerate;
+
     /**
      * 收到Info请求 处理
      *
@@ -42,7 +46,7 @@ public class ServerInfoRequestProcessor extends SipRequestProcessorAbstract {
         String sip = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) infoProcessorServer.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
         if (!sip.equals(fromDevice.getUserId())) {
             return;
         }

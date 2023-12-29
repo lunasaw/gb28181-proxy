@@ -17,14 +17,4 @@ public class CustomByeProcessorServer implements ByeProcessorServer {
     public void receiveBye(String userId) {
 
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
-    }
 }

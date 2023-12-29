@@ -11,7 +11,7 @@ import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
  * @date 2023/12/11
  * @description:
  */
-public interface SubscribeProcessorClient extends SipUserGenerate {
+public interface SubscribeProcessorClient {
 
     void putSubscribe(String userId, SubscribeInfo subscribeInfo);
 

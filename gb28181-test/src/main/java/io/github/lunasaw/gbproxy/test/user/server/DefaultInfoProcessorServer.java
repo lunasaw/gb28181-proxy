@@ -22,14 +22,4 @@ public class DefaultInfoProcessorServer implements InfoProcessorServer {
     public void dealInfo(String userId, String content) {
 
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return DeviceConfig.DEVICE_SERVER_VIEW_MAP.get(userId);
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return fromDevice;
-    }
 }

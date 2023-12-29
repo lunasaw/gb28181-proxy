@@ -15,14 +15,4 @@ public class CustomInfoProcessorClient implements InfoProcessorClient {
     public void receiveInfo(String userId, String content) {
 
     }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
-    }
 }

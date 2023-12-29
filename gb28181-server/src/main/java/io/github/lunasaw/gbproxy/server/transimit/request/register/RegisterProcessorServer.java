@@ -7,7 +7,7 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  * @author luna
  * @date 2023/10/18
  */
-public interface RegisterProcessorServer extends SipUserGenerate {
+public interface RegisterProcessorServer {
 
     /**
      * 获取第一次注册的事务

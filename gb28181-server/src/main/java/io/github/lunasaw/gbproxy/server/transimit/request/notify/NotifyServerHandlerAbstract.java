@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.server.transimit.request.notify;
 import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
@@ -21,8 +22,12 @@ public abstract class NotifyServerHandlerAbstract extends MessageHandlerAbstract
     @Resource
     public NotifyProcessorServer notifyProcessorServer;
 
-    public NotifyServerHandlerAbstract(NotifyProcessorServer notifyProcessorServer) {
+    @Resource
+    protected SipUserGenerate    sipUserGenerate;
+
+    public NotifyServerHandlerAbstract(NotifyProcessorServer notifyProcessorServer, SipUserGenerate sipUserGenerate) {
         this.notifyProcessorServer = notifyProcessorServer;
+        this.sipUserGenerate = sipUserGenerate;
     }
 
     @Override

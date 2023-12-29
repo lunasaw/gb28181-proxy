@@ -1,6 +1,5 @@
 package io.github.lunasaw.gbproxy.server.transimit.response.invite;
 
-import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
 
@@ -14,15 +13,5 @@ public class CustomInviteResponseProcessorServer implements InviteResponseProces
     @Override
     public void responseTrying() {
 
-    }
-
-    @Override
-    public Device getToDevice(String userId) {
-        return null;
-    }
-
-    @Override
-    public Device getFromDevice() {
-        return null;
     }
 }

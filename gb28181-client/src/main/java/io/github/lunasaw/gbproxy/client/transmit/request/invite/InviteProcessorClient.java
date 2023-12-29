@@ -18,7 +18,7 @@ import java.util.Vector;
 /**
  * @author weidian
  */
-public interface InviteProcessorClient extends SipUserGenerate {
+public interface InviteProcessorClient {
 
 
     void inviteSession(String callId, SdpSessionDescription sessionDescription);

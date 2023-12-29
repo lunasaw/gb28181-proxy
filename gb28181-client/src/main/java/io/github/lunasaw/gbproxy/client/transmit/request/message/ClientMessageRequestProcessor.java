@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.FromDevice;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.event.message.SipMessageRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
@@ -28,6 +29,8 @@ public class ClientMessageRequestProcessor extends SipMessageRequestProcessorAbs
 
     private String method = METHOD;
 
+    @Resource
+    private SipUserGenerate        sipUserGenerate;
 
     @Override
     public void process(RequestEvent evt) {
@@ -37,7 +40,7 @@ public class ClientMessageRequestProcessor extends SipMessageRequestProcessorAbs
         String userId = SipUtils.getUserIdFromToHeader(request);
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice) messageProcessorClient.getFromDevice();
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
 
         if (!userId.equals(fromDevice.getUserId())) {
             return;

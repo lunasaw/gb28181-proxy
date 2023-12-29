@@ -16,7 +16,7 @@ import io.github.lunasaw.sip.common.service.SipUserGenerate;
  * @author luna
  * @date 2023/10/18
  */
-public interface MessageProcessorClient extends SipUserGenerate {
+public interface MessageProcessorClient {
 
     /**
      * 获取设备录像信息

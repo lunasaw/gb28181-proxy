@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.message.MessageClientHandlerAbstract;
+import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 响应设备信息
+ * 
+ * @author weidian
  */
 @Component
 @Slf4j
@@ -29,8 +32,8 @@ public class DeviceInfoQueryMessageClientHandler extends MessageClientHandlerAbs
 
     private String cmdType = CMD_TYPE;
 
-    public DeviceInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient) {
-        super(messageProcessorClient);
+    public DeviceInfoQueryMessageClientHandler(MessageProcessorClient messageProcessorClient, SipUserGenerate sipUserGenerate) {
+        super(messageProcessorClient, sipUserGenerate);
     }
 
     @Override
@@ -47,8 +50,8 @@ public class DeviceInfoQueryMessageClientHandler extends MessageClientHandlerAbs
         String sipId = deviceSession.getSipId();
 
         // 设备查询
-        FromDevice fromDevice = (FromDevice)messageProcessorClient.getFromDevice();
-        ToDevice toDevice = (ToDevice) messageProcessorClient.getToDevice(sipId);
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(sipId);
 
         DeviceQuery deviceQuery = parseXml(DeviceQuery.class);
 
