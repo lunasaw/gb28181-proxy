@@ -4,6 +4,7 @@ import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
 import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.server.transimit.request.message.ServerMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.ToDevice;
@@ -39,7 +40,7 @@ public class KeepaliveNotifyMessageHandler extends MessageServerHandlerAbstract 
 
     @Override
     public String getRootType() {
-        return NOTIFY;
+        return ServerMessageRequestProcessor.METHOD + NOTIFY;
     }
 
 

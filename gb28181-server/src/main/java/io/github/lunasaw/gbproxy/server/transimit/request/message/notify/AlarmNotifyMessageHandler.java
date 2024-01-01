@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceAlarmNotify;
+import io.github.lunasaw.gbproxy.server.transimit.request.message.ServerMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class AlarmNotifyMessageHandler extends MessageServerHandlerAbstract {
 
     @Override
     public String getRootType() {
-        return NOTIFY;
+        return ServerMessageRequestProcessor.METHOD + NOTIFY;
     }
 
     @Override

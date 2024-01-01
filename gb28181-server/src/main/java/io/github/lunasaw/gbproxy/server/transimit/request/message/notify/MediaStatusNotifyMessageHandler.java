@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.notify;
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.gbproxy.server.transimit.request.message.ServerMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class MediaStatusNotifyMessageHandler extends MessageServerHandlerAbstrac
 
     @Override
     public String getRootType() {
-        return NOTIFY;
+        return ServerMessageRequestProcessor.METHOD + NOTIFY;
     }
 
 

@@ -40,8 +40,5 @@ public class BaseMessageServerHandler extends MessageServerHandlerAbstract {
         return cmdType;
     }
 
-    @Override
-    public String getRootType() {
-        return super.getRootType();
-    }
+
 }

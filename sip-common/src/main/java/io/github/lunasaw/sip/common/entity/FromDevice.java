@@ -1,8 +1,7 @@
 package io.github.lunasaw.sip.common.entity;
 
 import io.github.lunasaw.sip.common.constant.Constant;
-import io.github.lunasaw.sip.common.enums.StreamModeEnum;
-import io.github.lunasaw.sip.common.enums.TransModeEnum;
+
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.Data;
 
@@ -31,8 +30,8 @@ public class FromDevice extends Device {
         fromDevice.setUserId(userId);
         fromDevice.setIp(ip);
         fromDevice.setPort(port);
-        fromDevice.setTransport(TransModeEnum.UDP.getType());
-        fromDevice.setStreamMode(StreamModeEnum.TCP_PASSIVE.getType());
+        fromDevice.setTransport("UDP");
+        fromDevice.setStreamMode("TCP_PASSIVE");
         fromDevice.setFromTag(SipRequestUtils.getNewFromTag());
         fromDevice.setAgent(Constant.AGENT);
         return fromDevice;

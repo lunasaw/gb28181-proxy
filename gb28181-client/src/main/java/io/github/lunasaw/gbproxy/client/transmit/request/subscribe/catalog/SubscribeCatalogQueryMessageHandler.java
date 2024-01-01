@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.subscribe.catalog;
 
 import javax.sip.RequestEvent;
 import javax.sip.header.ContentTypeHeader;
+import javax.sip.header.EventHeader;
 import javax.sip.header.ExpiresHeader;
 import javax.sip.message.Response;
 
@@ -9,7 +10,6 @@ import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;
 import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
-import io.github.lunasaw.sip.common.service.SipUserGenerate;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import org.springframework.stereotype.Component;
@@ -36,11 +36,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class CatalogQueryMessageHandler extends SubscribeClientHandlerAbstract {
+public class SubscribeCatalogQueryMessageHandler extends SubscribeClientHandlerAbstract {
 
     public static final String CMD_TYPE = CmdTypeEnum.CATALOG.getType();
 
-    public CatalogQueryMessageHandler(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerateClient sipUserGenerate) {
+    public SubscribeCatalogQueryMessageHandler(SubscribeProcessorClient subscribeProcessorClient, SipUserGenerateClient sipUserGenerate) {
         super(subscribeProcessorClient, sipUserGenerate);
     }
 
@@ -53,6 +53,13 @@ public class CatalogQueryMessageHandler extends SubscribeClientHandlerAbstract {
     @Override
     public void handForEvt(RequestEvent event) {
         DeviceSession deviceSession = getDeviceSession(event);
+
+        EventHeader header = (EventHeader) event.getRequest().getHeader(EventHeader.NAME);
+        if (header == null){
+            log.info("handForEvt::event = {}", event);
+            return;
+        }
+
         // 订阅消息过来
         String sipId = deviceSession.getSipId();
         String userId = deviceSession.getUserId();

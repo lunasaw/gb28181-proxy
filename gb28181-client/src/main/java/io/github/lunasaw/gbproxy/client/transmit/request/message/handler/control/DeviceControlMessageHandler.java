@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.contro
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.message.ClientMessageRequestProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,7 @@ public class DeviceControlMessageHandler extends MessageClientHandlerAbstract {
 
     @Override
     public String getRootType() {
-        return CONTROL;
+        return ClientMessageRequestProcessor.METHOD + CONTROL;
     }
 
     @Override

@@ -3,6 +3,7 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.query;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.gbproxy.client.transmit.cmd.ClientSendCmd;
+import io.github.lunasaw.gbproxy.client.transmit.request.message.ClientMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
@@ -41,7 +42,7 @@ public class ConfigDownloadMessageHandler extends MessageClientHandlerAbstract {
 
     @Override
     public String getRootType() {
-        return QUERY;
+        return ClientMessageRequestProcessor.METHOD + QUERY;
     }
 
 
