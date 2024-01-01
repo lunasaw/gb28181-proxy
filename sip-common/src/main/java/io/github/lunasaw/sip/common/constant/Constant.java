@@ -6,9 +6,9 @@ package io.github.lunasaw.sip.common.constant;
  */
 public class Constant {
 
-    public static final String TCP = "tcp";
+    public static final String TCP = "TCP";
 
-    public static final String UDP = "udp";
+    public static final String UDP = "UDP";
 
     public static final String AGENT = "LunaSaw-GB28181-Proxy";
 

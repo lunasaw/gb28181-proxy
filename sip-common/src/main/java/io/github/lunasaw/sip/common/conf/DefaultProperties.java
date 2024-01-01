@@ -1,9 +1,12 @@
 package io.github.lunasaw.sip.common.conf;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +32,9 @@ public class DefaultProperties {
          * sip_server_log.log 和 sip_debug_log.log ERROR, INFO, WARNING, OFF, DEBUG, TRACE
          */
         try {
-            File configFile = ResourceUtils.getFile("classpath:sip/config.properties").getAbsoluteFile();
-            properties.load(Files.newInputStream(configFile.toPath()));
+            Resource resource = new ClassPathResource("sip/config.properties");
+            InputStream inputStream = resource.getInputStream();
+            properties.load(inputStream);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,4 +1,4 @@
-package io.github.lunasaw.gb28181.common.entity.base;
+package io.github.lunasaw.sip.common.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

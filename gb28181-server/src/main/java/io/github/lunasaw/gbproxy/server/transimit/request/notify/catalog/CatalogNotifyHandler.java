@@ -2,15 +2,12 @@ package io.github.lunasaw.gbproxy.server.transimit.request.notify.catalog;
 
 import javax.sip.RequestEvent;
 
-import io.github.lunasaw.gbproxy.server.transimit.request.notify.NotifyProcessorServer;
-import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
-
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceOtherUpdateNotify;
-import io.github.lunasaw.gbproxy.server.transimit.request.message.MessageProcessorServer;
 import io.github.lunasaw.gbproxy.server.transimit.request.notify.NotifyServerHandlerAbstract;
+import io.github.lunasaw.gbproxy.server.transimit.request.notify.ServerNotifyRequestProcessor;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 public class CatalogNotifyHandler extends NotifyServerHandlerAbstract {
 
     public static final String CMD_TYPE = "Catalog";
-
 
     @Override
     public void handForEvt(RequestEvent event) {
@@ -52,6 +48,6 @@ public class CatalogNotifyHandler extends NotifyServerHandlerAbstract {
 
     @Override
     public String getRootType() {
-        return RESPONSE;
+        return ServerNotifyRequestProcessor.METHOD + RESPONSE;
     }
 }

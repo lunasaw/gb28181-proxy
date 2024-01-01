@@ -6,11 +6,11 @@
     <parent>
         <groupId>io.github.lunasaw</groupId>
         <artifactId>sip-proxy</artifactId>
-        <version>1.1.5</version>
+        <version>1.1.6</version>
     </parent>
 
     <packaging>jar</packaging>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
     <artifactId>sip-common</artifactId>
     <name>sip-common</name>
     <description>轻量级SIP框架封装</description>
@@ -38,6 +38,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+            <version>${skywalking.version}</version>
         </dependency>
     </dependencies>
 

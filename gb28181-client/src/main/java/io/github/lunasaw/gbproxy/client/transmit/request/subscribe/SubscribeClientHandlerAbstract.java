@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
@@ -32,7 +32,7 @@ public abstract class SubscribeClientHandlerAbstract extends MessageHandlerAbstr
 
     @Override
     public String getRootType() {
-        return "Root";
+        return ClientSubscribeRequestProcessor.METHOD + "Root";
     }
 
     public DeviceSession getDeviceSession(RequestEvent event) {

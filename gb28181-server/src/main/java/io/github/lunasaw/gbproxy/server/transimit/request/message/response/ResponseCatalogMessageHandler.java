@@ -2,9 +2,10 @@ package io.github.lunasaw.gbproxy.server.transimit.request.message.response;
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.gbproxy.server.transimit.request.message.ServerMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceResponse;
 
 import org.springframework.stereotype.Component;
@@ -55,6 +56,6 @@ public class ResponseCatalogMessageHandler extends MessageServerHandlerAbstract 
 
     @Override
     public String getRootType() {
-        return RESPONSE;
+        return ServerMessageRequestProcessor.METHOD + RESPONSE;
     }
 }

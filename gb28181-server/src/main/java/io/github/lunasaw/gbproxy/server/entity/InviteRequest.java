@@ -1,7 +1,7 @@
 package io.github.lunasaw.gbproxy.server.entity;
 
-import io.github.lunasaw.sip.common.enums.ManufacturerEnum;
-import io.github.lunasaw.sip.common.enums.StreamModeEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.ManufacturerEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.StreamModeEnum;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Data;
 

@@ -1,17 +1,17 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
-import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
+import javax.annotation.Resource;
+import javax.sip.RequestEvent;
 
-import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
-import io.github.lunasaw.sip.common.utils.SipUtils;
-import lombok.Data;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.sip.RequestEvent;
+import gov.nist.javax.sip.message.SIPRequest;
+import io.github.lunasaw.gbproxy.server.user.SipUserGenerateServer;
+import io.github.lunasaw.sip.common.transmit.event.message.MessageHandlerAbstract;
+import io.github.lunasaw.sip.common.utils.SipUtils;
+import lombok.Data;
 
 /**
  * @author luna
@@ -22,7 +22,7 @@ public abstract class MessageServerHandlerAbstract extends MessageHandlerAbstrac
 
     @Resource
     @Lazy
-    public MessageProcessorServer messageProcessorServer;
+    public MessageProcessorServer   messageProcessorServer;
 
     @Resource
     protected SipUserGenerateServer sipUserGenerate;
@@ -38,7 +38,7 @@ public abstract class MessageServerHandlerAbstract extends MessageHandlerAbstrac
     }
 
     public DeviceSession getDeviceSession(RequestEvent event) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
+        SIPRequest sipRequest = (SIPRequest)event.getRequest();
 
         // 客户端发送的userId
         String userId = SipUtils.getUserIdFromFromHeader(sipRequest);

@@ -7,6 +7,7 @@ import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.layer.SipLayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -23,9 +24,12 @@ public class Applicationtest {
 
     static String localIp = "172.19.128.100";
 
+    @Autowired
+    SipLayer sipLayer;
+
     @BeforeEach
     public void before() {
-        SipLayer.addListeningPoint(localIp, 8117);
+        sipLayer.addListeningPoint(localIp, 8117);
         fromDevice = FromDevice.getInstance("41010500002000000001", localIp, 8117);
         toDevice = ToDevice.getInstance("33010602011187000001", localIp, 8118);
         toDevice.setPassword("luna");

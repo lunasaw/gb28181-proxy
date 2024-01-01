@@ -21,7 +21,7 @@ import io.github.lunasaw.gbproxy.server.entity.InviteRequest;
 import io.github.lunasaw.gbproxy.server.enums.PlayActionEnums;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
-import io.github.lunasaw.sip.common.enums.StreamModeEnum;
+import io.github.lunasaw.gb28181.common.entity.enums.StreamModeEnum;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.SipSender;
 

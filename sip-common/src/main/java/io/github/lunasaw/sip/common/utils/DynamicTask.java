@@ -24,31 +24,34 @@ import org.springframework.util.ObjectUtils;
 @Component
 public class DynamicTask {
 
-    private final Logger logger = LoggerFactory.getLogger(DynamicTask.class);
-
-    private ThreadPoolTaskScheduler threadPoolTaskScheduler;
-
-    private final Map<String, ScheduledFuture<?>> futureMap = new ConcurrentHashMap<>();
-    private final Map<String, Runnable> runnableMap = new ConcurrentHashMap<>();
+    private final Logger                          logger      = LoggerFactory.getLogger(DynamicTask.class);
+    private final Map<String, ScheduledFuture<?>> futureMap   = new ConcurrentHashMap<>();
+    private final Map<String, Runnable>           runnableMap = new ConcurrentHashMap<>();
+    private ThreadPoolTaskScheduler               threadPoolTaskScheduler;
 
     @PostConstruct
     public void DynamicTask() {
         threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(300);
+        threadPoolTaskScheduler.setPoolSize(200);
         threadPoolTaskScheduler.setWaitForTasksToCompleteOnShutdown(true);
         threadPoolTaskScheduler.setAwaitTerminationSeconds(10);
         threadPoolTaskScheduler.initialize();
     }
 
+    public void startCron(String key, Runnable task, Integer duration, TimeUnit timeUnit) {
+        long convert = TimeUnit.MILLISECONDS.convert(duration, timeUnit);
+        startCron(key, task, convert);
+    }
+
     /**
      * 循环执行的任务
      *
-     * @param key             任务ID
-     * @param task            任务
-     * @param cycleForCatalog 间隔 毫秒
+     * @param key 任务ID
+     * @param task 任务
+     * @param time 间隔 毫秒
      * @return
      */
-    public void startCron(String key, Runnable task, int cycleForCatalog) {
+    public void startCron(String key, Runnable task, long time) {
         if (ObjectUtils.isEmpty(key)) {
             return;
         }
@@ -61,8 +64,8 @@ public class DynamicTask {
                 return;
             }
         }
-        // scheduleWithFixedDelay 必须等待上一个任务结束才开始计时period， cycleForCatalog表示执行的间隔
-        future = threadPoolTaskScheduler.scheduleAtFixedRate(task, cycleForCatalog);
+        // scheduleWithFixedDelay 必须等待上一个任务结束才开始计时period， time表示执行的间隔
+        future = threadPoolTaskScheduler.scheduleAtFixedRate(task, time);
         if (future != null) {
             futureMap.put(key, future);
             runnableMap.put(key, task);
@@ -75,8 +78,8 @@ public class DynamicTask {
     /**
      * 延时任务
      *
-     * @param key   任务ID
-     * @param task  任务
+     * @param key 任务ID
+     * @param task 任务
      * @param delay 延时 /毫秒
      * @return
      */

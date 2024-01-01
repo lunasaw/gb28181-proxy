@@ -5,13 +5,13 @@ import java.nio.charset.Charset;
 import javax.sip.RequestEvent;
 import javax.sip.message.Response;
 
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.luna.common.text.StringTools;
 
 import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
 import io.github.lunasaw.sip.common.utils.XmlUtils;
 import lombok.Getter;
@@ -23,6 +23,25 @@ public class MessageHandlerAbstract implements MessageHandler {
 
     private String xmlStr;
 
+    public static <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
+        SIPRequest sipRequest = (SIPRequest)event.getRequest();
+        byte[] rawContent = sipRequest.getRawContent();
+        if (StringUtils.isBlank(charset)) {
+            charset = Constant.UTF_8;
+        }
+        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
+        Object o = XmlUtils.parseObj(xmlStr, clazz);
+        return (T)o;
+    }
+
+    public static String parseRequest(RequestEvent event, String charset) {
+        SIPRequest sipRequest = (SIPRequest)event.getRequest();
+        byte[] rawContent = sipRequest.getRawContent();
+        if (StringUtils.isBlank(charset)) {
+            charset = Constant.UTF_8;
+        }
+        return StringTools.toEncodedString(rawContent, Charset.forName(charset));
+    }
 
     @Override
     public void handForEvt(RequestEvent event) {
@@ -65,26 +84,6 @@ public class MessageHandlerAbstract implements MessageHandler {
         if (StringUtils.isBlank(xmlStr)) {
             return null;
         }
-        return (T) XmlUtils.parseObj(xmlStr, clazz);
-    }
-
-    public static <T> T parseRequest(RequestEvent event, String charset, Class<T> clazz) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
-        byte[] rawContent = sipRequest.getRawContent();
-        if (StringUtils.isBlank(charset)) {
-            charset = Constant.UTF_8;
-        }
-        String xmlStr = StringTools.toEncodedString(rawContent, Charset.forName(charset));
-        Object o = XmlUtils.parseObj(xmlStr, clazz);
-        return (T) o;
-    }
-
-    public static String parseRequest(RequestEvent event, String charset) {
-        SIPRequest sipRequest = (SIPRequest) event.getRequest();
-        byte[] rawContent = sipRequest.getRawContent();
-        if (StringUtils.isBlank(charset)) {
-            charset = Constant.UTF_8;
-        }
-        return StringTools.toEncodedString(rawContent, Charset.forName(charset));
+        return (T)XmlUtils.parseObj(xmlStr, clazz);
     }
 }

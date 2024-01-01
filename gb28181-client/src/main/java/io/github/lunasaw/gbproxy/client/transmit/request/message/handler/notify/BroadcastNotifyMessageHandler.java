@@ -2,9 +2,10 @@ package io.github.lunasaw.gbproxy.client.transmit.request.message.handler.notify
 
 import javax.sip.RequestEvent;
 
+import io.github.lunasaw.gbproxy.client.transmit.request.message.ClientMessageRequestProcessor;
 import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
-import io.github.lunasaw.gb28181.common.entity.base.DeviceSession;
+import io.github.lunasaw.sip.common.entity.DeviceSession;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceBroadcastNotify;
 
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class BroadcastNotifyMessageHandler extends MessageClientHandlerAbstract 
 
     @Override
     public String getRootType() {
-        return NOTIFY;
+        return ClientMessageRequestProcessor.METHOD + NOTIFY;
     }
 
     @Override

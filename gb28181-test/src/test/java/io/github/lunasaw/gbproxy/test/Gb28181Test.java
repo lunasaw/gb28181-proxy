@@ -36,10 +36,13 @@ public class Gb28181Test {
     @Qualifier("clientTo")
     private Device toDevice;
 
+    @Autowired
+    private SipLayer sipLayer;
+
     @BeforeEach
     public void before() {
         // 本地端口监听
-        SipLayer.addListeningPoint(fromDevice.getIp(), fromDevice.getPort());
+        sipLayer.addListeningPoint(fromDevice.getIp(), fromDevice.getPort());
 
     }
 
