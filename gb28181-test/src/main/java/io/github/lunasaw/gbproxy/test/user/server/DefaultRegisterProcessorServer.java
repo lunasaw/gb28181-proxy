@@ -32,6 +32,11 @@ public class DefaultRegisterProcessorServer implements RegisterProcessorServer {
     private Device fromDevice;
 
     @Override
+    public void responseUnauthorized(String userId) {
+        log.info("responseUnauthorized::userId = {}", userId);
+    }
+
+    @Override
     public SipTransaction getTransaction(String userId) {
         return sipTransactionMap.get(userId);
     }
