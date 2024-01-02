@@ -35,15 +35,11 @@ public class ResponseCatalogMessageHandler extends MessageServerHandlerAbstract 
 
     @Override
     public void handForEvt(RequestEvent event) {
-        DeviceSession deviceSession = getDeviceSession(event);
-
-        String userId = deviceSession.getUserId();
-        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(userId);
-        if (toDevice == null) {
-            // 未注册的设备不做处理
+        if (preCheck(event)){
             return;
         }
-
+        DeviceSession deviceSession = getDeviceSession(event);
+        String userId = deviceSession.getUserId();
         DeviceResponse deviceResponse = parseXml(DeviceResponse.class);
 
         messageProcessorServer.updateDeviceResponse(userId, deviceResponse);

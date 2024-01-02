@@ -42,11 +42,11 @@ public class AlarmNotifyMessageHandler extends MessageServerHandlerAbstract {
 
     @Override
     public void handForEvt(RequestEvent event) {
-
+        if (!sipUserGenerate.checkDevice(event)) {
+            return;
+        }
         DeviceSession deviceSession = getDeviceSession(event);
-
         String userId = deviceSession.getUserId();
-
         // 设备查询
         ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(userId);
         if (toDevice == null) {

@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
+import io.github.lunasaw.gb28181.common.entity.response.DeviceInfo;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceAlarmNotify;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceKeepLiveNotify;
@@ -62,4 +63,11 @@ public interface MessageProcessorServer {
      * @param deviceResponse
      */
     void updateDeviceResponse(String userId, DeviceResponse deviceResponse);
+
+    /**
+     * 更新设备信息
+     * @param userId
+     * @param deviceInfo
+     */
+    void updateDeviceInfo(String userId, DeviceInfo deviceInfo);
 }

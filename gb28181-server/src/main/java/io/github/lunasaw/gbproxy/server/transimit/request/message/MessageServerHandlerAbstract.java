@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.sip.common.entity.DeviceSession;
+import io.github.lunasaw.sip.common.entity.ToDevice;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -47,6 +48,22 @@ public abstract class MessageServerHandlerAbstract extends MessageHandlerAbstrac
         String sipId = SipUtils.getUserIdFromToHeader(sipRequest);
 
         return new DeviceSession(userId, sipId);
+    }
+
+    public boolean preCheck(RequestEvent event) {
+        if (!sipUserGenerate.checkDevice(event)) {
+            return false;
+        }
+        DeviceSession deviceSession = getDeviceSession(event);
+        String userId = deviceSession.getUserId();
+        // 设备查询
+        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(userId);
+        if (toDevice == null) {
+            // 未注册的设备不做处理
+            return false;
+        }
+
+        return true;
     }
 
 }
