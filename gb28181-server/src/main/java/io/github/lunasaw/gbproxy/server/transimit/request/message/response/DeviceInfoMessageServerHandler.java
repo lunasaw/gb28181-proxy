@@ -45,7 +45,7 @@ public class DeviceInfoMessageServerHandler extends MessageServerHandlerAbstract
 
     @Override
     public void handForEvt(RequestEvent event) {
-        if (preCheck(event)){
+        if (!preCheck(event)){
             return;
         }
         DeviceSession deviceSession = getDeviceSession(event);
