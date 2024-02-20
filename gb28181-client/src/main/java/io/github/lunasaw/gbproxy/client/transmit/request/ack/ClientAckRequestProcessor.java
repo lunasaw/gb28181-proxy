@@ -1,10 +1,11 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.ack;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.sip.Dialog;
 import javax.sip.DialogState;
 import javax.sip.RequestEvent;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.message.SIPRequest;
@@ -32,10 +33,10 @@ public class ClientAckRequestProcessor extends SipRequestProcessorAbstract {
 
     private String                    method = METHOD;
 
-    @Resource
+    @Autowired
     private AckRequestProcessorClient ackRequestProcessorClient;
 
-    @Resource
+    @Autowired
     private SipUserGenerateClient     sipUserGenerate;
 
     /**

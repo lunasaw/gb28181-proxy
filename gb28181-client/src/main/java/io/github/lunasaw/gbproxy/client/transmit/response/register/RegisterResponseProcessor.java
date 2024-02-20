@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.client.transmit.response.register;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.sdp.SdpParseException;
 import javax.sip.ResponseEvent;
 import javax.sip.header.CallIdHeader;
@@ -41,7 +41,7 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
 
     public String                   method = METHOD;
 
-    @Resource
+    @Autowired
     private RegisterProcessorClient registerProcessorClient;
 
     @Autowired

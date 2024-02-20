@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.message;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.sip.RequestEvent;
 
 import io.github.lunasaw.sip.common.entity.DeviceSession;
@@ -21,11 +21,11 @@ import lombok.Data;
 @Component
 public abstract class MessageServerHandlerAbstract extends MessageHandlerAbstract {
 
-    @Resource
+    @Autowired
     @Lazy
     public MessageProcessorServer   messageProcessorServer;
 
-    @Resource
+    @Autowired
     protected SipUserGenerateServer sipUserGenerate;
 
     public MessageServerHandlerAbstract(MessageProcessorServer messageProcessorServer, SipUserGenerateServer sipUserGenerate) {

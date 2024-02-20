@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.sip.RequestEvent;
 import javax.sip.header.*;
 import javax.sip.message.Request;
@@ -47,10 +47,10 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
 
     private String                  method = METHOD;
 
-    @Resource
+    @Autowired
     private RegisterProcessorServer registerProcessorServer;
 
-    @Resource
+    @Autowired
     private SipUserGenerateServer   sipUserGenerate;
 
     /**

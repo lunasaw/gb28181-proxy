@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.message;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.sip.RequestEvent;
 
 import org.springframework.stereotype.Component;
@@ -25,12 +25,12 @@ public class ClientMessageRequestProcessor extends SipMessageRequestProcessorAbs
 
     public static final String     METHOD = "MESSAGE";
 
-    @Resource
+    @Autowired
     private MessageProcessorClient messageProcessorClient;
 
     private String                 method = METHOD;
 
-    @Resource
+    @Autowired
     private SipUserGenerateClient  sipUserGenerate;
 
     @Override
