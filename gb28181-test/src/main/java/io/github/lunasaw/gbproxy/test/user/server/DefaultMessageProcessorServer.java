@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.user.server;
 
+import io.github.lunasaw.gb28181.common.entity.response.DeviceInfo;
 import io.github.lunasaw.sip.common.entity.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,5 +72,10 @@ public class DefaultMessageProcessorServer implements MessageProcessorServer {
     @Override
     public void updateDeviceResponse(String userId, DeviceResponse deviceResponse) {
         log.info("接收到设备通道信息 updateDeviceResponse::userId = {}, deviceResponse = {}", userId, JSON.toJSONString(deviceResponse));
+    }
+
+    @Override
+    public void updateDeviceInfo(String userId, DeviceInfo deviceInfo) {
+        log.info("接收到设备信息 updateDeviceInfo::userId = {}, deviceInfo = {}", userId, JSON.toJSONString(deviceInfo));
     }
 }

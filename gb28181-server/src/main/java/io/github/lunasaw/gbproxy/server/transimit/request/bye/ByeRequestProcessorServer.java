@@ -1,6 +1,6 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.bye;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.sip.RequestEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -132,7 +132,9 @@ public class ClientSendCmd {
         Assert.notNull(deviceInfo, "deviceInfo is null");
 
         deviceInfo.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
-        deviceInfo.setSn(RandomStrUtil.getValidationCode());
+        if (deviceInfo.getSn() == null) {
+            deviceInfo.setSn(RandomStrUtil.getValidationCode());
+        }
         return SipSender.doMessageRequest(fromDevice, toDevice, deviceInfo.toString());
     }
 
@@ -165,7 +167,9 @@ public class ClientSendCmd {
     public static String MobilePositionNotify(FromDevice fromDevice, ToDevice toDevice, MobilePositionNotify mobilePositionNotify,
                                               SubscribeInfo subscribeInfo) {
         mobilePositionNotify.setCmdType(CmdTypeEnum.DEVICE_INFO.getType());
-        mobilePositionNotify.setSn(RandomStrUtil.getValidationCode());
+        if (mobilePositionNotify.getSn() == null) {
+            mobilePositionNotify.setSn(RandomStrUtil.getValidationCode());
+        }
         mobilePositionNotify.setDeviceId(fromDevice.getUserId());
         return SipSender.doNotifyRequest(fromDevice, toDevice, mobilePositionNotify.toString(), subscribeInfo);
     }

@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.server.transimit.request.register;
 
+import gov.nist.javax.sip.message.SIPRequest;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
 
 
@@ -8,6 +9,12 @@ import io.github.lunasaw.sip.common.entity.SipTransaction;
  * @date 2023/10/18
  */
 public interface RegisterProcessorServer {
+
+    /**
+     * 回复401
+     * @param userId
+     */
+    void responseUnauthorized(String userId);
 
     /**
      * 获取第一次注册的事务

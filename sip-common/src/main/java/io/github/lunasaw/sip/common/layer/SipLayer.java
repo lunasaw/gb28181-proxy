@@ -80,7 +80,7 @@ public class SipLayer {
     public synchronized void addListeningPoint(String monitorIp, int port, SipListener listener, Boolean enableLog) {
         SipStackImpl sipStack;
         try {
-            Properties properties = DefaultProperties.getProperties("GB28181_SIP", monitorIp, enableLog);
+            Properties properties = DefaultProperties.getProperties("SIP-PROXY", monitorIp, enableLog);
             SipFactory sipFactory = SipFactory.getInstance();
             sipFactory.setPathName("gov.nist");
             sipStack = (SipStackImpl)sipFactory.createSipStack(properties);

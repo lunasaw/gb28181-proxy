@@ -8,6 +8,11 @@ import io.github.lunasaw.sip.common.entity.SipTransaction;
  */
 public class CustomRegisterProcessorServer implements RegisterProcessorServer {
     @Override
+    public void responseUnauthorized(String userId) {
+
+    }
+
+    @Override
     public SipTransaction getTransaction(String userId) {
         return null;
     }

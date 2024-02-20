@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.test;
 
 import javax.sip.message.Request;
 
+import io.github.lunasaw.gb28181.common.entity.utils.GbUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,7 @@ public class Gb28181TestClient {
     public void before() {
         // 本地端口监听
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        sipLayer.addListeningPoint("192.168.2.101", fromDevice.getPort(), true);
+        sipLayer.addListeningPoint("172.19.128.49", fromDevice.getPort(), true);
 
         DeviceConfig.DEVICE_CLIENT_VIEW_MAP.put(toDevice.getUserId(), toDevice);
 
@@ -71,6 +72,33 @@ public class Gb28181TestClient {
                 System.out.println(eventResult);
             }
         });
+    }
+
+    public static void main(String[] args) {
+        String userId = "41010500002000000001";
+        String prefix = userId.substring(0, 15);
+        long l = Long.parseLong(userId.substring(15,20));
+        System.out.println(l);
+        System.out.println(prefix + l);
+        System.out.println(userId);
+    }
+
+    @Test
+    public void test_register_client_multi() throws Exception {
+        for (int i = 0; i < 30; i++) {
+            String s = GbUtil.generateGbCode((long) i);
+            fromDevice.setUserId(s);
+            DeviceConfig.DEVICE_MAP.put(s, fromDevice);
+            String callId = SipRequestUtils.getNewCallId();
+            Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice) fromDevice, (ToDevice) toDevice, 300, callId);
+
+            SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
+                @Override
+                public void response(EventResult eventResult) {
+                    System.out.println(eventResult);
+                }
+            });
+        }
     }
 
     @Test

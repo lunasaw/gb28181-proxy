@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.sip.RequestEvent;
 import javax.sip.header.*;
 import javax.sip.message.Request;
@@ -47,10 +47,10 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
 
     private String                  method = METHOD;
 
-    @Resource
+    @Autowired
     private RegisterProcessorServer registerProcessorServer;
 
-    @Resource
+    @Autowired
     private SipUserGenerateServer   sipUserGenerate;
 
     /**
@@ -101,7 +101,6 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
                 return;
             }
 
-            registerProcessorServer.updateRegisterInfo(userId, registerInfo);
             String callId = SipUtils.getCallId(request);
             List<Header> okHeaderList = getRegisterOkHeaderList(request);
 
@@ -130,6 +129,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
                         DigestServerAuthenticationHelper.DEFAULT_ALGORITHM);
 
                 ResponseCmd.doResponseCmd(Response.UNAUTHORIZED, "Unauthorized", evt, wwwAuthenticateHeader);
+                registerProcessorServer.responseUnauthorized(userId);
                 return;
             }
 
@@ -147,6 +147,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             // 携带授权头并且密码正确
             ResponseCmd.doResponseCmd(Response.OK, "OK", evt, okHeaderList);
             // 注册成功
+            registerProcessorServer.updateRegisterInfo(userId, registerInfo);
             registerProcessorServer.updateSipTransaction(userId, sipTransaction);
         } catch (Exception e) {
             log.error("未处理的异常 ", e);
