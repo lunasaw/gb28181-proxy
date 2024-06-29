@@ -6,19 +6,19 @@
     <parent>
         <groupId>io.github.lunasaw</groupId>
         <artifactId>sip-proxy</artifactId>
-        <version>1.1.7</version>
+        <version>1.2.0</version>
     </parent>
 
     <packaging>jar</packaging>
-    <version>1.1.7</version>
+    <version>1.2.0</version>
     <artifactId>sip-common</artifactId>
     <name>sip-common</name>
     <description>轻量级SIP框架封装</description>
     <url>https://github.com/lunasaw/gb28181-proxy</url>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
