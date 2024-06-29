@@ -13,7 +13,7 @@ import javax.sip.message.Response;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
