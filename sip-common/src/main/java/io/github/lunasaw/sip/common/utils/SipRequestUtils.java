@@ -1,7 +1,6 @@
 package io.github.lunasaw.sip.common.utils;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,20 +19,17 @@ import javax.sip.message.MessageFactory;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 
-import gov.nist.javax.sip.SipProviderImpl;
-import gov.nist.javax.sip.header.Via;
-import gov.nist.javax.sip.header.ViaList;
-import gov.nist.javax.sip.message.SIPRequest;
-import io.github.lunasaw.sip.common.constant.Constant;
-import io.github.lunasaw.sip.common.layer.SipLayer;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.util.ObjectUtils;
 
 import com.google.common.collect.Lists;
 import com.luna.common.text.RandomStrUtil;
 
+import gov.nist.javax.sip.SipProviderImpl;
+import io.github.lunasaw.sip.common.constant.Constant;
+import io.github.lunasaw.sip.common.layer.SipLayer;
 import lombok.SneakyThrows;
-import org.springframework.util.ObjectUtils;
 
 /**
  * @author luna
@@ -47,7 +43,7 @@ public class SipRequestUtils {
 
     private static final AddressFactory ADDRESS_FACTORY;
 
-    private static final SdpFactory SDP_FACTORY;
+    private static final SdpFactory     SDP_FACTORY;
 
     static {
         try {
@@ -165,10 +161,10 @@ public class SipRequestUtils {
         SipProviderImpl sipProvider;
         if (ObjectUtils.isEmpty(ip)) {
             sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? SipLayer.getTcpSipProvider()
-                    : SipLayer.getUdpSipProvider();
+                : SipLayer.getUdpSipProvider();
         } else {
             sipProvider = transport.equalsIgnoreCase(Constant.TCP) ? SipLayer.getTcpSipProvider(ip)
-                    : SipLayer.getUdpSipProvider(ip);
+                : SipLayer.getUdpSipProvider(ip);
         }
 
         if (sipProvider == null) {
@@ -411,7 +407,7 @@ public class SipRequestUtils {
      * 创建响应
      *
      * @param statusCode 状态码
-     * @param request    回复的请求
+     * @param request 回复的请求
      * @return
      */
     public static Response createResponse(int statusCode, Request request) {
@@ -423,18 +419,18 @@ public class SipRequestUtils {
     }
 
     /**
-     * @param statusCode  statusCode – 状态码 {@link Response}
-     * @param callId      callId – 此消息的 callId 值的新 CallIdHeader 对象。
-     * @param cSeq        cSeq – 此消息的 cSeq 值的新 CSeqHeader 对象。
-     * @param from        from – 此消息的 from 值的新 FromHeader 对象。
-     * @param to          to – 此消息的 to 值的新 ToHeader 对象。
-     * @param via         via – 此消息的 ViaHeader 的新列表对象。
+     * @param statusCode statusCode – 状态码 {@link Response}
+     * @param callId callId – 此消息的 callId 值的新 CallIdHeader 对象。
+     * @param cSeq cSeq – 此消息的 cSeq 值的新 CSeqHeader 对象。
+     * @param from from – 此消息的 from 值的新 FromHeader 对象。
+     * @param to to – 此消息的 to 值的新 ToHeader 对象。
+     * @param via via – 此消息的 ViaHeader 的新列表对象。
      * @param maxForwards contentType – 此消息的内容类型值的新内容类型标头对象。
      * @param contentType 响应类型 – 此消息的正文内容值的新对象。
-     * @param content     内容
+     * @param content 内容
      */
     public static Response createResponse(int statusCode, CallIdHeader callId, CSeqHeader cSeq, FromHeader from, ToHeader to,
-                                          List<ViaHeader> via, MaxForwardsHeader maxForwards, ContentTypeHeader contentType, Object content) {
+        List<ViaHeader> via, MaxForwardsHeader maxForwards, ContentTypeHeader contentType, Object content) {
         try {
             if (contentType == null) {
                 return MESSAGE_FACTORY.createResponse(statusCode, callId, cSeq, from, to, via, maxForwards);
@@ -444,7 +440,6 @@ public class SipRequestUtils {
             throw new RuntimeException(e);
         }
     }
-
 
     public static Response createResponse(int statusCode, Request request, List<Header> headers) {
         try {
