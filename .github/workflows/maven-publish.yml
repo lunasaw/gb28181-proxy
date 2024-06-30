@@ -47,6 +47,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.SECRET_KEY }}
 
+      - name: Deploy JavaDoc 🚀
+        uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.SECRET_KEY }}
+          javadoc-branch: javadoc
+          java-version: 17
+          target-folder: docs
+
+
 #  publish:
 #    # 任务运行的环境
 #    runs-on: ubuntu-latest
