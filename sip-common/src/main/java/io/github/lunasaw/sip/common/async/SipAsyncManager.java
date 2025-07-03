@@ -99,9 +99,8 @@ public class SipAsyncManager {
                     log.debug("同步处理SIP请求成功: {}", processor.getClass().getSimpleName());
                 } catch (Exception e) {
                     String processorName = processor.getClass().getSimpleName();
-                    String method = processor.getSupportedMethod();
                     SipProcessorException processorException = SipExceptionHandler.createProcessorException(
-                        processorName, method, "同步处理器执行异常", e);
+                        processorName, null, "同步处理器执行异常", e);
                     log.error("同步处理器执行异常: {}", processorException.toString());
                     exceptionHandler.handleException(processorException, requestEvent);
                     break; // 遇到异常时停止后续处理器执行
@@ -121,9 +120,8 @@ public class SipAsyncManager {
                 return asyncExecutor.executeAsync(asyncProcessor, requestEvent)
                     .exceptionally(throwable -> {
                         String processorName = processor.getClass().getSimpleName();
-                        String method = processor.getSupportedMethod();
                         SipProcessorException processorException = SipExceptionHandler.createProcessorException(
-                            processorName, method, "异步处理器执行异常", throwable);
+                            processorName, null, "异步处理器执行异常", throwable);
                         log.error("异步处理器执行异常: {}", processorException.toString());
                         exceptionHandler.handleException(processorException, requestEvent);
                         return null;
@@ -161,9 +159,8 @@ public class SipAsyncManager {
 
                 } catch (Exception e) {
                     String processorName = processor.getClass().getSimpleName();
-                    String method = processor.getSupportedMethod();
                     SipProcessorException processorException = SipExceptionHandler.createProcessorException(
-                        processorName, method, "混合模式处理器执行异常", e);
+                        processorName, null, "混合模式处理器执行异常", e);
                     log.error("混合模式处理器执行异常: {}", processorException.toString());
                     exceptionHandler.handleException(processorException, requestEvent);
                     break; // 遇到异常时停止后续处理器执行
