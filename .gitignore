@@ -36,11 +36,3 @@ build/
 
 ### Mac OS ###
 .DS_Store
-
-### Logs ###
-*/logs/*
-
-### IntelliJ IDEA ###
-.idea/**
-
-.vscode/**

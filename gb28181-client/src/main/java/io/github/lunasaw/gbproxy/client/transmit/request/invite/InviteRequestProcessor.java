@@ -1,6 +1,5 @@
 package io.github.lunasaw.gbproxy.client.transmit.request.invite;
 
-import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.sip.RequestEvent;
 import javax.sip.header.ContentTypeHeader;
@@ -13,8 +12,8 @@ import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.GbSessionDescription;
+import io.github.lunasaw.sip.common.enums.ContentTypeEnum;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
-import io.github.lunasaw.sip.common.transmit.event.SipMethod;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipUtils;
 import lombok.Getter;
@@ -22,17 +21,20 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * INVITE请求处理器
- * 处理客户端接收到的INVITE请求
+ * SIP命令类型： 收到Invite请求
+ * 客户端发起Invite请求, Invite Request消息实现，请求视频指令
  *
  * @author luna
  */
-@SipMethod("INVITE")
 @Component
 @Getter
 @Setter
 @Slf4j
 public class InviteRequestProcessor extends SipRequestProcessorAbstract {
+
+    public static final String    METHOD = "INVITE";
+
+    private String                method = METHOD;
 
     @Autowired
     private InviteProcessorClient inviteProcessorClient;

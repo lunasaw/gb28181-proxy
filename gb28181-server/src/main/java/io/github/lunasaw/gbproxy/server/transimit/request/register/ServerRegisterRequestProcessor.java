@@ -25,7 +25,6 @@ import io.github.lunasaw.sip.common.entity.GbSipDate;
 import io.github.lunasaw.sip.common.entity.RemoteAddressInfo;
 import io.github.lunasaw.sip.common.entity.SipTransaction;
 import io.github.lunasaw.sip.common.transmit.ResponseCmd;
-import io.github.lunasaw.sip.common.transmit.event.SipMethod;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessorAbstract;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -34,17 +33,19 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * REGISTER请求处理器
- * 处理服务端接收到的设备注册请求
+ * SIP命令类型： REGISTER请求
  *
  * @author luna
  */
-@SipMethod("REGISTER")
 @Getter
 @Setter
 @Component
 @Slf4j
 public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract {
+
+    public final String             METHOD = "REGISTER";
+
+    private String                  method = METHOD;
 
     @Autowired
     private RegisterProcessorServer registerProcessorServer;
@@ -88,22 +89,68 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             // 判断TCP还是UDP
             ViaHeader reqViaHeader = (ViaHeader)request.getHeader(ViaHeader.NAME);
             String transport = reqViaHeader.getTransport();
-            registerInfo.setTransport(transport);
+            registerInfo.setTransport("TCP".equalsIgnoreCase(transport) ? "TCP" : "UDP");
             registerInfo.setLocalIp(receiveIp);
-            registerInfo.setRemoteAddress(requestAddress);
+            registerInfo.setRemotePort(remoteAddressInfo.getPort());
+            registerInfo.setRemoteIp(remoteAddressInfo.getIp());
 
-            if (registerFlag) {
-                registerProcessorServer.registerSuccess(userId, registerInfo);
-            } else {
-                registerProcessorServer.registerOut(userId, registerInfo);
+            SipTransaction sipTransaction = SipUtils.getSipTransaction(request);
+            if (!registerFlag) {
+                log.info(title + "设备：{}, 设备注销: {}", userId, expires);
+                registerProcessorServer.deviceOffLine(userId, registerInfo, sipTransaction);
+                return;
             }
 
-            // 回复200 OK
-            ResponseCmd.doResponseCmd(Response.OK, "OK", evt);
+            String callId = SipUtils.getCallId(request);
+            List<Header> okHeaderList = getRegisterOkHeaderList(request);
 
+            if (transaction != null && callId.equals(transaction.getCallId())) {
+                log.info(title + "设备：{}, 注册续订: {}", userId, expires);
+
+                ResponseCmd.doResponseCmd(Response.OK, "OK", evt, okHeaderList);
+                registerProcessorServer.updateSipTransaction(userId, sipTransaction);
+                return;
+            }
+
+            String password = StringUtils.EMPTY;
+            if (StringUtils.isNotBlank(fromDevice.getPassword())) {
+                password = fromDevice.getPassword();
+            }
+
+            AuthorizationHeader authHead = (AuthorizationHeader)request.getHeader(AuthorizationHeader.NAME);
+            if (authHead == null && StringUtils.isNotBlank(password)) {
+
+                // 认证密码不是空, 但是请求头中没有AuthorizationHeader
+                log.info(title + " 设备：{}, 回复401: {}", userId, requestAddress);
+
+                String nonce = DigestServerAuthenticationHelper.generateNonce();
+                WWWAuthenticateHeader wwwAuthenticateHeader =
+                    SipRequestUtils.createWWWAuthenticateHeader(DigestServerAuthenticationHelper.DEFAULT_SCHEME, fromDevice.getRealm(), nonce,
+                        DigestServerAuthenticationHelper.DEFAULT_ALGORITHM);
+
+                ResponseCmd.doResponseCmd(Response.UNAUTHORIZED, "Unauthorized", evt, wwwAuthenticateHeader);
+                registerProcessorServer.responseUnauthorized(userId);
+                return;
+            }
+
+            // 校验密码是否正确
+            boolean passwordCorrect = ObjectUtils.isEmpty(password) ||
+                DigestServerAuthenticationHelper.doAuthenticatePlainTextPassword(request, password);
+
+            if (!passwordCorrect) {
+                // 注册失败
+                log.info(title + " 设备：{}, 密码/SIP服务器ID错误, 回复403: {}", userId, requestAddress);
+                ResponseCmd.doResponseCmd(Response.FORBIDDEN, "wrong password", evt);
+                return;
+            }
+
+            // 携带授权头并且密码正确
+            ResponseCmd.doResponseCmd(Response.OK, "OK", evt, okHeaderList);
+            // 注册成功
+            registerProcessorServer.updateRegisterInfo(userId, registerInfo);
+            registerProcessorServer.updateSipTransaction(userId, sipTransaction);
         } catch (Exception e) {
-            log.error("process register request error", e);
-            ResponseCmd.doResponseCmd(Response.SERVER_INTERNAL_ERROR, "Internal Server Error", evt);
+            log.error("未处理的异常 ", e);
         }
     }
 
