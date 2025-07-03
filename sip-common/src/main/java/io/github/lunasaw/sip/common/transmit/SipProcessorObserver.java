@@ -21,6 +21,9 @@ import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
 import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessor;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessor;
 import io.github.lunasaw.sip.common.transmit.event.timeout.ITimeoutProcessor;
+import io.github.lunasaw.sip.common.async.AsyncSipMessageProcessor;
+import io.github.lunasaw.sip.common.metrics.SipMetrics;
+import io.micrometer.core.instrument.Timer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +40,12 @@ public class SipProcessorObserver implements SipListener {
 
     @Autowired
     private SipProcessorInject sipProcessorInject;
+    
+    @Autowired
+    private AsyncSipMessageProcessor asyncMessageProcessor;
+    
+    @Autowired
+    private SipMetrics sipMetrics;
 
     /**
      * 对SIP事件进行处理
@@ -88,79 +97,133 @@ public class SipProcessorObserver implements SipListener {
     }
 
     /**
-     * 分发RequestEvent事件
+     * 分发RequestEvent事件 - 优化版本，增加异步处理和性能监控
      *
      * @param requestEvent RequestEvent事件
      */
     @Override
     @Trace(operationName = "processRequest")
     public void processRequest(RequestEvent requestEvent) {
+        Timer.Sample sample = sipMetrics.startTimer();
+        String method = requestEvent.getRequest().getMethod();
+        
         sipProcessorInject.before(requestEvent);
 
-        String method = requestEvent.getRequest().getMethod();
-        List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
-        if (CollectionUtils.isEmpty(sipRequestProcessors)) {
-            log.warn("暂不支持方法 {} 的请求", method);
-            // TODO 回复错误玛
-            return;
-        }
         try {
+            // 记录方法调用
+            sipMetrics.recordMethodCall(method);
+            
+            List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
+            if (CollectionUtils.isEmpty(sipRequestProcessors)) {
+                log.warn("暂不支持方法 {} 的请求", method);
+                sipMetrics.recordError("UNSUPPORTED_METHOD", method);
+                // TODO 回复错误码
+                return;
+            }
+
+            // 异步处理请求
+            asyncMessageProcessor.processRequestAsync(requestEvent).whenComplete((result, throwable) -> {
+                if (throwable != null) {
+                    log.error("异步处理请求失败: method={}", method, throwable);
+                    sipMetrics.recordError("ASYNC_PROCESSING_ERROR", method);
+                } else {
+                    sipMetrics.recordMessageProcessed(method, "SUCCESS");
+                }
+            });
+
+            // 同步处理（保持兼容性）
             for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
                 sipRequestProcessor.process(requestEvent);
             }
+            
+            sipMetrics.recordMessageProcessed();
+            
         } catch (Exception e) {
             log.error("processRequest::requestEvent = {} ", requestEvent, e);
+            sipMetrics.recordError("PROCESSING_ERROR", method);
+            sipMetrics.recordMessageProcessed(method, "ERROR");
+        } finally {
+            sipMetrics.recordRequestProcessingTime(sample);
+            sipProcessorInject.after();
         }
-
-        sipProcessorInject.after();
     }
 
     /**
-     * 分发ResponseEvent事件
+     * 分发ResponseEvent事件 - 优化版本，增加异步处理和性能监控
      *
      * @param responseEvent responseEvent事件
      */
     @Override
     @Trace(operationName = "responseEvent")
     public void processResponse(ResponseEvent responseEvent) {
-        sipProcessorInject.before(responseEvent);
-
+        Timer.Sample sample = sipMetrics.startTimer();
         Response response = responseEvent.getResponse();
         int status = response.getStatusCode();
+        
+        sipProcessorInject.before(responseEvent);
 
-        // Success
-        if (((status >= Response.OK) && (status < Response.MULTIPLE_CHOICES)) || status == Response.UNAUTHORIZED) {
-            CSeqHeader cseqHeader = (CSeqHeader) responseEvent.getResponse().getHeader(CSeqHeader.NAME);
-            String method = cseqHeader.getMethod();
-            SipResponseProcessor sipResponseProcessor = RESPONSE_PROCESSOR_MAP.get(method);
-            if (sipResponseProcessor != null) {
-                sipResponseProcessor.process(responseEvent);
-            }
+        try {
+            // Success
+            if (((status >= Response.OK) && (status < Response.MULTIPLE_CHOICES)) || status == Response.UNAUTHORIZED) {
+                CSeqHeader cseqHeader = (CSeqHeader) responseEvent.getResponse().getHeader(CSeqHeader.NAME);
+                String method = cseqHeader.getMethod();
+                
+                sipMetrics.recordMethodCall(method + "_RESPONSE");
+                
+                // 异步处理响应
+                asyncMessageProcessor.processResponseAsync(responseEvent).whenComplete((result, throwable) -> {
+                    if (throwable != null) {
+                        log.error("异步处理响应失败: method={}, status={}", method, status, throwable);
+                        sipMetrics.recordError("ASYNC_RESPONSE_ERROR", method);
+                    } else {
+                        sipMetrics.recordMessageProcessed(method, "RESPONSE_SUCCESS");
+                    }
+                });
+                
+                SipResponseProcessor sipResponseProcessor = RESPONSE_PROCESSOR_MAP.get(method);
+                if (sipResponseProcessor != null) {
+                    sipResponseProcessor.process(responseEvent);
+                }
 
-            if (status != Response.UNAUTHORIZED && responseEvent.getResponse() != null && SipSubscribe.getOkSubscribesSize() > 0) {
-                SipSubscribe.publishOkEvent(responseEvent);
-            }
-        } else if ((status >= Response.TRYING) && (status < Response.OK)) {
-            // 增加其它无需回复的响应，如101、180等
-        } else {
-            log.warn("接收到失败的response响应！status：" + status + ",message:" + response.getReasonPhrase() + " response = {}", responseEvent.getResponse());
-            if (responseEvent.getResponse() != null && SipSubscribe.getErrorSubscribesSize() > 0) {
-                CallIdHeader callIdHeader = (CallIdHeader) responseEvent.getResponse().getHeader(CallIdHeader.NAME);
-                if (callIdHeader != null) {
-                    Event subscribe = SipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
-                    if (subscribe != null) {
-                        EventResult eventResult = new EventResult(responseEvent);
-                        subscribe.response(eventResult);
-                        SipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
+                if (status != Response.UNAUTHORIZED && responseEvent.getResponse() != null && SipSubscribe.getOkSubscribesSize() > 0) {
+                    SipSubscribe.publishOkEvent(responseEvent);
+                }
+                
+                sipMetrics.recordMessageProcessed("RESPONSE", "SUCCESS");
+                
+            } else if ((status >= Response.TRYING) && (status < Response.OK)) {
+                // 增加其它无需回复的响应，如101、180等
+                sipMetrics.recordMessageProcessed("RESPONSE", "PROVISIONAL");
+                
+            } else {
+                log.warn("接收到失败的response响应！status：" + status + ",message:" + response.getReasonPhrase() + " response = {}", responseEvent.getResponse());
+                sipMetrics.recordError("FAILED_RESPONSE", String.valueOf(status));
+                
+                if (responseEvent.getResponse() != null && SipSubscribe.getErrorSubscribesSize() > 0) {
+                    CallIdHeader callIdHeader = (CallIdHeader) responseEvent.getResponse().getHeader(CallIdHeader.NAME);
+                    if (callIdHeader != null) {
+                        Event subscribe = SipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
+                        if (subscribe != null) {
+                            EventResult eventResult = new EventResult(responseEvent);
+                            subscribe.response(eventResult);
+                            SipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
+                        }
                     }
                 }
+                if (responseEvent.getDialog() != null) {
+                    responseEvent.getDialog().delete();
+                }
+                
+                sipMetrics.recordMessageProcessed("RESPONSE", "ERROR");
             }
-            if (responseEvent.getDialog() != null) {
-                responseEvent.getDialog().delete();
-            }
+            
+        } catch (Exception e) {
+            log.error("processResponse error", e);
+            sipMetrics.recordError("RESPONSE_PROCESSING_ERROR", String.valueOf(status));
+        } finally {
+            sipMetrics.recordResponseProcessingTime(sample);
+            sipProcessorInject.after();
         }
-
-        sipProcessorInject.after();
     }
 
     /**
