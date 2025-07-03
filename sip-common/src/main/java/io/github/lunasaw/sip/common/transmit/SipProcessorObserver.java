@@ -12,9 +12,15 @@ import javax.sip.message.Request;
 import javax.sip.message.Response;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.skywalking.apm.toolkit.trace.Trace;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson2.JSON;
 
+import io.github.lunasaw.sip.common.async.SipAsyncManager;
+import io.github.lunasaw.sip.common.exception.SipExceptionHandler;
+import io.github.lunasaw.sip.common.exception.SipProcessorException;
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.event.SipSubscribe;
@@ -22,12 +28,10 @@ import io.github.lunasaw.sip.common.transmit.event.request.SipRequestProcessor;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessor;
 import io.github.lunasaw.sip.common.transmit.event.timeout.ITimeoutProcessor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.skywalking.apm.toolkit.trace.Trace;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * SIP信令处理类观察者
+ * 集成异步处理管理器，支持高并发消息处理
  *
  * @author luna
  */
@@ -37,6 +41,12 @@ public class SipProcessorObserver implements SipListener {
 
     @Autowired
     private SipProcessorInject sipProcessorInject;
+
+    @Autowired
+    private SipExceptionHandler                                 sipExceptionHandler;
+
+    @Autowired
+    private SipAsyncManager                                     sipAsyncManager;
 
     /**
      * 对SIP事件进行处理
@@ -89,6 +99,7 @@ public class SipProcessorObserver implements SipListener {
 
     /**
      * 分发RequestEvent事件
+     * 集成异步处理管理器，根据配置和处理器特性选择执行策略
      *
      * @param requestEvent RequestEvent事件
      */
@@ -99,20 +110,26 @@ public class SipProcessorObserver implements SipListener {
 
         String method = requestEvent.getRequest().getMethod();
         List<SipRequestProcessor> sipRequestProcessors = REQUEST_PROCESSOR_MAP.get(method);
+
         if (CollectionUtils.isEmpty(sipRequestProcessors)) {
             log.warn("暂不支持方法 {} 的请求", method);
-            // TODO 回复错误玛
+            sipExceptionHandler.handleException(
+                new SipProcessorException("UNKNOWN", method, "不支持的SIP方法: " + method),
+                requestEvent);
+            sipProcessorInject.after();
             return;
         }
-        try {
-            for (SipRequestProcessor sipRequestProcessor : sipRequestProcessors) {
-                sipRequestProcessor.process(requestEvent);
-            }
-        } catch (Exception e) {
-            log.error("processRequest::requestEvent = {} ", requestEvent, e);
-        }
 
-        sipProcessorInject.after();
+        // 使用异步管理器处理请求
+        sipAsyncManager.processRequest(sipRequestProcessors, requestEvent)
+            .whenComplete((result, throwable) -> {
+                if (throwable != null) {
+                    log.error("SIP请求处理完成但有异常: {}", method, throwable);
+                } else {
+                    log.debug("SIP请求处理完成: {}", method);
+                }
+                sipProcessorInject.after();
+            });
     }
 
     /**
@@ -121,46 +138,81 @@ public class SipProcessorObserver implements SipListener {
      * @param responseEvent responseEvent事件
      */
     @Override
-    @Trace(operationName = "responseEvent")
+    @Trace(operationName = "processResponse")
     public void processResponse(ResponseEvent responseEvent) {
         sipProcessorInject.before(responseEvent);
 
-        Response response = responseEvent.getResponse();
-        int status = response.getStatusCode();
+        try {
+            Response response = responseEvent.getResponse();
+            int status = response.getStatusCode();
 
-        // Success
-        if (((status >= Response.OK) && (status < Response.MULTIPLE_CHOICES)) || status == Response.UNAUTHORIZED) {
-            CSeqHeader cseqHeader = (CSeqHeader) responseEvent.getResponse().getHeader(CSeqHeader.NAME);
-            String method = cseqHeader.getMethod();
-            SipResponseProcessor sipResponseProcessor = RESPONSE_PROCESSOR_MAP.get(method);
-            if (sipResponseProcessor != null) {
-                sipResponseProcessor.process(responseEvent);
+            // Success
+            if (((status >= Response.OK) && (status < Response.MULTIPLE_CHOICES)) || status == Response.UNAUTHORIZED) {
+                handleSuccessResponse(responseEvent, status);
+            } else if ((status >= Response.TRYING) && (status < Response.OK)) {
+                // 增加其它无需回复的响应，如101、180等
+                log.debug("收到临时响应: {}", status);
+            } else {
+                handleErrorResponse(responseEvent, status);
             }
-
-            if (status != Response.UNAUTHORIZED && responseEvent.getResponse() != null && SipSubscribe.getOkSubscribesSize() > 0) {
-                SipSubscribe.publishOkEvent(responseEvent);
-            }
-        } else if ((status >= Response.TRYING) && (status < Response.OK)) {
-            // 增加其它无需回复的响应，如101、180等
-        } else {
-            log.warn("接收到失败的response响应！status：" + status + ",message:" + response.getReasonPhrase() + " response = {}", responseEvent.getResponse());
-            if (responseEvent.getResponse() != null && SipSubscribe.getErrorSubscribesSize() > 0) {
-                CallIdHeader callIdHeader = (CallIdHeader) responseEvent.getResponse().getHeader(CallIdHeader.NAME);
-                if (callIdHeader != null) {
-                    Event subscribe = SipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
-                    if (subscribe != null) {
-                        EventResult eventResult = new EventResult(responseEvent);
-                        subscribe.response(eventResult);
-                        SipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
-                    }
-                }
-            }
-            if (responseEvent.getDialog() != null) {
-                responseEvent.getDialog().delete();
-            }
+        } catch (Exception e) {
+            log.error("处理SIP响应时发生异常", e);
+            // 对于响应处理异常，我们只记录日志，不再发送响应
         }
 
         sipProcessorInject.after();
+    }
+
+    /**
+     * 处理成功响应
+     */
+    private void handleSuccessResponse(ResponseEvent responseEvent, int status) {
+        CSeqHeader cseqHeader = (CSeqHeader)responseEvent.getResponse().getHeader(CSeqHeader.NAME);
+        String method = cseqHeader.getMethod();
+        SipResponseProcessor sipResponseProcessor = RESPONSE_PROCESSOR_MAP.get(method);
+
+        if (sipResponseProcessor != null) {
+            // 使用异步管理器处理响应
+            sipAsyncManager.processResponse(sipResponseProcessor, responseEvent)
+                .whenComplete((result, throwable) -> {
+                    if (throwable != null) {
+                        String processorName = sipResponseProcessor.getClass().getSimpleName();
+                        log.error("SIP响应处理器异常: {} 方法: {} 状态码: {}", processorName, method, status, throwable);
+                    } else {
+                        log.debug("成功处理SIP响应: {} 状态码: {}", method, status);
+                    }
+                });
+        } else {
+            log.debug("未找到对应的响应处理器: {}", method);
+        }
+
+        if (status != Response.UNAUTHORIZED && responseEvent.getResponse() != null && SipSubscribe.getOkSubscribesSize() > 0) {
+            SipSubscribe.publishOkEvent(responseEvent);
+        }
+    }
+
+    /**
+     * 处理错误响应
+     */
+    private void handleErrorResponse(ResponseEvent responseEvent, int status) {
+        Response response = responseEvent.getResponse();
+        log.warn("接收到失败的response响应！status：{}, message: {}", status, response.getReasonPhrase());
+
+        if (responseEvent.getResponse() != null && SipSubscribe.getErrorSubscribesSize() > 0) {
+            CallIdHeader callIdHeader = (CallIdHeader)responseEvent.getResponse().getHeader(CallIdHeader.NAME);
+            if (callIdHeader != null) {
+                Event subscribe = SipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
+                if (subscribe != null) {
+                    EventResult eventResult = new EventResult(responseEvent);
+                    subscribe.response(eventResult);
+                    SipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
+                }
+            }
+        }
+
+        if (responseEvent.getDialog() != null) {
+            responseEvent.getDialog().delete();
+        }
     }
 
     /**
@@ -170,32 +222,40 @@ public class SipProcessorObserver implements SipListener {
      */
     @Override
     public void processTimeout(TimeoutEvent timeoutEvent) {
-        ClientTransaction clientTransaction = timeoutEvent.getClientTransaction();
+        try {
+            ClientTransaction clientTransaction = timeoutEvent.getClientTransaction();
 
-        if (clientTransaction == null) {
-            return;
-        }
-
-        Request request = clientTransaction.getRequest();
-        if (request == null) {
-            return;
-        }
-
-        CallIdHeader callIdHeader = (CallIdHeader)request.getHeader(CallIdHeader.NAME);
-        if (callIdHeader != null) {
-            Event subscribe = SipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
-            EventResult eventResult = new EventResult(timeoutEvent);
-            if (subscribe != null) {
-                subscribe.response(eventResult);
+            if (clientTransaction == null) {
+                log.debug("收到超时事件但客户端事务为空");
+                return;
             }
-            SipSubscribe.removeOkSubscribe(callIdHeader.getCallId());
-            SipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
+
+            Request request = clientTransaction.getRequest();
+            if (request == null) {
+                log.debug("收到超时事件但请求为空");
+                return;
+            }
+
+            CallIdHeader callIdHeader = (CallIdHeader)request.getHeader(CallIdHeader.NAME);
+            if (callIdHeader != null) {
+                Event subscribe = SipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
+                EventResult eventResult = new EventResult(timeoutEvent);
+                if (subscribe != null) {
+                    subscribe.response(eventResult);
+                }
+                SipSubscribe.removeOkSubscribe(callIdHeader.getCallId());
+                SipSubscribe.removeErrorSubscribe(callIdHeader.getCallId());
+
+                log.warn("SIP请求超时: {} CallID: {}", request.getMethod(), callIdHeader.getCallId());
+            }
+        } catch (Exception e) {
+            log.error("处理SIP超时事件异常", e);
         }
     }
 
     @Override
     public void processIOException(IOExceptionEvent exceptionEvent) {
-        log.error("processIOException::exceptionEvent = {} ", JSON.toJSONString(exceptionEvent));
+        log.error("SIP IO异常: {}", JSON.toJSONString(exceptionEvent));
     }
 
     /**
@@ -206,11 +266,17 @@ public class SipProcessorObserver implements SipListener {
      */
     @Override
     public void processTransactionTerminated(TransactionTerminatedEvent timeoutEvent) {
-        EventResult eventResult = new EventResult(timeoutEvent);
+        try {
+            EventResult eventResult = new EventResult(timeoutEvent);
 
-        Event timeOutSubscribe = SipSubscribe.getErrorSubscribe(eventResult.getCallId());
-        if (timeOutSubscribe != null) {
-            timeOutSubscribe.response(eventResult);
+            Event timeOutSubscribe = SipSubscribe.getErrorSubscribe(eventResult.getCallId());
+            if (timeOutSubscribe != null) {
+                timeOutSubscribe.response(eventResult);
+            }
+
+            log.debug("SIP事务终止: CallID: {}", eventResult.getCallId());
+        } catch (Exception e) {
+            log.error("处理SIP事务终止事件异常", e);
         }
     }
 
@@ -222,11 +288,24 @@ public class SipProcessorObserver implements SipListener {
      */
     @Override
     public void processDialogTerminated(DialogTerminatedEvent dialogTerminatedEvent) {
-        EventResult eventResult = new EventResult(dialogTerminatedEvent);
+        try {
+            EventResult eventResult = new EventResult(dialogTerminatedEvent);
 
-        Event timeOutSubscribe = SipSubscribe.getErrorSubscribe(eventResult.getCallId());
-        if (timeOutSubscribe != null) {
-            timeOutSubscribe.response(eventResult);
+            Event timeOutSubscribe = SipSubscribe.getErrorSubscribe(eventResult.getCallId());
+            if (timeOutSubscribe != null) {
+                timeOutSubscribe.response(eventResult);
+            }
+
+            log.debug("SIP对话终止: CallID: {}", eventResult.getCallId());
+        } catch (Exception e) {
+            log.error("处理SIP对话终止事件异常", e);
         }
+    }
+
+    /**
+     * 获取异步处理状态信息
+     */
+    public String getAsyncProcessorStatus() {
+        return sipAsyncManager.getAsyncExecutorStatus();
     }
 }

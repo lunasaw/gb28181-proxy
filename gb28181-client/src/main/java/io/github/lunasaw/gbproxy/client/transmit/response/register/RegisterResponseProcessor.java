@@ -9,7 +9,6 @@ import javax.sip.message.Request;
 import javax.sip.message.Response;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nist.javax.sip.ResponseEventExt;
@@ -18,6 +17,7 @@ import io.github.lunasaw.gbproxy.client.user.SipUserGenerateClient;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.transmit.SipSender;
+import io.github.lunasaw.sip.common.transmit.event.SipMethod;
 import io.github.lunasaw.sip.common.transmit.event.response.SipResponseProcessorAbstract;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import io.github.lunasaw.sip.common.utils.SipUtils;
@@ -26,20 +26,18 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * description 发起后 Register 的响应处理器
+ * REGISTER响应处理器
+ * 处理客户端发起REGISTER后的响应
  * 业务逻辑直接继承该类，实现方法即可
- * 
+ *
  * @author luna
  */
+@SipMethod("REGISTER")
 @Slf4j
 @Getter
 @Setter
 @Component
 public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
-
-    public static final String      METHOD = "REGISTER";
-
-    public String                   method = METHOD;
 
     @Autowired
     private RegisterProcessorClient registerProcessorClient;
@@ -73,25 +71,23 @@ public class RegisterResponseProcessor extends SipResponseProcessorAbstract {
         }
     }
 
-    public void responseUnAuthorized(ResponseEventExt evt) throws SdpParseException {
-        // 成功响应
-        SIPResponse response = (SIPResponse)evt.getResponse();
-
-        String toUserId = SipUtils.getUserIdFromToHeader(response);
-
-        CallIdHeader callIdHeader = response.getCallIdHeader();
-        Integer expire = registerProcessorClient.getExpire(toUserId);
-        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
-        ToDevice toDevice = (ToDevice)sipUserGenerate.getToDevice(toUserId);
-        if (fromDevice == null || toDevice == null) {
-            return;
-        }
-
+    /**
+     * 处理401未授权响应
+     *
+     * @param event 响应事件
+     * @throws SdpParseException SDP解析异常
+     */
+    public void responseUnAuthorized(ResponseEventExt event) throws SdpParseException {
+        SIPResponse response = (SIPResponse)event.getResponse();
         WWWAuthenticateHeader www = (WWWAuthenticateHeader)response.getHeader(WWWAuthenticateHeader.NAME);
-        Request registerRequestWithAuth =
-            SipRequestProvider.createRegisterRequestWithAuth(fromDevice, toDevice, callIdHeader.getCallId(), expire, www);
+        String callId = event.getResponse().getHeader(CallIdHeader.NAME).toString();
+        callId = callId.substring(callId.indexOf(":") + 1).trim();
+        Request request = event.getOriginalRequest();
 
-        // 发送二次请求
-        SipSender.transmitRequest(fromDevice.getIp(), registerRequestWithAuth);
+        FromDevice fromDevice = (FromDevice)sipUserGenerate.getFromDevice();
+        ToDevice toDevice = sipUserGenerate.getToDevice(SipUtils.getUserIdFromToHeader(response));
+
+        Request authRequest = SipRequestProvider.createAuthRequest(fromDevice, toDevice, request, www, callId);
+        SipSender.transmitRequest(fromDevice.getIp(), authRequest);
     }
 }

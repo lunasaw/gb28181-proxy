@@ -1,0 +1,178 @@
+# GB28181 SIP协议封装项目
+你是一个经验丰富的Java开发工程师，你非常擅长使用Spring Boot框架进行开发，你非常擅长使用SIP协议进行开发，你非常擅长使用GB28181协议进行开发。
+
+## 项目概述
+这是一个基于GB28181国标协议的轻量级SIP框架封装项目，支持视频监控设备与平台之间的标准化通信。
+
+## 技术栈
+- **语言**: Java 17
+- **框架**: Spring Boot 3.3.1
+- **协议**: SIP/GB28181
+- **构建工具**: Maven
+- **SIP实现**: javax.sip (jain-sip-ri)
+- **XML处理**: JAXB/DOM4J
+
+## 项目架构
+
+### 模块结构
+- `sip-common`: SIP协议通用封装，提供SIP消息处理、序列生成、事件订阅等基础功能
+- `gb28181-client`: GB28181客户端实现，模拟视频设备端功能
+- `gb28181-server`: GB28181服务端实现，模拟监控平台端功能
+- `gb28181-common`: GB28181协议公共实体、枚举和工具类
+- `gb28181-test`: 测试模块，包含各种功能测试用例
+
+### 核心设计模式
+- **事件驱动**: 使用SipRequestProcessor和SipResponseProcessor处理SIP消息
+- **工厂模式**: SipUserGenerate用于生成SIP用户信息
+- **观察者模式**: SipProcessorObserver管理处理器注册和分发
+- **自动配置**: Spring Boot Starter自动配置SIP环境
+
+## 代码规范
+
+### Java代码规范
+- 遵循阿里巴巴Java开发手册规范
+- 使用ali-code-style.xml格式化模板
+- 类和方法必须添加完整的JavaDoc注释
+- 变量命名采用驼峰命名法
+- 常量使用全大写下划线分隔
+
+### XML文件规范
+- 使用TAB缩进（不是空格）
+- GB28181 XML消息必须符合国标格式要求
+- 使用JAXB注解进行对象映射
+
+### 包命名规范
+- 基础包名: `io.github.lunasaw`
+- SIP公共功能: `io.github.lunasaw.sip.common`
+- GB28181功能: `io.github.lunasaw.gb28181.common` 和 `io.github.lunasaw.gbproxy`
+
+## 开发指导
+
+### 添加新的SIP消息处理器
+```java
+@Component
+public class CustomRequestProcessor extends SipRequestProcessorAbstract {
+    private final String method = "CUSTOM";
+
+    @Override
+    public void process(SipRequestEvent event) {
+        // 处理逻辑
+    }
+}
+```
+
+### 创建GB28181 XML实体类
+```java
+@XmlAccessorType(XmlAccessType.FIELD)
+public class CustomEntity extends XmlBean {
+    @XmlElement(name = "CmdType")
+    private String cmdType;
+
+    @XmlElement(name = "SN")
+    private String sn;
+
+    @XmlElement(name = "DeviceID")
+    private String deviceId;
+}
+```
+
+### 发送SIP消息
+```java
+// 发送MESSAGE请求
+String callId = SipSender.doMessageRequest(fromDevice, toDevice, xmlContent);
+
+// 发送REGISTER请求
+String callId = SipSender.doRegisterRequest(fromDevice, toDevice, expires);
+
+// 发送INVITE请求
+String callId = SipSender.doInviteRequest(fromDevice, toDevice, sdp);
+```
+
+## GB28181协议要点
+
+### 核心功能
+- **设备注册**: 设备向平台注册，建立信令通道
+- **心跳保活**: 定时发送Keepalive消息维持连接
+- **设备控制**: 云台控制(PTZ)、录像控制等
+- **目录查询**: 查询设备通道目录信息
+- **实时点播**: 建立实时视频流传输
+- **录像回放**: 历史录像文件查询和回放
+- **告警上报**: 设备告警信息上报
+- **事件订阅**: 订阅设备状态变化事件
+
+### 消息格式
+GB28181协议基于SIP协议，消息体采用XML格式，主要字段：
+- `CmdType`: 命令类型（如Catalog、DeviceInfo、Keepalive等）
+- `SN`: 命令序列号
+- `DeviceID`: 设备编码（20位国标编码）
+
+### 设备编码规范
+遵循GB/T 28181-2016标准：
+- 中心编码：8位
+- 行业编码：2位
+- 类型编码：3位
+- 网络标识：1位
+- 设备编码：6位
+
+## 常见开发场景
+
+### 客户端开发（设备端）
+```java
+// 设备注册
+ClientSendCmd.deviceRegister(fromDevice, toDevice, 3600);
+
+// 心跳上报
+ClientSendCmd.deviceKeepLiveNotify(fromDevice, toDevice, "OK");
+
+// 设备信息上报
+ClientSendCmd.deviceInfoResponse(fromDevice, toDevice, deviceInfo);
+
+// 目录上报
+ClientSendCmd.deviceChannelCatalogResponse(fromDevice, toDevice, deviceItems);
+```
+
+### 服务端开发（平台端）
+```java
+// 目录查询
+ServerSendCmd.deviceCatalogQuery(fromDevice, toDevice);
+
+// 设备信息查询
+ServerSendCmd.deviceInfoQuery(fromDevice, toDevice);
+
+// 云台控制
+ServerSendCmd.deviceControlPtz(fromDevice, toDevice, ptzCommand);
+
+// 实时点播
+ServerSendCmd.deviceInvitePlay(fromDevice, toDevice, inviteEntity);
+```
+
+## 注意事项
+
+### SIP协议要点
+- SIP消息必须包含正确的Via、From、To、Call-ID、CSeq等头域
+- 响应消息的CSeq必须与请求消息保持一致
+- Dialog状态管理对于INVITE会话至关重要
+
+### GB28181协议要点
+- 设备ID必须符合20位国标编码格式
+- XML消息编码必须为UTF-8
+- 时间格式统一使用yyyy-MM-dd'T'HH:mm:ss格式
+
+### 性能优化
+- 合理设置SIP栈的线程池大小
+- 对于大量设备场景，考虑消息队列削峰
+- 定时清理过期的Dialog和Transaction
+
+### 调试建议
+- 开启SIP消息日志，便于问题排查
+- 使用Wireshark抓包分析SIP信令交互
+- 关注设备注册状态和心跳间隔设置
+
+## 扩展开发
+- 支持TCP/TLS传输协议
+- 集成流媒体服务器（如ZLMediaKit）
+- 添加Web管理界面
+- 支持设备级联功能
+- 实现负载均衡和集群部署
+
+当开发此项目时，请始终考虑GB28181协议的标准符合性和SIP协议的正确实现。

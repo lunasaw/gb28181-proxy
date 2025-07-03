@@ -22,7 +22,7 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <spring-boot.version>3.3.1</spring-boot.version>
+        <spring-boot.version>3.5.3</spring-boot.version>
         <luna-common.version>2.6.2</luna-common.version>
         <github.username>lunasaw</github.username>
         <app.profiles>${project.name}</app.profiles>
