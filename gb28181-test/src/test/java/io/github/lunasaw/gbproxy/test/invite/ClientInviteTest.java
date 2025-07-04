@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.invite;
 
+import io.github.lunasaw.gbproxy.test.config.TestDeviceSupplier;
 import javax.sip.message.Request;
 
 import org.junit.jupiter.api.*;
@@ -31,10 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 public class ClientInviteTest {
 
     @Autowired
-    private SipLayer       sipLayer;
+    private SipLayer           sipLayer;
 
     @Autowired
     private DeviceSupplier deviceSupplier;
+
+    @Autowired
+    private TestDeviceSupplier testDeviceSupplier;
 
     @AfterAll
     public static void after() {
@@ -46,8 +50,8 @@ public class ClientInviteTest {
     @BeforeEach
     public void before() {
         // 获取客户端设备
-        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
-        ToDevice toDevice = (ToDevice)deviceSupplier.getDevice("41010500002000000001");
+        FromDevice fromDevice = testDeviceSupplier.getClientFromDevice();
+        ToDevice toDevice = testDeviceSupplier.getClientToDevice();
 
         if (fromDevice == null || toDevice == null) {
             log.error("未找到设备配置");
@@ -66,8 +70,8 @@ public class ClientInviteTest {
         String callId = SipRequestUtils.getNewCallId();
 
         // 获取设备
-        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
-        ToDevice toDevice = (ToDevice)deviceSupplier.getDevice("41010500002000000001");
+        FromDevice fromDevice = testDeviceSupplier.getClientFromDevice();
+        ToDevice toDevice = testDeviceSupplier.getClientToDevice();
 
         if (fromDevice == null || toDevice == null) {
             log.error("未找到设备配置");
@@ -82,13 +86,13 @@ public class ClientInviteTest {
     @Test
     public void b_test_un_register_client_custom() {
         // 获取设备
-        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+        FromDevice fromDevice = testDeviceSupplier.getClientFromDevice();
         if (fromDevice == null) {
             log.error("未找到客户端设备配置");
             return;
         }
 
-        Device instance = deviceSupplier.getDevice("41010500002000000001");
+        Device instance = testDeviceSupplier.getDevice("41010500002000000001");
         DefaultRegisterProcessorClient.isRegister = false;
         ClientSendCmd.deviceUnRegister(fromDevice, (ToDevice)instance);
     }

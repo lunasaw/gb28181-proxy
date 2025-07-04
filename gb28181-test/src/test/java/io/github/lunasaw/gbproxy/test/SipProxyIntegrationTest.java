@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.test;
 
 import io.github.lunasaw.gbproxy.client.Gb28181Client;
 import io.github.lunasaw.gbproxy.server.Gb28181Server;
+import io.github.lunasaw.gbproxy.test.config.TestDeviceSupplier;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.layer.SipLayer;
@@ -71,31 +72,24 @@ import java.util.concurrent.TimeUnit;
 public class SipProxyIntegrationTest {
 
     @Autowired
-    private SipLayer       sipLayer;
-
+    private SipLayer           sipLayer;
     @Autowired
-    private DeviceSupplier deviceSupplier;
-
-    @Autowired(required = false)
-    private Gb28181Server  gb28181Server;
-
-    @Autowired(required = false)
-    private Gb28181Client  gb28181Client;
+    private TestDeviceSupplier testDeviceSupplier;
 
     private CountDownLatch responseLatch;
-    private EventResult    lastEventResult;
+
+    private EventResult        lastEventResult;
 
     @BeforeEach
     public void setUp() {
         // 获取客户端设备
-        FromDevice clientFromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+        FromDevice clientFromDevice = testDeviceSupplier.getClientFromDevice();
         if (clientFromDevice == null) {
             log.error("未找到客户端设备配置");
             return;
         }
 
         // 设置监听点
-        sipLayer.addListeningPoint(clientFromDevice.getIp(), clientFromDevice.getPort());
         responseLatch = new CountDownLatch(1);
     }
 
@@ -106,8 +100,8 @@ public class SipProxyIntegrationTest {
         Assertions.assertNotNull(sipLayer, "SIP层应该被正确初始化");
 
         // 获取设备
-        FromDevice clientFromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
-        ToDevice clientToDevice = (ToDevice)deviceSupplier.getDevice("41010500002000000001");
+        FromDevice clientFromDevice = testDeviceSupplier.getClientFromDevice();
+        ToDevice clientToDevice = testDeviceSupplier.getClientToDevice();
 
         Assertions.assertNotNull(clientFromDevice, "客户端设备应该被正确配置");
         Assertions.assertNotNull(clientToDevice, "服务端设备应该被正确配置");
@@ -115,6 +109,8 @@ public class SipProxyIntegrationTest {
         System.out.println("=== SIP层初始化测试通过 ===");
         System.out.println("客户端设备: " + clientFromDevice.getUserId() + ":" + clientFromDevice.getPort());
         System.out.println("服务端设备: " + clientToDevice.getUserId() + ":" + clientToDevice.getPort());
+        sipLayer.addListeningPoint(clientFromDevice.getIp(), clientFromDevice.getPort());
+
     }
 
     @Test
@@ -122,8 +118,8 @@ public class SipProxyIntegrationTest {
     @DisplayName("测试设备注册")
     public void testDeviceRegistration() throws Exception {
         // 获取设备
-        FromDevice clientFromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
-        ToDevice clientToDevice = (ToDevice)deviceSupplier.getDevice("41010500002000000001");
+        FromDevice clientFromDevice = testDeviceSupplier.getClientFromDevice();
+        ToDevice clientToDevice = testDeviceSupplier.getClientToDevice();
 
         if (clientFromDevice == null || clientToDevice == null) {
             log.error("未找到设备配置");
@@ -174,8 +170,8 @@ public class SipProxyIntegrationTest {
     @DisplayName("测试设备心跳")
     public void testDeviceHeartbeat() throws Exception {
         // 获取设备
-        FromDevice clientFromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
-        ToDevice clientToDevice = (ToDevice)deviceSupplier.getDevice("41010500002000000001");
+        FromDevice clientFromDevice = testDeviceSupplier.getClientFromDevice();
+        ToDevice clientToDevice = testDeviceSupplier.getClientToDevice();
 
         if (clientFromDevice == null || clientToDevice == null) {
             log.error("未找到设备配置");
@@ -218,8 +214,8 @@ public class SipProxyIntegrationTest {
     @DisplayName("测试设备目录查询")
     public void testDeviceCatalogQuery() throws Exception {
         // 获取设备
-        FromDevice clientFromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
-        ToDevice clientToDevice = (ToDevice)deviceSupplier.getDevice("41010500002000000001");
+        FromDevice clientFromDevice = testDeviceSupplier.getClientFromDevice();
+        ToDevice clientToDevice = testDeviceSupplier.getClientToDevice();
 
         if (clientFromDevice == null || clientToDevice == null) {
             log.error("未找到设备配置");
@@ -258,39 +254,13 @@ public class SipProxyIntegrationTest {
 
     @Test
     @Order(5)
-    @DisplayName("测试GB28181服务器组件")
-    public void testGb28181ServerComponent() {
-        if (gb28181Server != null) {
-            System.out.println("=== GB28181服务器组件测试 ===");
-            System.out.println("服务器组件已加载: " + gb28181Server.getClass().getSimpleName());
-            Assertions.assertNotNull(gb28181Server, "GB28181服务器组件应该存在");
-        } else {
-            System.out.println("GB28181服务器组件未配置，跳过测试");
-        }
-    }
-
-    @Test
-    @Order(6)
-    @DisplayName("测试GB28181客户端组件")
-    public void testGb28181ClientComponent() {
-        if (gb28181Client != null) {
-            System.out.println("=== GB28181客户端组件测试 ===");
-            System.out.println("客户端组件已加载: " + gb28181Client.getClass().getSimpleName());
-            Assertions.assertNotNull(gb28181Client, "GB28181客户端组件应该存在");
-        } else {
-            System.out.println("GB28181客户端组件未配置，跳过测试");
-        }
-    }
-
-    @Test
-    @Order(7)
     @DisplayName("测试设备配置验证")
     public void testDeviceConfiguration() {
         System.out.println("=== 设备配置验证测试 ===");
 
         // 获取设备
-        FromDevice clientFromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
-        ToDevice clientToDevice = (ToDevice)deviceSupplier.getDevice("41010500002000000001");
+        FromDevice clientFromDevice = testDeviceSupplier.getClientFromDevice();
+        ToDevice clientToDevice = testDeviceSupplier.getClientToDevice();
 
         // 验证客户端设备配置
         Assertions.assertNotNull(clientFromDevice.getUserId(), "客户端设备ID不能为空");

@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.invite;
 
+import io.github.lunasaw.gbproxy.test.config.TestDeviceSupplier;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,9 @@ public class ServerInviteTest {
     @Autowired
     private DeviceSupplier deviceSupplier;
 
+    @Autowired
+    private TestDeviceSupplier testDeviceSupplier;
+
     @BeforeEach
     public void before() {
         // 本地端口监听
@@ -45,14 +49,14 @@ public class ServerInviteTest {
     @SneakyThrows
     public void test_invite_server() {
         dynamicTask.startDelay("play_test", () -> {
-            Device device = deviceSupplier.getDevice("33010602011187000001");
+            Device device = testDeviceSupplier.getDevice("33010602011187000001");
             if (device == null) {
                 test_invite_server();
                 return;
             }
 
             // 获取服务端设备
-            FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+            FromDevice fromDevice = testDeviceSupplier.getServerFromDevice();
 
             if (fromDevice == null) {
                 log.error("未找到服务端设备配置");
@@ -67,14 +71,14 @@ public class ServerInviteTest {
     @SneakyThrows
     public void test_invite_play_back_server() {
         dynamicTask.startDelay("play_back_test", () -> {
-            Device device = deviceSupplier.getDevice("34020000001320000001");
+            Device device = testDeviceSupplier.getDevice("34020000001320000001");
             if (device == null) {
                 test_invite_play_back_server();
                 return;
             }
 
             // 获取服务端设备
-            FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+            FromDevice fromDevice = testDeviceSupplier.getServerFromDevice();
             if (fromDevice == null) {
                 log.error("未找到服务端设备配置");
                 return;

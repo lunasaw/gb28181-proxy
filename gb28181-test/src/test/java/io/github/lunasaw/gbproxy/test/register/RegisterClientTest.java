@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.test.register;
 
+import io.github.lunasaw.gbproxy.test.config.TestDeviceSupplier;
 import javax.sip.message.Request;
 
 import org.junit.jupiter.api.AfterAll;
@@ -30,10 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 public class RegisterClientTest {
 
     @Autowired
-    private SipLayer       sipLayer;
+    private SipLayer           sipLayer;
 
     @Autowired
     private DeviceSupplier deviceSupplier;
+
+    @Autowired
+    private TestDeviceSupplier testDeviceSupplier;
 
     @AfterAll
     public static void after() {
@@ -45,7 +49,7 @@ public class RegisterClientTest {
     @BeforeEach
     public void before() {
         // 获取客户端设备
-        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+        FromDevice fromDevice = testDeviceSupplier.getClientFromDevice();
         if (fromDevice == null) {
             log.error("未找到客户端设备配置");
             return;
@@ -61,7 +65,7 @@ public class RegisterClientTest {
         String callId = SipRequestUtils.getNewCallId();
 
         // 获取客户端设备
-        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+        FromDevice fromDevice = testDeviceSupplier.getClientFromDevice();
         if (fromDevice == null) {
             log.error("未找到客户端设备配置");
             return;

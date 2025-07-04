@@ -1,6 +1,7 @@
 package io.github.lunasaw.gbproxy.test.subscribe;
 
 import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
+import io.github.lunasaw.gbproxy.test.config.TestDeviceSupplier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,10 +36,13 @@ public class SubscribeServerTest {
     @Autowired
     private DeviceSupplier deviceSupplier;
 
+    @Autowired
+    private TestDeviceSupplier testDeviceSupplier;
+
     @BeforeEach
     public void before() {
         // 获取服务端设备
-        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+        FromDevice fromDevice = testDeviceSupplier.getServerFromDevice();
         if (fromDevice == null) {
             log.error("未找到服务端设备配置");
             return;
@@ -57,14 +61,14 @@ public class SubscribeServerTest {
     @Test
     public void test_subscribe() {
         dynamicTask.startDelay("test_subscribe", () -> {
-            Device device = deviceSupplier.getDevice("33010602011187000001");
+            Device device = testDeviceSupplier.getDevice("33010602011187000001");
             if (device == null) {
                 test_subscribe();
                 return;
             }
 
             // 获取服务端设备
-            FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+            FromDevice fromDevice = testDeviceSupplier.getServerFromDevice();
 
             if (fromDevice == null) {
                 log.error("未找到服务端设备配置");
