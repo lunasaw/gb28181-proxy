@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import io.github.lunasaw.gbproxy.client.transmit.request.subscribe.SubscribeProcessorClient;
-import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.gb28181.common.entity.query.DeviceQuery;
 import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;

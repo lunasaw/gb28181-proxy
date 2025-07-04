@@ -8,7 +8,7 @@ import io.github.lunasaw.gb28181.common.entity.response.DeviceSubscribe;
  */
 public class CustomSubscribeResponseProcessorServer implements SubscribeResponseProcessorServer {
     @Override
-    public void subscribeResult(DeviceSubscribe deviceSubscribe) {
+    public void responseSubscribe(DeviceSubscribe deviceSubscribe) {
 
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import lombok.Data;
 
 import java.time.Duration;
+import jakarta.annotation.PostConstruct;
 
 /**
  * GB28181配置属性类 - 支持外部化配置
@@ -21,6 +22,14 @@ public class Gb28181Properties {
     private Client      client      = new Client();
     private Performance performance = new Performance();
     private Cache       cache       = new Cache();
+
+    /**
+     * 应用启动时自动验证配置
+     */
+    @PostConstruct
+    public void validateOnStartup() {
+        validate();
+    }
 
     @Data
     public static class Server {

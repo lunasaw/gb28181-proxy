@@ -9,10 +9,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 
 /**
  * @author luna
@@ -21,6 +18,8 @@ import lombok.SneakyThrows;
 @Getter
 @Setter
 @XmlAccessorType(XmlAccessType.NONE)
+@AllArgsConstructor
+@NoArgsConstructor
 public class XmlBean {
 
     /**

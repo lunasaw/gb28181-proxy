@@ -5,17 +5,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import io.github.lunasaw.gbproxy.server.transimit.cmd.ServerSendCmd;
 import io.github.lunasaw.gbproxy.test.Gb28181ApplicationTest;
-import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.layer.SipLayer;
 import io.github.lunasaw.sip.common.utils.DynamicTask;
+import io.github.lunasaw.sip.common.service.DeviceSupplier;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,24 +27,26 @@ import lombok.extern.slf4j.Slf4j;
 public class SubscribeServerTest {
 
     @Autowired
-    @Qualifier("serverFrom")
-    private Device      fromDevice;
-
-    @Autowired
-    @Qualifier("serverTo")
-    private Device      toDevice;
-
-    @Autowired
     private DynamicTask dynamicTask;
 
     @Autowired
     private SipLayer sipLayer;
 
+    @Autowired
+    private DeviceSupplier deviceSupplier;
+
     @BeforeEach
     public void before() {
+        // 获取服务端设备
+        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+        if (fromDevice == null) {
+            log.error("未找到服务端设备配置");
+            return;
+        }
+
         // 本地端口监听
         log.info("before::服务端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        sipLayer.addListeningPoint(DeviceConfig.LOOP_IP, 8117, true);
+        sipLayer.addListeningPoint("127.0.0.1", 8117, true);
     }
 
     @Test
@@ -56,13 +57,22 @@ public class SubscribeServerTest {
     @Test
     public void test_subscribe() {
         dynamicTask.startDelay("test_subscribe", () -> {
-            Device device = DeviceConfig.DEVICE_SERVER_VIEW_MAP.get("33010602011187000001");
+            Device device = deviceSupplier.getDevice("33010602011187000001");
             if (device == null) {
                 test_subscribe();
                 return;
             }
+
+            // 获取服务端设备
+            FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+
+            if (fromDevice == null) {
+                log.error("未找到服务端设备配置");
+                return;
+            }
+
             String invitePlay =
-                ServerSendCmd.deviceCatalogSubscribe((FromDevice)fromDevice, (ToDevice)device, 30, CmdTypeEnum.CATALOG.getType());
+                ServerSendCmd.deviceCatalogSubscribe(fromDevice, (ToDevice)device, 30, CmdTypeEnum.CATALOG.getType());
             log.info("test_subscribe:: callId = {}", invitePlay);
         }, 30 * 1000);
     }

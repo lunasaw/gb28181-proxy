@@ -1,6 +1,5 @@
 package io.github.lunasaw.gbproxy.server.user;
 
-
 import io.github.lunasaw.sip.common.service.SipUserGenerate;
 
 /**

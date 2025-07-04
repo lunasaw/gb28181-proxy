@@ -1,0 +1,433 @@
+# Voglander 项目 Cursor Rules
+你是一个资深的Java架构师，精通Spring Boot、微服务架构和分布式系统设计，擅长代码重构和性能优化，对代码规范和最佳实践有深入理解
+
+## 项目概述
+这是一个基于Spring Boot + SIP通信框架 + GB28181写的SIP代理项目，采用多模块架构设计，提供完整的SIP协议通信能力。
+
+## 项目架构
+
+### 模块说明
+
+本项目采用多模块架构设计，基于Spring Boot 3.3.1和Java 17构建，主要包含以下核心模块：
+
+#### 1. sip-common（SIP基础包）
+**功能描述**：SIP协议的基础封装和通用功能模块，提供SIP通信的核心能力，是整个项目的基础包
+**主要职责**：
+- SIP协议栈封装和配置管理
+- 异步消息处理和线程池管理
+- 高性能缓存系统（基于Caffeine）
+- 连接池管理和监控
+- 性能指标收集（基于Micrometer）
+- 设备管理和会话控制
+- 事件总线机制
+- 配置验证和外部化
+- SIP消息发送器（SipSender）
+- 消息处理器框架（SipProcessorObserver）
+- 异常处理和错误管理
+
+**核心组件**：
+- `SipLayer`：SIP协议层封装
+- `AsyncSipMessageProcessor`：异步消息处理器
+- `CacheService`：缓存服务
+- `SipConfigurationManager`：配置管理器
+- `DeviceSupplier`：设备提供器接口
+- `SipSender`：SIP消息发送器
+- `SipProcessorObserver`：SIP消息处理器观察者
+- `SipConnectionPool`：SIP连接池管理
+
+**使用场景**：作为其他模块的基础依赖，提供SIP通信的底层支持
+
+#### 2. gb28181-common（GB28181协议模型模块）
+**功能描述**：GB28181协议的数据模型和实体定义模块
+**主要职责**：
+- GB28181协议XML数据模型定义
+- 设备控制命令实体（云台控制、录像控制等）
+- 设备状态和目录信息模型
+- 告警和事件通知模型
+- 查询和响应数据结构
+- XML序列化和反序列化支持
+
+**核心组件**：
+- 设备控制命令：`DeviceControlPtz`、`DeviceControlRecordCmd`等
+- 设备信息模型：`DeviceCatalog`、`DeviceInfo`、`DeviceStatus`
+- 告警模型：`DeviceAlarm`、`DeviceAlarmNotify`
+- 查询模型：各种Query和Response类
+
+**使用场景**：为客户端和服务端模块提供标准的数据模型支持
+
+#### 3. gb28181-client（GB28181客户端模块）
+**功能描述**：GB28181协议的客户端实现，模拟设备端行为
+**主要职责**：
+- 设备注册和认证
+- 心跳检测和保活
+- 设备控制响应（云台、录像、告警等）
+- 实时点播和回放响应
+- 事件推送和状态上报
+- 设备信息查询响应
+- 语音广播处理
+
+**核心组件**：
+- `Gb28181Client`：客户端主类
+- `ClientSendCmd`：**向外暴露的主动服务接口**，提供各种SIP命令发送方法
+- 被动消息处理器：各种`XXXRequestProcessor`和`XXXResponseProcessor`
+- 设备配置和用户管理
+
+**向外暴露的主动服务**：
+- `ClientSendCmd.deviceRegister()`：设备注册
+- `ClientSendCmd.deviceAlarmNotify()`：告警上报
+- `ClientSendCmd.deviceKeepLiveNotify()`：心跳状态上报
+- `ClientSendCmd.deviceChannelCatalogResponse()`：设备目录响应
+- `ClientSendCmd.deviceInfoResponse()`：设备信息响应
+- `ClientSendCmd.deviceStatusResponse()`：设备状态响应
+- `ClientSendCmd.deviceBye()`：发送BYE请求
+- `ClientSendCmd.deviceAck()`：发送ACK响应
+
+**被动消息处理器**：
+- `ClientMessageRequestProcessor`：处理MESSAGE请求
+- `ClientSubscribeRequestProcessor`：处理SUBSCRIBE请求
+- `InviteRequestProcessor`：处理INVITE请求
+- `ByeResponseProcessor`：处理BYE响应
+- 各种消息处理器：注册、控制、查询、告警等
+
+**使用场景**：
+- 模拟GB28181设备进行测试
+- 构建设备端应用
+- 协议兼容性验证
+
+#### 4. gb28181-server（GB28181服务端模块）
+**功能描述**：GB28181协议的服务端实现，提供平台级服务
+**主要职责**：
+- 设备注册管理
+- 设备认证和会话控制
+- 设备控制命令下发
+- 实时点播和回放控制
+- 告警接收和处理
+- 设备状态监控
+- 云台控制（PTZ）
+- 设备查询和目录管理
+
+**核心组件**：
+- `Gb28181Server`：服务端主类
+- `ServerSendCmd`：**向外暴露的主动服务接口**，提供各种SIP命令发送方法
+- 被动消息处理器：各种`XXXRequestProcessor`和`XXXResponseProcessor`
+- 设备会话管理
+
+**向外暴露的主动服务**：
+- `ServerSendCmd.deviceInfo()`：设备信息查询
+- `ServerSendCmd.devicePresetQuery()`：设备预设位置查询
+- `ServerSendCmd.deviceControlPtzCmd()`：云台控制命令
+- `ServerSendCmd.deviceControlRecordCmd()`：录像控制命令
+- `ServerSendCmd.deviceInvite()`：设备实时流点播
+- `ServerSendCmd.deviceInvitePlayBack()`：设备回放点播
+- `ServerSendCmd.deviceInvitePlayBackControl()`：回放控制
+- `ServerSendCmd.deviceBye()`：发送BYE请求
+- `ServerSendCmd.deviceAck()`：发送ACK响应
+
+**被动消息处理器**：
+- `ServerMessageRequestProcessor`：处理MESSAGE请求
+- `ServerNotifyRequestProcessor`：处理NOTIFY请求
+- `ByeRequestProcessorServer`：处理BYE请求
+- `SubscribeResponseProcessor`：处理SUBSCRIBE响应
+- 各种消息处理器：注册、控制、查询、点播等
+
+**使用场景**：
+- 构建GB28181平台服务
+- 设备管理和控制
+- 视频监控系统集成
+
+#### 5. gb28181-test（测试和示例模块）
+**功能描述**：集成测试和示例代码模块
+**主要职责**：
+- 客户端和服务端集成测试
+- 协议功能验证
+- 性能测试和压力测试
+- 示例代码和配置
+- 测试工具和辅助类
+
+**核心组件**：
+- 各种测试类：注册、点播、控制、告警等
+- 测试配置和工具类
+- 示例配置文件
+
+**使用场景**：
+- 功能验证和回归测试
+- 性能基准测试
+- 学习和参考示例
+
+### 模块依赖关系
+
+```
+gb28181-test
+    ├── gb28181-client
+    │   ├── sip-common (基础包)
+    │   └── gb28181-common
+    └── gb28181-server
+        ├── sip-common (基础包)
+        └── gb28181-common
+
+sip-common (基础包，无依赖)
+gb28181-common (协议模型，无依赖)
+```
+
+### 架构特点
+
+#### 1. 基础包架构
+- **sip-common作为基础包**：提供SIP通信的核心能力，包括协议栈封装、消息处理、连接池管理等
+- **统一的消息处理框架**：通过`SipProcessorObserver`统一管理所有SIP消息的接收和处理
+- **异步处理机制**：通过`AsyncSipMessageProcessor`提供高性能的异步消息处理
+
+#### 2. 主动服务与被动处理
+- **主动服务**：通过`XXXSendCmd`类向外暴露主动服务接口，用于发送SIP命令
+- **被动处理**：通过各种`XXXRequestProcessor`和`XXXResponseProcessor`处理接收到的SIP消息
+- **职责分离**：主动服务和被动处理完全分离，便于维护和扩展
+
+#### 3. 消息处理流程
+```
+SIP消息接收 → SipProcessorObserver → 具体Processor → 业务处理 → 响应发送
+```
+
+#### 4. 发送命令流程
+```
+业务调用 → XXXSendCmd → SipSender → SIP协议栈 → 网络发送
+```
+
+### 技术栈
+
+- **Java版本**：Java 17
+- **Spring Boot**：3.3.1
+- **SIP协议栈**：javax.sip (jain-sip-ri 1.3.0-91)
+- **缓存**：Caffeine 3.1.8
+- **监控**：Micrometer 1.12.0
+- **工具库**：Guava 32.1.3-jre
+- **XML处理**：dom4j 2.1.4
+- **构建工具**：Maven
+
+### 部署方式
+
+1. **全量包引入**：引入整个项目依赖
+2. **按需引入**：根据实际需求引入特定模块
+3. **Spring Boot Starter**：支持自动配置和快速集成
+
+## 编码规范
+
+### Java代码规范
+
+#### 1. 命名约定
+- 类名使用 PascalCase
+- 方法名和变量名使用 camelCase
+- 常量使用 UPPER_SNAKE_CASE
+- 包名使用小写，以 `io.github.lunasaw` 为根包
+- 统一使用lombok处理日志，使用@Slf4j注解
+- 统一使用lombok处理getter和setter方法，使用@Getter和@Setter注解
+- 统一使用lombok处理构造方法，使用@AllArgsConstructor和@NoArgsConstructor注解
+- 统一使用lombok处理toString方法，使用@ToString注解
+
+#### 3. 异常处理
+- 使用 `ServiceException` 进行业务异常处理
+- 使用 `GlobalExceptionHandler` 进行全局异常处理
+- 自定义异常枚举 `ServiceExceptionEnum`
+
+#### 4. Java版本和包导入规范 (强制性要求)
+- 项目使用 **Java 17** 版本，需要遵循Java 17的语法和特性
+- **强制使用jakarta包**而不是javax包
+- 例如：使用 `jakarta.validation.constraints.NotBlank` 而不是 `javax.validation.constraints.NotBlank`
+- 所有Jakarta EE相关的包都必须使用jakarta前缀
+- 这是强制性规范，确保项目的一致性和兼容性
+
+
+#### 6. JSON序列化规范 (强制性要求)
+- 项目内所有JSON序列化和反序列化统一使用fastjson2
+- 禁止使用Jackson、Gson等其他JSON库进行序列化操作
+- 配置类中统一配置fastjson2作为默认JSON处理器
+- 自定义序列化器和反序列化器基于fastjson2实现
+- 确保JSON处理的一致性和性能优化
+
+#### 7. 时间字段返回格式规范 (强制性要求)
+- 所有Controller层VO返回的时间字段必须统一返回unix时间戳（毫秒级）
+- 禁止返回字符串格式的时间（如"2023-12-01 10:30:00"）
+- 时间字段命名建议以Time结尾，如：createTime、updateTime、expireTime等
+- 对于需要显示具体时间格式的场景，由前端根据unix时间戳进行格式化处理
+- DTO中可以使用Date或LocalDateTime类型，转换到VO时根据类型使用不同方法：
+  - Date类型：使用date.getTime()方法获取毫秒级时间戳
+  - LocalDateTime类型：使用localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()方法获取毫秒级时间戳
+- 确保时间数据的一致性和国际化兼容性
+
+#### 8. 时间字段类型规范 (强制性要求)
+- DO层（数据对象层）统一使用LocalDateTime类型处理时间字段
+- DTO层（数据传输对象层）统一使用LocalDateTime类型处理时间字段
+- 禁止在DO和DTO层使用Date、Timestamp等其他时间类型
+- 保持数据层时间处理的统一性和现代化
+
+#### 9. 时间转换领域方法规范 (强制性要求)
+- 在DTO类中提供时间转换的领域方法，避免重复编写转换逻辑
+- 为LocalDateTime字段提供转换为毫秒级时间戳的便捷方法
+- 方法命名规范：字段名 + "ToEpochMilli"，如：createTimeToEpochMilli()、updateTimeToEpochMilli()
+- 方法实现：return fieldName != null ? fieldName.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;
+- 提高代码可读性，减少转换逻辑的重复编写
+
+#### 10. 数据检查
+- 统一使用 `Assert` 进行数据检查，采用apache-commons-lang3的Assert工具类
+
+#### 11. 集成层Wrapper规范 (强制性要求)
+- 所有与外部系统交互的Wrapper类必须统一返回 `ResultDTO` 封装格式
+- 包括但不限于：设备命令服务、第三方API调用、消息队列处理、文件处理等外部交互组件
+- 成功情况使用 `ResultDTOUtils.success()` 返回
+- 失败情况使用 `ResultDTOUtils.failure(errorCode, errorMessage)` 返回
+- 所有Wrapper方法必须包含完整的异常处理：参数校验、业务异常捕获、系统异常捕获
+- 必须使用 `@Slf4j` 注解添加详细的日志记录：操作开始、成功、失败信息
+- 确保外部系统交互的统一性、可追踪性和稳定性
+
+### 7. SIP代理项目特殊数据管理规范 (强制性要求)
+- **外部接口调用**：所有业务数据必须通过外部接口获取，禁止本地硬编码业务数据
+- **接口封装**：外部接口调用必须通过Wrapper类封装，统一返回ResultDTO格式
+- **缓存策略**：外部接口数据优先缓存，减少接口调用频率，提升性能
+- **测试数据**：测试环境可使用本地XML文件或内存数据，生产环境必须使用真实接口
+- **设备管理**：设备信息通过DeviceSupplier接口获取，支持动态更新
+- **会话管理**：SIP会话信息使用连接池管理，支持会话复用和超时清理
+- **消息处理**：SIP消息通过MessageProcessor接口处理，支持异步处理
+- **数据同步**：定期同步外部数据到本地缓存，保证数据一致性
+- **异常处理**：外部接口调用异常时，优先使用缓存数据，保证服务可用性
+- **监控告警**：监控外部接口调用状态，异常时及时告警
+
+### 8. 外部接口Wrapper规范 (强制性要求)
+- **统一返回格式**：所有外部接口调用必须返回ResultDTO格式
+- **异常处理**：包含完整的异常处理：参数校验、业务异常、系统异常
+- **日志记录**：使用@Slf4j记录详细的调用日志：开始、成功、失败信息
+- **超时控制**：设置合理的超时时间，避免长时间等待
+- **重试机制**：对关键接口实现重试机制，提高调用成功率
+- **熔断保护**：对频繁调用的接口实现熔断机制，保护系统稳定性
+- **性能监控**：监控接口调用性能，及时发现性能瓶颈
+
+## 配置管理
+
+### 1. 配置文件
+- `application.yml`: 主配置文件
+- `application-dev.yml`: 开发环境配置
+- `application-test.yml`: 测试环境配置
+- `application-sip.yml`: SIP协议相关配置
+- `application-gb28181.yml`: GB28181协议配置
+
+### 2. 常量管理
+- SIP协议常量放在 `SipConstant`
+- 缓存常量放在 `CacheConstants`
+- 设备相关常量放在 `DeviceConstant`
+- GB28181协议常量放在 `Gb28181Constant`
+
+## 业务规范
+
+### 1. SIP设备管理
+- 设备注册使用 `DeviceRegisterService`
+- 设备命令使用 `DeviceCommandService`
+- 设备协议枚举 `DeviceAgreementEnum`
+
+### 2. GB28181协议处理
+- 设备控制使用 `DeviceControlService`
+- 云台控制使用 `PtzControlService`
+- 告警处理使用 `AlarmProcessService`
+
+### 3. 消息处理
+- 使用 `AsyncSipMessageProcessor` 进行异步消息处理
+- 使用 `SipMessageQueue` 进行消息队列管理
+- 使用 `@RateLimiter` 注解进行限流控制
+
+## 测试规范
+
+### 1. 单元测试
+- 测试类以 `Test` 结尾
+- 使用 `@SpringBootTest` 进行集成测试
+- 测试方法使用 `@Test` 注解
+
+### 2. Mock注解规范 (强制性要求)
+- 禁止使用 `@MockBean` 注解，该注解自Spring 3.4.0起已被标记为废弃，计划在4.0.0版本中移除
+- 统一使用 `@MockitoBean` 注解替代 `@MockBean`
+- 导入路径：`org.springframework.test.context.bean.override.mockito.MockitoBean`
+- 确保测试代码的前瞻性和兼容性
+
+### 3. 测试数据
+- 使用模拟设备进行SIP协议测试
+- 测试配置文件放在 `resources/` 目录
+- 测试日志放在 `logs/` 目录
+
+## 日志规范
+
+### 1. 日志配置
+- 使用 `logback-spring.xml` 配置日志
+- 不同环境使用不同的日志级别
+
+### 2. 日志使用
+- 使用 `@Slf4j` 注解
+- 重要操作记录INFO级别日志
+- 异常记录ERROR级别日志
+
+## 安全规范
+
+### 1. API安全
+- 使用过滤器进行请求预处理
+- IP工具类 `IpUtils` 进行IP相关操作
+- 使用拦截器进行请求拦截
+
+## 性能优化
+
+### 1. 异步处理
+- 使用 `AsyncSipMessageProcessor` 进行异步消息处理
+- 使用 `SipAsyncConfig` 配置异步线程池
+
+### 2. 并发处理
+- 使用 `SipConnectionPool` 处理连接池管理
+- 使用 `SipPoolManager` 进行连接池监控和优化
+
+### 3. 缓存优化
+- 使用 `CacheService` 进行多级缓存管理
+- 使用 `SipMetrics` 进行性能指标监控
+
+## 代码生成指导
+- 遵循现有的分层架构
+- 保持代码风格一致
+- 添加必要的注释和文档
+- 考虑异常处理和日志记录
+- 遵循Spring Boot最佳实践
+
+## SIP代理项目架构
+
+```
+SIP Client/Server Application
+    ↓ uses
+XXXSendCmd (主动服务接口)
+    ↓ uses
+SipSender (消息发送器)
+    ↓ uses
+SIP Layer (协议层封装)
+    ↓ uses
+Jain SIP Stack (底层SIP协议栈)
+
+被动消息处理流程：
+SIP消息接收 → SipProcessorObserver → XXXRequestProcessor/XXXResponseProcessor → 业务处理
+
+模块分层架构：
+gb28181-client/gb28181-server
+    ↓ depends on
+sip-common (SIP基础包)
+    ↓ depends on
+gb28181-common (协议模型)
+    ↓ depends on
+javax.sip (SIP协议栈)
+```
+
+### 架构特点：
+- **基础包设计**：sip-common作为基础包，提供SIP通信的核心能力
+- **主动服务与被动处理分离**：通过XXXSendCmd提供主动服务，通过XXXProcessor处理被动消息
+- **统一消息处理框架**：通过SipProcessorObserver统一管理所有SIP消息处理
+- **异步处理机制**：高性能的异步消息处理机制
+- **缓存优化**：多级缓存提升性能
+- **监控集成**：完整的性能监控和指标收集
+- **配置外部化**：灵活的配置管理
+
+### 核心组件说明：
+- **SIP Layer**：SIP协议栈封装，提供统一的协议接口
+- **SipSender**：SIP消息发送器，负责主动发送SIP命令
+- **SipProcessorObserver**：SIP消息处理器观察者，统一管理消息处理
+- **XXXSendCmd**：主动服务接口，向外暴露SIP命令发送能力
+- **XXXProcessor**：被动消息处理器，处理接收到的SIP消息
+- **Cache Service**：缓存服务，提供高性能的数据缓存
+- **Async Processor**：异步处理器，处理高并发的SIP消息
+- **Configuration Manager**：配置管理器，统一管理所有配置

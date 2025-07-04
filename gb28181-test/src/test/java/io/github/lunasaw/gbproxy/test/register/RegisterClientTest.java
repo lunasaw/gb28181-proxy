@@ -6,11 +6,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import io.github.lunasaw.gbproxy.test.Gb28181ApplicationTest;
-import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
@@ -20,6 +18,7 @@ import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.event.EventResult;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestProvider;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
+import io.github.lunasaw.sip.common.service.DeviceSupplier;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -31,15 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 public class RegisterClientTest {
 
     @Autowired
-    @Qualifier("clientFrom")
-    private Device   fromDevice;
+    private SipLayer       sipLayer;
 
     @Autowired
-    @Qualifier("clientTo")
-    private Device   toDevice;
-
-    @Autowired
-    private SipLayer sipLayer;
+    private DeviceSupplier deviceSupplier;
 
     @AfterAll
     public static void after() {
@@ -50,23 +44,36 @@ public class RegisterClientTest {
 
     @BeforeEach
     public void before() {
+        // 获取客户端设备
+        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+        if (fromDevice == null) {
+            log.error("未找到客户端设备配置");
+            return;
+        }
+
         // 本地端口监听
         log.info("before::客户端初始化 fromDevice.ip : {} , fromDevice.port : {}", fromDevice.getIp(), fromDevice.getPort());
-        sipLayer.addListeningPoint(DeviceConfig.LOOP_IP, fromDevice.getPort());
-
+        sipLayer.addListeningPoint("127.0.0.1", fromDevice.getPort());
     }
 
     @Test
     public void test_register_client() {
         String callId = SipRequestUtils.getNewCallId();
 
+        // 获取客户端设备
+        FromDevice fromDevice = (FromDevice)deviceSupplier.getDevice("33010602011187000001");
+        if (fromDevice == null) {
+            log.error("未找到客户端设备配置");
+            return;
+        }
+
         ToDevice instance = ToDevice.getInstance("41010500002000000001", "10.37.2.198", 8116);
         instance.setPassword("bajiuwulian1006");
 
-        DeviceConfig.DEVICE_CLIENT_VIEW_MAP.put("41010500002000000001", instance);
-        fromDevice.setIp(DeviceConfig.LOOP_IP);
+        deviceSupplier.addOrUpdateDevice(instance);
+        fromDevice.setIp("127.0.0.1");
 
-        Request registerRequest = SipRequestProvider.createRegisterRequest((FromDevice)fromDevice, instance, 300, callId);
+        Request registerRequest = SipRequestProvider.createRegisterRequest(fromDevice, instance, 300, callId);
 
         SipSender.transmitRequestSuccess(fromDevice.getIp(), registerRequest, new Event() {
             @Override

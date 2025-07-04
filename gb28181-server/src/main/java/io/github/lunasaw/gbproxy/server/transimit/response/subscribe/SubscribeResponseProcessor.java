@@ -48,6 +48,6 @@ public class SubscribeResponseProcessor extends SipResponseProcessorAbstract {
             return;
         }
         DeviceSubscribe deviceSubscribe = SipUtils.parseResponse(evt, DeviceSubscribe.class);
-        subscribeResponseProcessorServer.subscribeResult(deviceSubscribe);
+        subscribeResponseProcessorServer.responseSubscribe(deviceSubscribe);
     }
 }

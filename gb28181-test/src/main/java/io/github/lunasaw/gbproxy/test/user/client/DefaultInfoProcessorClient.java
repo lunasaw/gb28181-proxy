@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import io.github.lunasaw.gbproxy.test.config.DeviceConfig;
 import io.github.lunasaw.sip.common.entity.Device;
 /**
  * @author luna
