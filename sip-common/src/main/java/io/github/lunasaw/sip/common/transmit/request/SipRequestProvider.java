@@ -27,7 +27,11 @@ import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 
 /**
  * Sip命令request创造器
+ *
+ * @deprecated 请使用 {@link SipRequestBuilderFactory} 替代此类
+ * 此类保留是为了向后兼容，新代码建议使用新的构建器模式
  */
+@Deprecated
 public class SipRequestProvider {
 
     /**
