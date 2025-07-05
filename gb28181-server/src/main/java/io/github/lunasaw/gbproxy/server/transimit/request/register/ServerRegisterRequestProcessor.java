@@ -79,7 +79,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             String requestAddress = remoteAddressInfo.getIp() + ":" + remoteAddressInfo.getPort();
 
             String title = registerFlag ? "[注册请求]" : "[注销请求]";
-            log.info(title + "设备：{}, 开始处理: {}", userId, requestAddress);
+            log.info("{}设备：{}, 开始处理: {}", title, userId, requestAddress);
 
             SipTransaction transaction = registerProcessorServer.getTransaction(userId);
 
@@ -96,7 +96,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
 
             SipTransaction sipTransaction = SipUtils.getSipTransaction(request);
             if (!registerFlag) {
-                log.info(title + "设备：{}, 设备注销: {}", userId, expires);
+                log.info("{}设备：{}, 设备注销: {}", title, userId, expires);
                 registerProcessorServer.deviceOffLine(userId, registerInfo, sipTransaction);
                 return;
             }
@@ -105,7 +105,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             List<Header> okHeaderList = getRegisterOkHeaderList(request);
 
             if (transaction != null && callId.equals(transaction.getCallId())) {
-                log.info(title + "设备：{}, 注册续订: {}", userId, expires);
+                log.info("{}设备：{}, 注册续订: {}", title, userId, expires);
 
                 ResponseCmd.doResponseCmd(Response.OK, "OK", evt, okHeaderList);
                 registerProcessorServer.updateSipTransaction(userId, sipTransaction);
@@ -121,7 +121,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
             if (authHead == null && StringUtils.isNotBlank(password)) {
 
                 // 认证密码不是空, 但是请求头中没有AuthorizationHeader
-                log.info(title + " 设备：{}, 回复401: {}", userId, requestAddress);
+                log.info("{} 设备：{}, 回复401: {}", title, userId, requestAddress);
 
                 String nonce = DigestServerAuthenticationHelper.generateNonce();
                 WWWAuthenticateHeader wwwAuthenticateHeader =
@@ -139,7 +139,7 @@ public class ServerRegisterRequestProcessor extends SipRequestProcessorAbstract 
 
             if (!passwordCorrect) {
                 // 注册失败
-                log.info(title + " 设备：{}, 密码/SIP服务器ID错误, 回复403: {}", userId, requestAddress);
+                log.info("{} 设备：{}, 密码/SIP服务器ID错误, 回复403: {}", title, userId, requestAddress);
                 ResponseCmd.doResponseCmd(Response.FORBIDDEN, "wrong password", evt);
                 return;
             }

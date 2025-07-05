@@ -66,8 +66,7 @@ public class TestDeviceSupplier implements DeviceSupplier {
      * 创建客户端From设备
      */
     private Device createClientFromDevice() {
-        FromDevice device = FromDevice.getInstance("33010602011187000001", LOOP_IP, 8118);
-        return device;
+        return FromDevice.getInstance("33010602011187000001", LOOP_IP, 8118);
     }
 
     /**
@@ -208,7 +207,7 @@ public class TestDeviceSupplier implements DeviceSupplier {
     /**
      * 根据Device创建FromDevice
      */
-    private FromDevice createFromDevice(Device device) {
+    public FromDevice createFromDevice(Device device) {
         if (device == null) {
             log.warn("设备为空，无法创建FromDevice");
             return null;
@@ -226,7 +225,7 @@ public class TestDeviceSupplier implements DeviceSupplier {
     /**
      * 根据Device创建ToDevice
      */
-    private ToDevice createToDevice(Device device) {
+    public ToDevice createToDevice(Device device) {
         if (device == null) {
             log.warn("设备为空，无法创建ToDevice");
             return null;

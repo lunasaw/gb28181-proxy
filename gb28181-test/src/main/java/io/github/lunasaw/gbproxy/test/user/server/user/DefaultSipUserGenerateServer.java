@@ -1,5 +1,7 @@
 package io.github.lunasaw.gbproxy.test.user.server.user;
 
+import io.github.lunasaw.gbproxy.test.config.TestDeviceSupplier;
+import io.github.lunasaw.sip.common.entity.FromDevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,17 +17,19 @@ import io.github.lunasaw.sip.common.service.DeviceSupplier;
 public class DefaultSipUserGenerateServer implements SipUserGenerateServer {
 
     @Autowired
-    private DeviceSupplier deviceSupplier;
+    private TestDeviceSupplier deviceSupplier;
 
     @Override
     public Device getToDevice(String userId) {
-        return deviceSupplier.getDevice(userId);
+        Device device = deviceSupplier.getDevice(userId);
+        if (device instanceof FromDevice) {
+            return device;
+        }
+        return deviceSupplier.createToDevice(device);
     }
 
     @Override
     public Device getFromDevice() {
-        // 业务方自定义实现：这里可以根据实际业务需求返回服务端设备
-        // 例如：从配置中获取、从数据库查询、从缓存获取等
-        return deviceSupplier.getDevice("server"); // 假设服务端设备ID为"server"
+        return deviceSupplier.getServerFromDevice();
     }
 }

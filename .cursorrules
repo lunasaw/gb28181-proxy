@@ -431,3 +431,10 @@ javax.sip (SIP协议栈)
 - **Cache Service**：缓存服务，提供高性能的数据缓存
 - **Async Processor**：异步处理器，处理高并发的SIP消息
 - **Configuration Manager**：配置管理器，统一管理所有配置
+
+# 单测client/server设备配置分离规范
+所有单元测试（单测）中，涉及SIP消息模拟时，必须严格区分client和server的设备配置。
+- 客户端发起的消息，from/to必须分别使用clientFromDevice/clientToDevice。
+- 服务端发起的消息，from/to必须分别使用serverFromDevice/serverToDevice。
+- 不允许混用或写反。
+- 所有后续单测都要遵循此规范，client和server的设备配置、消息模拟、断言等必须分开处理，保持一致性和可维护性。
