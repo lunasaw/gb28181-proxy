@@ -1,6 +1,5 @@
 package io.github.lunasaw.sip.common.transmit;
 
-import io.github.lunasaw.sip.common.metrics.SipMetrics;
 import io.github.lunasaw.sip.common.utils.TraceUtils;
 import io.micrometer.core.instrument.Timer;
 import lombok.Getter;
@@ -8,7 +7,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Component;
 
 import javax.sip.*;
 import javax.sip.message.Response;
@@ -22,11 +20,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author luna
  */
+@Setter
+@Getter
 @Slf4j
 public abstract class AsyncSipListener extends AbstractSipListener {
 
-    @Getter
-    @Setter
     private ThreadPoolTaskExecutor messageExecutor;
 
     public AsyncSipListener() {

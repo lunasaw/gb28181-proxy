@@ -4,6 +4,7 @@ import io.github.lunasaw.sip.common.metrics.SipMetrics;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class DefaultSipListener extends AsyncSipListener {
      * @param messageExecutor Spring管理的线程池执行器
      * @param sipMetrics      SIP指标收集器
      */
-    public DefaultSipListener(ThreadPoolTaskExecutor messageExecutor, SipMetrics sipMetrics) {
+    public DefaultSipListener(@Qualifier("sipMessageProcessor") ThreadPoolTaskExecutor messageExecutor, SipMetrics sipMetrics) {
         if (messageExecutor != null) {
             setMessageExecutor(messageExecutor);
         }
