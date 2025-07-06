@@ -8,8 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sip.*;
 
+import lombok.Setter;
 import org.assertj.core.util.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -17,7 +18,6 @@ import gov.nist.javax.sip.SipProviderImpl;
 import gov.nist.javax.sip.SipStackImpl;
 import io.github.lunasaw.sip.common.conf.DefaultProperties;
 import io.github.lunasaw.sip.common.conf.msg.StringMsgParserFactory;
-import io.github.lunasaw.sip.common.transmit.SipProcessorObserver;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,9 +27,10 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author luna
  */
+@Setter
 @Slf4j
 @Component
-public class SipLayer {
+public class SipLayer implements InitializingBean {
 
     private static final Map<String, SipProviderImpl> tcpSipProviderMap = new ConcurrentHashMap<>();
     private static final Map<String, SipProviderImpl> udpSipProviderMap = new ConcurrentHashMap<>();
@@ -43,31 +44,9 @@ public class SipLayer {
     @Getter
     private static final List<String>                 monitorIpList     = Lists.newArrayList("0.0.0.0");
 
-    @Autowired
-    private SipProcessorObserver                      sipProcessorObserver;
+    @Getter
+    private SipListener sipListener;
 
-    /**
-     * 生成监听点唯一标识
-     */
-    private String getListeningPointKey(String monitorIp, int port) {
-        return monitorIp + ":" + port;
-    }
-
-    /**
-     * 检查监听点是否已存在
-     */
-    private boolean isListeningPointExists(String monitorIp, int port) {
-        String key = getListeningPointKey(monitorIp, port);
-        return listeningPoints.containsKey(key);
-    }
-
-    /**
-     * 标记监听点已创建
-     */
-    private void markListeningPointCreated(String monitorIp, int port) {
-        String key = getListeningPointKey(monitorIp, port);
-        listeningPoints.put(key, true);
-    }
 
     public static SipProviderImpl getUdpSipProvider(String ip) {
         if (ObjectUtils.isEmpty(ip)) {
@@ -102,17 +81,40 @@ public class SipLayer {
     }
 
     /**
+     * 生成监听点唯一标识
+     */
+    private String getListeningPointKey(String monitorIp, int port) {
+        return monitorIp + ":" + port;
+    }
+
+    /**
+     * 检查监听点是否已存在
+     */
+    private boolean isListeningPointExists(String monitorIp, int port) {
+        String key = getListeningPointKey(monitorIp, port);
+        return listeningPoints.containsKey(key);
+    }
+
+    /**
+     * 标记监听点已创建
+     */
+    private void markListeningPointCreated(String monitorIp, int port) {
+        String key = getListeningPointKey(monitorIp, port);
+        listeningPoints.put(key, true);
+    }
+
+    /**
      * 添加监听点（简化版本）
      */
     public void addListeningPoint(String monitorIp, int port) {
-        addListeningPoint(monitorIp, port, sipProcessorObserver, true);
+        addListeningPoint(monitorIp, port, sipListener, true);
     }
 
     /**
      * 添加监听点（带日志控制）
      */
     public void addListeningPoint(String monitorIp, int port, Boolean enableLog) {
-        addListeningPoint(monitorIp, port, sipProcessorObserver, enableLog);
+        addListeningPoint(monitorIp, port, sipListener, enableLog);
     }
 
     /**
@@ -222,7 +224,7 @@ public class SipLayer {
         SipProviderImpl tcpProvider = tcpSipProviderMap.remove(monitorIp);
         if (tcpProvider != null) {
             try {
-                tcpProvider.removeSipListener(sipProcessorObserver);
+                tcpProvider.removeSipListener(sipListener);
                 log.info("[SIP SERVER] 清理TCP监听点: {}:{}", monitorIp, port);
             } catch (Exception e) {
                 log.warn("[SIP SERVER] 清理TCP监听点时发生异常: {}", e.getMessage());
@@ -233,7 +235,7 @@ public class SipLayer {
         SipProviderImpl udpProvider = udpSipProviderMap.remove(monitorIp);
         if (udpProvider != null) {
             try {
-                udpProvider.removeSipListener(sipProcessorObserver);
+                udpProvider.removeSipListener(sipListener);
                 log.info("[SIP SERVER] 清理UDP监听点: {}:{}", monitorIp, port);
             } catch (Exception e) {
                 log.warn("[SIP SERVER] 清理UDP监听点时发生异常: {}", e.getMessage());
@@ -287,5 +289,10 @@ public class SipLayer {
             return deviceLocalIp;
         }
         return getUdpSipProvider().getListeningPoint().getIPAddress();
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+
     }
 }

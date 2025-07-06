@@ -33,7 +33,15 @@ public class InviteRequestBuilder extends AbstractSipRequestBuilder {
         sipMessage.setContent(content);
         sipMessage.setCallId(callId);
 
-        return build(fromDevice, toDevice, sipMessage);
+        // 临时设置subject到toDevice，用于构建请求
+        String originalSubject = toDevice.getSubject();
+        try {
+            toDevice.setSubject(subject);
+            return build(fromDevice, toDevice, sipMessage);
+        } finally {
+            // 恢复原始subject
+            toDevice.setSubject(originalSubject);
+        }
     }
 
     /**

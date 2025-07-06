@@ -438,3 +438,62 @@ javax.sip (SIP协议栈)
 - 服务端发起的消息，from/to必须分别使用serverFromDevice/serverToDevice。
 - 不允许混用或写反。
 - 所有后续单测都要遵循此规范，client和server的设备配置、消息模拟、断言等必须分开处理，保持一致性和可维护性。
+
+### 9. SIP请求类型转换规范 (强制性要求)
+- **接口与实现分离**：`Request`是接口，`SIPRequest`是具体实现类
+- **强制类型转换**：当需要使用`SIPRequest`特有功能时，必须进行强制类型转换
+- **转换场景**：在单元测试中，当`createRequest`等方法返回`Request`接口类型，但需要使用`SIPRequest`实现类的特有方法时
+- **转换示例**：
+  ```java
+  // 错误示例：直接使用接口方法
+  assertEquals(testRequest.getCallIdHeader().getCallId(),
+              receivedReq.getCallIdHeader().getCallId(), "CallId应该匹配");
+
+  // 正确示例：强制转换为SIPRequest
+  assertEquals(((SIPRequest)testRequest).getCallIdHeader().getCallId(),
+              ((SIPRequest)receivedReq).getCallIdHeader().getCallId(), "CallId应该匹配");
+  ```
+- **安全转换**：建议使用`instanceof`检查后再进行转换，避免`ClassCastException`
+- **类型一致性**：确保测试中所有SIP请求对象都使用相同的类型转换方式
+- **代码可读性**：在复杂测试中，建议将转换后的对象赋值给局部变量，提高代码可读性
+
+### 10. 异步SIP监听器TraceId处理规范 (强制性要求)
+- **TraceId传递**：在异步SIP监听器的所有异步方法中，必须正确处理TraceId的传递和清理
+- **处理模式**：所有异步方法必须遵循统一的TraceId处理模式：
+  1. 在主线程中获取TraceId：`String traceId = TraceUtils.getTraceId();`
+  2. 在异步线程中设置TraceId：`TraceUtils.setTraceId(traceId);`
+  3. 在异步线程的finally块中清理TraceId：`TraceUtils.clearTraceId();`
+  4. 在主线程的finally块中也清理TraceId：`TraceUtils.clearTraceId();`
+- **适用范围**：适用于所有继承`AsyncSipListener`的异步SIP事件处理方法：
+  - `processRequest(RequestEvent)`
+  - `processResponse(ResponseEvent)`
+  - `processTimeout(TimeoutEvent)`
+  - `processIOException(IOExceptionEvent)`
+  - `processTransactionTerminated(TransactionTerminatedEvent)`
+  - `processDialogTerminated(DialogTerminatedEvent)`
+- **代码示例**：
+  ```java
+  @Override
+  public void processRequest(RequestEvent requestEvent) {
+      try {
+          String traceId = TraceUtils.getTraceId();
+          messageExecutor.execute(() -> {
+              try {
+                  TraceUtils.setTraceId(traceId);
+                  // 业务处理逻辑
+                  super.processRequest(requestEvent);
+              } catch (Exception e) {
+                  // 异常处理
+              } finally {
+                  TraceUtils.clearTraceId();
+              }
+          });
+      } catch (Exception e) {
+          // 异常处理
+      } finally {
+          TraceUtils.clearTraceId();
+      }
+  }
+  ```
+- **重要性**：确保异步处理中的日志追踪和链路追踪功能正常工作，便于问题排查和性能监控
+- **一致性**：所有异步方法必须保持相同的TraceId处理模式，确保代码的一致性和可维护性

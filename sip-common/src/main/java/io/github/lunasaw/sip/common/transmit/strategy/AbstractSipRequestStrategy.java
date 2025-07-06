@@ -3,6 +3,7 @@ package io.github.lunasaw.sip.common.transmit.strategy;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
+import io.github.lunasaw.sip.common.transmit.SipMessageTransmitter;
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.sip.common.transmit.request.SipRequestBuilderFactory;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;

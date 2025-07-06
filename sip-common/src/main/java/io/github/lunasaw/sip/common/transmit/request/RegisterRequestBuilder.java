@@ -39,7 +39,15 @@ public class RegisterRequestBuilder extends AbstractSipRequestBuilder {
         sipMessage.setMethod(Request.REGISTER);
         sipMessage.setCallId(callId);
 
-        return build(fromDevice, toDevice, sipMessage);
+        // 临时设置expires到toDevice，用于构建请求
+        Integer originalExpires = toDevice.getExpires();
+        try {
+            toDevice.setExpires(expires);
+            return build(fromDevice, toDevice, sipMessage);
+        } finally {
+            // 恢复原始expires
+            toDevice.setExpires(originalExpires);
+        }
     }
 
     /**
