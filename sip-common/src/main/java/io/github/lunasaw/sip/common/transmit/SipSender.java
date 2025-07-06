@@ -15,6 +15,7 @@ import io.github.lunasaw.sip.common.transmit.strategy.SipRequestStrategy;
 import io.github.lunasaw.sip.common.transmit.strategy.SipRequestStrategyFactory;
 import io.github.lunasaw.sip.common.utils.SipRequestUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * SIP消息发送器（重构版）
@@ -45,7 +46,11 @@ public class SipSender {
             this.fromDevice = fromDevice;
             this.toDevice = toDevice;
             this.method = method;
-            this.callId = SipRequestUtils.getNewCallId();
+            if (StringUtils.isBlank(toDevice.getCallId())) {
+                this.callId = SipRequestUtils.getNewCallId();
+            } else {
+                this.callId = toDevice.getCallId();
+            }
         }
 
         public SipRequestBuilder content(String content) {
@@ -79,7 +84,9 @@ public class SipSender {
         }
 
         public SipRequestBuilder callId(String callId) {
-            this.callId = callId;
+            if (StringUtils.isNoneBlank(callId)) {
+                this.callId = callId;
+            }
             return this;
         }
 

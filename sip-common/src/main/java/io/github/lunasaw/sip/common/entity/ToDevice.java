@@ -14,23 +14,25 @@ public class ToDevice extends Device {
      * toTag也是SIP协议中的一个字段，用于标识SIP消息的接收方。每个SIP消息都应该包含一个toTag字段，这个字段的值是由接收方生成的随机字符串，
      * 用于标识该消息的接收方。在SIP消息的传输过程中，每个中间节点都会将toTag字段的值保留不变，以确保消息的接收方不变。
      */
-    private String  toTag;
+    private String toTag;
 
     /**
      * 需要想下游携带的信息
      */
-    private String  subject;
+    private String subject;
 
     /**
      * 本地ip
      */
-    private String  localIp;
+    private String localIp;
 
     private Integer expires;
 
-    private String  eventType;
+    private String eventType;
 
-    private String  eventId;
+    private String eventId;
+
+    private String callId;
 
     public static ToDevice getInstance(String userId, String ip, int port) {
         ToDevice toDevice = new ToDevice();
