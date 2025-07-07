@@ -28,6 +28,8 @@ public abstract class AbstractClientCommandStrategy implements ClientCommandStra
     @Override
     public String execute(FromDevice fromDevice, ToDevice toDevice, Event errorEvent, Event okEvent, Object... params) {
         try {
+            Assert.notNull(fromDevice, "发送设备不能为空");
+            Assert.notNull(toDevice, "接收设备不能为空");
             log.debug("执行命令: {}, 发送设备: {}, 接收设备: {}", getCommandType(), fromDevice.getUserId(), toDevice.getUserId());
 
             // 参数校验
@@ -44,7 +46,7 @@ public abstract class AbstractClientCommandStrategy implements ClientCommandStra
 
         } catch (Exception e) {
             log.error("命令执行失败: {}, 错误信息: {}", getCommandType(), e.getMessage(), e);
-            throw new RuntimeException("命令执行失败: " + getCommandType(), e);
+            throw e;
         }
     }
 

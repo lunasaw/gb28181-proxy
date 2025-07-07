@@ -1,5 +1,6 @@
 package io.github.lunasaw.gbproxy.client.transmit.cmd;
 
+import com.luna.common.check.Assert;
 import io.github.lunasaw.gb28181.common.entity.DeviceAlarm;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
@@ -131,6 +132,7 @@ public class ClientCommandSender {
      * @return callId
      */
     public static String sendRegisterCommand(FromDevice fromDevice, ToDevice toDevice, Integer expires) {
+        Assert.isTrue(expires >= 0, "过期时间应该 >= 0");
         return sendCommand("REGISTER", fromDevice, toDevice, expires);
     }
 
