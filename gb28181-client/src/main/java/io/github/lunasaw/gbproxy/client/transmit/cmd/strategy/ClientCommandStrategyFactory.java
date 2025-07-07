@@ -2,6 +2,7 @@ package io.github.lunasaw.gbproxy.client.transmit.cmd.strategy;
 
 import io.github.lunasaw.gb28181.common.entity.enums.CmdTypeEnum;
 import io.github.lunasaw.gbproxy.client.transmit.cmd.strategy.impl.AlarmCommandStrategy;
+import io.github.lunasaw.gbproxy.client.transmit.cmd.strategy.impl.CatalogCommandStrategy;
 import io.github.lunasaw.gbproxy.client.transmit.cmd.strategy.impl.KeepaliveCommandStrategy;
 import io.github.lunasaw.gbproxy.client.transmit.cmd.strategy.impl.RegisterCommandStrategy;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class ClientCommandStrategyFactory {
     static {
         // 初始化默认策略
         STRATEGY_MAP.put(CmdTypeEnum.ALARM.getType(), new AlarmCommandStrategy());
+        STRATEGY_MAP.put(CmdTypeEnum.CATALOG.getType(), new CatalogCommandStrategy());
         STRATEGY_MAP.put(CmdTypeEnum.KEEPALIVE.getType(), new KeepaliveCommandStrategy());
         STRATEGY_MAP.put(CmdTypeEnum.REGISTER.getType(), new RegisterCommandStrategy());
 

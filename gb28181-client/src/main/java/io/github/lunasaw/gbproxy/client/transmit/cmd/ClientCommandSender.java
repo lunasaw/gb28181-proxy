@@ -2,6 +2,8 @@ package io.github.lunasaw.gbproxy.client.transmit.cmd;
 
 import com.luna.common.check.Assert;
 import io.github.lunasaw.gb28181.common.entity.DeviceAlarm;
+import io.github.lunasaw.gb28181.common.entity.response.DeviceResponse;
+import io.github.lunasaw.gb28181.common.entity.response.DeviceItem;
 import io.github.lunasaw.sip.common.entity.FromDevice;
 import io.github.lunasaw.sip.common.entity.ToDevice;
 import io.github.lunasaw.gb28181.common.entity.notify.DeviceAlarmNotify;
@@ -9,6 +11,8 @@ import io.github.lunasaw.sip.common.subscribe.SubscribeInfo;
 import io.github.lunasaw.sip.common.transmit.event.Event;
 import io.github.lunasaw.gbproxy.client.transmit.cmd.strategy.ClientCommandStrategy;
 import io.github.lunasaw.gbproxy.client.transmit.cmd.strategy.ClientCommandStrategyFactory;
+
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -124,6 +128,42 @@ public class ClientCommandSender {
     }
 
     /**
+     * 发送目录命令
+     *
+     * @param fromDevice     发送设备
+     * @param toDevice       接收设备
+     * @param deviceResponse 设备响应对象
+     * @return callId
+     */
+    public static String sendCatalogCommand(FromDevice fromDevice, ToDevice toDevice, DeviceResponse deviceResponse) {
+        return sendCommand("Catalog", fromDevice, toDevice, deviceResponse);
+    }
+
+    /**
+     * 发送目录命令
+     *
+     * @param fromDevice  发送设备
+     * @param toDevice    接收设备
+     * @param deviceItems 设备列表
+     * @return callId
+     */
+    public static String sendCatalogCommand(FromDevice fromDevice, ToDevice toDevice, List<DeviceItem> deviceItems) {
+        return sendCommand("Catalog", fromDevice, toDevice, deviceItems);
+    }
+
+    /**
+     * 发送目录命令
+     *
+     * @param fromDevice 发送设备
+     * @param toDevice   接收设备
+     * @param deviceItem 单个设备项
+     * @return callId
+     */
+    public static String sendCatalogCommand(FromDevice fromDevice, ToDevice toDevice, DeviceItem deviceItem) {
+        return sendCommand("Catalog", fromDevice, toDevice, deviceItem);
+    }
+
+    /**
      * 发送注册命令
      *
      * @param fromDevice 发送设备
@@ -233,6 +273,7 @@ public class ClientCommandSender {
      * @return 是否已注册
      */
     public static boolean hasCommandType(String commandType) {
+        Assert.notNull(commandType, "命令类型不能为空");
         return ClientCommandStrategyFactory.hasStrategy(commandType);
     }
 

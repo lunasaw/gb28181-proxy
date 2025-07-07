@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author luna
  * @date 2023/10/15
  */
+@Deprecated
 @Slf4j
 public class ClientSendCmd {
 
